@@ -15,6 +15,11 @@ npm run serve
 npm run build
 ```
 
+### Run frontend tests (located in /tests/unit/*)
+```
+npm test
+```
+
 ### Lints and fixes files
 ```
 npm run lint

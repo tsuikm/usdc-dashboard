@@ -7,7 +7,6 @@
     "build": "nuxt build",
     "generate": "nuxt generate",
     "start": "nuxt start",
-    "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
     "test": "jest"
   },

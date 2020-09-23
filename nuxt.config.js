@@ -1,3 +1,6 @@
 module.exports = {
-  srcDir: 'src/'
+  srcDir: 'src/',
+  plugins: [
+    '@/plugins/material.js'
+  ]
 }

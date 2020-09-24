@@ -35,11 +35,46 @@
     </md-table>
   </div>
 </template>
+
 <script>
+import Web3 from "web3";
+const web3 = new Web3(Web3.givenProvider);
+
 export default {
-  mounted() {
-    console.log(this.$route.fullPath);
-    console.log(this.$route.params);
+  data() {
+    return {
+      transactions: [],
+    };
+  },
+  methods: {
+    async fetchTransactions(address) {
+      let n = await web3.eth.getBlockNumber();
+      let numTransactions = await web3.eth.getTransactionCount(address, n);
+
+      for (let i = n; i >= 0 && numTransactions > 0; i--) {
+        try {
+          let block = await web3.eth.getBlock(i, true);
+          if (block && block.transactions) {
+            for (const transaction of block.transactions) {
+              if (address === transaction.from) {
+                this.transactions.push(transaction);
+                numTransactions--;
+              } else if (address === transaction.to) {
+                this.transactions.push(transaction);
+              }
+            }
+          }
+        } catch (e) {
+          console.error(`Error in block ${i}`, e);
+        }
+      }
+    },
+  },
+  async mounted() {
+    const { address } = this.$route.params;
+    if (!address || address.length === 0) return;
+
+    this.fetchTransactions(address);
   },
 };
 </script>

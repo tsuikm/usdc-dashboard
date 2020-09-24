@@ -17,15 +17,19 @@
       </div>
     </md-toolbar>
     <Overview v-if="addressSubmitted" :walletAddress="walletAddress"/>
+    <Transactions />
   </div>
 </template>
 
 <script>
 import Overview from "./Overview";
+import Transactions from "./Transactions";
+
 export default {
   name: 'Dashboard',
   components: {
-    Overview
+    Overview,
+    Transactions
   },
   data() {
     return {

@@ -44,12 +44,18 @@
         // .on("changed", function(log){
         // });
 
+        // transactions = 0
+        // blocks = 0
+        // while transactions < 50 * page:
+        //   transactions = getBlockTransactionCountByNumber(latest - blocks)
+        //   blocks++
+
         const requestDataFilter = JSON.stringify({
           jsonrpc: "2.0",
           method: "eth_newFilter",
           params: [
             {
-              fromBlock: '0x' + (latest - 3).toString(16),
+              fromBlock: '0x' + (latest - 0 /**blocks*/).toString(16),
               toBlock: '0x' + (latest).toString(16),
               topics: []
             }

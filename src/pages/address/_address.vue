@@ -37,8 +37,10 @@
 </template>
 
 <script>
-import Web3 from "web3";
-const web3 = new Web3(Web3.givenProvider);
+import { getTransactionsForAddress, getCurrentBlockNumber } from "@/api/infura";
+
+const DEFAULT_PAGE_LENGTH = 25;
+const INITIAL_BLOCK_LOOKBACK = 80000;
 
 export default {
   data() {
@@ -46,28 +48,36 @@ export default {
       transactions: [],
     };
   },
-  methods: {
-    async fetchTransactions(address) {
-      let n = await web3.eth.getBlockNumber();
-      let numTransactions = await web3.eth.getTransactionCount(address, n);
 
-      for (let i = n; i >= 0 && numTransactions > 0; i--) {
-        try {
-          let block = await web3.eth.getBlock(i, true);
-          if (block && block.transactions) {
-            for (const transaction of block.transactions) {
-              if (address === transaction.from) {
-                this.transactions.push(transaction);
-                numTransactions--;
-              } else if (address === transaction.to) {
-                this.transactions.push(transaction);
-              }
-            }
-          }
-        } catch (e) {
-          console.error(`Error in block ${i}`, e);
-        }
+  methods: {
+    async fetchTransactions(address, pageLength = DEFAULT_PAGE_LENGTH) {
+      address = "0x" + address.slice(2).padStart(64, "0");
+
+      const currentBlock = await getCurrentBlockNumber();
+      let lookback = INITIAL_BLOCK_LOOKBACK;
+
+      let transactions = await getTransactionsForAddress(
+        address,
+        "0x" + Math.max(0, currentBlock - lookback).toString(16),
+        "latest"
+      );
+
+      while (
+        transactions.receiverTxns.length + transactions.senderTxns.length <
+          pageLength &&
+        currentBlock - lookback >= 0
+      ) {
+        lookback *= 2;
+        transactions = await getTransactionsForAddress(
+          address,
+          "0x" + Math.max(0, currentBlock - lookback).toString(16),
+          "latest"
+        );
       }
+
+      this.transactions = transactions.receiverTxns.concat(
+        transactions.senderTxns
+      );
     },
   },
   async mounted() {

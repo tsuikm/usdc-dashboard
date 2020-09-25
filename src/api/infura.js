@@ -1,10 +1,29 @@
-const API_KEY = 'b8bedc0e21794975befedd1ed3ac29a6'
-const BASE_URL = `https://ropsten.infura.io/v3/${API_KEY}`
+const PROJECT_ID = 'b8bedc0e21794975befedd1ed3ac29a6'
+const BASE_URL = `https://ropsten.infura.io/v3/${PROJECT_ID}`
+
+export const getCurrentBlockNumber = async () => {
+  const res = await fetch(BASE_URL, {
+    method: 'POST',
+    headers: {
+      'Accept': '*/*'
+    },
+    body: JSON.stringify({
+      "jsonrpc": "2.0",
+      "id": 0,
+      "method": "eth_blockNumber",
+      "params": []
+    })
+  })
+
+  if (res.status === 200) {
+    const block = (await res.json()).result
+    return Number(block)
+  } else {
+    console.error('Failed to get current block number');
+  }
+}
 
 export const getTransactionsForAddress = async (address, fromBlock, toBlock) => {
-  let receiverTransactions = [];
-  let senderTransactions = [];
-
   const receiverRes = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
@@ -54,14 +73,14 @@ export const getTransactionsForAddress = async (address, fromBlock, toBlock) => 
   })
 
   if (senderRes.status === 200 && receiverRes.status === 200) {
-    receiverTransactions = (await receiverRes.json()).result;
-    senderTransactions = (await senderRes.json()).result;
+    let receiverTxns = (await receiverRes.json()).result;
+    let senderTxns = (await senderRes.json()).result;
 
     // TODO: For now, remove any internal (self to self) transactions
-    receiverTransactions = receiverTransactions.filter(t => t.topics[1] !== t.topics[2])
-    senderTransactions = senderTransactions.filter(t => t.topics[1] !== t.topics[2])
+    receiverTxns = receiverTxns.filter(t => t.topics[1] !== t.topics[2])
+    senderTxns = senderTxns.filter(t => t.topics[1] !== t.topics[2])
 
-    return { receiverTransactions, senderTransactions }
+    return { receiverTxns, senderTxns }
   } else {
     console.error('Failed to fetch transactions for address', address);
   }

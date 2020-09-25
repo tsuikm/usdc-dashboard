@@ -16,7 +16,7 @@
     methods: {
       async method() {
         // https://ethereum.stackexchange.com/questions/1587/how-can-i-get-the-data-of-the-latest-10-blocks-via-web3-js
-        // const latest = await web3.eth.getBlockNumber();
+        const latest = await web3.eth.getBlockNumber();
         // const batch = new web3.eth.BatchRequest()
 
         // for (let i = latest - 10; i < latest + 1; i += 1 ) {
@@ -44,31 +44,47 @@
         // .on("changed", function(log){
         // });
 
+        const requestDataFilter = JSON.stringify({
+          jsonrpc: "2.0",
+          method: "eth_newFilter",
+          params: [
+            {
+              fromBlock: '0x' + (latest - 3).toString(16),
+              toBlock: '0x' + (latest).toString(16),
+              topics: []
+            }
+          ],
+          id: 0
+        });
+
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: requestDataFilter
+        }).then(response => response.json())
+          .then(filter => {
 
 
-        // const requestData = JSON.stringify({
-        //   jsonrpc: "2.0",
-        //   method: "eth_getLogs",
-        //   params: [
-        //     {
-        //       topics: []
-        //     }
-        //   ],
-        //   limit: 10,
-        //   id: 0
-        // });
+            const requestDataUrl = JSON.stringify({
+              jsonrpc: "2.0",
+              method: "eth_getFilterLogs",
+              params: [filter.result],
+              id: 0
+            });
 
-        // fetch(url, {
-        //   method: 'POST',
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   },
-        //   body: requestData
-        // }).then(response => response.json())
-        //   .then(data => {
-        //     console.log(data)
-        //   });
-
+            fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: requestDataUrl
+            }).then(response => response.json())
+              .then(data => {
+                console.log(data)
+              });
+          });
 
       }
     }

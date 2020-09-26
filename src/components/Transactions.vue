@@ -40,12 +40,13 @@
         let blockNum = await getCurrentBlockNumber();
         let transactions = []
         let blocks = 0
-        let count = 1000;
+        const count = 1000;
         while (transactions.length <= 50) { //*page
-          transactions = transactions.concat(await getTransactions('0x' + (blockNum - count + 1).toString(16), '0x' + (blockNum).toString(16)));
-          blockNum -= count;
+          transactions = await getTransactions('0x' + (blockNum - count*blocks).toString(16), '0x' + (blockNum).toString(16));
+          blocks += 1;
         }
-        return transactions; //truncate to 50
+        transactions = transactions.slice(0, 50);
+        return transactions;
       }
     },
     created() {

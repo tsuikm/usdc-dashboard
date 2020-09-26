@@ -7,14 +7,22 @@
 
       <md-table-row>
         <md-table-head md-numeric>ID</md-table-head>
-        <md-table-head>Name</md-table-head>
-        <md-table-head>Email</md-table-head>
-        <md-table-head>Gender</md-table-head>
-        <md-table-head>Job Title</md-table-head>
+        <md-table-head>TXN HASH</md-table-head>
+        <md-table-head>Age</md-table-head>
+        <md-table-head>Quantity</md-table-head>
+        <md-table-head>Sender</md-table-head>
+        <md-table-head>Receiver</md-table-head>
       </md-table-row>
 
       <md-table-row v-for="transaction in this.transactions" :key="transaction.id">
+        <md-table-cell md-numeric>{{ transaction.id + 1 }}</md-table-cell>
         <md-table-cell>{{ transaction.transactionHash }}</md-table-cell>
+        <md-table-cell>hi</md-table-cell>
+        <md-table-cell>hello</md-table-cell>
+        <md-table-cell>something</md-table-cell>
+        <md-table-cell>no</md-table-cell>
+
+
       </md-table-row>
 
 
@@ -27,6 +35,8 @@
 <script>
   import { getCurrentBlockNumber, getTransactions } from '../api/infura.js';
 
+  //timestamp blockbynumber
+  //from/to/value getTransactionByHash
 
   export default {
     name: 'Transactions',

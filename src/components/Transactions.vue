@@ -13,8 +13,8 @@
         <md-table-head>Job Title</md-table-head>
       </md-table-row>
 
-      <md-table-row v-for="transaction in this.transactions" :key="transaction.transactionHash">
-        <md-table-cell>{{ transaction.transactionHash }}</md-table-cell>        
+      <md-table-row v-for="transaction in this.transactions" :key="transaction.id">
+        <md-table-cell>{{ transaction.transactionHash }}</md-table-cell>
       </md-table-row>
 
 
@@ -46,6 +46,9 @@
           blocks += 1;
         }
         transactions = transactions.slice(0, 50);
+        transactions.forEach((transaction, index) => {
+          transaction.id = index;
+        });
         return transactions;
       }
     },

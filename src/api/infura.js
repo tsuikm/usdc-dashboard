@@ -85,3 +85,31 @@ export const getTransactionsForAddress = async (address, fromBlock, toBlock) => 
     console.error('Failed to fetch transactions for address', address);
   }
 }
+
+export const getTransactions = async (fromBlock, toBlock) => {
+  const receiverRes = await fetch(BASE_URL, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      "jsonrpc": "2.0",
+      "id": 0,
+      "method": "eth_getLogs",
+      "params": [
+        {
+          "fromBlock": fromBlock,
+          "toBlock": toBlock,
+          "address": "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
+        }
+      ]
+    })
+  })
+
+  if (receiverRes.status === 200) {
+    let receiverTxns = (await receiverRes.json()).result;
+    return receiverTxns;
+  } else {
+    console.error('Failed to fetch transactions');
+  }
+}

@@ -17,7 +17,7 @@
       <md-table-row v-for="transaction in this.transactions" :key="transaction.id">
         <md-table-cell md-numeric>{{ transaction.id + 1 }}</md-table-cell>
         <md-table-cell>{{ transaction.transactionHash }}</md-table-cell>
-        <md-table-cell>hi</md-table-cell>
+        <md-table-cell>{{ transaction.age }}</md-table-cell>
         <md-table-cell>{{ transaction.data }}</md-table-cell>
         <md-table-cell>{{ transaction.from }}</md-table-cell>
         <md-table-cell>{{ transaction.to }}</md-table-cell>
@@ -68,13 +68,49 @@
           blocks += 1;
         }
 
+        transactions = transactions.reverse();
         transactions = transactions.slice(0, 50);
+
         transactions.forEach((transaction, index) => {
           transaction.id = index;
           transaction.data = fromHex(transaction.data)/10**6;
           transaction.from = transaction.topics[1]
           transaction.to = transaction.topics[2]
         });
+
+
+        // Since some of the transactions have the same block number, use a
+        // dictionary to keep track of the age of the block for performance.
+        const blockNumberToAge = new Map();
+        const now = Date.now();
+
+        for (const transaction of transactions) {
+
+          if (!blockNumberToAge.has(transaction.blockNumber)) {
+            const block = await web3.eth.getBlock(transaction.blockNumber);
+            const blockTime = new Date(block.timestamp * 1000);
+            const age = now - blockTime.getTime(); // in ms.
+
+            // https://stackoverflow.com/questions/10874048/from-milliseconds-to-hour-minutes-seconds-and-milliseconds
+            const seconds = Math.floor((age / 1000) % 60);
+            const minutes = Math.floor((age / (1000 * 60)) % 60);
+            const hours = Math.floor((age / (1000 * 60 * 60)) % 24);
+
+            if (hours == 0 && minutes == 0) {
+              blockNumberToAge.set(transaction.blockNumber, `${seconds} s ago`);
+            }
+            else if (hours == 0) {
+              blockNumberToAge.set(transaction.blockNumber, `${minutes} mins ${seconds} s ago`);
+            }
+            else {
+              blockNumberToAge.set(transaction.blockNumber, `${hours} hrs ${minutes} mins ago`);
+            }
+          }
+
+          transaction.age = blockNumberToAge.get(transaction.blockNumber);
+        }
+
+
         return transactions;
       },
       async getTransactionCount() {

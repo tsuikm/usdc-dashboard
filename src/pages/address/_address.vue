@@ -14,11 +14,16 @@
         <md-table-cell>{{ parseInt(t["data"], 16) / 10 ** 6 }}</md-table-cell>
       </md-table-row>
     </md-table>
+    <pagination
+      v-bind:totalPages="this.totalPages"
+      @page:change="this.pageChange"
+    />
   </div>
 </template>
 
 <script>
 import Web3 from "web3";
+import Pagination from "@/components/Pagination";
 const web3 = new Web3(Web3.givenProvider);
 const TRANSACTION_TOPIC =
   "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
@@ -62,10 +67,15 @@ const getLogs = async (address, fromBlock) => {
 };
 
 export default {
+  components: {
+    Pagination,
+  },
   data() {
     return {
       transactions: [],
       loading: false,
+      totalPages: 30,
+      page: 0,
     };
   },
 
@@ -105,7 +115,10 @@ export default {
       this.loading = false;
     },
   },
-
+  async pageChange(page) {
+    this.page = page;
+    this.transactions = await this.fetchTransactions(address);
+  },
   async mounted() {
     const { address } = this.$route.params;
     if (!address || address.length === 0) return;

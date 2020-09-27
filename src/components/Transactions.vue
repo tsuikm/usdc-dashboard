@@ -19,8 +19,8 @@
         <md-table-cell>{{ transaction.transactionHash }}</md-table-cell>
         <md-table-cell>hi</md-table-cell>
         <md-table-cell>{{ transaction.data }}</md-table-cell>
-        <md-table-cell>something</md-table-cell>
-        <md-table-cell>no</md-table-cell>
+        <md-table-cell>{{ transaction.from }}</md-table-cell>
+        <md-table-cell>{{ transaction.to }}</md-table-cell>
 
 
       </md-table-row>
@@ -72,6 +72,8 @@
         transactions.forEach((transaction, index) => {
           transaction.id = index;
           transaction.data = fromHex(transaction.data)/10**6;
+          transaction.from = transaction.topics[1]
+          transaction.to = transaction.topics[2]
         });
         return transactions;
       },

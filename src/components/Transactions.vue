@@ -3,6 +3,7 @@
     <md-table md-card>
       <md-table-toolbar>
         <h1 class="md-title">Transactions</h1>
+        <pagination v-bind:totalPages="this.totalPages" @page:change="this.pageChange"/>
       </md-table-toolbar>
       <md-table-row>
         <md-table-head md-numeric>ID</md-table-head>
@@ -17,12 +18,9 @@
         <md-table-cell>{{ transaction.transactionHash }}</md-table-cell>
         <md-table-cell>{{ transaction.age }}</md-table-cell>
         <md-table-cell>{{ transaction.data }}</md-table-cell>
-        <md-table-cell>{{ transaction.from }}</md-table-cell>
-        <md-table-cell>{{ transaction.to }}</md-table-cell>
+        <md-table-cell><a v-bind:href='`address/${transaction.from}`'>{{ transaction.from }}</a></md-table-cell>
+        <md-table-cell><a v-bind:href='`address/${transaction.to}`'>{{ transaction.to }}</a></md-table-cell>
       </md-table-row>
-      <pagination 
-        v-bind:totalPages="this.totalPages"
-        @page:change="this.pageChange"/>
     </md-table>
   </div>
 </template>
@@ -54,25 +52,27 @@
       async getTransactions() {
         const latest = await web3.eth.getBlockNumber();
         //console.log(await this.getTransactionCount());
-        console.log(this.page);
 
         let transactions = []
         let blocks = 0
         const count = 1000;
         while (transactions.length <= 50 * (this.page + 1)) {
+          const from = Math.max(latest - count * blocks, 0);
           transactions = await web3.eth.getPastLogs({
-            fromBlock: toHex(latest - count * blocks),
+            fromBlock: toHex(from),
             toBlock: toHex(latest),
             address: usdcAddress
           });
-          // if (transactions == []) {
-          //   console.log("i failed now");
-          //   break;
-          // }
+
+          // If its the last page, we don't have to display 50.
+          if (from === 0) {
+            break;
+          }
           blocks += 1;
         }
 
-        transactions = transactions.slice(transactions.length-50*(this.page + 1), transactions.length-50*(this.page));
+        const upper = Math.min(transactions.length, transactions.length-50*(this.page));
+        transactions = transactions.slice(transactions.length-50*(this.page + 1), upper);
         transactions = transactions.reverse();
 
         transactions.forEach((transaction, index) => {
@@ -121,12 +121,11 @@
         return transactions;
       },
       async getTransactionCount() {
-        //need to fix since this is from sender address so just returning 1
+        //TODO:need to fix since this is from sender address so just returning 1
         const transactionCount = await web3.eth.getTransactionCount(usdcAddress);
         return transactionCount;
       },
       async pageChange (page) {
-        console.log("pageChange");
         this.page = page;
         this.transactions = await this.getTransactions();
       }

@@ -1,7 +1,7 @@
-import App from '../../src/App.vue';
+import Dashboard from '../../src/components/Dashboard.vue';
 
-describe("App", () => {
+describe("Dashboard", () => {
   test("has data", () => {
-    expect(typeof App).toBe("object");
+    expect(typeof Dashboard).toBe("object");
   });
 });

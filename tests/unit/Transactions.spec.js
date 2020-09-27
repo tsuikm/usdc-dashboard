@@ -28,7 +28,7 @@ jest.mock('web3', () => class Web3 {
         }
         return result;
       },
-      getBlock: async (hash) => {
+      getBlock: async () => {
         return {
           timestamp: '0000000000'
         }

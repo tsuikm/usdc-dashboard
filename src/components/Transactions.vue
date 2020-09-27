@@ -18,7 +18,7 @@
         <md-table-cell md-numeric>{{ transaction.id + 1 }}</md-table-cell>
         <md-table-cell>{{ transaction.transactionHash }}</md-table-cell>
         <md-table-cell>hi</md-table-cell>
-        <md-table-cell>hello</md-table-cell>
+        <md-table-cell>{{ transaction.data }}</md-table-cell>
         <md-table-cell>something</md-table-cell>
         <md-table-cell>no</md-table-cell>
 
@@ -37,6 +37,7 @@
   const web3 = new Web3(Web3.givenProvider);
 
   const toHex = num => '0x' + (num).toString(16);
+  const fromHex = num => parseInt(num, 16);
   //timestamp blockbynumber
   //from/to/value getTransactionByHash
 
@@ -68,6 +69,7 @@
         transactions = transactions.slice(0, 50);
         transactions.forEach((transaction, index) => {
           transaction.id = index;
+          transaction.data = fromHex(transaction.data)/10**6;
         });
         return transactions;
       }

@@ -95,8 +95,8 @@ export default {
         transactions = await getLogs(address, currentBlock, lookback);
       }
 
-      console.log(transactions);
-      this.transactions = transactions;
+      // Put most recent transactions first, take the first pageLength
+      this.transactions = transactions.reverse().slice(0, pageLength);
     },
   },
   async mounted() {

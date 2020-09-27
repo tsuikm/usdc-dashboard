@@ -56,10 +56,12 @@ const getLogs = async (address, fromBlock) => {
       topics: [TRANSACTION_TOPIC, address, null],
     });
 
-    return receiverTxns.concat(
-      // Prevent internal transactions from being counted twice
-      senderTxns.filter((log) => log.topics[1] !== log.topics[2])
-    );
+    return receiverTxns
+      .concat(
+        // Prevent internal transactions from being counted twice
+        senderTxns.filter((log) => log.topics[1] !== log.topics[2])
+      )
+      .sort((a, b) => a.blockNumber - b.blockNumber);
   } catch (e) {
     if (e.code === -32005) {
       // More than 10k results

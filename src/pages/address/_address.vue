@@ -38,7 +38,7 @@ const CONTRACT_ADDRESS = "0x07865c6E87B9F70255377e024ace6630C1Eaa37F";
 // Mainnet USDC Address
 // const CONTRACT_ADDRESS = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48";
 
-const getLogs = async (address, fromBlock) => {
+export const getLogs = async (address, fromBlock) => {
   try {
     // Txns where wallet is receiver
     const receiverTxns = await web3.eth.getPastLogs({

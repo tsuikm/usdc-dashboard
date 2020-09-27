@@ -7,7 +7,10 @@
         <md-table-head>Receiver Address</md-table-head>
         <md-table-head>Transaction Amount</md-table-head>
       </md-table-row>
-      <md-table-row v-for="t in transactions" :key="t.transactionHash">
+      <md-table-row
+        v-for="t in transactions.slice(page * 25, (page + 1) * 25)"
+        :key="t.transactionHash"
+      >
         <md-table-cell>{{ t["transactionHash"] }}</md-table-cell>
         <md-table-cell>{{ t["topics"][1] }}</md-table-cell>
         <md-table-cell>{{ t["topics"][2] }}</md-table-cell>
@@ -74,7 +77,7 @@ export default {
     return {
       transactions: [],
       loading: false,
-      totalPages: 30,
+      totalPages: 0,
       page: 0,
     };
   },
@@ -88,6 +91,9 @@ export default {
       if (transactions !== null) {
         // We have all transactions in history for this address
         this.transactions = transactions.reverse().slice(0, 10000);
+        this.totalPages = Math.ceil(
+          this.transactions.length / DEFAULT_PAGE_LENGTH
+        );
         this.loading = false;
         return;
       }
@@ -112,12 +118,14 @@ export default {
 
       // We have the latest 10k transactions
       this.transactions = transactions.reverse().slice(0, 10000);
+      this.totalPages = Math.ceil(
+        this.transactions.length / DEFAULT_PAGE_LENGTH
+      );
       this.loading = false;
     },
-  },
-  async pageChange(page) {
-    this.page = page;
-    this.transactions = await this.fetchTransactions(address);
+    async pageChange(page) {
+      this.page = page;
+    },
   },
   async mounted() {
     const { address } = this.$route.params;

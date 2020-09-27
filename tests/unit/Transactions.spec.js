@@ -40,7 +40,7 @@ jest.mock('web3', () => class Web3 {
 describe('Transactions', () => {
 
   it('Renders labels correctly', () => {
-    const { getByText, getByPlaceholderText } = render(Transactions);
+    const { getByText } = render(Transactions);
 
     getByText('Transactions');
     getByText('ID');
@@ -51,17 +51,44 @@ describe('Transactions', () => {
     getByText('Receiver');
   });
 
-  it('Renders entries correctly', () => {
+  it('Renders entries correctly', async () => {
+    const { findByText } = await render(Transactions);
 
-// 3
-// 0x0003
-// 0
-// 0x00300
-// 0x3000
-
+    findByText('3');
+    findByText('0x0003');
+    findByText('0');
+    findByText('0x00300');
+    findByText('0x3000');
   });
 
 
+  it('Pagination rendered correctly', () => {
+    const { getByText } = render(Transactions);
+
+    getByText('First');
+    getByText('<');
+    getByText('Page 1 of 300');
+    getByText('>');
+    getByText('Last');
+  });
 
 
+  it('Pagination functionality', async () => {
+    const { getByText, findByText } = await render(Transactions);
+
+    await fireEvent.click(getByText('>'));
+
+    getByText('First');
+    getByText('<');
+    getByText('Page 2 of 300');
+    getByText('>');
+    getByText('Last');
+
+
+    findByText('51');
+    findByText('0x00051');
+    findByText('0');
+    findByText('0x005100');
+    findByText('0x51000');
+  });
 });

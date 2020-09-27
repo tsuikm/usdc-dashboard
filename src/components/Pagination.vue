@@ -4,11 +4,11 @@
     <md-icon class="clickable" @click="changePage(page - 1)"
       >navigate_before</md-icon
     >
-    <p>Page {{ page }} of {{ totalPages }}</p>
+    <p>Page {{ page + 1 }} of {{ totalPages }}</p>
     <md-icon class="clickable" @click="changePage(page + 1)"
       >navigate_next</md-icon
     >
-    <md-button @click="changePage(totalPages)">Last</md-button>
+    <md-button @click="changePage(totalPages - 1)">Last</md-button>
   </div>
 </template>
 

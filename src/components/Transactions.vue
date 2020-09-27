@@ -20,41 +20,16 @@
         <md-table-cell>{{ transaction.from }}</md-table-cell>
         <md-table-cell>{{ transaction.to }}</md-table-cell>
       </md-table-row>
-      <vue-ads-pagination
-            :total-items="totalItems"
-            :max-visible-pages="maxVisiblePages"
-            :page="page"
-            :loading="loading"
-            :items-per-page="itemsPerPage"
-            @range-change="rangeChange"
-            @page-change="pageChange"
-        >
-            <template slot-scope="props">
-                <div class="vue-ads-pr-2 vue-ads-leading-loose">
-                    Items {{ props.start }} to {{ props.end }} of {{ props.total }}
-                </div>
-            </template>
-            <template
-                slot="buttons"
-                slot-scope="props"
-            >
-                <vue-ads-page-button
-                    v-for="(button, key) in props.buttons"
-                    :key="key"
-                    v-bind="button"
-                    @page-change="pageChange"
-                />
-            </template>
-        </vue-ads-pagination>
+      <pagination 
+        v-bind:totalPages="this.totalPages"
+        @page:change="this.pageChange"/>
     </md-table>
   </div>
 </template>
 
 
 <script>
-  import Vue from 'vue';
-  import VueAdsPagination from './Pagination/Pagination';
-  import VueAdsPageButton from './Pagination/PageButton';
+  import Pagination from './Pagination';
 
   import Web3 from 'web3';
   const web3 = new Web3(Web3.givenProvider);
@@ -62,25 +37,17 @@
 
   const toHex = num => '0x' + (num).toString(16);
   const fromHex = num => parseInt(num, 16);
-  //timestamp blockbynumber
-  //from/to/value getTransactionByHash
 
   export default {
     name: 'Transactions',
     components: {
-      VueAdsPageButton,
-      VueAdsPagination,
+      Pagination,
     },
     data() {
       return {
         transactions: [],
-        start: null,
-        end: null,
+        totalPages: 300, //fix this
         page: 0,
-        maxVisiblePages: 2,
-        totalItems: 14948,
-        loading: false,
-        itemsPerPage: 50
       }
     },
     methods: {
@@ -109,7 +76,7 @@
         transactions = transactions.reverse();
 
         transactions.forEach((transaction, index) => {
-          transaction.id = index;
+          transaction.id = index + 50*(this.page);
           transaction.data = fromHex(transaction.data)/10**6;
           transaction.from = transaction.topics[1]
           transaction.to = transaction.topics[2]
@@ -162,14 +129,9 @@
         console.log("pageChange");
         this.page = page;
         this.transactions = await this.getTransactions();
-      },
-      rangeChange (start, end) {
-        this.start = start;
-        this.end = end;
-      },
+      }
     },
     created() {
-      console.log("created");
       this.getTransactions().then(transactions => {
         this.transactions = transactions;
       });

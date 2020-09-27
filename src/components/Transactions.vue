@@ -35,6 +35,7 @@
 <script>
   import Web3 from 'web3';
   const web3 = new Web3(Web3.givenProvider);
+  const usdcAddress = '0x07865c6E87B9F70255377e024ace6630C1Eaa37F';
 
   const toHex = num => '0x' + (num).toString(16);
   const fromHex = num => parseInt(num, 16);
@@ -51,6 +52,7 @@
     methods: {
       async getTransactions() {
         const latest = await web3.eth.getBlockNumber();
+        console.log(await this.getTransactionCount());
 
         let transactions = []
         let blocks = 0
@@ -60,7 +62,7 @@
           transactions = await web3.eth.getPastLogs({
             fromBlock: toHex(latest - count * blocks),
             toBlock: toHex(latest),
-            address: '0x07865c6E87B9F70255377e024ace6630C1Eaa37F'
+            address: usdcAddress
           } );
 
           blocks += 1;
@@ -72,6 +74,12 @@
           transaction.data = fromHex(transaction.data)/10**6;
         });
         return transactions;
+      },
+      async getTransactionCount() {
+        //need to fix since this is from sender address so just returning 1
+        const transactionCount = web3.eth.getTransactionCount(usdcAddress);
+        console.log(transactionCount);
+        return transactionCount;
       }
     },
     created() {

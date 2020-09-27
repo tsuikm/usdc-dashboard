@@ -37,10 +37,42 @@
 </template>
 
 <script>
-import { getTransactionsForAddress, getCurrentBlockNumber } from "@/api/infura";
+import Web3 from "web3";
+const web3 = new Web3(Web3.givenProvider);
 
 const DEFAULT_PAGE_LENGTH = 25;
 const INITIAL_BLOCK_LOOKBACK = 80000;
+
+const getLogs = async (address, currentBlock, lookback) => {
+  // Txns where wallet is receiver
+  const receiverTxns = await web3.eth.getPastLogs({
+    fromBlock: "0x" + Math.max(0, currentBlock - lookback).toString(16),
+    toBlock: "latest",
+    address: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
+    topics: [
+      "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+      null,
+      address,
+    ],
+  });
+
+  // Txns where wallet is sender
+  const senderTxns = await web3.eth.getPastLogs({
+    fromBlock: "0x" + Math.max(0, currentBlock - lookback).toString(16),
+    toBlock: "latest",
+    address: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
+    topics: [
+      "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+      address,
+      null,
+    ],
+  });
+
+  return receiverTxns.concat(
+    // Prevent internal transactions from being counted twice
+    senderTxns.filter((log) => log.topics[1] !== log.topics[2])
+  );
+};
 
 export default {
   data() {
@@ -53,31 +85,18 @@ export default {
     async fetchTransactions(address, pageLength = DEFAULT_PAGE_LENGTH) {
       address = "0x" + address.slice(2).padStart(64, "0");
 
-      const currentBlock = await getCurrentBlockNumber();
+      const currentBlock = await web3.eth.getBlockNumber();
       let lookback = INITIAL_BLOCK_LOOKBACK;
 
-      let transactions = await getTransactionsForAddress(
-        address,
-        "0x" + Math.max(0, currentBlock - lookback).toString(16),
-        "latest"
-      );
+      let transactions = await getLogs(address, currentBlock, lookback);
 
-      while (
-        transactions.receiverTxns.length + transactions.senderTxns.length <
-          pageLength &&
-        currentBlock - lookback >= 0
-      ) {
+      while (transactions.length < pageLength && currentBlock - lookback >= 0) {
         lookback *= 2;
-        transactions = await getTransactionsForAddress(
-          address,
-          "0x" + Math.max(0, currentBlock - lookback).toString(16),
-          "latest"
-        );
+        transactions = await getLogs(address, currentBlock, lookback);
       }
 
-      this.transactions = transactions.receiverTxns.concat(
-        transactions.senderTxns
-      );
+      console.log(transactions);
+      this.transactions = transactions;
     },
   },
   async mounted() {

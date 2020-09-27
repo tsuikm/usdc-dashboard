@@ -1,5 +1,9 @@
 <template>
   <div>
+    <pagination
+      v-bind:totalPages="this.totalPages"
+      @page:change="this.pageChange"
+    />
     <md-table>
       <md-table-row>
         <md-table-head md-numeric>Transaction Hash</md-table-head>
@@ -17,10 +21,6 @@
         <md-table-cell>{{ parseInt(t["data"], 16) / 10 ** 6 }}</md-table-cell>
       </md-table-row>
     </md-table>
-    <pagination
-      v-bind:totalPages="this.totalPages"
-      @page:change="this.pageChange"
-    />
   </div>
 </template>
 

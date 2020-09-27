@@ -6,14 +6,16 @@
         <md-table-head>Sender Address</md-table-head>
         <md-table-head>Receiver Address</md-table-head>
         <md-table-head>How Long Ago</md-table-head>
-        <md-table-head>Transaction Amount</md-table-head> </md-table-row
-      >]
+        <md-table-head>Transaction Amount</md-table-head>
+      </md-table-row>
       <md-table-row v-for="i in transactions" :key="i.transactioHash">
-        <md-table-cell></md-table-cell>
-        <md-table-cell></md-table-cell>
-        <md-table-cell></md-table-cell>
-        <md-table-cell></md-table-cell>
-        <md-table-cell></md-table-cell>
+        <md-table-cell>{{ transactions[0]["transactionHash"] }}</md-table-cell>
+        <md-table-cell>{{ transactions[0]["topics"][1] }}</md-table-cell>
+        <md-table-cell>{{ transactions[0]["topics"][2] }}</md-table-cell>
+        <md-table-cell>0 Seconds Ago</md-table-cell>
+        <md-table-cell>{{
+          parseInt(transactions[0]["data"], 16) / 10 ** 6
+        }}</md-table-cell>
       </md-table-row>
     </md-table>
   </div>
@@ -22,7 +24,6 @@
 <script>
 import Web3 from "web3";
 const web3 = new Web3(Web3.givenProvider);
-
 const TRANSACTION_TOPIC =
   "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 const DEFAULT_PAGE_LENGTH = 25;
@@ -108,6 +109,7 @@ export default {
       this.loading = false;
     },
   },
+
   async mounted() {
     const { address } = this.$route.params;
     if (!address || address.length === 0) return;

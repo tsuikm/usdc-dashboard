@@ -5,17 +5,13 @@
         <md-table-head md-numeric>Transaction Hash</md-table-head>
         <md-table-head>Sender Address</md-table-head>
         <md-table-head>Receiver Address</md-table-head>
-        <md-table-head>How Long Ago</md-table-head>
         <md-table-head>Transaction Amount</md-table-head>
       </md-table-row>
-      <md-table-row v-for="i in transactions" :key="i.transactioHash">
-        <md-table-cell>{{ transactions[0]["transactionHash"] }}</md-table-cell>
-        <md-table-cell>{{ transactions[0]["topics"][1] }}</md-table-cell>
-        <md-table-cell>{{ transactions[0]["topics"][2] }}</md-table-cell>
-        <md-table-cell>0 Seconds Ago</md-table-cell>
-        <md-table-cell>{{
-          parseInt(transactions[0]["data"], 16) / 10 ** 6
-        }}</md-table-cell>
+      <md-table-row v-for="t in transactions" :key="t.transactionHash">
+        <md-table-cell>{{ t["transactionHash"] }}</md-table-cell>
+        <md-table-cell>{{ t["topics"][1] }}</md-table-cell>
+        <md-table-cell>{{ t["topics"][2] }}</md-table-cell>
+        <md-table-cell>{{ parseInt(t["data"], 16) / 10 ** 6 }}</md-table-cell>
       </md-table-row>
     </md-table>
   </div>

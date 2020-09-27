@@ -61,7 +61,6 @@ describe('Transactions', () => {
     findByText('0x3000');
   });
 
-
   it('Pagination rendered correctly', () => {
     const { getByText } = render(Transactions);
 
@@ -71,7 +70,6 @@ describe('Transactions', () => {
     getByText('>');
     getByText('Last');
   });
-
 
   it('Pagination functionality', async () => {
     const { getByText, findByText } = await render(Transactions);
@@ -83,7 +81,6 @@ describe('Transactions', () => {
     getByText('Page 2 of 300');
     getByText('>');
     getByText('Last');
-
 
     findByText('51');
     findByText('0x00051');

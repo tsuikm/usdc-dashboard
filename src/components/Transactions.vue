@@ -82,7 +82,6 @@
           transaction.to = transaction.topics[2]
         });
 
-
         // Since some of the transactions have the same block number, use a
         // dictionary to keep track of the age of the block for performance.
         const blockNumberToAge = new Map();
@@ -109,7 +108,8 @@
             }
             else if (days == 0) {
               blockNumberToAge.set(transaction.blockNumber, `${hours} hrs ${minutes} mins ago`);
-            } else {
+            }
+            else {
               blockNumberToAge.set(transaction.blockNumber, `${days} days ${hours} hrs ago`);
             }
           }
@@ -117,13 +117,10 @@
           transaction.age = blockNumberToAge.get(transaction.blockNumber);
         }
 
-
         return transactions;
       },
       async getTransactionCount() {
-        //TODO:need to fix since this is from sender address so just returning 1
-        const transactionCount = await web3.eth.getTransactionCount(usdcAddress);
-        return transactionCount;
+        // TODO: need to fix since this is from sender address so just returning 1
       },
       async pageChange (page) {
         this.page = page;

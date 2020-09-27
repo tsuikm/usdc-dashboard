@@ -7,18 +7,26 @@
         <md-table-head>Receiver Address</md-table-head>
         <md-table-head>Transaction Amount</md-table-head>
       </md-table-row>
-      <md-table-row v-for="t in transactions" :key="t.transactionHash">
+      <md-table-row
+        v-for="t in transactions.slice(page * 25, (page + 1) * 25)"
+        :key="t.transactionHash"
+      >
         <md-table-cell>{{ t["transactionHash"] }}</md-table-cell>
         <md-table-cell>{{ t["topics"][1] }}</md-table-cell>
         <md-table-cell>{{ t["topics"][2] }}</md-table-cell>
         <md-table-cell>{{ parseInt(t["data"], 16) / 10 ** 6 }}</md-table-cell>
       </md-table-row>
     </md-table>
+    <pagination
+      v-bind:totalPages="this.totalPages"
+      @page:change="this.pageChange"
+    />
   </div>
 </template>
 
 <script>
 import Web3 from "web3";
+import Pagination from "@/components/Pagination";
 const web3 = new Web3(Web3.givenProvider);
 const TRANSACTION_TOPIC =
   "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
@@ -62,10 +70,15 @@ const getLogs = async (address, fromBlock) => {
 };
 
 export default {
+  components: {
+    Pagination,
+  },
   data() {
     return {
       transactions: [],
       loading: false,
+      totalPages: 0,
+      page: 0,
     };
   },
 
@@ -78,6 +91,9 @@ export default {
       if (transactions !== null) {
         // We have all transactions in history for this address
         this.transactions = transactions.reverse().slice(0, 10000);
+        this.totalPages = Math.ceil(
+          this.transactions.length / DEFAULT_PAGE_LENGTH
+        );
         this.loading = false;
         return;
       }
@@ -102,10 +118,15 @@ export default {
 
       // We have the latest 10k transactions
       this.transactions = transactions.reverse().slice(0, 10000);
+      this.totalPages = Math.ceil(
+        this.transactions.length / DEFAULT_PAGE_LENGTH
+      );
       this.loading = false;
     },
+    async pageChange(page) {
+      this.page = page;
+    },
   },
-
   async mounted() {
     const { address } = this.$route.params;
     if (!address || address.length === 0) return;

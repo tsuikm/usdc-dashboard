@@ -31,6 +31,8 @@ const web3 = new Web3(Web3.givenProvider);
 export const TRANSACTION_TOPIC =
   "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 const DEFAULT_PAGE_LENGTH = 25;
+const MAX_TRANSACTIONS = 10000;
+const WEB3_RESULT_TOO_LARGE_ERROR_CODE = -32005;
 
 // Ropsten USDC Address
 const CONTRACT_ADDRESS = "0x07865c6E87B9F70255377e024ace6630C1Eaa37F";
@@ -63,8 +65,8 @@ export const getLogs = async (address, fromBlock) => {
       )
       .sort((a, b) => a.blockNumber - b.blockNumber);
   } catch (e) {
-    if (e.code === -32005) {
-      // More than 10k results
+    if (e.code === WEB3_RESULT_TOO_LARGE_ERROR_CODE) {
+      // More than MAX_TRANSACTIONS results
       return null;
     }
     console.error(e);
@@ -92,7 +94,7 @@ export default {
       let transactions = await getLogs(address, 0);
       if (transactions !== null) {
         // We have all transactions in history for this address
-        this.transactions = transactions.reverse().slice(0, 10000);
+        this.transactions = transactions.reverse().slice(0, MAX_TRANSACTIONS);
         this.totalPages = Math.ceil(
           this.transactions.length / DEFAULT_PAGE_LENGTH
         );
@@ -104,8 +106,8 @@ export default {
       let fromBlock = Math.floor((range[0] + range[1]) / 2);
       transactions = await getLogs(address, fromBlock);
 
-      // Over 10k transactions; binary search to find block number that gets us just over 10k
-      while (transactions === null || transactions.length < 10000) {
+      // Over MAX_TRANSACTIONS transactions; binary search to find block number that gets us just over MAX_TRANSACTIONS
+      while (transactions === null || transactions.length < MAX_TRANSACTIONS) {
         if (transactions === null) {
           // Still too many transactions
           range[0] = fromBlock;
@@ -118,8 +120,8 @@ export default {
         transactions = await getLogs(address, fromBlock);
       }
 
-      // We have the latest 10k transactions
-      this.transactions = transactions.reverse().slice(0, 10000);
+      // We have the latest MAX_TRANSACTIONS transactions
+      this.transactions = transactions.reverse().slice(0, MAX_TRANSACTIONS);
       this.totalPages = Math.ceil(
         this.transactions.length / DEFAULT_PAGE_LENGTH
       );

@@ -23,7 +23,6 @@
   </div>
 </template>
 
-
 <script>
   import Web3 from 'web3';
   import moment from 'moment';
@@ -41,7 +40,7 @@
     data() {
       return {
         transactions: [],
-        totalPages: 300, //fix this
+        totalPages: 300, // TODO: this number is hard-coded. We need to calculate the total number of transactions (not done yet) to compute how many total pages.
         page: 0,
       }
     },
@@ -51,7 +50,8 @@
         let transactions = []
         let blocks = 0
         const count = 1000;
-        //Loop to find enough transactions to display on the selected page
+
+        // Loop to find enough transactions to display on the selected page.
         while (transactions.length <= 50 * (this.page + 1)) {
           const from = Math.max(latest - count * blocks, 0);
           transactions = await web3.eth.getPastLogs({
@@ -68,7 +68,7 @@
           blocks += 1;
         }
 
-        //select the correct 50 transactions to display on the page
+        // Select the correct 50 transactions to display on the page.
         const upper = Math.min(transactions.length, transactions.length-50*(this.page));
         transactions = transactions.slice(transactions.length-50*(this.page + 1), upper).reverse();
 
@@ -95,6 +95,7 @@
             const hours = age.hours();
             const days = age.days();
 
+            // TODO: Factor this out to a separate util function? Also consider when minutes/hours/days is singular!
             if (days == 0 && hours == 0 && minutes == 0) {
               blockNumberToAge.set(transaction.blockNumber, `${seconds} s ago`);
             }
@@ -128,5 +129,4 @@
       });
     }
   }
-
 </script>

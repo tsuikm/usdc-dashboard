@@ -58,6 +58,16 @@ export const getLogs = async (address, fromBlock) => {
       topics: [TRANSACTION_TOPIC, address, null],
     });
 
+    receiverTxns.forEach((t) => {
+      t.topics[1] = "0x" + parseInt(t.topics[1]).toString(16);
+      t.topics[2] = "0x" + parseInt(t.topics[2]).toString(16);
+    });
+
+    senderTxns.forEach((t) => {
+      t.topics[1] = "0x" + parseInt(t.topics[1]).toString(16);
+      t.topics[2] = "0x" + parseInt(t.topics[2]).toString(16);
+    });
+
     return receiverTxns
       .concat(
         // Prevent internal transactions from being counted twice

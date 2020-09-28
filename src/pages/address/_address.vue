@@ -6,7 +6,7 @@
     />
     <md-table>
       <md-table-row>
-        <md-table-head md-numeric>Transaction Hash</md-table-head>
+        <md-table-head>Transaction Hash</md-table-head>
         <md-table-head>Sender Address</md-table-head>
         <md-table-head>Receiver Address</md-table-head>
         <md-table-head>Transaction Amount</md-table-head>

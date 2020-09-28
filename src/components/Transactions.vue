@@ -3,6 +3,7 @@
     <md-table md-card>
       <md-table-toolbar>
         <h1 class="md-title">Transactions</h1>
+        <pagination v-bind:totalPages="this.totalPages" @page:change="this.pageChange"/>
       </md-table-toolbar>
       <md-table-row>
         <md-table-head md-numeric>ID</md-table-head>
@@ -17,12 +18,9 @@
         <md-table-cell>{{ transaction.transactionHash }}</md-table-cell>
         <md-table-cell>{{ transaction.age }}</md-table-cell>
         <md-table-cell>{{ transaction.data }}</md-table-cell>
-        <md-table-cell>{{ transaction.from }}</md-table-cell>
-        <md-table-cell>{{ transaction.to }}</md-table-cell>
+        <md-table-cell><a v-bind:href='`address/${transaction.from}`'>{{ transaction.from }}</a></md-table-cell>
+        <md-table-cell><a v-bind:href='`address/${transaction.to}`'>{{ transaction.to }}</a></md-table-cell>
       </md-table-row>
-      <pagination 
-        v-bind:totalPages="this.totalPages"
-        @page:change="this.pageChange"/>
     </md-table>
   </div>
 </template>
@@ -30,12 +28,13 @@
 
 <script>
   import Pagination from './Pagination';
-  import { fromHex, toHex } from '../utils/utils';
 
   import Web3 from 'web3';
   const web3 = new Web3(Web3.givenProvider);
-  const USDC_ADDRESS = '0x07865c6E87B9F70255377e024ace6630C1Eaa37F';
-  
+  const usdcAddress = '0x07865c6E87B9F70255377e024ace6630C1Eaa37F';
+
+  const toHex = num => '0x' + (num).toString(16);
+  const fromHex = num => parseInt(num, 16);
 
   export default {
     name: 'Transactions',
@@ -52,23 +51,28 @@
     methods: {
       async getTransactions() {
         const latest = await web3.eth.getBlockNumber();
+        //console.log(await this.getTransactionCount());
+
         let transactions = []
         let blocks = 0
         const count = 1000;
         while (transactions.length <= 50 * (this.page + 1)) {
+          const from = Math.max(latest - count * blocks, 0);
           transactions = await web3.eth.getPastLogs({
-            fromBlock: toHex(latest - count * blocks),
+            fromBlock: toHex(from),
             toBlock: toHex(latest),
-            address: USDC_ADDRESS
+            address: usdcAddress
           });
-          // if (transactions == []) {
-          //   console.log("i failed now");
-          //   break;
-          // }
+
+          // If its the last page, we don't have to display 50.
+          if (from === 0) {
+            break;
+          }
           blocks += 1;
         }
 
-        transactions = transactions.slice(transactions.length-50*(this.page + 1), transactions.length-50*(this.page));
+        const upper = Math.min(transactions.length, transactions.length-50*(this.page));
+        transactions = transactions.slice(transactions.length-50*(this.page + 1), upper);
         transactions = transactions.reverse();
 
         transactions.forEach((transaction, index) => {
@@ -77,7 +81,6 @@
           transaction.from = transaction.topics[1]
           transaction.to = transaction.topics[2]
         });
-
 
         // Since some of the transactions have the same block number, use a
         // dictionary to keep track of the age of the block for performance.
@@ -105,7 +108,8 @@
             }
             else if (days == 0) {
               blockNumberToAge.set(transaction.blockNumber, `${hours} hrs ${minutes} mins ago`);
-            } else {
+            }
+            else {
               blockNumberToAge.set(transaction.blockNumber, `${days} days ${hours} hrs ago`);
             }
           }
@@ -113,16 +117,12 @@
           transaction.age = blockNumberToAge.get(transaction.blockNumber);
         }
 
-
         return transactions;
       },
       async getTransactionCount() {
-        //need to fix since this is from sender address so just returning 1
-        const transactionCount = await web3.eth.getTransactionCount(USDC_ADDRESS);
-        return transactionCount;
+        // TODO: need to fix since this is from sender address so just returning 1
       },
       async pageChange (page) {
-        console.log("pageChange");
         this.page = page;
         this.transactions = await this.getTransactions();
       }

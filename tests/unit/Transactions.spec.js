@@ -43,7 +43,6 @@ describe('Transactions', () => {
     const { getByText } = render(Transactions);
 
     getByText('Transactions');
-    getByText('ID');
     getByText('TXN HASH');
     getByText('Age');
     getByText('Quantity');
@@ -54,7 +53,6 @@ describe('Transactions', () => {
   it('Renders entries correctly', async () => {
     const { findByText } = render(Transactions);
 
-    findByText('3');
     findByText('0x0003');
     findByText('0');
     findByText('0x00300');
@@ -82,7 +80,6 @@ describe('Transactions', () => {
     getByText('>');
     getByText('Last');
 
-    findByText('51');
     findByText('0x00051');
     findByText('0');
     findByText('0x005100');

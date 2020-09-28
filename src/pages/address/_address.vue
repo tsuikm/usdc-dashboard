@@ -81,11 +81,14 @@ export default {
     return {
       transactions: [],
       loading: false,
-      totalPages: 0,
       page: 0,
     };
   },
-
+  computed: {
+    totalPages() {
+      return Math.ceil(this.transactions.length / DEFAULT_PAGE_LENGTH);
+    },
+  },
   methods: {
     async fetchTransactions(address) {
       this.loading = true;
@@ -95,9 +98,6 @@ export default {
       if (transactions !== null) {
         // We have all transactions in history for this address
         this.transactions = transactions.reverse().slice(0, MAX_TRANSACTIONS);
-        this.totalPages = Math.ceil(
-          this.transactions.length / DEFAULT_PAGE_LENGTH
-        );
         this.loading = false;
         return;
       }
@@ -122,9 +122,6 @@ export default {
 
       // We have the latest MAX_TRANSACTIONS transactions
       this.transactions = transactions.reverse().slice(0, MAX_TRANSACTIONS);
-      this.totalPages = Math.ceil(
-        this.transactions.length / DEFAULT_PAGE_LENGTH
-      );
       this.loading = false;
     },
     async pageChange(page) {

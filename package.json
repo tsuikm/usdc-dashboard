@@ -13,6 +13,7 @@
   "dependencies": {
     "@testing-library/vue": "^5.0.4",
     "@vue/cli-plugin-unit-jest": "^4.5.6",
+    "@vue/test-utils": "^1.1.0",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6",

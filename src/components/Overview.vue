@@ -2,7 +2,7 @@
   <div>
     <div>Address: {{ walletAddress }}</div>
     <div>Balance: {{ this.balance }}</div>
-    <BalanceTable
+    <BalanceCard
       :usdcBalance="this.balance"
       :usdValue="this.usdValue"
       :conversionRate="this.conversionRate"
@@ -12,7 +12,7 @@
 
 <script>
 import Web3 from "web3";
-import BalanceTable from "./BalanceTable";
+import BalanceCard from "./BalanceCard";
 import axios from "axios";
 const web3 = new Web3(Web3.givenProvider);
 const tokenAddress = "0x07865c6E87B9F70255377e024ace6630C1Eaa37F";
@@ -36,7 +36,7 @@ const contract = new web3.eth.Contract(abi, tokenAddress);
 
 export default {
   components: {
-    BalanceTable,
+    BalanceCard,
   },
   data() {
     return {
@@ -79,5 +79,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

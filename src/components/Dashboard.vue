@@ -22,10 +22,12 @@
 
 <script>
 import Overview from "./Overview";
+import BalanceCard from "./BalanceCard";
 export default {
   name: "Dashboard",
   components: {
     Overview,
+    BalanceCard,
   },
   data() {
     return {

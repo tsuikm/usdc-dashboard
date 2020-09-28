@@ -6,15 +6,13 @@
         <Pagination v-bind:totalPages="this.totalPages" @page:change="this.pageChange"/>
       </md-table-toolbar>
       <md-table-row>
-        <md-table-head md-numeric>ID</md-table-head>
         <md-table-head>TXN HASH</md-table-head>
         <md-table-head>Age</md-table-head>
         <md-table-head>Quantity</md-table-head>
         <md-table-head>Sender</md-table-head>
         <md-table-head>Receiver</md-table-head>
       </md-table-row>
-      <md-table-row v-for="transaction in this.transactions" :key="transaction.id">
-        <md-table-cell md-numeric>{{ transaction.id + 1 }}</md-table-cell>
+      <md-table-row v-for="transaction in this.transactions" :key="transaction.transactionHash">
         <md-table-cell>{{ transaction.transactionHash }}</md-table-cell>
         <md-table-cell>{{ transaction.age }}</md-table-cell>
         <md-table-cell>{{ transaction.data }}</md-table-cell>
@@ -29,7 +27,7 @@
 <script>
   import Web3 from 'web3';
   import Pagination from './Pagination';
-  import { fromHex, toHex, toSeconds, toMinutes, toHours, toDays, removeLeadingZeros } from '../utils/utils';
+  import { fromHex, toHex, toSeconds, toMinutes, toHours, toDays, removeLeadingZeros, removeDuplicates } from '../utils/utils';
 
   const web3 = new Web3(Web3.givenProvider);
   const USDC_ADDRESS = '0x07865c6E87B9F70255377e024ace6630C1Eaa37F';
@@ -60,6 +58,7 @@
             toBlock: toHex(latest),
             address: USDC_ADDRESS
           });
+          transactions = removeDuplicates(transactions, transaction => transaction.transactionHash);
 
           // If its the last page, we don't have to display 50.
           if (from === 0) {
@@ -72,8 +71,7 @@
         const upper = Math.min(transactions.length, transactions.length-50*(this.page));
         transactions = transactions.slice(transactions.length-50*(this.page + 1), upper).reverse();
 
-        transactions.forEach((transaction, index) => {
-          transaction.id = index + 50*(this.page);
+        transactions.forEach((transaction) => {
           transaction.data = fromHex(transaction.data)/10**6;
           transaction.from = removeLeadingZeros(transaction.topics[1]);
           transaction.to = removeLeadingZeros(transaction.topics[2]);

@@ -26,8 +26,9 @@
 
 <script>
   import Web3 from 'web3';
+  import moment from 'moment';
   import Pagination from './Pagination';
-  import { fromHex, toHex, toSeconds, toMinutes, toHours, toDays, removeLeadingZeros, removeDuplicates } from '../utils/utils';
+  import { fromHex, toHex, removeLeadingZeros, removeDuplicates } from '../utils/utils';
 
   const web3 = new Web3(Web3.givenProvider);
   const USDC_ADDRESS = '0x07865c6E87B9F70255377e024ace6630C1Eaa37F';
@@ -66,7 +67,7 @@
           }
           blocks += 1;
         }
-        
+
         //select the correct 50 transactions to display on the page
         const upper = Math.min(transactions.length, transactions.length-50*(this.page));
         transactions = transactions.slice(transactions.length-50*(this.page + 1), upper).reverse();
@@ -80,19 +81,19 @@
         // Since some of the transactions have the same block number, use a
         // dictionary to keep track of the age of the block for performance.
         const blockNumberToAge = new Map();
-        const now = Date.now();
+        const now = moment();
 
         for (const transaction of transactions) {
 
           if (!blockNumberToAge.has(transaction.blockNumber)) {
             const block = await web3.eth.getBlock(transaction.blockNumber);
-            const blockTime = new Date(block.timestamp * 1000);
-            const age = now - blockTime.getTime(); // in ms.
+            const blockTime = moment.unix(block.timestamp);
+            const age = moment.duration(now.diff(blockTime));
 
-            const seconds = toSeconds(age);
-            const minutes = toMinutes(age);
-            const hours = toHours(age);
-            const days = toDays(age);
+            const seconds = age.seconds();
+            const minutes = age.minutes();
+            const hours = age.hours();
+            const days = age.days();
 
             if (days == 0 && hours == 0 && minutes == 0) {
               blockNumberToAge.set(transaction.blockNumber, `${seconds} s ago`);

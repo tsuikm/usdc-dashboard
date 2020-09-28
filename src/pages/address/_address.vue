@@ -28,7 +28,7 @@
 import Web3 from "web3";
 import Pagination from "@/components/Pagination";
 const web3 = new Web3(Web3.givenProvider);
-const TRANSACTION_TOPIC =
+export const TRANSACTION_TOPIC =
   "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 const DEFAULT_PAGE_LENGTH = 25;
 

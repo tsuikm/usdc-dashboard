@@ -25,7 +25,6 @@ export default {
   },
   methods: {
     changePage(page) {
-      console.log(page);
       page = Math.min(this.totalPages - 1, Math.max(page, 0));
       this.page = page;
       this.$emit("page:change", page);

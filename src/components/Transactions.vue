@@ -3,7 +3,7 @@
     <md-table md-card>
       <md-table-toolbar>
         <h1 class="md-title">Transactions</h1>
-        <pagination v-bind:totalPages="this.totalPages" @page:change="this.pageChange"/>
+        <Pagination v-bind:totalPages="this.totalPages" @page:change="this.pageChange"/>
       </md-table-toolbar>
       <md-table-row>
         <md-table-head md-numeric>ID</md-table-head>
@@ -27,14 +27,12 @@
 
 
 <script>
-  import Pagination from './Pagination';
-
   import Web3 from 'web3';
-  const web3 = new Web3(Web3.givenProvider);
-  const usdcAddress = '0x07865c6E87B9F70255377e024ace6630C1Eaa37F';
+  import Pagination from './Pagination';
+  import { fromHex, toHex, toSeconds, toMinutes, toHours, toDays, removeLeadingZeros } from '../utils/utils';
 
-  const toHex = num => '0x' + (num).toString(16);
-  const fromHex = num => parseInt(num, 16);
+  const web3 = new Web3(Web3.givenProvider);
+  const USDC_ADDRESS = '0x07865c6E87B9F70255377e024ace6630C1Eaa37F';
 
   export default {
     name: 'Transactions',
@@ -51,17 +49,16 @@
     methods: {
       async getTransactions() {
         const latest = await web3.eth.getBlockNumber();
-        //console.log(await this.getTransactionCount());
-
         let transactions = []
         let blocks = 0
         const count = 1000;
+        //Loop to find enough transactions to display on the selected page
         while (transactions.length <= 50 * (this.page + 1)) {
           const from = Math.max(latest - count * blocks, 0);
           transactions = await web3.eth.getPastLogs({
             fromBlock: toHex(from),
             toBlock: toHex(latest),
-            address: usdcAddress
+            address: USDC_ADDRESS
           });
 
           // If its the last page, we don't have to display 50.
@@ -70,16 +67,16 @@
           }
           blocks += 1;
         }
-
+        
+        //select the correct 50 transactions to display on the page
         const upper = Math.min(transactions.length, transactions.length-50*(this.page));
-        transactions = transactions.slice(transactions.length-50*(this.page + 1), upper);
-        transactions = transactions.reverse();
+        transactions = transactions.slice(transactions.length-50*(this.page + 1), upper).reverse();
 
         transactions.forEach((transaction, index) => {
           transaction.id = index + 50*(this.page);
           transaction.data = fromHex(transaction.data)/10**6;
-          transaction.from = transaction.topics[1]
-          transaction.to = transaction.topics[2]
+          transaction.from = removeLeadingZeros(transaction.topics[1]);
+          transaction.to = removeLeadingZeros(transaction.topics[2]);
         });
 
         // Since some of the transactions have the same block number, use a
@@ -94,16 +91,15 @@
             const blockTime = new Date(block.timestamp * 1000);
             const age = now - blockTime.getTime(); // in ms.
 
-            // https://stackoverflow.com/questions/10874048/from-milliseconds-to-hour-minutes-seconds-and-milliseconds
-            const seconds = Math.floor((age / 1000) % 60);
-            const minutes = Math.floor((age / (1000 * 60)) % 60);
-            const hours = Math.floor((age / (1000 * 60 * 60)) % 24);
-            const days = Math.floor((age / (1000 * 60 * 60 * 24)) % 365.25)
+            const seconds = toSeconds(age);
+            const minutes = toMinutes(age);
+            const hours = toHours(age);
+            const days = toDays(age);
 
-            if (hours == 0 && minutes == 0) {
+            if (days == 0 && hours == 0 && minutes == 0) {
               blockNumberToAge.set(transaction.blockNumber, `${seconds} s ago`);
             }
-            else if (hours == 0) {
+            else if (days == 0 && hours == 0) {
               blockNumberToAge.set(transaction.blockNumber, `${minutes} mins ${seconds} s ago`);
             }
             else if (days == 0) {

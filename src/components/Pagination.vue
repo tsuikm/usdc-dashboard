@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'pagination',
+  name: 'Pagination',
   props: {
     totalPages: Number,
   },

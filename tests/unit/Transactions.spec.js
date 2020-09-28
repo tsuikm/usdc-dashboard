@@ -28,7 +28,7 @@ jest.mock('web3', () => class Web3 {
         }
         return result;
       },
-      getBlock: async () => {
+      getBlock: async (hash) => {
         return {
           timestamp: '0000000000'
         }
@@ -52,7 +52,7 @@ describe('Transactions', () => {
   });
 
   it('Renders entries correctly', async () => {
-    const { findByText } = await render(Transactions);
+    const { findByText } = render(Transactions);
 
     findByText('3');
     findByText('0x0003');
@@ -72,7 +72,7 @@ describe('Transactions', () => {
   });
 
   it('Pagination functionality', async () => {
-    const { getByText, findByText } = await render(Transactions);
+    const { getByText, findByText } = render(Transactions);
 
     await fireEvent.click(getByText('>'));
 

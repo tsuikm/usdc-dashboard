@@ -7,30 +7,37 @@ import VueMaterial from "vue-material";
 Vue.use(VueMaterial);
 
 describe("BalanceCard", () => {
-  it("values display within balance card", async (done) => {
+  it("ValueDisplay renders onto BalanceCard", async (done) => {
     const wrapper = mount(BalanceCard);
     const valueDisplay = wrapper.findComponent({ name: "ValueDisplay" });
     expect(valueDisplay.exists()).toBeTruthy();
+    expect(valueDisplay.text()).toContain("BALANCE (USDC)");
+    expect(valueDisplay.text()).toContain("BALANCE (USD $)");
     done();
   });
 
-  it("balance card images properly display", async (done) => {
+  it("Images display on BalanceCard", async (done) => {
     const wrapper = mount(BalanceCard);
     const images = wrapper.find("img");
     expect(images.exists()).toBeTruthy();
     done();
   });
 
-  it("fetches conversion rate from Coinbase API", async (done) => {
+  it("ConversionDisplay renders onto BalanceCard", async (done) => {
     const wrapper = mount(BalanceCard);
-    const arrow = wrapper.find("img");
-    expect(arrow.exists()).toBeTruthy();
+    const conversionDisplay = wrapper.findComponent({
+      name: "ConversionDisplay",
+    });
+    expect(conversionDisplay.exists()).toBeTruthy();
+    expect(conversionDisplay.text()).toContain("CONVERSION RATE:");
+    expect(conversionDisplay.text()).toContain("1 USD//Coin to");
+    expect(conversionDisplay.text()).toContain("US Dollar");
     done();
   });
 });
 
 describe("Dashboard", () => {
-  it("balance card displays on submit", async (done) => {
+  it("BalanceCard displays on Dashboard input's submit", async (done) => {
     const wrapper = mount(Dashboard);
     const addr = wrapper.find("input");
     const form = wrapper.find("form");
@@ -43,26 +50,3 @@ describe("Dashboard", () => {
     done();
   });
 });
-
-//   it("displays balance values on balance card", async (done) => {
-//     const wrapper = mount(Dashboard);
-//     const addr = wrapper.find("input");
-//     const form = wrapper.find("form");
-//     await addr.setValue("0xc0539c310393165705265dc9865a0E495202771B");
-//     await form.trigger("submit.prevent");
-//     await wrapper.vm.$nextTick();
-
-//     const valuedisplay = wrapper.findComponent({ name: "ValueDisplay" });
-//     expect(valuedisplay.exists()).toBeTruthy();
-//     done();
-//   });
-
-//   //   it("displays wallet balance in usd", async done => {
-//   //     const wrapper = mount(BalanceCard);
-//   //     done();
-//   //   });
-
-//   //   it("fetches the conversion rate from Coinbase API", async done => {
-//   //     const wrapper = mount(BalanceCard);
-//   //     done();
-//   //   });

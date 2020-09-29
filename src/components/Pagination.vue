@@ -14,32 +14,28 @@
 
 <script>
 export default {
-  name: "pagination",
+  name: 'Pagination',
   props: {
     totalPages: Number,
   },
   data() {
     return {
-      page: 0,
-    };
+      page: 0
+    }
   },
   methods: {
     changePage(page) {
-      page = Math.min(this.totalPages - 1, Math.max(page, 0));
+      page = Math.min(this.totalPages, Math.max(page, 0));
       this.page = page;
-      this.$emit("page:change", page);
-    },
-  },
-};
+      this.$emit('page:change', page);
+    }
+  }
+}
 </script>
 
 <style scoped>
-.clickable {
-  cursor: pointer;
-}
-
 .page {
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
 </style>

@@ -32,10 +32,10 @@ export default {
     return {
       balance: null
     }
-  }, 
+  },
   props: {
     walletAddress: String
-  }, 
+  },
   created: function() {
     this.lookupBalance();
   },

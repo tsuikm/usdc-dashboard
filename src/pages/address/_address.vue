@@ -1,6 +1,6 @@
 <template>
   <div>
-    <pagination
+    <Pagination
       v-bind:totalPages="this.totalPages"
       @page:change="this.pageChange"
     />

@@ -12,14 +12,6 @@ module.exports = {
       {
         rel: 'stylesheet',
         href: 'https://fonts.googleapis.com/icon?family=Material+Icons'
-      },
-      {
-        rel: 'stylesheet',
-        href: 'https://unpkg.com/vue-material/dist/vue-material.min.css'
-      },
-      {
-        rel: 'stylesheet',
-        href: 'https://unpkg.com/vue-material/dist/theme/default.css'
       }
     ]
   }

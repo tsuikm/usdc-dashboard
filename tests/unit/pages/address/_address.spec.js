@@ -55,7 +55,7 @@ jest.mock('web3', () => class Web3 {
       getBlockNumber: async function () {
         return "0x7";
       },
-      getPastLogs: async function ({ fromBlock, toBlock, address, topics }) {
+      getPastLogs: async function ({ fromBlock, toBlock, topics }) {
         if (toBlock === 'latest') toBlock = await this.getBlockNumber()
 
         if (topics[1]) {

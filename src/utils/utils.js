@@ -7,9 +7,9 @@ export function fromHex(num) {
 
 export function removeLeadingZeros(num) {
     if (!num || fromHex(num) === 0) {
-        return '0x0000000000000000000000000000000000000000';
+        return '0x0000000000000000000000000000000000000000'; // TODO: what should be returned for this case?
     }
-    return '0x' + num.slice(2, num.length).replaceAll('0', '');
+    return toHex(fromHex(num.slice(2, num.length)));
 }
 
 export function removeDuplicates(a, key) {

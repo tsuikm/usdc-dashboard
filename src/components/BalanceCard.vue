@@ -14,10 +14,7 @@
         />
       </div>
       <div class="card-footer">
-        <div class="subheading">CONVERSION RATE:</div>
-        <div class="content">
-          1 USD//Coin to {{ this.conversionRate }} US Dollar
-        </div>
+        <ConversionDisplay :conversionRate="this.conversionRate" />
       </div>
     </md-card>
   </div>
@@ -25,10 +22,12 @@
 
 <script>
 import ValueDisplay from "./ValueDisplay";
+import ConversionDisplay from "./ConversionDisplay";
 export default {
   name: "BalanceCard",
   components: {
     ValueDisplay,
+    ConversionDisplay,
   },
   props: {
     usdcBalance: Number,
@@ -60,18 +59,6 @@ export default {
 .heading {
   font-weight: 800;
   font-size: 24px;
-  color: #a3a3a3;
-}
-.subheading {
-  font-weight: 800;
-  font-size: 20px;
-  color: #a3a3a3;
-  height: 50px;
-  letter-spacing: 1px;
-}
-.content {
-  font-weight: 200;
-  font-size: 20px;
   color: #a3a3a3;
 }
 .gray-bar {

@@ -9,7 +9,7 @@ export function removeLeadingZeros(num) {
     if (!num || fromHex(num) === 0) {
         return '0x0000000000000000000000000000000000000000'; // TODO: what should be returned for this case?
     }
-    return toHex(fromHex(num.slice(2, num.length)));
+    return toHex(fromHex(num));
 }
 
 export function removeDuplicates(a, key) {

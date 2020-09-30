@@ -88,7 +88,7 @@ export default {
   components: {
     Pagination,
   },
-  data() {ƒ
+  data() {
     return {
       transactions: [],
       loading: false,

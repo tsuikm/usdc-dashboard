@@ -3,7 +3,7 @@
     <md-toolbar>
       <div class="md-toolbar-row">
         <div class="md-toolbar-section-start">
-          <img id="logo" src="../assets/usdc-logo.png">
+          <img id="logo" src="../assets/usdc-logo.png" />
         </div>
         <div class="md-toolbar-section-end">
           <form @submit.prevent="submitAddress">
@@ -16,7 +16,7 @@
         </div>
       </div>
     </md-toolbar>
-    <Overview v-if="addressSubmitted" :walletAddress="walletAddress"/>
+    <Overview v-if="addressSubmitted" :walletAddress="walletAddress" />
     <Transactions />
   </div>
 </template>
@@ -26,30 +26,30 @@ import Overview from "./Overview";
 import Transactions from "./Transactions";
 
 export default {
-  name: 'Dashboard',
+  name: "Dashboard",
   components: {
     Overview,
-    Transactions
+    Transactions,
   },
   data() {
     return {
       walletAddress: "",
-      addressSubmitted: false
+      addressSubmitted: false,
     };
   },
   methods: {
     submitAddress() {
       this.addressSubmitted = true;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .md-toolbar {
-    padding-top: 8px;
-  }
-  #logo {
-    height: 40px;
-  }
+.md-toolbar {
+  padding-top: 8px;
+}
+#logo {
+  height: 40px;
+}
 </style>

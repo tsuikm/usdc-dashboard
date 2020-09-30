@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import Address, { getLogs, TRANSACTION_TOPIC } from '@/pages/address/_address.vue';
+import Address, { getLogs, TRANSACTION_TOPIC } from '@/components/TransactionTable';
 import Vue from 'vue'
 import VueMaterial from 'vue-material'
 
@@ -93,13 +93,8 @@ describe('_address.vue', () => {
 
   it("renders correctly", async () => {
     const wrapper = mount(Address, {
-      mocks: {
-        $route: {
-          path: '/address/' + MOCK_WALLET_ADDRESS,
-          params: {
-            address: MOCK_WALLET_ADDRESS
-          }
-        }
+      propsData: {
+        walletAddress: MOCK_WALLET_ADDRESS
       }
     });
 
@@ -142,13 +137,8 @@ describe('_address.vue', () => {
     // for a total of 27 transactions with the 3 in MOCK_SENDER_TXNS
 
     const wrapper = mount(Address, {
-      mocks: {
-        $route: {
-          path: '/address/' + MOCK_WALLET_ADDRESS,
-          params: {
-            address: MOCK_WALLET_ADDRESS
-          }
-        }
+      propsData: {
+        walletAddress: MOCK_WALLET_ADDRESS
       }
     });
 

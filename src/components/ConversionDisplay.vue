@@ -11,7 +11,7 @@
 export default {
   name: "ConversionDisplay",
   props: {
-    conversionRate: Number,
+    conversionRate: String,
   },
 };
 </script>

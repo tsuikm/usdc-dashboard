@@ -32,14 +32,14 @@ export default {
   props: {
     usdcBalance: Number,
     usdValue: Number,
-    conversionRate: Number,
+    conversionRate: String,
   },
 };
 </script>
 
 <style scoped>
 .container {
-  width: 850px;
+  width: 800px;
   height: 300px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);

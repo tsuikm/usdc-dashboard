@@ -65,7 +65,7 @@ export default {
 }
 .value {
   font-weight: 900;
-  font-size: 70px;
+  font-size: 65px;
   color: #717171;
 }
 </style>

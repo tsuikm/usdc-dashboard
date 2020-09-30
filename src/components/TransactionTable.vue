@@ -84,10 +84,11 @@ export const getLogs = async (address, fromBlock) => {
 };
 
 export default {
+  name: "Address",
   components: {
     Pagination,
   },
-  data() {
+  data() {ƒ
     return {
       transactions: [],
       loading: false,
@@ -102,6 +103,7 @@ export default {
   },
   methods: {
     async fetchTransactions() {
+        console.log("walletAddress", this.$props.walletAddress);
       let address = this.$props.walletAddress;
       if (!address || address.length === 0) return;
 

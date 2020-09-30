@@ -2,14 +2,17 @@ export function toHex(num) {
     return '0x' + (num).toString(16);
 }
 export function fromHex(num) {
-    return parseInt(num, 16);
+    return parseInt(num);
 }
 
 export function removeLeadingZeros(num) {
-    if (!num || fromHex(num) === 0) {
-        return '0x0000000000000000000000000000000000000000'; // TODO: what should be returned for this case?
+    if (num[0] === '0' && num[1] === 'x') {
+        let hex = num.slice(2);
+        while (hex[0] === '0' && hex.length > 1) {
+            hex = hex.slice(1)
+        }
+        return '0x' + hex;
     }
-    return toHex(fromHex(num));
 }
 
 export function removeDuplicates(a, key) {

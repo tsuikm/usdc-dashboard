@@ -17,7 +17,7 @@
       </div>
     </md-toolbar>
     <Overview v-if="addressSubmitted" :walletAddress="walletAddress" />
-    <Transactions />
+    <Transactions :address="null" />
   </div>
 </template>
 

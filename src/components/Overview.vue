@@ -13,7 +13,6 @@
 <script>
 import Web3 from "web3";
 import BalanceCard from "./BalanceCard";
-import axios from "axios";
 const web3 = new Web3(Web3.givenProvider);
 const tokenAddress = "0x07865c6E87B9F70255377e024ace6630C1Eaa37F";
 const abi = [

@@ -2,11 +2,12 @@
   <div>
     <Table
       :name="this.tableName"
-      :totalPages="this.totalPages"
+      :totalItems="this.totalItems"
       :schema="this.tableSchema"
       :content="this.transactions"
       :keyField="'Transaction Hash'"
       @page:change="this.pageChange"
+      ref="table"
     />
   </div>
 </template>
@@ -20,7 +21,6 @@ import { fromHex, removeLeadingZeros, removeDuplicates } from "../utils/utils";
 const web3 = new Web3(Web3.givenProvider);
 
 const USDC_ADDRESS = "0x07865c6E87B9F70255377e024ace6630C1Eaa37F";
-const DEFAULT_PAGE_LENGTH = 25;
 const MAX_TRANSACTIONS = 10000;
 const WEB3_RESULT_TOO_LARGE_ERROR_CODE = -32005;
 const TRANSACTION_TOPIC =
@@ -94,12 +94,11 @@ export default {
   },
   props: ["address"],
   computed: {
-    totalPages() {
-      // TODO: this number is hard-coded. We need to calculate the total number of
-      // transactions (not done yet) to compute how many total pages.
-      if (!this.address) return 300;
+    totalItems() {
+      // TODO: this number is hard-coded. We need to calculate the total number of transactions
+      if (!this.address) return 7500;
 
-      return Math.ceil(this.transactions.length / DEFAULT_PAGE_LENGTH);
+      return this.transactions.length;
     },
     tableName() {
       if (!this.address) return "All Transactions";
@@ -119,6 +118,9 @@ export default {
 
       return transactionSchema;
     },
+    pageLength() {
+      return this.$refs.table.pageLength;
+    },
   },
   data() {
     return {
@@ -134,7 +136,7 @@ export default {
       const count = 1000;
 
       // Loop to find enough transactions to display on the selected page.
-      while (transactions.length <= DEFAULT_PAGE_LENGTH * (this.page + 2)) {
+      while (transactions.length <= this.pageLength * (this.page + 2)) {
         const from = Math.max(latest - count * blocks, 0);
         transactions = await getLogs(null, from);
 

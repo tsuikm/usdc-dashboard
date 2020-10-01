@@ -3,7 +3,7 @@
     <md-table-toolbar>
       <h1 class="md-title">{{ name }}</h1>
       <Pagination
-        :totalPages="this.totalPages"
+        :totalPages="Math.ceil(this.totalItems / pageLength)"
         @page:change="this.pageChange"
       />
     </md-table-toolbar>
@@ -36,6 +36,7 @@ export default {
   data() {
     return {
       page: 0,
+      pageLength: 25,
     };
   },
   methods: {
@@ -48,7 +49,7 @@ export default {
     name: String,
 
     // This number can change. Passed directly to Pagination.
-    totalPages: Number,
+    totalItems: Number,
 
     // Maps column name to a getter function of each item of the row.
     // For instance: schema {

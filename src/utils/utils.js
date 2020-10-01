@@ -9,14 +9,14 @@ export function padHex(hex, length) {
     return "0x" + hex.slice(2).padStart(length, "0");
 }
 
-export function removeLeadingZeros(num) {
-    if (num[0] === '0' && num[1] === 'x') {
-        let hex = num.slice(2);
-        while (hex[0] === '0' && hex.length > 1) {
-            hex = hex.slice(1)
-        }
-        return '0x' + hex;
+export function removeLeadingZeros(hex) {
+    if (hex[0] !== '0' || hex[1] !== 'x') {
+        throw new Error(hex + ' is not a hex string')
     }
+
+    let i = 2
+    for (; hex[i] === '0' && i < hex.length - 1; i++);
+    return '0x' + hex.slice(i);
 }
 
 export function removeDuplicates(a, key) {

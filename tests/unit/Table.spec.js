@@ -8,10 +8,16 @@ Vue.use(VueMaterial);
 const testProps = {
   name: 'Test Name',
   totalItems: 300,
-  schema: {
-    A: (i) => i.a,
-    B: (i) => i.b,
-  },
+  schema: [
+    {
+      name: 'A',
+      getter: (i) => i.a
+    },
+    {
+      name: 'B',
+      getter: (i) => i.b
+    }
+  ],
   keyField: 'B',
   content: [
     {
@@ -28,13 +34,17 @@ const testProps = {
 const testPropsLinks = {
   name: 'Test Name',
   totalItems: 30,
-  schema: {
-    A: (i) => ({
-      value: i.a,
-      link: '/a-link'
-    }),
-    B: (i) => i.b,
-  },
+  schema: [
+    {
+      name: 'A',
+      getter: (i) => i.a,
+      link: () => '/a-link'
+    },
+    {
+      name: 'B',
+      getter: (i) => i.b
+    }
+  ],
   keyField: 'B',
   content: [
     {
@@ -51,10 +61,16 @@ const testPropsLinks = {
 const testPropsLarge = {
   name: 'Test Name',
   totalItems: 30,
-  schema: {
-    A: (i) => i.a,
-    B: (i) => i.b,
-  },
+  schema: [
+    {
+      name: 'A',
+      getter: (i) => i.a
+    },
+    {
+      name: 'B',
+      getter: (i) => i.b
+    }
+  ],
   keyField: 'B',
   content: []
 }

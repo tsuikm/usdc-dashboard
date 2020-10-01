@@ -113,21 +113,58 @@ export default {
       return `Transactions for Wallet ${this.address}`;
     },
     tableSchema() {
-      const transactionSchema = {
-        "Transaction Hash": (t) => t.transactionHash,
-        Quantity: (t) => t.data,
-        Sender: (t) => ({
-          value: t.from,
-          link: `/address/${t.from}`,
-        }),
-        Receiver: (t) => ({
-          value: t.to,
-          link: `/address/${t.to}`,
-        }),
-      };
+      // const transactionSchema = {
+      //   "Transaction Hash": (t) => t.transactionHash,
+      //   Quantity: (t) => t.data,
+      //   Sender: (t) => ({
+      //     value: t.from,
+      //     link: `/address/${t.from}`,
+      //   }),
+      //   Receiver: (t) => ({
+      //     value: t.to,
+      //     link: `/address/${t.to}`,
+      //   }),
+      // };
+      const transactionSchema = [
+        {
+          name: "Transaction Hash",
+          getter(t) {
+            return t.transactionHash;
+          },
+        },
+        {
+          name: "Quantity",
+          getter(t) {
+            return t.data;
+          },
+        },
+        {
+          name: "Sender",
+          getter(t) {
+            return t.from;
+          },
+          link(t) {
+            return `/address/${t.from}`;
+          },
+        },
+        {
+          name: "Receiver",
+          getter(t) {
+            return t.to;
+          },
+          link(t) {
+            return `/address/${t.to}`;
+          },
+        },
+      ];
 
       if (!this.address) {
-        transactionSchema["Age"] = (t) => t.age;
+        transactionSchema.push({
+          name: "Age",
+          getter(t) {
+            return t.age;
+          },
+        });
       }
 
       return transactionSchema;

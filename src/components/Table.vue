@@ -9,18 +9,18 @@
     </md-table-toolbar>
 
     <md-table-row>
-      <md-table-head v-for="(_, field) in schema" :key="field">{{
-        field
-      }}</md-table-head>
+      <md-table-head v-for="{ name } in schema" :key="name">
+        {{ name }}
+      </md-table-head>
     </md-table-row>
 
     <md-table-row
       v-for="item in content.slice(page * pageLength, (page + 1) * pageLength)"
       :key="item[keyField]"
     >
-      <md-table-cell v-for="(getter, field) in schema" :key="field">
-        <a v-if="typeof getter(item) === 'object'" :href="getter(item).link">
-          {{ getter(item).value }}
+      <md-table-cell v-for="{ name, getter, link } in schema" :key="name">
+        <a v-if="link" :href="link(item)">
+          {{ getter(item) }}
         </a>
         <template v-else>
           {{ getter(item) }}
@@ -56,12 +56,28 @@ export default {
     // This number can change. Passed directly to Pagination.
     totalItems: Number,
 
-    // Maps column name to a getter function of each item of the row.
-    // For instance: schema {
-    //    age: function(transaction) { return transaction.age; }
-    //    sender: function(t) { return { value: t.from, link: `/address/${t.from}` }; }
-    // }
-    schema: Object,
+    // List of field objects, in the order in which they should be displayed in the table, e.g.
+    // Each object must contain `name` and `getter`. `link` is optional.
+    // [
+    //   {
+    //     name: 'Age',
+    //     getter(t) { return t.age; }
+    //   },
+    //   {
+    //     name: 'Sender',
+    //     getter(t) { return t.from; },
+    //     link(t) { return `/address/${t.from}`}
+    //   }
+    // ]
+    schema: {
+      type: Array,
+      validator: (prop) => {
+        // Every field in schema should have a name and getter
+        return prop.every(({ name, getter }) => {
+          return name && getter;
+        });
+      },
+    },
 
     // Name of field that should be used as key
     keyField: String,

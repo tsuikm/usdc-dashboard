@@ -19,7 +19,19 @@
       :key="item[keyField]"
     >
       <md-table-cell v-for="(_, field) in schema" :key="field">
-        {{ schema[field](item) }}
+        <a
+          v-if="typeof schema[field](item) === 'object'"
+          :href="schema[field](item).link"
+          >{{ schema[field](item).value }}</a
+        >
+        <template v-else>
+          {{ schema[field](item) }}
+        </template></md-table-cell
+      ></md-table-row
+    ></md-table
+  >
+</template>
+        
       </md-table-cell>
     </md-table-row>
   </md-table>
@@ -54,7 +66,7 @@ export default {
     // Maps column name to a getter function of each item of the row.
     // For instance: schema {
     //    age: function(transaction) { return transaction.age; }
-    //
+    //    sender: function(t) { return { value: t.from, link: `/address/${t.from}` }; }
     // }
     schema: Object,
 

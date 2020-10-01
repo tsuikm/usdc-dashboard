@@ -21,7 +21,7 @@ import {
   removeLeadingZeros,
   removeDuplicates,
   toHex,
-  pad64Hex,
+  padHex,
 } from "../utils/utils";
 
 const web3 = new Web3(Web3.givenProvider);
@@ -114,8 +114,14 @@ export default {
       const transactionSchema = {
         "Transaction Hash": (t) => t.transactionHash,
         Quantity: (t) => t.data,
-        Sender: (t) => t.from,
-        Receiver: (t) => t.to,
+        Sender: (t) => ({
+          value: t.from,
+          link: `/address/${t.from}`,
+        }),
+        Receiver: (t) => ({
+          value: t.to,
+          link: `/address/${t.to}`,
+        }),
       };
 
       if (!this.address) {
@@ -200,7 +206,7 @@ export default {
       let address = this.address;
       if (!address || address.length === 0) return;
 
-      address = pad64Hex(address);
+      address = padHex(address);
 
       let transactions = await getLogs(address, 0);
       if (transactions !== null) {

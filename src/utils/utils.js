@@ -5,8 +5,8 @@ export function fromHex(num) {
     return parseInt(num);
 }
 
-export function pad64Hex(hex) {
-    return "0x" + hex.slice(2).padStart(64, "0");
+export function padHex(hex, length = 64) {
+    return "0x" + hex.slice(2).padStart(length, "0");
 }
 
 export function removeLeadingZeros(num) {

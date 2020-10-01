@@ -12,6 +12,7 @@
 
 <script>
 import Web3 from "web3";
+import { padHex } from "../utils/utils";
 import BalanceCard from "./BalanceCard";
 const web3 = new Web3(Web3.givenProvider);
 const tokenAddress = "0x07865c6E87B9F70255377e024ace6630C1Eaa37F";
@@ -47,13 +48,13 @@ export default {
   props: {
     walletAddress: String,
   },
-  created: function() {
+  created: function () {
     this.lookupBalance();
   },
-  updated: function() {
+  updated: function () {
     this.$nextTick(this.convertToUSD());
   },
-  mounted: function() {
+  mounted: function () {
     require("axios")
       .get("https://api.coinbase.com/v2/exchange-rates?currency=USD")
       .then(
@@ -66,11 +67,13 @@ export default {
         return;
       }
 
-      contract.methods.balanceOf(this.walletAddress).call((error, balance) => {
-        contract.methods.decimals().call((error, decimals) => {
-          this.balance = balance / 10 ** decimals;
+      contract.methods
+        .balanceOf(padHex(this.walletAddress, 40))
+        .call((error, balance) => {
+          contract.methods.decimals().call((error, decimals) => {
+            this.balance = balance / 10 ** decimals;
+          });
         });
-      });
     },
     convertToUSD() {
       this.usdValue = this.balance * this.conversionRate;

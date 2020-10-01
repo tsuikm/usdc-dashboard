@@ -18,18 +18,16 @@
       v-for="item in content.slice(page * pageLength, (page + 1) * pageLength)"
       :key="item[keyField]"
     >
-      <md-table-cell v-for="(_, field) in schema" :key="field">
-        <a
-          v-if="typeof schema[field](item) === 'object'"
-          :href="schema[field](item).link"
-          >{{ schema[field](item).value }}</a
-        >
+      <md-table-cell v-for="(getter, field) in schema" :key="field">
+        <a v-if="typeof getter(item) === 'object'" :href="getter(item).link">
+          {{ getter(item).value }}
+        </a>
         <template v-else>
-          {{ schema[field](item) }}
-        </template></md-table-cell
-      ></md-table-row
-    ></md-table
-  >
+          {{ getter(item) }}
+        </template>
+      </md-table-cell>
+    </md-table-row>
+  </md-table>
 </template>
 
 <script>

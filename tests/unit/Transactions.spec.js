@@ -6,7 +6,7 @@ import VueMaterial from 'vue-material'
 Vue.use(VueMaterial);
 
 jest.mock('web3', () => class Web3 {
-  get eth () {
+  get eth() {
     return {
       getBlockNumber: async () => {
         return 1000;
@@ -23,7 +23,7 @@ jest.mock('web3', () => class Web3 {
             data: '0x0',
             transactionHash: `0x000${i}`,
             blockNumber: `0x000${i}0000`,
-            topics: [ '0x0', `0x00${i}00`, `0x${i}000`]
+            topics: ['0x0', `0x00${i}00`, `0x${i}000`]
           });
         }
         return result;
@@ -35,15 +35,14 @@ jest.mock('web3', () => class Web3 {
       }
     }
   }
-} );
+});
 
 describe('Transactions', () => {
 
   it('Renders labels correctly', () => {
     const { getByText } = render(Transactions);
 
-    getByText('Transactions');
-    getByText('TXN HASH');
+    getByText('Transaction Hash');
     getByText('Age');
     getByText('Quantity');
     getByText('Sender');

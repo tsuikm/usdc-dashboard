@@ -1,42 +1,20 @@
 <template>
   <div>
-    <md-table md-card>
-      <md-table-toolbar>
-        <h1 class="md-title">Transactions</h1>
-        <Pagination
-          v-bind:totalPages="this.totalPages"
-          @page:change="this.pageChange"
-        />
-      </md-table-toolbar>
-      <md-table-row>
-        <md-table-head>Txn Hash</md-table-head>
-        <!-- <md-table-head>Age</md-table-head> -->
-        <md-table-head>Quantity</md-table-head>
-        <md-table-head>Sender</md-table-head>
-        <md-table-head>Receiver</md-table-head>
-      </md-table-row>
-      <md-table-row
-        v-for="t in this.transactions.slice(page * 25, (page + 1) * 25)"
-        :key="t.transactionHash"
-      >
-        <md-table-cell>{{ t.transactionHash }}</md-table-cell>
-        <!-- <md-table-cell>{{ t.age }}</md-table-cell> -->
-        <md-table-cell>{{ t.data }}</md-table-cell>
-        <md-table-cell>
-          <a v-bind:href="`address/${t.from}`">{{ t.from }}</a>
-        </md-table-cell>
-        <md-table-cell>
-          <a v-bind:href="`address/${t.to}`">{{ t.to }}</a>
-        </md-table-cell>
-      </md-table-row>
-    </md-table>
+    <Table
+      :name="this.tableName"
+      :totalPages="this.totalPages"
+      :schema="this.tableSchema"
+      :content="this.transactions"
+      :keyField="'Transaction Hash'"
+      @page:change="this.pageChange"
+    />
   </div>
 </template>
 
 <script>
 import Web3 from "web3";
 import moment from "moment";
-import Pagination from "./Pagination";
+import Table from "./Table";
 import {
   fromHex,
   toHex,
@@ -71,7 +49,6 @@ export const getLogs = async (address, fromBlock) => {
       t.from = removeLeadingZeros(t.topics[1]);
       t.to = removeLeadingZeros(t.topics[2]);
       t.data = fromHex(t.data) / 10 ** 6;
-      console.log(t);
     });
 
     // Querying for all transactions; receiverTxns should include all
@@ -117,7 +94,8 @@ export const getLogs = async (address, fromBlock) => {
 export default {
   name: "Transactions",
   components: {
-    Pagination,
+    // Pagination,
+    Table,
   },
   props: ["address"],
   computed: {
@@ -127,6 +105,19 @@ export default {
       if (!this.address) return 300;
 
       return Math.ceil(this.transactions.length / DEFAULT_PAGE_LENGTH);
+    },
+    tableName() {
+      if (!this.address) return "All Transactions";
+
+      return `Transactions for ${this.address}`;
+    },
+    tableSchema() {
+      return {
+        "Transaction Hash": (t) => t.transactionHash,
+        Quantity: (t) => t.data,
+        Sender: (t) => t.from,
+        Receiver: (t) => t.to,
+      };
     },
   },
   data() {
@@ -143,7 +134,7 @@ export default {
       const count = 1000;
 
       // Loop to find enough transactions to display on the selected page.
-      while (transactions.length <= 50 * (this.page + 1)) {
+      while (transactions.length <= DEFAULT_PAGE_LENGTH * (this.page + 2)) {
         const from = Math.max(latest - count * blocks, 0);
         transactions = await getLogs(null, from);
 
@@ -199,13 +190,11 @@ export default {
     },
     async getWalletTransactions() {
       let address = this.address;
-      console.log(address);
       if (!address || address.length === 0) return;
 
       address = "0x" + address.slice(2).padStart(64, "0");
 
       let transactions = await getLogs(address, 0);
-      console.log(transactions);
       if (transactions !== null) {
         // We have all transactions in history for this address
         this.transactions = transactions.reverse().slice(0, MAX_TRANSACTIONS);
@@ -231,11 +220,14 @@ export default {
       }
 
       // We have the latest MAX_TRANSACTIONS transactions
-      console.log(transactions.reverse().slice(0, MAX_TRANSACTIONS));
       this.transactions = transactions.reverse().slice(0, MAX_TRANSACTIONS);
     },
     async pageChange(page) {
       this.page = page;
+
+      if (!this.address) {
+        this.getAllTransactions();
+      }
     },
   },
   created() {

@@ -2,17 +2,26 @@
   <md-table md-card>
     <md-table-toolbar>
       <h1 class="md-title">{{ name }}</h1>
-      <Pagination v-bind:totalPages="{{ totalPages }}" @page:change="this.pageChange"/>
+      <Pagination
+        :totalPages="this.totalPages"
+        @page:change="this.pageChange"
+      />
     </md-table-toolbar>
 
     <md-table-row>
-      <md-table-head v-for="title in schema">{{title}}</md-table-head>
+      <md-table-head v-for="(_, field) in schema" :key="field">{{
+        field
+      }}</md-table-head>
     </md-table-row>
 
-    <md-table-row v-for="item in content" :key="item.id">
-      <md-table-head v-for="title in schema">{{schema[title](item)}}</md-table-head>
+    <md-table-row
+      v-for="item in content.slice(page * 25, (page + 1) * 25)"
+      :key="item[keyField]"
+    >
+      <md-table-cell v-for="(_, field) in schema" :key="field">
+        {{ schema[field](item) }}
+      </md-table-cell>
     </md-table-row>
-
   </md-table>
 </template>
 
@@ -20,9 +29,20 @@
 import Pagination from "./Pagination";
 
 export default {
-  name: 'Table',
+  name: "Table",
   components: {
-    Pagination
+    Pagination,
+  },
+  data() {
+    return {
+      page: 0,
+    };
+  },
+  methods: {
+    pageChange(page) {
+      this.page = page;
+      this.$emit("page:change", page);
+    },
   },
   props: {
     name: String,
@@ -37,9 +57,12 @@ export default {
     // }
     schema: Object,
 
+    // Name of field that should be used as key
+    keyField: String,
+
     // Array of the 'content' in the table. Can dynamically change.
     // For instance: [{age: 100, to: ...}, {age: 0, to: ...}, ...]
-    content: Array
-  }
+    content: Array,
+  },
 };
 </script>

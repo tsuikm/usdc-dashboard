@@ -31,11 +31,6 @@
     ></md-table
   >
 </template>
-        
-      </md-table-cell>
-    </md-table-row>
-  </md-table>
-</template>
 
 <script>
 import Pagination from "./Pagination";

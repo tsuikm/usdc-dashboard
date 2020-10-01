@@ -16,7 +16,13 @@
 import Web3 from "web3";
 import moment from "moment";
 import Table from "./Table";
-import { fromHex, removeLeadingZeros, removeDuplicates } from "../utils/utils";
+import {
+  fromHex,
+  removeLeadingZeros,
+  removeDuplicates,
+  toHex,
+  pad64Hex,
+} from "../utils/utils";
 
 const web3 = new Web3(Web3.givenProvider);
 
@@ -34,7 +40,7 @@ export const getLogs = async (address, fromBlock) => {
   try {
     // Txns where wallet is receiver
     const receiverTxns = await web3.eth.getPastLogs({
-      fromBlock: "0x" + fromBlock.toString(16),
+      fromBlock: toHex(fromBlock),
       toBlock: "latest",
       address: USDC_ADDRESS,
       topics: [TRANSACTION_TOPIC, null, address],
@@ -56,7 +62,7 @@ export const getLogs = async (address, fromBlock) => {
 
     // Txns where wallet is sender
     const senderTxns = await web3.eth.getPastLogs({
-      fromBlock: "0x" + fromBlock.toString(16),
+      fromBlock: toHex(fromBlock),
       toBlock: "latest",
       address: USDC_ADDRESS,
       topics: [TRANSACTION_TOPIC, address, null],
@@ -194,7 +200,7 @@ export default {
       let address = this.address;
       if (!address || address.length === 0) return;
 
-      address = "0x" + address.slice(2).padStart(64, "0");
+      address = pad64Hex(address);
 
       let transactions = await getLogs(address, 0);
       if (transactions !== null) {

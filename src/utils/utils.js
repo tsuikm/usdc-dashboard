@@ -5,6 +5,10 @@ export function fromHex(num) {
     return parseInt(num);
 }
 
+export function pad64Hex(hex) {
+    return "0x" + hex.slice(2).padStart(64, "0");
+}
+
 export function removeLeadingZeros(num) {
     if (num[0] === '0' && num[1] === 'x') {
         let hex = num.slice(2);

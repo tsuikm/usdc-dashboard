@@ -15,7 +15,7 @@
     </md-table-row>
 
     <md-table-row
-      v-for="item in content.slice(page * 25, (page + 1) * 25)"
+      v-for="item in content.slice(page * pageLength, (page + 1) * pageLength)"
       :key="item[keyField]"
     >
       <md-table-cell v-for="(_, field) in schema" :key="field">

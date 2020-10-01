@@ -22,15 +22,17 @@ import {
   removeDuplicates,
   toHex,
   padHex,
-} from "../utils/utils";
+} from "@/utils/utils";
+
+import {
+  USDC_CONTRACT_ADDRESS,
+  TRANSACTION_TOPIC,
+  WEB3_RESULT_TOO_LARGE_ERROR_CODE,
+  WEB3_MAX_TRANSACTIONS,
+  WEB3_GET_LOGS_ADDRESS_LENGTH,
+} from "@/utils/constants";
 
 const web3 = new Web3(Web3.givenProvider);
-
-const USDC_ADDRESS = "0x07865c6E87B9F70255377e024ace6630C1Eaa37F";
-const MAX_TRANSACTIONS = 10000;
-const WEB3_RESULT_TOO_LARGE_ERROR_CODE = -32005;
-export const TRANSACTION_TOPIC =
-  "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 
 /**
  * Gets transaction logs for a wallet starting from fromBlock until latest.
@@ -42,7 +44,7 @@ export const getLogs = async (address, fromBlock) => {
     const receiverTxns = await web3.eth.getPastLogs({
       fromBlock: toHex(fromBlock),
       toBlock: "latest",
-      address: USDC_ADDRESS,
+      address: USDC_CONTRACT_ADDRESS,
       topics: [TRANSACTION_TOPIC, null, address],
     });
 
@@ -64,7 +66,7 @@ export const getLogs = async (address, fromBlock) => {
     const senderTxns = await web3.eth.getPastLogs({
       fromBlock: toHex(fromBlock),
       toBlock: "latest",
-      address: USDC_ADDRESS,
+      address: USDC_CONTRACT_ADDRESS,
       topics: [TRANSACTION_TOPIC, address, null],
     });
 
@@ -200,18 +202,22 @@ export default {
         transaction.age = blockNumberToAge.get(transaction.blockNumber);
       }
 
-      this.transactions = transactions.reverse().slice(0, MAX_TRANSACTIONS);
+      this.transactions = transactions
+        .reverse()
+        .slice(0, WEB3_MAX_TRANSACTIONS);
     },
     async getWalletTransactions() {
       let address = this.address;
       if (!address || address.length === 0) return;
 
-      address = padHex(address);
+      address = padHex(address, WEB3_GET_LOGS_ADDRESS_LENGTH);
 
       let transactions = await getLogs(address, 0);
       if (transactions !== null) {
         // We have all transactions in history for this address
-        this.transactions = transactions.reverse().slice(0, MAX_TRANSACTIONS);
+        this.transactions = transactions
+          .reverse()
+          .slice(0, WEB3_MAX_TRANSACTIONS);
         return;
       }
 
@@ -220,7 +226,10 @@ export default {
       transactions = await getLogs(address, fromBlock);
 
       // Over MAX_TRANSACTIONS transactions; binary search to find block number that gets us just over MAX_TRANSACTIONS
-      while (transactions === null || transactions.length < MAX_TRANSACTIONS) {
+      while (
+        transactions === null ||
+        transactions.length < WEB3_MAX_TRANSACTIONS
+      ) {
         if (transactions === null) {
           // Still too many transactions
           range[0] = fromBlock;
@@ -234,7 +243,9 @@ export default {
       }
 
       // We have the latest MAX_TRANSACTIONS transactions
-      this.transactions = transactions.reverse().slice(0, MAX_TRANSACTIONS);
+      this.transactions = transactions
+        .reverse()
+        .slice(0, WEB3_MAX_TRANSACTIONS);
     },
     async pageChange(page) {
       this.page = page;

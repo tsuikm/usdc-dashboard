@@ -5,7 +5,7 @@ export function fromHex(num) {
     return parseInt(num);
 }
 
-export function padHex(hex, length = 64) {
+export function padHex(hex, length) {
     return "0x" + hex.slice(2).padStart(length, "0");
 }
 

@@ -86,17 +86,17 @@ describe('Table', () => {
   it('Renders labels correctly', () => {
     const { getByText } = render(Table, { props: testProps });
 
-    getByText('A');
-    getByText('B');
+    expect(getByText('A')).not.toBeNull();
+    expect(getByText('B')).not.toBeNull();
   });
 
   it('Renders entries correctly', async () => {
     const { getByText } = render(Table, { props: testProps });
 
-    getByText('Row 1 A');
-    getByText('Row 1 B');
-    getByText('Row 2 A');
-    getByText('Row 2 B');
+    expect(getByText('Row 1 A')).not.toBeNull();
+    expect(getByText('Row 1 B')).not.toBeNull();
+    expect(getByText('Row 2 A')).not.toBeNull();
+    expect(getByText('Row 2 B')).not.toBeNull();
   });
 
   it('Renders links correctly', async () => {
@@ -118,18 +118,17 @@ describe('Table', () => {
   it('Pagination functionality', async () => {
     const { getByText } = render(Table, { props: testPropsLarge });
 
-    getByText('Row 1 A');
-    getByText('Row 1 B');
-    getByText('Row 25 A');
-    getByText('Row 25 B');
+    expect(getByText('Row 1 A')).not.toBeNull();
+    expect(getByText('Row 1 B')).not.toBeNull();
+    expect(getByText('Row 25 A')).not.toBeNull();
+    expect(getByText('Row 25 B')).not.toBeNull();
 
     await fireEvent.click(getByText('navigate_next'));
 
-    getByText('Page 2 of 2');
-
-    getByText('Row 26 A');
-    getByText('Row 26 B');
-    getByText('Row 30 A');
-    getByText('Row 30 B');
+    expect(getByText('Page 2 of 2')).not.toBeNull();
+    expect(getByText('Row 26 A')).not.toBeNull();
+    expect(getByText('Row 26 B')).not.toBeNull();
+    expect(getByText('Row 30 A')).not.toBeNull();
+    expect(getByText('Row 30 B')).not.toBeNull();
   });
 });

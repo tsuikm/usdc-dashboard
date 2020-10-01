@@ -15,12 +15,7 @@
 import Web3 from "web3";
 import moment from "moment";
 import Table from "./Table";
-import {
-  fromHex,
-  toHex,
-  removeLeadingZeros,
-  removeDuplicates,
-} from "../utils/utils";
+import { fromHex, removeLeadingZeros, removeDuplicates } from "../utils/utils";
 
 const web3 = new Web3(Web3.givenProvider);
 
@@ -108,16 +103,21 @@ export default {
     },
     tableName() {
       if (!this.address) return "All Transactions";
-
       return `Transactions for ${this.address}`;
     },
     tableSchema() {
-      return {
+      const transactionSchema = {
         "Transaction Hash": (t) => t.transactionHash,
         Quantity: (t) => t.data,
         Sender: (t) => t.from,
         Receiver: (t) => t.to,
       };
+
+      if (!this.address) {
+        transactionSchema["Age"] = (t) => t.age;
+      }
+
+      return transactionSchema;
     },
   },
   data() {
@@ -148,43 +148,43 @@ export default {
 
       // Since some of the transactions have the same block number, use a
       // dictionary to keep track of the age of the block for performance.
-      // const blockNumberToAge = new Map();
-      // const now = moment();
+      const blockNumberToAge = new Map();
+      const now = moment();
 
-      // for (const transaction of transactions) {
-      //   if (!blockNumberToAge.has(transaction.blockNumber)) {
-      //     const block = await web3.eth.getBlock(transaction.blockNumber);
-      //     const blockTime = moment.unix(block.timestamp);
-      //     const age = moment.duration(now.diff(blockTime));
+      for (const transaction of transactions) {
+        if (!blockNumberToAge.has(transaction.blockNumber)) {
+          const block = await web3.eth.getBlock(transaction.blockNumber);
+          const blockTime = moment.unix(block.timestamp);
+          const age = moment.duration(now.diff(blockTime));
 
-      //     const seconds = age.seconds();
-      //     const minutes = age.minutes();
-      //     const hours = age.hours();
-      //     const days = age.days();
+          const seconds = age.seconds();
+          const minutes = age.minutes();
+          const hours = age.hours();
+          const days = age.days();
 
-      //     // TODO: Factor this out to a separate util function? Also consider when minutes/hours/days is singular!
-      //     if (days == 0 && hours == 0 && minutes == 0) {
-      //       blockNumberToAge.set(transaction.blockNumber, `${seconds} s ago`);
-      //     } else if (days == 0 && hours == 0) {
-      //       blockNumberToAge.set(
-      //         transaction.blockNumber,
-      //         `${minutes} mins ${seconds} s ago`
-      //       );
-      //     } else if (days == 0) {
-      //       blockNumberToAge.set(
-      //         transaction.blockNumber,
-      //         `${hours} hrs ${minutes} mins ago`
-      //       );
-      //     } else {
-      //       blockNumberToAge.set(
-      //         transaction.blockNumber,
-      //         `${days} days ${hours} hrs ago`
-      //       );
-      //     }
-      //   }
+          // TODO: Factor this out to a separate util function? Also consider when minutes/hours/days is singular!
+          if (days == 0 && hours == 0 && minutes == 0) {
+            blockNumberToAge.set(transaction.blockNumber, `${seconds} s ago`);
+          } else if (days == 0 && hours == 0) {
+            blockNumberToAge.set(
+              transaction.blockNumber,
+              `${minutes} mins ${seconds} s ago`
+            );
+          } else if (days == 0) {
+            blockNumberToAge.set(
+              transaction.blockNumber,
+              `${hours} hrs ${minutes} mins ago`
+            );
+          } else {
+            blockNumberToAge.set(
+              transaction.blockNumber,
+              `${days} days ${hours} hrs ago`
+            );
+          }
+        }
 
-      //   transaction.age = blockNumberToAge.get(transaction.blockNumber);
-      // }
+        transaction.age = blockNumberToAge.get(transaction.blockNumber);
+      }
 
       this.transactions = transactions.reverse().slice(0, MAX_TRANSACTIONS);
     },

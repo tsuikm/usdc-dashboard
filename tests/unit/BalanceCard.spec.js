@@ -34,10 +34,11 @@ describe("BalanceCard", () => {
 });
 
 describe("Dashboard", () => {
-  it("BalanceCard displays on Dashboard input's submit", async() => {
+  it("BalanceCard displays on Dashboard input's submit", async () => {
     const wrapper = mount(Dashboard);
     const addr = wrapper.find("input");
     const form = wrapper.find("form");
+    
     await addr.setValue("0xc0539c310393165705265dc9865a0E495202771B");
     await form.trigger("submit.prevent");
     await wrapper.vm.$nextTick();

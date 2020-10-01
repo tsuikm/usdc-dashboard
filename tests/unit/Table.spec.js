@@ -25,6 +25,29 @@ const testProps = {
   ]
 }
 
+const testPropsLinks = {
+  name: 'Test Name',
+  totalItems: 30,
+  schema: {
+    A: (i) => ({
+      value: i.a,
+      link: '/a-link'
+    }),
+    B: (i) => i.b,
+  },
+  keyField: 'B',
+  content: [
+    {
+      a: 'Row 1 A',
+      b: 'Row 1 B'
+    },
+    {
+      a: 'Row 2 A',
+      b: 'Row 2 B'
+    }
+  ]
+}
+
 const testPropsLarge = {
   name: 'Test Name',
   totalItems: 30,
@@ -58,6 +81,22 @@ describe('Table', () => {
     getByText('Row 1 B');
     getByText('Row 2 A');
     getByText('Row 2 B');
+  });
+
+  it('Renders links correctly', async () => {
+    const { getByText } = render(Table, { props: testPropsLinks });
+
+    const a1 = getByText('Row 1 A');
+    const b1 = getByText('Row 1 B');
+    const a2 = getByText('Row 2 A');
+    const b2 = getByText('Row 2 B');
+
+    expect(a1).toBeInstanceOf(HTMLAnchorElement)
+    expect(a2).toBeInstanceOf(HTMLAnchorElement)
+    expect(a1.getAttribute('href')).toBe('/a-link')
+    expect(a2.getAttribute('href')).toBe('/a-link')
+    expect(b1).not.toBeInstanceOf(HTMLAnchorElement)
+    expect(b2).not.toBeInstanceOf(HTMLAnchorElement)
   });
 
   it('Pagination functionality', async () => {

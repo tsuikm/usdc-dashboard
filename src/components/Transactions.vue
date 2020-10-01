@@ -108,7 +108,7 @@ export default {
     },
     tableName() {
       if (!this.address) return "All Transactions";
-      return `Transactions for ${this.address}`;
+      return `Transactions for Wallet ${this.address}`;
     },
     tableSchema() {
       const transactionSchema = {

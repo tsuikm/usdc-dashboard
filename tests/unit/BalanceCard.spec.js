@@ -7,23 +7,21 @@ import VueMaterial from "vue-material";
 Vue.use(VueMaterial);
 
 describe("BalanceCard", () => {
-  it("ValueDisplay renders onto BalanceCard", async (done) => {
+  it("ValueDisplay renders onto BalanceCard", () => {
     const wrapper = mount(BalanceCard);
     const valueDisplay = wrapper.findComponent({ name: "ValueDisplay" });
     expect(valueDisplay.exists()).toBeTruthy();
     expect(valueDisplay.text()).toContain("BALANCE (USDC)");
     expect(valueDisplay.text()).toContain("BALANCE (USD $)");
-    done();
   });
 
-  it("Images display on BalanceCard", async (done) => {
+  it("Images display on BalanceCard", () => {
     const wrapper = mount(BalanceCard);
     const images = wrapper.find("img");
     expect(images.exists()).toBeTruthy();
-    done();
   });
 
-  it("ConversionDisplay renders onto BalanceCard", async (done) => {
+  it("ConversionDisplay renders onto BalanceCard", () => {
     const wrapper = mount(BalanceCard);
     const conversionDisplay = wrapper.findComponent({
       name: "ConversionDisplay",
@@ -32,12 +30,11 @@ describe("BalanceCard", () => {
     expect(conversionDisplay.text()).toContain("CONVERSION RATE:");
     expect(conversionDisplay.text()).toContain("1 USD//Coin to");
     expect(conversionDisplay.text()).toContain("US Dollar");
-    done();
   });
 });
 
 describe("Dashboard", () => {
-  it("BalanceCard displays on Dashboard input's submit", async (done) => {
+  it("BalanceCard displays on Dashboard input's submit", async() => {
     const wrapper = mount(Dashboard);
     const addr = wrapper.find("input");
     const form = wrapper.find("form");
@@ -47,6 +44,5 @@ describe("Dashboard", () => {
 
     const balancecard = wrapper.findComponent({ name: "BalanceCard" });
     expect(balancecard.exists()).toBeTruthy();
-    done();
   });
 });

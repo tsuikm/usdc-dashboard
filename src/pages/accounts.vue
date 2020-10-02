@@ -37,7 +37,7 @@ export default {
      * @param {number} to - as a base-10 number.
      * @returns {Object[]|null} - returns null if there are more than MAX_TRANSACTIONS results.
      */
-    async transactions(from, to) {
+    async getTransactions(from, to) {
       try {
         return await web3.eth.getPastLogs({
           fromBlock: toHex(from),
@@ -57,10 +57,12 @@ export default {
 
     async fetchAllAccounts() {
       let addresses = new Set();
+      const latest = web3.eth.getBlockNumber();
 
-      let range = [0, await web3.eth.getBlockNumber()];
+      let range = [0, latest];
+
       let fromBlock = Math.floor((range[0] + range[1]) / 2);
-      let transactions = await getLogs(null, fromBlock);
+      let transactions = await this.getTransactions(fromBlock, latest);
 
       // Over MAX_TRANSACTIONS transactions; binary search to find block number that gets us just over MAX_TRANSACTIONS
       while (
@@ -79,7 +81,7 @@ export default {
         console.log(range)
         fromBlock = Math.floor((range[0] + range[1]) / 2);
         console.log(fromBlock)
-        transactions = await getLogs(null, fromBlock);
+        transactions = await this.getTransactions(fromBlock, latest);
     }
     // console.log( transactions)
 

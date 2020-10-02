@@ -24,7 +24,8 @@ import {
   WEB3_RESULT_TOO_LARGE_ERROR_CODE,
   WEB3_MAX_TRANSACTIONS,
   WEB3_GET_LOGS_ADDRESS_LENGTH,
-} from "@/utils/constants";
+} from '@/utils/constants';
+
 import { fromHex, toHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
 
 // constants
@@ -64,7 +65,7 @@ export default {
 
     async fetchAllAccounts() {
       let addresses = new Set();
-      const latest = web3.eth.getBlockNumber();
+      const latest = await web3.eth.getBlockNumber();
 
       let range = [0, latest];
 

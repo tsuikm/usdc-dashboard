@@ -38,53 +38,77 @@ export default {
     Table
   },
   methods: {
-    async fetchAllAccounts() {
-      const latest = await web3.eth.getBlockNumber();
-      let addresses = new Set();
-      let blockNum = 0;
-      while (true) {
-        let blck = blockNum++
-        let block = await web3.eth.getBlock(blck)
-        if (!block)
-          break
-
-        for(let i = 0; i < block.transactions.length; i++) {
-          let tx = await web3.eth.getTransaction(block.transactions[i]);
-          if (tx.to !== null) {
-            addresses.add(removeLeadingZeros(tx.to));
-          }
-          if (tx.from !== null) {
-            addresses.add(removeLeadingZeros(tx.from));;
-          }
+    async getLogs(fromBlock) {
+      try {
+        return await web3.eth.getPastLogs({
+            fromBlock: toHex(fromBlock),
+            toBlock: "latest",
+            address: USDC_CONTRACT_ADDRESS,
+        });
+      } catch (e) {
+        if (e.code === WEB3_RESULT_TOO_LARGE_ERROR_CODE) {
+          // More than MAX_TRANSACTIONS results
+          return null;
         }
+        throw e;
       }
-
-      let accounts = [];
-      let totalBalance = 0;
-
-      for (let address of addresses) {
-        try {
-          let balance = await web3.eth.getBalance(address);
-          totalBalance += balance
-          accounts.push({
-            address: address,
-            balance: balance,
-            percentage: 0
-          });
-        }
-        catch (err) {
-          console.log(err)
-        }
-      }
-      accounts.sort((a,b) => (a.balance - b.balance));
-      for (let account of accounts) {
-        account.percentage = roundToNearest(account.balance*100/totalBalance, PERCENTAGE_DECIMAL_PLACES) + '%'
-      }
-      this.totalBalance = totalBalance;
-      this.accounts = accounts;
     },
-    async pageChange(page) {
-      console.log("hi")
+      async fetchAllAccounts() {
+        const latest = await web3.eth.getBlockNumber();
+        let addresses = new Set();
+
+        let range = [0, await web3.eth.getBlockNumber()];
+        let fromBlock = Math.floor((range[0] + range[1]) / 2);
+        let transactions = await getLogs(fromBlock);
+
+      // Over MAX_TRANSACTIONS transactions; binary search to find block number that gets us just over MAX_TRANSACTIONS
+      while (
+        transactions === null ||
+        transactions.length < WEB3_MAX_TRANSACTIONS
+      ) {
+        if (transactions === null) {
+          // Still too many transactions
+          range[0] = fromBlock;
+        } else {
+          // Not enough transactions
+          range[1] = fromBlock;
+        }
+
+        fromBlock = Math.floor((range[0] + range[1]) / 2);
+        transactions = await getLogs(address, fromBlock);
+      }
+
+        transactions.forEach((t) => {
+        addresses.add(removeLeadingZeros(t.topics[1]));
+        addresses.add(removeLeadingZeros(t.topics[2]));
+      });
+
+        let accounts = [];
+        let totalBalance = 0;
+        
+        for (let address of addresses) {
+          try {
+            let balance = await web3.eth.getBalance(address)/10**6;
+            totalBalance += balance
+            accounts.push({     
+              address: address,
+              balance: balance,
+              percentage: 0
+            });
+          } 
+          catch (err) {
+              console.log(err)
+          }
+        }
+        accounts.sort((a,b) => (b.balance - a.balance)); 
+        for (let account of accounts) {
+            account.percentage = roundToNearest(account.balance*100/totalBalance, PERCENTAGE_DECIMAL_PLACES) + '%'
+        }
+        this.totalBalance = totalBalance;
+        this.accounts = accounts;
+      },
+      async pageChange(page) {
+        console.log("hi")
     },
   },
   computed: {
@@ -118,7 +142,7 @@ export default {
       ];
     },
     pageLength() {
-      return this.$refs.table.pageLength;
+        return this.$refs.table.pageLength;
     }
   },
   data() {

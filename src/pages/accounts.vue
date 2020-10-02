@@ -26,6 +26,8 @@ import {
 
 import {
   USDC_CONTRACT_ADDRESS,
+  WEB3_RESULT_TOO_LARGE_ERROR_CODE,
+  WEB3_MAX_TRANSACTIONS,
   TRANSACTION_TOPIC,
   WEB3_GET_LOGS_ADDRESS_LENGTH,
 } from "@/utils/constants";
@@ -40,73 +42,76 @@ export default {
   methods: {
     async getLogs(fromBlock) {
       try {
-        return await web3.eth.getPastLogs({
-            fromBlock: toHex(fromBlock),
-            toBlock: "latest",
-            address: USDC_CONTRACT_ADDRESS,
+        // Txns where wallet is receiver
+        const receiverTxns = await web3.eth.getPastLogs({
+          fromBlock: toHex(fromBlock),
+          toBlock: 'latest',
+          address: USDC_CONTRACT_ADDRESS
         });
+        return receiverTxns
       } catch (e) {
         if (e.code === WEB3_RESULT_TOO_LARGE_ERROR_CODE) {
           // More than MAX_TRANSACTIONS results
           return null;
         }
-        throw e;
       }
     },
-      async fetchAllAccounts() {
-        const latest = await web3.eth.getBlockNumber();
-        let addresses = new Set();
+    async fetchAllAccounts() {
+      let addresses = new Set();
 
-        let range = [0, await web3.eth.getBlockNumber()];
-        let fromBlock = Math.floor((range[0] + range[1]) / 2);
-        let transactions = await getLogs(fromBlock);
+      let range = [0, await web3.eth.getBlockNumber()];
+      let fromBlock = Math.floor((range[0] + range[1]) / 2);
+      let transactions = await this.getLogs(fromBlock);
 
       // Over MAX_TRANSACTIONS transactions; binary search to find block number that gets us just over MAX_TRANSACTIONS
       while (
         transactions === null ||
         transactions.length < WEB3_MAX_TRANSACTIONS
       ) {
+        console.log("hello")
         if (transactions === null) {
           // Still too many transactions
+          console.log("in block")
           range[0] = fromBlock;
         } else {
           // Not enough transactions
           range[1] = fromBlock;
         }
-
+        console.log(range)
         fromBlock = Math.floor((range[0] + range[1]) / 2);
-        transactions = await getLogs(address, fromBlock);
+        console.log(fromBlock)
+        //transactions = await this.getLogs(fromBlock);
+    }
+
+    transactions.forEach((t) => {
+      addresses.add(removeLeadingZeros(t.topics[1]));
+      addresses.add(removeLeadingZeros(t.topics[2]));
+    });
+
+      let accounts = [];
+      let totalBalance = 0;
+      
+      for (let address of addresses) {
+        try {
+          let balance = await web3.eth.getBalance(address)/10**6;
+          totalBalance += balance
+          accounts.push({     
+            address: address,
+            balance: balance,
+            percentage: 0
+          });
+        } 
+        catch (err) {
+            console.log(err)
+        }
       }
-
-        transactions.forEach((t) => {
-        addresses.add(removeLeadingZeros(t.topics[1]));
-        addresses.add(removeLeadingZeros(t.topics[2]));
-      });
-
-        let accounts = [];
-        let totalBalance = 0;
-        
-        for (let address of addresses) {
-          try {
-            let balance = await web3.eth.getBalance(address)/10**6;
-            totalBalance += balance
-            accounts.push({     
-              address: address,
-              balance: balance,
-              percentage: 0
-            });
-          } 
-          catch (err) {
-              console.log(err)
-          }
-        }
-        accounts.sort((a,b) => (b.balance - a.balance)); 
-        for (let account of accounts) {
-            account.percentage = roundToNearest(account.balance*100/totalBalance, PERCENTAGE_DECIMAL_PLACES) + '%'
-        }
-        this.totalBalance = totalBalance;
-        this.accounts = accounts;
-      },
+      accounts.sort((a,b) => (b.balance - a.balance)); 
+      for (let account of accounts) {
+        account.percentage = roundToNearest(account.balance*100/totalBalance, PERCENTAGE_DECIMAL_PLACES) + '%'
+      }
+      this.totalBalance = totalBalance;
+      this.accounts = accounts;
+    },
       async pageChange(page) {
         console.log("hi")
     },

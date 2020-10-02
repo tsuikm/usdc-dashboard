@@ -93,5 +93,6 @@ export default {
   font-weight: 200;
   font-size: 20px;
   color: #a3a3a3;
+  padding-left: 10px;
 }
 </style>

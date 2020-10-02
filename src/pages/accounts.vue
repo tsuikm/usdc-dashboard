@@ -80,12 +80,16 @@ export default {
         console.log(range)
         fromBlock = Math.floor((range[0] + range[1]) / 2);
         console.log(fromBlock)
-        //transactions = await this.getLogs(fromBlock);
+        transactions = await this.getLogs(fromBlock);
     }
 
     transactions.forEach((t) => {
-      addresses.add(removeLeadingZeros(t.topics[1]));
-      addresses.add(removeLeadingZeros(t.topics[2]));
+      if (t.topics[1]) {
+        addresses.add(t.topics[1]);
+      }
+      if (t.topics[2]) {
+        addresses.add(t.topics[2]);
+      }
     });
 
       let accounts = [];
@@ -96,7 +100,7 @@ export default {
           let balance = await web3.eth.getBalance(address)/10**6;
           totalBalance += balance
           accounts.push({     
-            address: address,
+            address: removeLeadingZeros(address),
             balance: balance,
             percentage: 0
           });

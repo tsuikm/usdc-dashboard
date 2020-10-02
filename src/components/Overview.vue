@@ -7,6 +7,7 @@
       :usdValue="this.usdValue"
       :conversionRate="this.conversionRate"
     />
+    <TotalSupply :usdcBalance="this.balance" :totalSupply="this.totalSupply"/>
   </div>
 </template>
 
@@ -18,6 +19,7 @@ import {
   WEB3_BALANCEOF_ADDRESS_LENGTH,
 } from "@/utils/constants";
 import BalanceCard from "./BalanceCard";
+import TotalSupply from "./TotalSupply";
 const web3 = new Web3(Web3.givenProvider);
 
 const abi = [
@@ -35,18 +37,27 @@ const abi = [
     outputs: [{ name: "", type: "uint8" }],
     type: "function",
   },
+  {
+    constant: true,
+    inputs: [],
+    name: "totalSupply",
+    outputs: [{ name: "", type: "uint256" }],
+    type: "function",
+  },
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
   components: {
     BalanceCard,
+    TotalSupply,
   },
   data() {
     return {
       balance: null,
       usdValue: null,
       conversionRate: null,
+      totalSupply: null,
     };
   },
   props: {
@@ -54,6 +65,7 @@ export default {
   },
   created: function () {
     this.lookupBalance();
+    this.getTotalSupply();
   },
   updated: function () {
     this.$nextTick(this.convertToUSD());
@@ -82,6 +94,11 @@ export default {
     convertToUSD() {
       this.usdValue = this.balance * this.conversionRate;
     },
+    getTotalSupply() {
+      contract.methods.totalSupply().call((error, totalSupply) => {
+        this.totalSupply = totalSupply;
+      });
+    }
   },
 };
 </script>

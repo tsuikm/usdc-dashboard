@@ -17,7 +17,14 @@
 // modules
 import Table from '@/components/Table';
 import Web3 from 'web3';
-import * from '@/utils/constants';
+
+import {
+  USDC_CONTRACT_ADDRESS,
+  TRANSACTION_TOPIC,
+  WEB3_RESULT_TOO_LARGE_ERROR_CODE,
+  WEB3_MAX_TRANSACTIONS,
+  WEB3_GET_LOGS_ADDRESS_LENGTH,
+} from "@/utils/constants";
 import { fromHex, toHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
 
 // constants

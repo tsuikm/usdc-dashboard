@@ -38,53 +38,53 @@ export default {
     Table
   },
   methods: {
-      async fetchAllAccounts() {
-        const latest = await web3.eth.getBlockNumber();
-        let addresses = new Set();
-        let blockNum = 0;
-        while (true) {
-            let blck = blockNum++
-            let block = await web3.eth.getBlock(blck)
-            if (!block)
-            break
-            
-            for(let i = 0; i < block.transactions.length; i++) {
-                let tx = await web3.eth.getTransaction(block.transactions[i]);
-                if (tx.to !== null) {
-                  addresses.add(removeLeadingZeros(tx.to));
-                }
-                if (tx.from !== null) {
-                  addresses.add(removeLeadingZeros(tx.from));;
-                }
-            }
-        }
+    async fetchAllAccounts() {
+      const latest = await web3.eth.getBlockNumber();
+      let addresses = new Set();
+      let blockNum = 0;
+      while (true) {
+        let blck = blockNum++
+        let block = await web3.eth.getBlock(blck)
+        if (!block)
+          break
 
-        let accounts = [];
-        let totalBalance = 0;
-        
-        for (let address of addresses) {
-            try {
-                let balance = await web3.eth.getBalance(address);
-                totalBalance += balance
-                accounts.push(
-                    {
-                        address: address,
-                        balance: balance,
-                        percentage: 0
-                });
-            } catch (err) {
-                console.log(err)
-            }
+        for(let i = 0; i < block.transactions.length; i++) {
+          let tx = await web3.eth.getTransaction(block.transactions[i]);
+          if (tx.to !== null) {
+            addresses.add(removeLeadingZeros(tx.to));
+          }
+          if (tx.from !== null) {
+            addresses.add(removeLeadingZeros(tx.from));;
+          }
         }
-        accounts.sort((a,b) => (a.balance - b.balance)); 
-        for (let account of accounts) {
-            account.percentage = roundToNearest(account.balance*100/totalBalance, PERCENTAGE_DECIMAL_PLACES) + '%'
+      }
+
+      let accounts = [];
+      let totalBalance = 0;
+
+      for (let address of addresses) {
+        try {
+          let balance = await web3.eth.getBalance(address);
+          totalBalance += balance
+          accounts.push({
+            address: address,
+            balance: balance,
+            percentage: 0
+          });
         }
-        this.totalBalance = totalBalance;
-        this.accounts = accounts;
-      },
-      async pageChange(page) {
-        console.log("hi")
+        catch (err) {
+          console.log(err)
+        }
+      }
+      accounts.sort((a,b) => (a.balance - b.balance));
+      for (let account of accounts) {
+        account.percentage = roundToNearest(account.balance*100/totalBalance, PERCENTAGE_DECIMAL_PLACES) + '%'
+      }
+      this.totalBalance = totalBalance;
+      this.accounts = accounts;
+    },
+    async pageChange(page) {
+      console.log("hi")
     },
   },
   computed: {
@@ -118,7 +118,7 @@ export default {
       ];
     },
     pageLength() {
-        return this.$refs.table.pageLength;
+      return this.$refs.table.pageLength;
     }
   },
   data() {

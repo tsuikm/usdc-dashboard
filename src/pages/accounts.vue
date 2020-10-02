@@ -13,55 +13,64 @@
 </template>
 
 <script>
-import Table from "@/components/Table";
-import Web3 from "web3";
-import {
-  fromHex,
-  removeLeadingZeros,
-  removeDuplicates,
-  roundToNearest,
-  toHex,
-  padHex,
-} from "@/utils/utils";
+
+// modules
+import Table from '@/components/Table';
+import Web3 from 'web3';
 
 import {
   USDC_CONTRACT_ADDRESS,
+  TRANSACTION_TOPIC,
   WEB3_RESULT_TOO_LARGE_ERROR_CODE,
   WEB3_MAX_TRANSACTIONS,
-  TRANSACTION_TOPIC,
   WEB3_GET_LOGS_ADDRESS_LENGTH,
-} from "@/utils/constants";
+} from '@/utils/constants';
 
-const web3 = new Web3(Web3.givenProvider);
+import { fromHex, toHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
+
+// constants
 const PERCENTAGE_DECIMAL_PLACES = 8;
+const web3 = new Web3(Web3.givenProvider);
 
 export default {
   components: {
     Table
   },
   methods: {
-    async getLogs(fromBlock) {
+
+    /**
+     * Gets the transactions from one block to another block.
+     *
+     * @param {number} from - as a base-10 number.
+     * @param {number} to - as a base-10 number.
+     * @returns {Object[]|null} - returns null if there are more than MAX_TRANSACTIONS results.
+     */
+    async getTransactions(from) {
       try {
-        // Txns where wallet is receiver
-        const receiverTxns = await web3.eth.getPastLogs({
-          fromBlock: toHex(fromBlock),
+        return await web3.eth.getPastLogs({
+          fromBlock: toHex(from),
           toBlock: 'latest',
           address: USDC_CONTRACT_ADDRESS
         });
-        return receiverTxns
-      } catch (e) {
-        if (e.code === WEB3_RESULT_TOO_LARGE_ERROR_CODE) {
+      }
+      catch (error) {
+        if (error.code === WEB3_RESULT_TOO_LARGE_ERROR_CODE) {
           // More than MAX_TRANSACTIONS results
           return null;
         }
+        throw error;
       }
     },
+
+
     async fetchAllAccounts() {
       let addresses = new Set();
+      const latest = await web3.eth.getBlockNumber();
 
-      let range = [0, await web3.eth.getBlockNumber()];
+      let range = [0, latest];
+
       let fromBlock = Math.floor((range[0] + range[1]) / 2);
-      let transactions = await this.getLogs(fromBlock);
+      let transactions = await this.getTransactions(fromBlock, latest);
 
       // Over MAX_TRANSACTIONS transactions; binary search to find block number that gets us just over MAX_TRANSACTIONS
       while (
@@ -80,8 +89,9 @@ export default {
         console.log(range)
         fromBlock = Math.floor((range[0] + range[1]) / 2);
         console.log(fromBlock)
-        transactions = await this.getLogs(fromBlock);
+        transactions = await this.getTransactions(fromBlock);
     }
+    // console.log( transactions)
 
     transactions.forEach((t) => {
       if (t.topics[1]) {
@@ -94,22 +104,22 @@ export default {
 
       let accounts = [];
       let totalBalance = 0;
-      
+
       for (let address of addresses) {
         try {
           let balance = await web3.eth.getBalance(address)/10**6;
           totalBalance += balance
-          accounts.push({     
-            address: removeLeadingZeros(address),
+          accounts.push({
+            address: address,
             balance: balance,
             percentage: 0
           });
-        } 
+        }
         catch (err) {
             console.log(err)
         }
       }
-      accounts.sort((a,b) => (b.balance - a.balance)); 
+      accounts.sort((a,b) => (b.balance - a.balance));
       for (let account of accounts) {
         account.percentage = roundToNearest(account.balance*100/totalBalance, PERCENTAGE_DECIMAL_PLACES) + '%'
       }

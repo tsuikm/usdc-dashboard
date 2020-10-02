@@ -2,12 +2,14 @@
   <div>
     <div>Address: {{ walletAddress }}</div>
     <div>Balance: {{ this.balance }}</div>
-    <BalanceCard
-      :usdcBalance="this.balance"
-      :usdValue="this.usdValue"
-      :conversionRate="this.conversionRate"
-    />
-    <TotalSupply :usdcBalance="this.balance" :totalSupply="this.totalSupply"/>
+    <div class="summaryCards">
+      <BalanceCard
+        :usdcBalance="this.balance"
+        :usdValue="this.usdValue"
+        :conversionRate="this.conversionRate"
+      />
+      <TotalSupply :usdcBalance="this.balance" :totalSupply="this.totalSupply"/>
+    </div>
   </div>
 </template>
 
@@ -65,10 +67,10 @@ export default {
   },
   created: function () {
     this.lookupBalance();
-    this.getTotalSupply();
   },
   updated: function () {
     this.$nextTick(this.convertToUSD());
+    this.$nextTick(this.getTotalSupply());
   },
   mounted: function () {
     require("axios")
@@ -96,9 +98,17 @@ export default {
     },
     getTotalSupply() {
       contract.methods.totalSupply().call((error, totalSupply) => {
-        this.totalSupply = totalSupply;
+      this.totalSupply = totalSupply;
       });
     }
   },
 };
 </script>
+
+<style scoped>
+.summaryCards {
+  display: flex;
+  justify-content: space-between;
+  padding: 50px;
+}
+</style>

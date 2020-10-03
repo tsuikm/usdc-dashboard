@@ -78,10 +78,10 @@ export default {
 
       transactions.forEach((t) => {
         if (t.topics[1]) {
-          addresses.add(t.topics[1]);
+          addresses.add(removeLeadingZeros(t.topics[1]));
         }
         if (t.topics[2]) {
-          addresses.add(t.topics[2]);
+          addresses.add(removeLeadingZeros(t.topics[2]));
         }
       });
 
@@ -90,7 +90,7 @@ export default {
 
       for (let address of addresses) {
         try {
-          const paddedAddress = padHex(removeLeadingZeros(address), constants.WEB3_BALANCEOF_ADDRESS_LENGTH)
+          const paddedAddress = padHex(address, constants.WEB3_BALANCEOF_ADDRESS_LENGTH)
 
           let balance = await web3.eth.getBalance(paddedAddress)/10**6;
           totalBalance += balance

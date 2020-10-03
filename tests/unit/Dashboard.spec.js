@@ -5,7 +5,6 @@ import VueMaterial from 'vue-material';
 
 Vue.use(VueMaterial);
 
-
 jest.mock('web3', () => class Web3 {
   get utils() {
     const VALID_ADDRESSES = [
@@ -34,8 +33,8 @@ describe('Dashboard', () => {
   it('Search Bar Displayed Correctly', () => {
     const { getByText, getByLabelText } = render(Dashboard);
 
-    getByLabelText('Wallet Address');
-    getByText('search'); // the icon
+    expect(getByLabelText('Wallet Address')).not.toBeNull();
+    expect(getByText('search')).not.toBeNull();
   });
 
   it('Search Bar Valid Address Functionality', async () => {
@@ -43,7 +42,7 @@ describe('Dashboard', () => {
     global.window = Object.create(window);
 
     const input = getByLabelText('Wallet Address');
-    await fireEvent.input(input, '0x36f80a0bde5020ab0880ab54') ;
+    await fireEvent.input(input, '0x36f80a0bde5020ab0880ab54');
 
     const url = '/address/0x36f80a0bde5020ab0880ab54';
     Object.defineProperty(window, 'location', {
@@ -58,11 +57,11 @@ describe('Dashboard', () => {
   it('Search Bar Invalid Address Functionality', async () => {
     const { getByLabelText } = render(Dashboard);
 
-    delete global.window.location; 
+    delete global.window.location;
     global.window = Object.create(window);
 
     const input = getByLabelText('Wallet Address');
-    await fireEvent.input(input, 'invalid-address') ;
+    await fireEvent.input(input, 'invalid-address');
 
     const url = '/404';
     Object.defineProperty(window, 'location', {

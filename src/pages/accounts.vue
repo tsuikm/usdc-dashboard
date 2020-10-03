@@ -17,19 +17,9 @@
 // modules
 import Table from '@/components/Table';
 import Web3 from 'web3';
+import * as constants from '@/utils/constants';
+import { toHex, padHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
 
-import {
-  USDC_CONTRACT_ADDRESS,
-  TRANSACTION_TOPIC,
-  WEB3_RESULT_TOO_LARGE_ERROR_CODE,
-  WEB3_MAX_TRANSACTIONS,
-  WEB3_GET_LOGS_ADDRESS_LENGTH,
-  WEB3_BALANCEOF_ADDRESS_LENGTH
-} from '@/utils/constants';
-
-import { fromHex, toHex, padHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
-
-// constants
 const PERCENTAGE_DECIMAL_PLACES = 8;
 const web3 = new Web3(Web3.givenProvider);
 
@@ -46,16 +36,16 @@ export default {
      * @param {number} to - as a base-10 number.
      * @returns {Object[]|null} - returns null if there are more than MAX_TRANSACTIONS results.
      */
-    async getTransactions(from) {
+    async getTransactions(from, to) {
       try {
         return await web3.eth.getPastLogs({
           fromBlock: toHex(from),
-          toBlock: 'latest',
-          address: USDC_CONTRACT_ADDRESS
+          toBlock: toHex(to),
+          address: constants.USDC_CONTRACT_ADDRESS
         });
       }
       catch (error) {
-        if (error.code === WEB3_RESULT_TOO_LARGE_ERROR_CODE) {
+        if (error.code === constants.WEB3_RESULT_TOO_LARGE_ERROR_CODE) {
           // More than MAX_TRANSACTIONS results
           return null;
         }
@@ -74,7 +64,7 @@ export default {
       let transactions = await this.getTransactions(fromBlock, latest);
 
       // Binary search to find block number that gets us just over MAX_TRANSACTIONS
-      while (transactions === null ||transactions.length < WEB3_MAX_TRANSACTIONS - 1) {
+      while (transactions === null ||transactions.length < constants.WEB3_MAX_TRANSACTIONS - 1) {
         if (transactions === null) {
           // Still too many transactions
           range[0] = fromBlock;
@@ -83,7 +73,7 @@ export default {
           range[1] = fromBlock;
         }
         fromBlock = Math.floor((range[0] + range[1]) / 2);
-        transactions = await this.getTransactions(fromBlock);
+        transactions = await this.getTransactions(fromBlock, latest);
       }
 
       transactions.forEach((t) => {
@@ -100,7 +90,7 @@ export default {
 
       for (let address of addresses) {
         try {
-          const paddedAddress = padHex(removeLeadingZeros(address), WEB3_BALANCEOF_ADDRESS_LENGTH)
+          const paddedAddress = padHex(removeLeadingZeros(address), constants.WEB3_BALANCEOF_ADDRESS_LENGTH)
 
           let balance = await web3.eth.getBalance(paddedAddress)/10**6;
           totalBalance += balance

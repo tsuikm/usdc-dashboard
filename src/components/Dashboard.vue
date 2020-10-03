@@ -10,7 +10,7 @@
             <md-field>
               <label>Wallet Address</label>
               <md-input type="text" v-model="walletAddress"></md-input>
-              <md-icon @click="submitAddress">search</md-icon>
+              <md-button @click="submitAddress"><md-icon>search</md-icon></md-button>
             </md-field>
           </form>
         </div>

@@ -113,8 +113,8 @@ export default {
       this.totalBalance = totalBalance;
       this.accounts = accounts;
     },
-      async pageChange(page) {
-        console.log("hi")
+    async pageChange(page) {
+      console.log("hi")
     },
   },
   computed: {

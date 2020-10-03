@@ -119,8 +119,7 @@ export default {
   },
   computed: {
     totalItems() {
-      // TODO: this number is hard-coded. We need to calculate the total number of transactions
-      return 5500;
+      return this.accounts.length;
     },
     tableSchema() {
       return [

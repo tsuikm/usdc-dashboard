@@ -126,29 +126,21 @@ export default {
       return [
         {
           name: 'Address',
-          getter(account) {
-              return account.address;
-          },
-          link(account) {
-              return `/address/${account.address}`;
-          },
+          getter: account => account.address,
+          link: account => `/address/${account.address}`
         },
         {
           name: 'Balance',
-          getter(account) {
-              return account.balance;
-          },
+          getter: account => account.balance
         },
         {
           name: 'Percentage',
-          getter(account) {
-              return account.percentage;
-          }
+          getter: account => account.percentage
         }
       ];
     },
     pageLength() {
-        return this.$refs.table.pageLength;
+      return this.$refs.table.pageLength;
     }
   },
   data() {

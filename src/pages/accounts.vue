@@ -18,6 +18,7 @@ import Table from '@/components/Table';
 import Web3 from 'web3';
 import * as constants from '@/utils/constants';
 import { toHex, padHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
+import { getBalance } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
 const web3 = new Web3(Web3.givenProvider);
@@ -111,8 +112,7 @@ export default {
       // Fetch the balance of each address.
       for (const address of addresses) {
         if (address.length <= constants.WEB3_BALANCEOF_ADDRESS_LENGTH + 2) {
-          const paddedAddress = padHex(address, constants.WEB3_BALANCEOF_ADDRESS_LENGTH);
-          const balance = await web3.eth.getBalance(paddedAddress) / (10 ** 6);
+          const balance = await getBalance(address);
           totalBalance += balance;
 
           accounts.push({ address, balance });

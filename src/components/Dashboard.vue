@@ -10,7 +10,7 @@
             <md-field>
               <label>Wallet Address</label>
               <md-input type="text" v-model="walletAddress"></md-input>
-              <md-icon>search</md-icon>
+              <md-icon @click="submitAddress">search</md-icon>
             </md-field>
           </form>
         </div>
@@ -22,8 +22,11 @@
 </template>
 
 <script>
+import Web3 from 'web3';
 import Overview from "./Overview";
 import Transactions from "./Transactions";
+
+const web3 = new Web3(Web3.givenProvider);
 
 export default {
   name: "Dashboard",
@@ -40,6 +43,13 @@ export default {
   methods: {
     submitAddress() {
       this.addressSubmitted = true;
+
+      if (web3.utils.isAddress(this.walletAddress)) {
+        window.location.href = `/address/${this.walletAddress}`;
+      }
+      else {
+        window.location.href = `/404`;
+      }
     },
   },
 };

@@ -251,6 +251,7 @@ export default {
 
       let transactions = await getLogs(address, 0);
       if (transactions !== null) {
+
         // We have all transactions in history for this address
         this.transactions = transactions
           .reverse()

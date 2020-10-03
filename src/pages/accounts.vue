@@ -7,7 +7,6 @@
       :content="this.accounts"
       :keyField="'address'"
       @page:change="this.pageChange"
-      ref="table"
     />
   </div>
 </template>
@@ -27,6 +26,15 @@ export default {
   components: {
     Table
   },
+  data() {
+    return {
+      accounts: [],
+      page: 0
+    };
+  },
+  async created() {
+    this.accounts = await this.getAccounts();
+  },
   methods: {
 
     /**
@@ -34,7 +42,7 @@ export default {
      *
      * @param {number} from - as a base-10 number.
      * @param {number} to - as a base-10 number.
-     * @returns {Object[]|null} - returns null if there are more than MAX_TRANSACTIONS results.
+     * @return {Object[]|null} - returns null if there are more than MAX_TRANSACTIONS results.
      */
     async getTransactions(from, to) {
       try {
@@ -53,68 +61,75 @@ export default {
       }
     },
 
-
-    async fetchAllAccounts() {
-      const addresses = new Set();
+    /**
+     * Gets all transactions in the entire block-chain, capped at MAX_TRANSACTIONS.
+     *
+     * @return {Object[]}
+     */
+    async getAllTransactions() {
       const latest = await web3.eth.getBlockNumber();
 
+      // Range of the possible 'from' block numbers that gets MAX_TRANSACTIONS.
       const range = [0, latest];
+      let midpoint = Math.floor((range[0] + range[1]) / 2);
+      let transactions = await this.getTransactions(midpoint, latest);
 
-      let fromBlock = Math.floor((range[0] + range[1]) / 2);
-      let transactions = await this.getTransactions(fromBlock, latest);
-
-      // Binary search to find block number that gets us just over MAX_TRANSACTIONS
-      while (transactions === null ||transactions.length < constants.WEB3_MAX_TRANSACTIONS - 1) {
+      // Binary search to find the block number that gets MAX_TRANSACTIONS.
+      while (transactions === null || transactions.length < constants.WEB3_MAX_TRANSACTIONS - 1) {
         if (transactions === null) {
-          // Still too many transactions
-          range[0] = fromBlock;
-        } else {
-          // Not enough transactions
-          range[1] = fromBlock;
+          // Still too many transactions.
+          range[0] = midpoint;
         }
-        fromBlock = Math.floor((range[0] + range[1]) / 2);
-        transactions = await this.getTransactions(fromBlock, latest);
+        else {
+          // Not enough transactions.
+          range[1] = midpoint;
+        }
+        midpoint = Math.floor((range[0] + range[1]) / 2);
+        transactions = await this.getTransactions(midpoint, latest);
       }
+      return transactions;
+    },
 
-      transactions.forEach((t) => {
-        if (t.topics[1]) {
-          addresses.add(removeLeadingZeros(t.topics[1]));
-        }
-        if (t.topics[2]) {
-          addresses.add(removeLeadingZeros(t.topics[2]));
-        }
-      });
+    /**
+     * Gets all accounts (addresses) and their balances/percentages.
+     *
+     * @return {Object[]}
+     */
+    async getAccounts() {
+      const transactions = await this.getAllTransactions();
 
-      let accounts = [];
+      // Get all of the addresses of all transactions in a Set.
+      const addresses = new Set();
+      for (const txn of transactions) {
+        txn.topics[1] && addresses.add(removeLeadingZeros(txn.topics[1]));
+        txn.topics[2] && addresses.add(removeLeadingZeros(txn.topics[2]));
+      };
+
+      const accounts = [];
       let totalBalance = 0;
 
-      for (let address of addresses) {
-        try {
-          const paddedAddress = padHex(address, constants.WEB3_BALANCEOF_ADDRESS_LENGTH)
+      // Fetch the balance of each address.
+      for (const address of addresses) {
+        if (address.length <= constants.WEB3_BALANCEOF_ADDRESS_LENGTH + 2) {
+          const paddedAddress = padHex(address, constants.WEB3_BALANCEOF_ADDRESS_LENGTH);
+          const balance = await web3.eth.getBalance(paddedAddress) / (10 ** 6);
+          totalBalance += balance;
 
-          let balance = await web3.eth.getBalance(paddedAddress)/10**6;
-          totalBalance += balance
-          accounts.push({
-            address: address,
-            balance: balance,
-            percentage: 0
-          });
-          console.log(balance)
-        }
-        catch (err) {
-            console.log(err)
+          accounts.push({ address, balance });
         }
       }
-      console.log(accounts.length)
-      accounts.sort((a,b) => (b.balance - a.balance));
-      for (let account of accounts) {
-        account.percentage = roundToNearest(account.balance*100/totalBalance, PERCENTAGE_DECIMAL_PLACES) + '%'
+
+      // Compute the 'percentage' of each address.
+      for (const account of accounts) {
+        account.percentage = `${roundToNearest(account.balance / totalBalance * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
       }
-      this.totalBalance = totalBalance;
-      this.accounts = accounts;
+
+      // Sort (in reverse order) the account addresses by balance.
+      accounts.sort((a, b) => b.balance - a.balance);
+      return accounts;
     },
     async pageChange(page) {
-      console.log("hi")
+      // TODO: when the page changes, how should we "recompute" accounts?
     },
   },
   computed: {
@@ -137,20 +152,7 @@ export default {
           getter: account => account.percentage
         }
       ];
-    },
-    pageLength() {
-      return this.$refs.table.pageLength;
     }
-  },
-  data() {
-    return {
-      totalBalance: 0,
-      accounts: [],
-      page: 0
-    };
-  },
-  async created() {
-    await this.fetchAllAccounts()
   }
 };
 </script>

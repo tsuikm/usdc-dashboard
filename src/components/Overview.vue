@@ -167,7 +167,7 @@ export default {
       });
     },
     checkIsContract() {
-      web3.eth.getCode(this.walletAddress).then((addressType, error) => {
+      web3.eth.getCode(this.walletAddress).then((addressType) => {
         var address = addressType;
         if (address !== "0x") {
           this.isContract = true;

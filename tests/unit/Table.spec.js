@@ -83,13 +83,11 @@ for (let i = 1; i <= 30; i++) {
 describe('Loading bar', () => {
   it('Loading bar renders if table has not loaded yet', () => {
     const {
-      getByText
+      queryByTestId
     } = render(Table, {
       props: loading
     });
-    expect(getByText("md-progress-bar"))
-
-
+    expect(queryByTestId("data-test-id")).not.toBeNull();
 
 
 

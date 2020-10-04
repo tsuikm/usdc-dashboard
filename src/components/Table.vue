@@ -1,6 +1,10 @@
 <template>
   <div id="container">
-    <md-progress-bar v-if="loading" md-mode="indeterminate"></md-progress-bar>
+    <md-progress-bar
+      data-testid="test-id"
+      v-if="loading"
+      md-mode="indeterminate"
+    ></md-progress-bar>
     <md-table md-card>
       <md-table-toolbar>
         <h1 class="md-title">{{ name }}</h1>

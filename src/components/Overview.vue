@@ -1,17 +1,18 @@
 <template>
   <div>
-    <div>Address: {{ walletAddress }}</div>
-    <div>Balance: {{ this.balance }}</div>
     <div class="summaryCards">
-      <BalanceCard
-        :usdcBalance="this.balance"
-        :usdValue="this.usdValue"
-        :conversionRate="this.conversionRate"
-        :minter="minter"
-        :pauser="pauser"
-        :owner="owner"
-      />
-      <TotalSupply :usdcBalance="this.balance" :totalSupply="this.totalSupply"/>
+      <div class="leftSummary">
+        <Address :walletAddress="walletAddress" :isContract="isContract" />
+        <BalanceCard
+          :usdcBalance="this.balance"
+          :usdValue="this.usdValue"
+          :conversionRate="this.conversionRate"
+          :minter="minter"
+          :pauser="pauser"
+          :owner="owner"
+        />
+      </div>
+      <TotalSupply :usdcBalance="this.balance" :totalSupply="this.totalSupply" />
     </div>
   </div>
 </template>
@@ -21,10 +22,11 @@ import Web3 from "web3";
 import { padHex } from "@/utils/utils";
 import {
   USDC_CONTRACT_ADDRESS,
-  WEB3_BALANCEOF_ADDRESS_LENGTH,
+  WEB3_BALANCEOF_ADDRESS_LENGTH
 } from "@/utils/constants";
 import BalanceCard from "./BalanceCard";
 import TotalSupply from "./TotalSupply";
+import Address from "./Address";
 const web3 = new Web3(Web3.givenProvider);
 
 const abi = [
@@ -33,42 +35,49 @@ const abi = [
     inputs: [{ name: "_owner", type: "address" }],
     name: "balanceOf",
     outputs: [{ name: "balance", type: "uint256" }],
-    type: "function",
+    type: "function"
   },
   {
     constant: true,
     inputs: [],
     name: "decimals",
     outputs: [{ name: "", type: "uint8" }],
-    type: "function",
+    type: "function"
   },
   {
     constant: true,
     inputs: [],
     name: "totalSupply",
     outputs: [{ name: "", type: "uint256" }],
-    type: "function",
+    type: "function"
   },
   {
     constant: true,
-    inputs: [{ name: "account", type: "address"}],
+    inputs: [{ name: "account", type: "address" }],
     name: "isMinter",
-    outputs: [{ name: "", type: "bool"}],
-    type: "function",
+    outputs: [{ name: "", type: "bool" }],
+    type: "function"
   },
   {
     constant: true,
     inputs: [],
     name: "pauser",
-    outputs: [{ name: "", type: "address"}],
-    type: "function",
+    outputs: [{ name: "", type: "address" }],
+    type: "function"
   },
   {
     constant: true,
     inputs: [],
     name: "owner",
-    outputs: [{ name: "", type: "address"}],
-    type: "function",
+    outputs: [{ name: "", type: "address" }],
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [{ name: "account", type: "address" }],
+    name: "isContract",
+    outputs: [{ name: "", type: "bool" }],
+    type: "function"
   }
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
@@ -77,6 +86,7 @@ export default {
   components: {
     BalanceCard,
     TotalSupply,
+    Address
   },
   data() {
     return {
@@ -87,16 +97,16 @@ export default {
       minter: null,
       pauser: null,
       owner: null,
-      isContract: null,
+      isContract: null
     };
   },
   props: {
-    walletAddress: String,
+    walletAddress: String
   },
-  created: function () {
+  created: function() {
     this.lookupBalance();
   },
-  updated: function () {
+  updated: function() {
     this.$nextTick(this.checkIsContract());
     this.$nextTick(this.convertToUSD());
     this.$nextTick(this.getTotalSupply());
@@ -104,12 +114,10 @@ export default {
     this.$nextTick(this.checkIsPauser());
     this.$nextTick(this.checkIsOwner());
   },
-  mounted: function () {
+  mounted: function() {
     require("axios")
       .get("https://api.coinbase.com/v2/exchange-rates?currency=USD")
-      .then(
-        (response) => (this.conversionRate = response.data.data.rates.USDC)
-      );
+      .then(response => (this.conversionRate = response.data.data.rates.USDC));
   },
   methods: {
     lookupBalance() {
@@ -130,50 +138,45 @@ export default {
     },
     getTotalSupply() {
       contract.methods.totalSupply().call((error, totalSupply) => {
-      this.totalSupply = totalSupply;
+        this.totalSupply = totalSupply;
       });
     },
     checkIsMinter() {
-      console.log("wallet", this.walletAddress);
-      var newWallet = padHex(this.walletAddress, WEB3_BALANCEOF_ADDRESS_LENGTH);
-      console.log('newwallet', newWallet);
       contract.methods.isMinter(this.walletAddress).call((error, minter) => {
-      console.log("minter", minter)
-      this.minter = minter;
+        this.minter = minter;
       });
     },
     checkIsPauser() {
       contract.methods.pauser().call((error, pauser) => {
-      var pauserAddress = pauser;
-      if (pauserAddress === this.walletAddress) {
-        this.pauser = true;
-      } else {
-        this.pauser = false;
-      }
+        var pauserAddress = pauser;
+        if (pauserAddress === this.walletAddress) {
+          this.pauser = true;
+        } else {
+          this.pauser = false;
+        }
       });
     },
     checkIsOwner() {
       contract.methods.owner().call((error, owner) => {
-      var ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
-      if (ownerAddress === this.walletAddress) {
-        this.owner = true;
-      } else {
-        this.owner = false;
-      }
+        var ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
+        if (ownerAddress === this.walletAddress) {
+          this.owner = true;
+        } else {
+          this.owner = false;
+        }
       });
     },
     checkIsContract() {
-      web3.eth.getCode(this.walletAddress).call((addressType, error) => {
+      web3.eth.getCode(this.walletAddress).then((addressType, error) => {
         var address = addressType;
-        console.log("address type", address);
         if (address !== "0x") {
           this.isContract = true;
         } else {
           this.isContract = false;
         }
-      })
+      });
     }
-  },
+  }
 };
 </script>
 

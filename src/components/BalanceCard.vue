@@ -4,17 +4,14 @@
       <div class="card-header">
         <div class="card-subheader">
           <div class="heading">SUMMARY</div>
-          <RoleDisplay :minter="this.minter" :pauser="this.pauser" :owner="this.owner"/>
+          <RoleDisplay :minter="this.minter" :pauser="this.pauser" :owner="this.owner" />
         </div>
         <div>
           <img src="../assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
         </div>
       </div>
       <div class="card-content">
-        <ValueDisplay
-          :usdcBalance="this.usdcBalance"
-          :usdValue="this.usdValue"
-        />
+        <ValueDisplay :usdcBalance="this.usdcBalance" :usdValue="this.usdValue" />
       </div>
       <div class="card-footer">
         <ConversionDisplay :conversionRate="this.conversionRate" />
@@ -32,7 +29,7 @@ export default {
   components: {
     ValueDisplay,
     ConversionDisplay,
-    RoleDisplay,
+    RoleDisplay
   },
   props: {
     usdcBalance: Number,
@@ -40,10 +37,7 @@ export default {
     conversionRate: String,
     minter: Boolean,
     pauser: Boolean,
-    owner: Boolean,
-  },
-  updated () {
-    console.log("minter in balance", this.minter);
+    owner: Boolean
   }
 };
 </script>

@@ -19,9 +19,9 @@
       :key="item[keyField]"
     >
       <md-table-cell v-for="{ name, getter, link } in schema" :key="name">
-        <nuxt-link v-if="link" :to="link(item)">
+        <a v-if="link" :href="link(item)">
           {{ getter(item) }}
-        </nuxt-link>
+        </a>
         <template v-else>
           {{ getter(item) }}
         </template>

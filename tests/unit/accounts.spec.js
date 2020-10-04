@@ -2,7 +2,7 @@ import { render, fireEvent } from "@testing-library/vue";
 import accounts from "@/pages/accounts";
 import Vue from "vue";
 import VueMaterial from "vue-material";
-import { fromHex, toHex, padHex } from "@/utils/utils";
+import { fromHex, toHex, padHex, removeLeadingZeros } from "@/utils/utils";
 
 Vue.use(VueMaterial);
 
@@ -15,7 +15,18 @@ for(let i = 0; i < 101; i++) {
   });
 }
 
-jest.mock('web3', () => class Web3 {
+const MOCK_ACCOUNTS = new Map();
+for (let transaction of MOCK_TRANSACTIONS) {
+  let address = transaction.topics[1]
+  if (!MOCK_ACCOUNTS.has(address)) {
+    MOCK_ACCOUNTS.set(address, transaction.data)
+  }
+  else {
+    MOCK_ACCOUNTS.set(address, MOCK_ACCOUNTS.get(address) + transaction.data)
+  }    
+}
+
+jest.doMock('web3', () => class Web3 {
   get eth() {
     return {
       Contract: class Contract {
@@ -24,13 +35,7 @@ jest.mock('web3', () => class Web3 {
             balanceOf: address => {
               return {
                 call: () => new Promise((res) => {
-                  let totalBalance = 0;
-                  for (let transaction of MOCK_TRANSACTIONS) {
-                    if (transaction.topics[1] == address) {
-                      totalBalance += transaction.data
-                    }
-                  }
-                  return res(totalBalance)
+                  return res(MOCK_ACCOUNTS.get(address));
                 })
               };
             },
@@ -64,19 +69,26 @@ describe("accounts", () => {
   });
 
   it("orders accounts by balance", async () => {
-    const { findByText } = render(accounts);
+    const { findByText, getByText } = render(accounts);
 
+    let addresses = [...MOCK_ACCOUNTS.entries()].sort((a, b) => b[1] - a[1]);
+
+    // top 25 accounts by balance
+    for (let i = 0; i < 25; i++) {
+      expect(findByText(removeLeadingZeros(addresses[i][0]))).not.toBeNull();
+      expect(findByText(addresses[i][1])).not.toBeNull();
+    }
     
-  });
+    // go to page 2
+    await fireEvent.click(getByText('navigate_next'));
+    getByText('First');
+    findByText('Page 2 of ' + Math.ceil(addresses.length/25));
+    getByText('Last');
 
-  // it("ConversionDisplay renders onto BalanceCard", () => {
-  //   const wrapper = mount(BalanceCard);
-  //   const conversionDisplay = wrapper.findComponent({
-  //     name: "ConversionDisplay",
-  //   });
-  //   expect(conversionDisplay.exists()).toBeTruthy();
-  //   expect(conversionDisplay.text()).toContain("CONVERSION RATE:");
-  //   expect(conversionDisplay.text()).toContain("1 USD//Coin to");
-  //   expect(conversionDisplay.text()).toContain("US Dollar");
-  // });
+    // next top 25 accounts by balance
+    for (let i = 25; i < 50; i++) {
+      expect(findByText(removeLeadingZeros(addresses[i][0]))).not.toBeNull();
+      expect(findByText(addresses[i][1])).not.toBeNull();
+    }
+  });
 });

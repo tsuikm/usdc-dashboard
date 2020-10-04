@@ -9,7 +9,10 @@
       @page:change="this.pageChange"
       ref="table"
     />
-    <ProgressSpinnerIndeterminate v-if="isLoading == true" />
+    <md-progress-spinner
+      v-if="isLoading"
+      md-mode="indeterminate"
+    ></md-progress-spinner>
   </div>
 </template>
 
@@ -17,7 +20,6 @@
 import Web3 from "web3";
 import moment from "moment";
 import Table from "./Table";
-import ProgressSpinnerIndeterminate from "./LoadingSpinner";
 import {
   fromHex,
   removeLeadingZeros,
@@ -101,7 +103,6 @@ export default {
   components: {
     // Pagination,
     Table,
-    ProgressSpinnerIndeterminate,
   },
   props: ["address"],
   computed: {
@@ -307,3 +308,11 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.md-progress-spinner {
+  margin: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

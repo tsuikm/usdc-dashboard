@@ -46,60 +46,37 @@ jest.mock('web3', () => class Web3 {
       getPastLogs: async (options) => {
         const from = fromHex(options.fromBlock);
         const to = fromHex(options.toBlock);
-
-        const result = [];
-        for (let i = 0; i < (from - to) / 1000 * 50; i++) {
-          result.push({
-            data: '0x0',
-            transactionHash: `0x000${i}`,
-            blockNumber: `0x000${i}0000`,
-            topics: [ '0x0', `0x00${i}00`, `0x${i}000`]
-          });
-        }
-        return result;
-      };
+        const length = transactions.length;
+        return transactions.slice(Math.max(length -(from - to), 0), length);
+      },
     }
   }
 } );
   
 
-describe("accounts renders ", () => {
-  it("ValueDisplay renders onto BalanceCard", () => {
+describe("accounts", () => {
+  it("accounts displays a table titled Accounts with columns for Address, Balance and Percentage", () => {
+    const { getByText } = render(accounts);
+    expect(getByText('Accounts')).not.toBeNull();
+    expect(getByText('Address')).not.toBeNull();
+    expect(getByText('Balance')).not.toBeNull();
+    expect(getByText('Percentage')).not.toBeNull();
+  });
+
+  it("orders accounts by balance", async () => {
+    const { findByText } = render(accounts);
+
     
-    expect(valueDisplay.exists()).toBeTruthy();
-    expect(valueDisplay.text()).toContain("BALANCE (USDC)");
-    expect(valueDisplay.text()).toContain("BALANCE (USD $)");
   });
 
-  it("Images display on BalanceCard", () => {
-    const wrapper = mount(BalanceCard);
-    const images = wrapper.find("img");
-    expect(images.exists()).toBeTruthy();
-  });
-
-  it("ConversionDisplay renders onto BalanceCard", () => {
-    const wrapper = mount(BalanceCard);
-    const conversionDisplay = wrapper.findComponent({
-      name: "ConversionDisplay",
-    });
-    expect(conversionDisplay.exists()).toBeTruthy();
-    expect(conversionDisplay.text()).toContain("CONVERSION RATE:");
-    expect(conversionDisplay.text()).toContain("1 USD//Coin to");
-    expect(conversionDisplay.text()).toContain("US Dollar");
-  });
-});
-
-describe("Dashboard", () => {
-  it("BalanceCard displays on Dashboard input's submit", async () => {
-    const wrapper = mount(Dashboard);
-    const addr = wrapper.find("input");
-    const form = wrapper.find("form");
-    
-    await addr.setValue("0xc0539c310393165705265dc9865a0E495202771B");
-    await form.trigger("submit.prevent");
-    await wrapper.vm.$nextTick();
-
-    const balancecard = wrapper.findComponent({ name: "BalanceCard" });
-    expect(balancecard.exists()).toBeTruthy();
-  });
+  // it("ConversionDisplay renders onto BalanceCard", () => {
+  //   const wrapper = mount(BalanceCard);
+  //   const conversionDisplay = wrapper.findComponent({
+  //     name: "ConversionDisplay",
+  //   });
+  //   expect(conversionDisplay.exists()).toBeTruthy();
+  //   expect(conversionDisplay.text()).toContain("CONVERSION RATE:");
+  //   expect(conversionDisplay.text()).toContain("1 USD//Coin to");
+  //   expect(conversionDisplay.text()).toContain("US Dollar");
+  // });
 });

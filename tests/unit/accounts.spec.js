@@ -51,8 +51,8 @@ jest.doMock('web3', () => class Web3 {
       getPastLogs: async (options) => {
         const from = fromHex(options.fromBlock);
         const to = fromHex(options.toBlock);
-        const length = transactions.length;
-        return transactions.slice(Math.max(length -(from - to), 0), length);
+        const length = MOCK_TRANSACTIONS.length;
+        return MOCK_TRANSACTIONS.slice(Math.max(length -(from - to), 0), length);
       },
     }
   }

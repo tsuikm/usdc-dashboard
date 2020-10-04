@@ -16,7 +16,7 @@
 import Table from '@/components/Table';
 import Web3 from 'web3';
 import * as constants from '@/utils/constants';
-import { toHex, padHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
+import { toHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
 import { getBalance } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
@@ -102,7 +102,7 @@ export default {
       for (const txn of transactions) {
         txn.topics[1] && addresses.add(removeLeadingZeros(txn.topics[1]));
         txn.topics[2] && addresses.add(removeLeadingZeros(txn.topics[2]));
-      };
+      }
 
       const accounts = [];
       let totalBalance = 0;

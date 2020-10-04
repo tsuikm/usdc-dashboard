@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div>
+      <md-icon v-if="isBlacklisted">block</md-icon>
+    </div>
     <div class="summaryCards">
       <div class="leftSummary">
         <Address :walletAddress="walletAddress" :isContract="isContract" />
@@ -78,7 +81,13 @@ const abi = [
     name: "isContract",
     outputs: [{ name: "", type: "bool" }],
     type: "function"
-  }
+  },
+  {
+    inputs: [{ name: "_account", type: "address" }],
+    name: "isBlacklisted",
+    outputs: [{ name: "", type: "bool" }],
+    type: "function",
+  },
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
@@ -91,6 +100,7 @@ export default {
   data() {
     return {
       balance: null,
+      isBlacklisted: false,
       usdValue: null,
       conversionRate: null,
       totalSupply: null,
@@ -105,6 +115,7 @@ export default {
   },
   created: function() {
     this.lookupBalance();
+    this.lookupBlacklisted();
   },
   updated: function() {
     this.$nextTick(this.checkIsContract());
@@ -131,6 +142,19 @@ export default {
           contract.methods.decimals().call((error, decimals) => {
             this.balance = balance / 10 ** decimals;
           });
+        });
+    },
+    lookupBlacklisted() {
+      if (this.walletAddress === "") {
+        return;
+      }
+
+      contract.methods
+        .isBlacklisted(
+          padHex(this.walletAddress, WEB3_BALANCEOF_ADDRESS_LENGTH)
+        )
+        .call((error, isBlacklisted) => {
+          this.isBlacklisted = isBlacklisted;
         });
     },
     convertToUSD() {

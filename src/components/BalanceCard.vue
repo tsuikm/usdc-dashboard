@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import ValueDisplay from "./ValueDisplay";
-import ConversionDisplay from "./ConversionDisplay";
-import RoleDisplay from "./RoleDisplay";
+import ValueDisplay from "@/components/ValueDisplay";
+import ConversionDisplay from "@/components/ConversionDisplay";
+import RoleDisplay from "@/components/RoleDisplay";
 export default {
   name: "BalanceCard",
   components: {
@@ -58,6 +58,7 @@ export default {
 }
 .card-subheader {
   display: flex;
+  align-items: center;
 }
 .card-content {
   height: 145px;

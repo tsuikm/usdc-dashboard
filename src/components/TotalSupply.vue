@@ -35,7 +35,6 @@ export default {
     async calculatePercentage() {
       await this.usdcBalance;
       var percentage = (this.usdcBalance / parseInt(this.totalSupply)) * 100;
-      // var percentage = (10000000000000 / parseInt(this.totalSupply)) * 100;
       if (percentage < 0.001) {
           this.usdcPercent = "<.001"
       } else {

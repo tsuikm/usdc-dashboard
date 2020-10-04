@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import BalanceCard from "../../src/components/BalanceCard.vue";
+import BalanceCard from "@/components/BalanceCard.vue";
 import Vue from "vue";
 import VueMaterial from "vue-material";
 

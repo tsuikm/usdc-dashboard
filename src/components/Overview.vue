@@ -28,7 +28,7 @@ import {
   WEB3_BALANCEOF_ADDRESS_LENGTH
 } from "@/utils/constants";
 import BalanceCard from "./BalanceCard";
-import TotalSupply from "./TotalSupply";
+import TotalSupply from "@/components/TotalSupply";
 import Address from "./Address";
 const web3 = new Web3(Web3.givenProvider);
 
@@ -126,6 +126,7 @@ export default {
     this.$nextTick(this.checkIsOwner());
   },
   mounted: function() {
+    // this.fetchRate("https://api.coinbase.com/v2/exchange-rates?currency=USD");
     require("axios")
       .get("https://api.coinbase.com/v2/exchange-rates?currency=USD")
       .then(response => (this.conversionRate = response.data.data.rates.USDC));
@@ -199,7 +200,21 @@ export default {
           this.isContract = false;
         }
       });
-    }
+    },
+    // async fetchRate(url) {
+    //   try {
+    //     const response = await fetch(url);
+    //     data = response.data["rates"];
+    //     response.text().then((data) => {
+    //       console.log("data", data)
+    //     })
+    //     console.log("object", response.text());
+    //     this.conversionRate = response[data].text();
+    //     console.log("conv rate", this.conversionRate);
+    //   } catch (err) {
+    //     console.log('fetch failed', err);
+    //   }
+    // }
   }
 };
 </script>

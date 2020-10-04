@@ -260,6 +260,7 @@ export default {
         this.transactions = transactions
           .reverse()
           .slice(0, WEB3_MAX_TRANSACTIONS);
+        this.isLoading = false;
         return;
       }
 

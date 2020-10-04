@@ -1,5 +1,6 @@
 <template>
   <div id="container">
+    <md-progress-bar v-if="loading" md-mode="indeterminate"></md-progress-bar>
     <md-table md-card>
       <md-table-toolbar>
         <h1 class="md-title">{{ name }}</h1>
@@ -32,10 +33,6 @@
         </md-table-cell>
       </md-table-row>
     </md-table>
-    <md-progress-spinner
-      v-if="this.loading"
-      md-mode="indeterminate"
-    ></md-progress-spinner>
   </div>
 </template>
 
@@ -98,18 +95,8 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.md-progress-spinner {
-  margin: 24px;
-}
-#container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 
-  .md-table {
-    width: 100%;
-  }
+<style lang="scss" scoped>
+.md-progress-bar {
 }
 </style>

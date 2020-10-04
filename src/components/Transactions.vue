@@ -1,7 +1,7 @@
 <template>
   <div>
     <Table
-      :loading="true"
+      :loading="loading"
       :name="this.tableName"
       :totalItems="this.totalItems"
       :schema="this.tableSchema"
@@ -178,7 +178,7 @@ export default {
     return {
       transactions: [],
       page: 0,
-      isLoading: true,
+      loading: true,
     };
   },
   methods: {
@@ -244,7 +244,7 @@ export default {
       this.transactions = transactions
         .reverse()
         .slice(0, WEB3_MAX_TRANSACTIONS);
-      this.isLoading = false;
+      this.loading = false;
     },
     async getWalletTransactions() {
       let address = this.address;
@@ -258,7 +258,7 @@ export default {
         this.transactions = transactions
           .reverse()
           .slice(0, WEB3_MAX_TRANSACTIONS);
-        this.isLoading = false;
+        this.loading = false;
         return;
       }
 

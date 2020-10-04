@@ -1,4 +1,7 @@
-import { render, fireEvent } from '@testing-library/vue';
+import {
+  render,
+  fireEvent
+} from '@testing-library/vue';
 import Table from '../../src/components/Table.vue';
 import Vue from 'vue'
 import VueMaterial from 'vue-material'
@@ -8,8 +11,7 @@ Vue.use(VueMaterial);
 const testProps = {
   name: 'Test Name',
   totalItems: 300,
-  schema: [
-    {
+  schema: [{
       name: 'A',
       getter: (i) => i.a
     },
@@ -19,8 +21,7 @@ const testProps = {
     }
   ],
   keyField: 'B',
-  content: [
-    {
+  content: [{
       a: 'Row 1 A',
       b: 'Row 1 B'
     },
@@ -34,8 +35,7 @@ const testProps = {
 const testPropsLinks = {
   name: 'Test Name',
   totalItems: 30,
-  schema: [
-    {
+  schema: [{
       name: 'A',
       getter: (i) => i.a,
       link: () => '/a-link'
@@ -46,8 +46,7 @@ const testPropsLinks = {
     }
   ],
   keyField: 'B',
-  content: [
-    {
+  content: [{
       a: 'Row 1 A',
       b: 'Row 1 B'
     },
@@ -61,8 +60,7 @@ const testPropsLinks = {
 const testPropsLarge = {
   name: 'Test Name',
   totalItems: 30,
-  schema: [
-    {
+  schema: [{
       name: 'A',
       getter: (i) => i.a
     },
@@ -82,16 +80,60 @@ for (let i = 1; i <= 30; i++) {
   })
 }
 
+describe('Loading bar', () => {
+  it('Loading bar renders if table has not loaded yet', () => {
+    const {
+      getByText
+    } = render(Table, {
+      props: loading
+    });
+    expect(getByText("md-progress-bar"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // const {
+    //   loading
+    // } = render(Table, {
+    //   props: loading
+    // });
+    // const loadingbar = wrapper.get("md-progress-bar");
+    // if (!loading) {
+    //   expect(loadingbar.exists()).toBeTruthy();
+    // }
+  });
+});
+
+
 describe('Table', () => {
   it('Renders labels correctly', () => {
-    const { getByText } = render(Table, { props: testProps });
+    const {
+      getByText
+    } = render(Table, {
+      props: testProps
+    });
 
     expect(getByText('A')).not.toBeNull();
     expect(getByText('B')).not.toBeNull();
   });
 
   it('Renders entries correctly', async () => {
-    const { getByText } = render(Table, { props: testProps });
+    const {
+      getByText
+    } = render(Table, {
+      props: testProps
+    });
 
     expect(getByText('Row 1 A')).not.toBeNull();
     expect(getByText('Row 1 B')).not.toBeNull();
@@ -100,7 +142,11 @@ describe('Table', () => {
   });
 
   it('Renders links correctly', async () => {
-    const { getByText } = render(Table, { props: testPropsLinks });
+    const {
+      getByText
+    } = render(Table, {
+      props: testPropsLinks
+    });
 
     const a1 = getByText('Row 1 A');
     const b1 = getByText('Row 1 B');
@@ -116,7 +162,11 @@ describe('Table', () => {
   });
 
   it('Pagination functionality', async () => {
-    const { getByText } = render(Table, { props: testPropsLarge });
+    const {
+      getByText
+    } = render(Table, {
+      props: testPropsLarge
+    });
 
     expect(getByText('Row 1 A')).not.toBeNull();
     expect(getByText('Row 1 B')).not.toBeNull();

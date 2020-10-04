@@ -9,6 +9,7 @@
       @page:change="this.pageChange"
       ref="table"
     />
+    <ProgressSpinnerIndeterminate v-if="isLoading == true" />
   </div>
 </template>
 
@@ -16,6 +17,7 @@
 import Web3 from "web3";
 import moment from "moment";
 import Table from "./Table";
+import ProgressSpinnerIndeterminate from "./LoadingSpinner";
 import {
   fromHex,
   removeLeadingZeros,
@@ -99,6 +101,7 @@ export default {
   components: {
     // Pagination,
     Table,
+    ProgressSpinnerIndeterminate,
   },
   props: ["address"],
   computed: {
@@ -177,6 +180,7 @@ export default {
     return {
       transactions: [],
       page: 0,
+      isLoading: true,
     };
   },
   methods: {
@@ -242,6 +246,7 @@ export default {
       this.transactions = transactions
         .reverse()
         .slice(0, WEB3_MAX_TRANSACTIONS);
+      this.isLoading = false;
     },
     async getWalletTransactions() {
       let address = this.address;

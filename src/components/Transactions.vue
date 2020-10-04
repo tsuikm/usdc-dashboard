@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table
+      :loading="isLoading"
       :name="this.tableName"
       :totalItems="this.totalItems"
       :schema="this.tableSchema"
@@ -9,10 +10,6 @@
       @page:change="this.pageChange"
       ref="table"
     />
-    <md-progress-spinner
-      v-if="isLoading"
-      md-mode="indeterminate"
-    ></md-progress-spinner>
   </div>
 </template>
 
@@ -308,11 +305,4 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.md-progress-spinner {
-  margin: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>
+

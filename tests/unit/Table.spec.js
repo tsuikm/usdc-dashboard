@@ -12,23 +12,23 @@ const testProps = {
   name: 'Test Name',
   totalItems: 300,
   schema: [{
-      name: 'A',
-      getter: (i) => i.a
-    },
-    {
-      name: 'B',
-      getter: (i) => i.b
-    }
+    name: 'A',
+    getter: (i) => i.a
+  },
+  {
+    name: 'B',
+    getter: (i) => i.b
+  }
   ],
   keyField: 'B',
   content: [{
-      a: 'Row 1 A',
-      b: 'Row 1 B'
-    },
-    {
-      a: 'Row 2 A',
-      b: 'Row 2 B'
-    }
+    a: 'Row 1 A',
+    b: 'Row 1 B'
+  },
+  {
+    a: 'Row 2 A',
+    b: 'Row 2 B'
+  }
   ]
 }
 
@@ -36,24 +36,24 @@ const testPropsLinks = {
   name: 'Test Name',
   totalItems: 30,
   schema: [{
-      name: 'A',
-      getter: (i) => i.a,
-      link: () => '/a-link'
-    },
-    {
-      name: 'B',
-      getter: (i) => i.b
-    }
+    name: 'A',
+    getter: (i) => i.a,
+    link: () => '/a-link'
+  },
+  {
+    name: 'B',
+    getter: (i) => i.b
+  }
   ],
   keyField: 'B',
   content: [{
-      a: 'Row 1 A',
-      b: 'Row 1 B'
-    },
-    {
-      a: 'Row 2 A',
-      b: 'Row 2 B'
-    }
+    a: 'Row 1 A',
+    b: 'Row 1 B'
+  },
+  {
+    a: 'Row 2 A',
+    b: 'Row 2 B'
+  }
   ]
 }
 
@@ -61,13 +61,13 @@ const testPropsLarge = {
   name: 'Test Name',
   totalItems: 30,
   schema: [{
-      name: 'A',
-      getter: (i) => i.a
-    },
-    {
-      name: 'B',
-      getter: (i) => i.b
-    }
+    name: 'A',
+    getter: (i) => i.a
+  },
+  {
+    name: 'B',
+    getter: (i) => i.b
+  }
   ],
   keyField: 'B',
   content: []
@@ -82,34 +82,14 @@ for (let i = 1; i <= 30; i++) {
 
 describe('Loading bar', () => {
   it('Loading bar renders if table has not loaded yet', () => {
-    const {
-      queryByTestId
-    } = render(Table, {
-      props: loading
+    const { queryByTestId } = render(Table, {
+      props: {
+        ...testProps,
+        loading: true
+      }
     });
-    expect(queryByTestId("data-test-id")).not.toBeNull();
 
-
-
-
-
-
-
-
-
-
-
-
-
-    // const {
-    //   loading
-    // } = render(Table, {
-    //   props: loading
-    // });
-    // const loadingbar = wrapper.get("md-progress-bar");
-    // if (!loading) {
-    //   expect(loadingbar.exists()).toBeTruthy();
-    // }
+    expect(queryByTestId("test-id")).not.toBeNull();
   });
 });
 

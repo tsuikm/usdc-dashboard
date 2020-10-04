@@ -6,7 +6,6 @@
       :schema="this.tableSchema"
       :content="this.accounts"
       :keyField="'address'"
-      @page:change="this.pageChange"
     />
   </div>
 </template>
@@ -29,8 +28,7 @@ export default {
   },
   data() {
     return {
-      accounts: [],
-      page: 0
+      accounts: []
     };
   },
   async created() {
@@ -127,10 +125,7 @@ export default {
       // Sort (in reverse order) the account addresses by balance.
       accounts.sort((a, b) => b.balance - a.balance);
       return accounts;
-    },
-    async pageChange(page) {
-      // TODO: when the page changes, how should we "recompute" accounts?
-    },
+    }
   },
   computed: {
     totalItems() {

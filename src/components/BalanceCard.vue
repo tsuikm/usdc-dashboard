@@ -2,7 +2,10 @@
   <div>
     <md-card class="container">
       <div class="card-header">
-        <div class="heading">SUMMARY</div>
+        <div class="card-subheader">
+          <div class="heading">SUMMARY</div>
+          <RoleDisplay :minter="this.minter" :pauser="this.pauser" :owner="this.owner"/>
+        </div>
         <div>
           <img src="../assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
         </div>
@@ -23,17 +26,25 @@
 <script>
 import ValueDisplay from "./ValueDisplay";
 import ConversionDisplay from "./ConversionDisplay";
+import RoleDisplay from "./RoleDisplay";
 export default {
   name: "BalanceCard",
   components: {
     ValueDisplay,
     ConversionDisplay,
+    RoleDisplay,
   },
   props: {
     usdcBalance: Number,
     usdValue: Number,
     conversionRate: String,
+    minter: Boolean,
+    pauser: Boolean,
+    owner: Boolean,
   },
+  updated () {
+    console.log("minter in balance", this.minter);
+  }
 };
 </script>
 
@@ -48,6 +59,11 @@ export default {
 .card-header {
   height: 60px;
   letter-spacing: 1px;
+  display: flex;
+  flex-direction: column;
+}
+.card-subheader {
+  display: flex;
 }
 .card-content {
   height: 145px;

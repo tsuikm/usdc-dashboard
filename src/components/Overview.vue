@@ -7,6 +7,9 @@
         :usdcBalance="this.balance"
         :usdValue="this.usdValue"
         :conversionRate="this.conversionRate"
+        :minter="minter"
+        :pauser="pauser"
+        :owner="owner"
       />
       <TotalSupply :usdcBalance="this.balance" :totalSupply="this.totalSupply"/>
     </div>
@@ -46,6 +49,27 @@ const abi = [
     outputs: [{ name: "", type: "uint256" }],
     type: "function",
   },
+  {
+    constant: true,
+    inputs: [{ name: "account", type: "address"}],
+    name: "isMinter",
+    outputs: [{ name: "", type: "bool"}],
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "pauser",
+    outputs: [{ name: "", type: "address"}],
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "owner",
+    outputs: [{ name: "", type: "address"}],
+    type: "function",
+  }
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
@@ -60,6 +84,10 @@ export default {
       usdValue: null,
       conversionRate: null,
       totalSupply: null,
+      minter: null,
+      pauser: null,
+      owner: null,
+      isContract: null,
     };
   },
   props: {
@@ -69,8 +97,12 @@ export default {
     this.lookupBalance();
   },
   updated: function () {
+    this.$nextTick(this.checkIsContract());
     this.$nextTick(this.convertToUSD());
     this.$nextTick(this.getTotalSupply());
+    this.$nextTick(this.checkIsMinter());
+    this.$nextTick(this.checkIsPauser());
+    this.$nextTick(this.checkIsOwner());
   },
   mounted: function () {
     require("axios")
@@ -100,6 +132,46 @@ export default {
       contract.methods.totalSupply().call((error, totalSupply) => {
       this.totalSupply = totalSupply;
       });
+    },
+    checkIsMinter() {
+      console.log("wallet", this.walletAddress);
+      var newWallet = padHex(this.walletAddress, WEB3_BALANCEOF_ADDRESS_LENGTH);
+      console.log('newwallet', newWallet);
+      contract.methods.isMinter(this.walletAddress).call((error, minter) => {
+      console.log("minter", minter)
+      this.minter = minter;
+      });
+    },
+    checkIsPauser() {
+      contract.methods.pauser().call((error, pauser) => {
+      var pauserAddress = pauser;
+      if (pauserAddress === this.walletAddress) {
+        this.pauser = true;
+      } else {
+        this.pauser = false;
+      }
+      });
+    },
+    checkIsOwner() {
+      contract.methods.owner().call((error, owner) => {
+      var ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
+      if (ownerAddress === this.walletAddress) {
+        this.owner = true;
+      } else {
+        this.owner = false;
+      }
+      });
+    },
+    checkIsContract() {
+      web3.eth.getCode(this.walletAddress).call((addressType, error) => {
+        var address = addressType;
+        console.log("address type", address);
+        if (address !== "0x") {
+          this.isContract = true;
+        } else {
+          this.isContract = false;
+        }
+      })
     }
   },
 };

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Table
-      :loading="isLoading"
+      :loading="true"
       :name="this.tableName"
       :totalItems="this.totalItems"
       :schema="this.tableSchema"

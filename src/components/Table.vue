@@ -14,10 +14,6 @@
           {{ name }}
         </md-table-head>
       </md-table-row>
-      <md-progress-spinner
-        v-if="this.loading"
-        md-mode="indeterminate"
-      ></md-progress-spinner>
 
       <md-table-row
         v-for="item in content.slice(
@@ -36,6 +32,10 @@
         </md-table-cell>
       </md-table-row>
     </md-table>
+    <md-progress-spinner
+      v-if="this.loading"
+      md-mode="indeterminate"
+    ></md-progress-spinner>
   </div>
 </template>
 
@@ -107,5 +107,9 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  .md-table {
+    width: 100%;
+  }
 }
 </style>

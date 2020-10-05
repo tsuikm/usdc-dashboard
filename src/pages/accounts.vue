@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NavBar />
     <Table
       :name="'Accounts'"
       :totalItems="this.totalItems"
@@ -13,6 +14,7 @@
 <script>
 
 // modules
+import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 import Web3 from 'web3';
 import * as constants from '@/utils/constants';
@@ -24,7 +26,8 @@ const web3 = new Web3(Web3.givenProvider);
 
 export default {
   components: {
-    Table
+    Table,
+    NavBar
   },
   data() {
     return {

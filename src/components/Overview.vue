@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div>Address: {{ walletAddress }}</div>
+    <div>
+      Address: {{ walletAddress }}
+      <md-icon v-if="isBlacklisted">block</md-icon>
+    </div>
     <div>Balance: {{ this.balance }}</div>
     <BalanceCard
       :usdcBalance="this.balance"
@@ -35,6 +38,13 @@ const abi = [
     outputs: [{ name: "", type: "uint8" }],
     type: "function",
   },
+  {
+    constant: true,
+    inputs: [{ name: "_account", type: "address" }],
+    name: "isBlacklisted",
+    outputs: [{ name: "", type: "bool" }],
+    type: "function",
+  },
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
@@ -52,6 +62,7 @@ export default {
   data() {
     return {
       balance: null,
+      isBlacklisted: false,
       usdValue: null,
       conversionRate: null,
     };
@@ -59,8 +70,9 @@ export default {
   props: {
     walletAddress: String,
   },
-  created: async function () {
-    await this.lookupBalance();
+  created: function () {
+    this.lookupBalance();
+    this.lookupBlacklisted();
   },
   updated: function () {
     this.$nextTick(this.convertToUSD());
@@ -79,6 +91,19 @@ export default {
       }
 
       this.balance = await getBalance(this.walletAddress);
+    },
+    lookupBlacklisted() {
+      if (this.walletAddress === "") {
+        return;
+      }
+
+      contract.methods
+        .isBlacklisted(
+          padHex(this.walletAddress, WEB3_BALANCEOF_ADDRESS_LENGTH)
+        )
+        .call((error, isBlacklisted) => {
+          this.isBlacklisted = isBlacklisted;
+        });
     },
     convertToUSD() {
       this.usdValue = this.balance * this.conversionRate;

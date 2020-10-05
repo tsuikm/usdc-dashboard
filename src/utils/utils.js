@@ -26,3 +26,7 @@ export function removeDuplicates(a, key) {
         return seen.has(k) ? false : seen.add(k);
     });
 }
+
+export function roundToNearest(num, decimalPlaces) {
+    return Math.round(num * 10**decimalPlaces)/(10**decimalPlaces)
+}

@@ -8,8 +8,8 @@
         <form @submit.prevent="submitAddress">
           <md-field>
             <label>Wallet Address</label>
-            <md-input type="text" v-model="walletAddress"></md-input>
-            <md-button class="button" @click="submitAddress"><md-icon>search</md-icon></md-button>
+            <md-input type="text" v-model="walletAddress" class='input'></md-input>
+            <button @click="submitAddress"><md-icon>search</md-icon></button>
           </md-field>
         </form>
       </div>
@@ -53,4 +53,18 @@ export default {
 #logo {
   height: 40px;
 }
+
+button {
+  background-color: transparent;
+  border: none;
+}
+button:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.input {
+  width: 400px;
+}
+
 </style>

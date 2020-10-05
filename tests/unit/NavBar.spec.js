@@ -1,5 +1,5 @@
 import { render, fireEvent } from '@testing-library/vue';
-import Dashboard from '../../src/components/Dashboard.vue';
+import NavBar from '../../src/components/NavBar.vue';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 
@@ -28,34 +28,37 @@ jest.mock('web3', () => class Web3 {
   }
 } );
 
+function setWindowUrl(url) {
+  Object.defineProperty(window, 'location', {
+    value: {
+      href: url
+    }
+  });
+}
 
-describe('Dashboard', () => {
+describe('NavBar', () => {
   it('Search Bar Displayed Correctly', () => {
-    const { getByText, getByLabelText } = render(Dashboard);
+    const { getByText, getByLabelText } = render(NavBar);
 
     expect(getByLabelText('Wallet Address')).not.toBeNull();
     expect(getByText('search')).not.toBeNull();
   });
 
   it('Search Bar Valid Address Functionality', async () => {
-    const { getByLabelText } = render(Dashboard);
+    const { getByLabelText } = render(NavBar);
     global.window = Object.create(window);
 
     const input = getByLabelText('Wallet Address');
     await fireEvent.input(input, '0x36f80a0bde5020ab0880ab54');
 
     const url = '/address/0x36f80a0bde5020ab0880ab54';
-    Object.defineProperty(window, 'location', {
-      value: {
-        href: url
-      }
-    });
+    setWindowUrl(url);
     expect(window.location.href).toEqual(url);
 
   });
 
   it('Search Bar Invalid Address Functionality', async () => {
-    const { getByLabelText } = render(Dashboard);
+    const { getByLabelText } = render(NavBar);
 
     delete global.window.location;
     global.window = Object.create(window);
@@ -64,11 +67,7 @@ describe('Dashboard', () => {
     await fireEvent.input(input, 'invalid-address');
 
     const url = '/404';
-    Object.defineProperty(window, 'location', {
-      value: {
-        href: url
-      }
-    });
+    setWindowUrl(url);
     expect(window.location.href).toEqual(url);
   });
 });

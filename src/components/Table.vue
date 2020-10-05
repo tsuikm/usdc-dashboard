@@ -1,7 +1,7 @@
 <template>
-  <div id="container">
+  <div id="table-and-loading-container">
     <md-progress-bar
-      data-testid="test-id"
+      data-testid="progress-bar-test-id"
       v-if="loading"
       md-mode="indeterminate"
     ></md-progress-bar>

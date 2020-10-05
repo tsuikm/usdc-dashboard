@@ -90,7 +90,7 @@ describe('Loading bar', () => {
         loading: true
       }
     });
-    expect(queryByTestId("test-id")).not.toBeNull();
+    expect(queryByTestId("progress-bar-test-id")).not.toBeNull();
   });
   it('Loading bar disappears after table renders', () => {
     const {
@@ -102,7 +102,7 @@ describe('Loading bar', () => {
       }
     });
 
-    expect(queryByTestId("test-id")).toBeNull();
+    expect(queryByTestId("progress-bar-test-id")).toBeNull();
   });
 
 });

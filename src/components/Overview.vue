@@ -86,8 +86,8 @@ const abi = [
     inputs: [{ name: "_account", type: "address" }],
     name: "isBlacklisted",
     outputs: [{ name: "", type: "bool" }],
-    type: "function",
-  },
+    type: "function"
+  }
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
@@ -125,11 +125,11 @@ export default {
     this.$nextTick(this.checkIsPauser());
     this.$nextTick(this.checkIsOwner());
   },
-  mounted: function() {
-    // this.fetchRate("https://api.coinbase.com/v2/exchange-rates?currency=USD");
-    require("axios")
-      .get("https://api.coinbase.com/v2/exchange-rates?currency=USD")
-      .then(response => (this.conversionRate = response.data.data.rates.USDC));
+  mounted: async function() {
+    const response = await require("axios").get(
+      "https://api.coinbase.com/v2/exchange-rates?currency=USD"
+    );
+    this.conversionRate = response.data.data.rates.USDC;
   },
   methods: {
     lookupBalance() {
@@ -192,7 +192,7 @@ export default {
       });
     },
     checkIsContract() {
-      web3.eth.getCode(this.walletAddress).then((addressType) => {
+      web3.eth.getCode(this.walletAddress).then(addressType => {
         var address = addressType;
         if (address !== "0x") {
           this.isContract = true;
@@ -200,7 +200,7 @@ export default {
           this.isContract = false;
         }
       });
-    },
+    }
     // async fetchRate(url) {
     //   try {
     //     const response = await fetch(url);

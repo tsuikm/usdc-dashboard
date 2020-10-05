@@ -90,12 +90,8 @@ describe('Loading bar', () => {
         loading: true
       }
     });
-
     expect(queryByTestId("test-id")).not.toBeNull();
   });
-});
-
-describe('Loading bar', () => {
   it('Loading bar disappears after table renders', () => {
     const {
       queryByTestId
@@ -108,8 +104,8 @@ describe('Loading bar', () => {
 
     expect(queryByTestId("test-id")).toBeNull();
   });
-});
 
+});
 
 describe('Table', () => {
   it('Renders labels correctly', () => {

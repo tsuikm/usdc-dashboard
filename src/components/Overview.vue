@@ -118,12 +118,7 @@ export default {
     this.lookupBlacklisted();
   },
   updated: function() {
-    this.$nextTick(this.checkIsContract());
-    this.$nextTick(this.convertToUSD());
-    this.$nextTick(this.getTotalSupply());
-    this.$nextTick(this.checkIsMinter());
-    this.$nextTick(this.checkIsPauser());
-    this.$nextTick(this.checkIsOwner());
+    this.update();
   },
   mounted: async function() {
     const response = await require("axios").get(
@@ -200,21 +195,15 @@ export default {
           this.isContract = false;
         }
       });
+    },
+    update() {
+      this.checkIsContract();
+      this.convertToUSD();
+      this.getTotalSupply();
+      this.checkIsMinter();
+      this.checkIsPauser();
+      this.checkIsOwner();
     }
-    // async fetchRate(url) {
-    //   try {
-    //     const response = await fetch(url);
-    //     data = response.data["rates"];
-    //     response.text().then((data) => {
-    //       console.log("data", data)
-    //     })
-    //     console.log("object", response.text());
-    //     this.conversionRate = response[data].text();
-    //     console.log("conv rate", this.conversionRate);
-    //   } catch (err) {
-    //     console.log('fetch failed', err);
-    //   }
-    // }
   }
 };
 </script>

@@ -9,7 +9,7 @@
       </div>
       <div class="card-content">
         <div class="subheading">PERCENTAGE OF USDC HELD</div>
-        <div class="value">{{ this.usdcPercent }} %</div>
+        <div class="value">{{ usdcPercent }} %</div>
       </div>
       <div class="card-footer">
         <div class="subheading">TOTAL SUPPLY:</div>

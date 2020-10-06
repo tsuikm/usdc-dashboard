@@ -4,17 +4,17 @@
       <div class="card-header">
         <div class="card-subheader">
           <div class="heading">SUMMARY</div>
-          <RoleDisplay :minter="this.minter" :pauser="this.pauser" :owner="this.owner" />
+          <RoleDisplay :minter="minter" :pauser="pauser" :owner="owner" />
         </div>
         <div>
           <img src="../assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
         </div>
       </div>
       <div class="card-content">
-        <ValueDisplay :usdcBalance="this.usdcBalance" :usdValue="this.usdValue" />
+        <ValueDisplay :usdcBalance="usdcBalance" :usdValue="usdValue" />
       </div>
       <div class="card-footer">
-        <ConversionDisplay :conversionRate="this.conversionRate" />
+        <ConversionDisplay :conversionRate="conversionRate" />
       </div>
     </md-card>
   </div>

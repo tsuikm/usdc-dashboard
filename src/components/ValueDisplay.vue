@@ -3,7 +3,7 @@
     <div class="md-layout-items left">
       <div>
         <div class="subheading">BALANCE (USDC)</div>
-        <div class="value">{{ this.usdcBalance }}</div>
+        <div class="value">{{ usdcBalance }}</div>
       </div>
     </div>
     <div class="md-layout-items mid">
@@ -16,7 +16,7 @@
     <div class="md-layout-items right">
       <div>
         <div class="subheading">BALANCE (USD $)</div>
-        <div class="value">{{ this.usdValue }}</div>
+        <div class="value">{{ usdValue }}</div>
       </div>
     </div>
   </div>

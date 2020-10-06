@@ -5,14 +5,14 @@
     </div>
     <div class="summaryCards">
       <div class="leftSummary">
-        <Address :walletAddress="walletAddress" :isContract="isContract" />
+        <Address :walletAddress="walletAddress" :isContract="this.isContract" />
         <BalanceCard
           :usdcBalance="this.balance"
           :usdValue="this.usdValue"
           :conversionRate="this.conversionRate"
-          :minter="minter"
-          :pauser="pauser"
-          :owner="owner"
+          :minter="this.minter"
+          :pauser="this.pauser"
+          :owner="this.owner"
         />
       </div>
       <TotalSupply :usdcBalance="this.balance" :totalSupply="this.totalSupply" />

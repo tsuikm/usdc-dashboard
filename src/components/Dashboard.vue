@@ -3,7 +3,7 @@
     <md-toolbar>
       <div class="md-toolbar-row">
         <div class="md-toolbar-section-start">
-          <img id="logo" src="../assets/usdc-logo.png" />
+          <img id="logo" src="@/assets/usdc-logo.png" />
         </div>
         <div class="md-toolbar-section-end">
           <form @submit.prevent="submitAddress">

@@ -4,7 +4,7 @@
       <div class="card-header">
         <div class="heading">TOTAL SUPPLY</div>
         <div>
-          <img src="../assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
+          <img src="@/assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
         </div>
       </div>
       <div class="card-content">

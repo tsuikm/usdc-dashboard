@@ -109,7 +109,7 @@ export default {
      * @return {boolean}
      */
     isValidAddress(address) {
-      return address && removeLeadingZeros(address).length < constants.WEB3_BALANCEOF_ADDRESS_LENGTH + 2;
+      return address && removeLeadingZeros(address).length <= constants.WEB3_BALANCEOF_ADDRESS_LENGTH + 2;
     },
 
     /**

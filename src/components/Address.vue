@@ -15,7 +15,8 @@
         <img src="@/assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
       </div>
       <div class="subheading">
-        <div>{{this.walletAddress}}</div>
+        <div>{{ this.walletAddress }}</div>
+        <md-icon v-if="this.isBlacklisted" title="Blacklisted">block</md-icon>
       </div>
     </md-card>
   </div>
@@ -25,9 +26,10 @@
 export default {
   name: "Address",
   props: {
+    isBlacklisted: Boolean,
     isContract: Boolean,
-    walletAddress: String
-  }
+    walletAddress: String,
+  },
 };
 </script>
 
@@ -60,5 +62,13 @@ export default {
   color: #a3a3a3;
   height: 50px;
   letter-spacing: 1px;
+}
+
+.subheading > div {
+  display: inline;
+}
+
+.subheading > i {
+  margin-bottom: 0.25rem;
 }
 </style>

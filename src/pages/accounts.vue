@@ -19,7 +19,7 @@ import Table from '@/components/Table';
 import Web3 from 'web3';
 import * as constants from '@/utils/constants';
 import { toHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
-import { getBalance } from '@/components/Overview';
+import { getBalance, getTotalSupply } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
 const web3 = new Web3(Web3.givenProvider);
@@ -108,22 +108,15 @@ export default {
       }
 
       const accounts = [];
-      let totalBalance = 0;
-
-      // Fetch the balance of each address.
+      const totalSupply = await getTotalSupply();
+      // Fetch the balance of each address and compute the 'percentage' of each address.
       for (const address of addresses) {
         if (address.length <= constants.WEB3_BALANCEOF_ADDRESS_LENGTH + 2) {
           const balance = await getBalance(address);
-          totalBalance += balance;
-
-          accounts.push({ address, balance });
+          const percentage = `${roundToNearest(account.balance / totalSupply * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
+          accounts.push({ address, balance, percentage });
         }
-      }
-
-      // Compute the 'percentage' of each address.
-      for (const account of accounts) {
-        account.percentage = `${roundToNearest(account.balance / totalBalance * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
-      }
+      }      
 
       // Sort (in reverse order) the account addresses by balance.
       accounts.sort((a, b) => b.balance - a.balance);

@@ -98,6 +98,11 @@ export async function getBalance(address) {
   return balance / (10 ** decimals);
 }
 
+export async function getTotalSupply() {
+  const totalSupply = await contract.methods.totalSupply().call();
+  return totalSupply;
+}
+
 export default {
   components: {
     BalanceCard,
@@ -157,10 +162,8 @@ export default {
     convertToUSD() {
       this.usdValue = this.balance * this.conversionRate;
     },
-    getTotalSupply() {
-      contract.methods.totalSupply().call((error, totalSupply) => {
-        this.totalSupply = totalSupply;
-      });
+    async getTotalSupply() {
+      this.totalSupply = await getTotalSupply();
     },
     checkIsMinter() {
       contract.methods.isMinter(this.walletAddress).call((error, minter) => {

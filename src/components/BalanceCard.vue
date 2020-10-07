@@ -2,44 +2,49 @@
   <div>
     <md-card class="container">
       <div class="card-header">
-        <div class="heading">SUMMARY</div>
+        <div class="card-subheader">
+          <div class="heading">SUMMARY</div>
+          <RoleDisplay :minter="minter" :pauser="pauser" :owner="owner" />
+        </div>
         <div>
           <img src="../assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
         </div>
       </div>
       <div class="card-content">
-        <ValueDisplay
-          :usdcBalance="this.usdcBalance"
-          :usdValue="this.usdValue"
-        />
+        <ValueDisplay :usdcBalance="usdcBalance" :usdValue="usdValue" />
       </div>
       <div class="card-footer">
-        <ConversionDisplay :conversionRate="this.conversionRate" />
+        <ConversionDisplay :conversionRate="conversionRate" />
       </div>
     </md-card>
   </div>
 </template>
 
 <script>
-import ValueDisplay from "./ValueDisplay";
-import ConversionDisplay from "./ConversionDisplay";
+import ValueDisplay from "@/components/ValueDisplay";
+import ConversionDisplay from "@/components/ConversionDisplay";
+import RoleDisplay from "@/components/RoleDisplay";
 export default {
   name: "BalanceCard",
   components: {
     ValueDisplay,
     ConversionDisplay,
+    RoleDisplay
   },
   props: {
     usdcBalance: Number,
     usdValue: Number,
     conversionRate: String,
-  },
+    minter: Boolean,
+    pauser: Boolean,
+    owner: Boolean
+  }
 };
 </script>
 
 <style scoped>
 .container {
-  width: 800px;
+  width: 750px;
   height: 300px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
@@ -48,6 +53,12 @@ export default {
 .card-header {
   height: 60px;
   letter-spacing: 1px;
+  display: flex;
+  flex-direction: column;
+}
+.card-subheader {
+  display: flex;
+  align-items: center;
 }
 .card-content {
   height: 145px;

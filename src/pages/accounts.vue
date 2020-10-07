@@ -110,13 +110,19 @@ export default {
       const accounts = [];
       const totalSupply = await getTotalSupply();
       // Fetch the balance of each address and compute the 'percentage' of each address.
+
+      const batch = new web3.BatchRequest();
+
       for (const address of addresses) {
         if (address.length <= constants.WEB3_BALANCEOF_ADDRESS_LENGTH + 2) {
-          const balance = await getBalance(address);
-          const percentage = `${roundToNearest(account.balance / totalSupply * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
-          accounts.push({ address, balance, percentage });
+          batch.add(await getBalance(address, balance => {
+            const percentage = `${roundToNearest(balance / totalSupply * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
+            accounts.push({ address, balance, percentage });
+          }));
         }
-      }      
+      }  
+      
+      await batch.execute();
 
       // Sort (in reverse order) the account addresses by balance.
       accounts.sort((a, b) => b.balance - a.balance);

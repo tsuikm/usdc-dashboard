@@ -91,11 +91,14 @@ const abi = [
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
-export async function getBalance(address) {
-  const balance = await contract.methods.balanceOf(padHex(address, WEB3_BALANCEOF_ADDRESS_LENGTH)).call()
-  const decimals = await contract.methods.decimals().call();
 
-  return balance / (10 ** decimals);
+export async function getBalance(address, batchCallback=null) {
+  const decimals = await contract.methods.decimals().call();
+  if (batchCallback) {
+    return contract.methods.balanceOf(padHex(address, WEB3_BALANCEOF_ADDRESS_LENGTH)).call.request(balance => batchCallback(balance / (10 ** decimals)))
+  } else {
+    return await contract.methods.balanceOf(padHex(address, WEB3_BALANCEOF_ADDRESS_LENGTH)).call() / (10 ** decimals)
+  }
 }
 
 export async function getTotalSupply() {

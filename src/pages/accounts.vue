@@ -78,6 +78,14 @@ export default {
 
       // Binary search to find the block number that gets MAX_TRANSACTIONS.
       while (transactions === null || transactions.length < constants.WEB3_MAX_TRANSACTIONS - 1) {
+
+        // NOTE: this is a hot fix for https://github.com/selinafeng/usdc-dashboard/issues/33
+        //       This is NOT our intended solution for the future, as the '100' is hard-coded for safety.
+        //       We will delete this code once we start work on that issue.
+        if (range[1] - range[0] <= 1) {
+          return await this.getTransactions(midpoint + 100, latest);
+        }
+
         if (transactions === null) {
           // Still too many transactions.
           range[0] = midpoint;
@@ -143,9 +151,9 @@ export default {
       const balances = await this.getBalancesFor(addresses);
 
       const accounts = [];
-      for (let i = 0; i < addresses.length; i++) {
+      for (let i = 0; i < addresses.size(); i++) {
         const address = addresses[i];
-        const balance = balances[i]
+        const balance = balances[i];
         const percentage = `${roundToNearest(balance / totalSupply * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
 
         accounts.push({address, balance, percentage});

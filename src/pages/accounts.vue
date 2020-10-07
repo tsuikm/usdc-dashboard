@@ -151,7 +151,7 @@ export default {
       const balances = await this.getBalancesFor(addresses);
 
       const accounts = [];
-      for (let i = 0; i < addresses.size(); i++) {
+      for (let i = 0; i < addresses.size; i++) {
         const address = addresses[i];
         const balance = balances[i];
         const percentage = `${roundToNearest(balance / totalSupply * 100, PERCENTAGE_DECIMAL_PLACES)}%`;

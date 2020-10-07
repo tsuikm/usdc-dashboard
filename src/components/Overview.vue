@@ -105,7 +105,8 @@ export async function getBalance(address) {
 }
 
 export async function getTotalSupply() {
-  return await contract.methods.totalSupply().call();
+  const decimals = await contract.methods.decimals().call();
+  return await contract.methods.totalSupply().call() / (10 ** decimals);
 }
 
 export default {

@@ -1,33 +1,43 @@
 <template>
-  <md-table md-card>
-    <md-table-toolbar>
-      <h1 class="md-title">{{ name }}</h1>
-      <Pagination
-        :totalPages="Math.ceil(this.totalItems / pageLength)"
-        @page:change="this.pageChange"
-      />
-    </md-table-toolbar>
+  <div id="table-and-loading-container">
+    <md-progress-bar
+      data-testid="progress-bar-test-id"
+      v-if="loading"
+      md-mode="indeterminate"
+    ></md-progress-bar>
+    <md-table md-card>
+      <md-table-toolbar>
+        <h1 class="md-title">{{ name }}</h1>
+        <Pagination
+          :totalPages="Math.ceil(this.totalItems / pageLength)"
+          @page:change="this.pageChange"
+        />
+      </md-table-toolbar>
 
-    <md-table-row>
-      <md-table-head v-for="{ name } in schema" :key="name">
-        {{ name }}
-      </md-table-head>
-    </md-table-row>
+      <md-table-row>
+        <md-table-head v-for="{ name } in schema" :key="name">
+          {{ name }}
+        </md-table-head>
+      </md-table-row>
 
-    <md-table-row
-      v-for="item in content.slice(page * pageLength, (page + 1) * pageLength)"
-      :key="item[keyField]"
-    >
-      <md-table-cell v-for="{ name, getter, link } in schema" :key="name">
-        <a v-if="link" :href="link(item)">
-          {{ getter(item) }}
-        </a>
-        <template v-else>
-          {{ getter(item) }}
-        </template>
-      </md-table-cell>
-    </md-table-row>
-  </md-table>
+      <md-table-row
+        v-for="item in content.slice(
+          page * pageLength,
+          (page + 1) * pageLength
+        )"
+        :key="item[keyField]"
+      >
+        <md-table-cell v-for="{ name, getter, link } in schema" :key="name">
+          <a v-if="link" :href="link(item)">
+            {{ getter(item) }}
+          </a>
+          <template v-else>
+            {{ getter(item) }}
+          </template>
+        </md-table-cell>
+      </md-table-row>
+    </md-table>
+  </div>
 </template>
 
 <script>
@@ -52,6 +62,7 @@ export default {
   },
   props: {
     name: String,
+    loading: Boolean,
 
     // This number can change. Passed directly to Pagination.
     totalItems: Number,

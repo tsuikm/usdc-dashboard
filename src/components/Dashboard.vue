@@ -16,37 +16,20 @@
         </div>
       </div>
     </md-toolbar>
+    <NavBar />
     <Transactions />
   </div>
 </template>
 
 <script>
-import Transactions from "./Transactions";
+import NavBar from '@/components/NavBar';
+import Transactions from '@/components/Transactions';
 
 export default {
-  name: "Dashboard",
+  name: 'Dashboard',
   components: {
     Transactions,
-  },
-  data() {
-    return {
-      walletAddress: "",
-      addressSubmitted: false,
-    };
-  },
-  methods: {
-    submitAddress() {
-      this.addressSubmitted = true;
-    },
-  },
+    NavBar
+  }
 };
 </script>
-
-<style scoped>
-.md-toolbar {
-  padding-top: 8px;
-}
-#logo {
-  height: 40px;
-}
-</style>

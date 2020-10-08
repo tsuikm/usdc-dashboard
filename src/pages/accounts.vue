@@ -78,6 +78,16 @@ export default {
 
       // Binary search to find the block number that gets MAX_TRANSACTIONS.
       while (transactions === null || transactions.length < constants.WEB3_MAX_TRANSACTIONS - 1) {
+
+        // If the range is too small, find the first non-null result.
+        if (range[1] - range[0] <= 1) {
+          let i = 0;
+          while (transactions === null) {
+            transactions = await this.getTransactions(midpoint + i++, latest);
+          }
+          break;
+        }
+
         if (transactions === null) {
           // Still too many transactions.
           range[0] = midpoint;

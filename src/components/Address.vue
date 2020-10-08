@@ -35,7 +35,7 @@ export default {
 
 <style scoped>
 .container {
-  width: 750px;
+  width: 700px;
   height: 120px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);

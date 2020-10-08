@@ -11,10 +11,7 @@
         </div>
       </div>
       <div class="card-content">
-        <ValueDisplay :usdcBalance="usdcBalance" :usdValue="usdValue" />
-      </div>
-      <div class="card-footer">
-        <ConversionDisplay :conversionRate="conversionRate" />
+        <ValueDisplay :usdcBalance="usdcBalance"/>
       </div>
     </md-card>
   </div>
@@ -22,19 +19,15 @@
 
 <script>
 import ValueDisplay from "@/components/ValueDisplay";
-import ConversionDisplay from "@/components/ConversionDisplay";
 import RoleDisplay from "@/components/RoleDisplay";
 export default {
   name: "BalanceCard",
   components: {
     ValueDisplay,
-    ConversionDisplay,
     RoleDisplay
   },
   props: {
     usdcBalance: Number,
-    usdValue: Number,
-    conversionRate: String,
     minter: Boolean,
     pauser: Boolean,
     owner: Boolean
@@ -44,8 +37,8 @@ export default {
 
 <style scoped>
 .container {
-  width: 750px;
-  height: 300px;
+  width: 700px;
+  height: 250px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
   padding: 30px;
@@ -61,11 +54,7 @@ export default {
   align-items: center;
 }
 .card-content {
-  height: 145px;
-}
-.card-footer {
-  height: 30px;
-  display: flex;
+  height: 140px;
 }
 .heading {
   font-weight: 800;

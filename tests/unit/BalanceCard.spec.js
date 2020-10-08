@@ -81,9 +81,9 @@ describe("BalanceCard", () => {
     const wrapper = mount(BalanceCard);
     const valueDisplay = wrapper.findComponent({ name: "ValueDisplay" });
     expect(valueDisplay.exists()).toBeTruthy();
-    expect(valueDisplay.text()).toContain("BALANCE (USDC)");
+    expect(valueDisplay.text()).toContain("USDC BALANCE ($)");
   });
-  
+
   it("Displays privileged roles components", () => {
     const wrapper = mount(BalanceCard);
     const roleDisplay = wrapper.findComponent({ name: "RoleDisplay" });

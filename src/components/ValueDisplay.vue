@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout">
     <div class="md-layout-items left">
-        <div class="subheading">BALANCE (USDC)</div>
+        <div class="subheading">USDC BALANCE ($)</div>
         <div class="value">{{ usdcBalance }}</div>
     </div>
   </div>

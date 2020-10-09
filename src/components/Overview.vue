@@ -9,8 +9,6 @@
         />
         <BalanceCard
           :usdcBalance="this.balance"
-          :usdValue="this.usdValue"
-          :conversionRate="this.conversionRate"
           :minter="this.minter"
           :pauser="this.pauser"
           :owner="this.owner"
@@ -114,8 +112,6 @@ export default {
     return {
       balance: null,
       isBlacklisted: false,
-      usdValue: null,
-      conversionRate: null,
       totalSupply: null,
       minter: null,
       pauser: null,
@@ -132,12 +128,6 @@ export default {
   },
   updated: function () {
     this.update();
-  },
-  mounted: async function () {
-    const response = await require("axios").get(
-      "https://api.coinbase.com/v2/exchange-rates?currency=USD"
-    );
-    this.conversionRate = response.data.data.rates.USDC;
   },
   methods: {
     async lookupBalance() {
@@ -159,9 +149,6 @@ export default {
         .call((error, isBlacklisted) => {
           this.isBlacklisted = isBlacklisted;
         });
-    },
-    convertToUSD() {
-      this.usdValue = this.balance * this.conversionRate;
     },
     getTotalSupply() {
       contract.methods.totalSupply().call((error, totalSupply) => {
@@ -205,7 +192,6 @@ export default {
     },
     update() {
       this.checkIsContract();
-      this.convertToUSD();
       this.getTotalSupply();
       this.checkIsMinter();
       this.checkIsPauser();
@@ -219,6 +205,6 @@ export default {
 .summaryCards {
   display: flex;
   justify-content: space-between;
-  padding: 50px;
+  padding: 75px;
 }
 </style>

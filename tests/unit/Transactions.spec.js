@@ -2,6 +2,7 @@ import { mount } from "@vue/test-utils";
 import Address, { getLogs, TRANSACTION_TOPIC } from '@/components/Transactions';
 import Vue from 'vue'
 import VueMaterial from 'vue-material'
+import * as constants from '@/utils/constants';
 
 Vue.use(VueMaterial);
 
@@ -64,11 +65,6 @@ jest.mock('web3', () => class Web3 {
       Contract: class Contract {
         constructor() {
           this.methods = {
-            decimals: () => {
-              return {
-                call: () => new Promise((res) => res(6))
-              }
-            }
           };
         }
       },
@@ -83,6 +79,9 @@ jest.mock('web3', () => class Web3 {
       getPastLogs: async function ({ fromBlock, toBlock, topics }) {
         if (toBlock === 'latest') toBlock = await this.getBlockNumber()
 
+        if (!topics) {
+          return [...MOCK_RECEIVER_TXNS, ...MOCK_SENDER_TXNS, ...MOCK_OTHER_TXNS]
+        }
         if (topics[1]) {
           // Return mock sender txns
           return MOCK_SENDER_TXNS.filter(t => {
@@ -93,8 +92,6 @@ jest.mock('web3', () => class Web3 {
           return MOCK_RECEIVER_TXNS.filter(t => {
             return parseInt(t.blockNumber) <= parseInt(toBlock) && parseInt(t.blockNumber) >= parseInt(fromBlock)
           })
-        } else {
-          return MOCK_RECEIVER_TXNS.concat(MOCK_SENDER_TXNS).concat(MOCK_OTHER_TXNS)
         }
       },
     }
@@ -152,9 +149,11 @@ describe('_address.vue', () => {
 
   it("renders all transactions correctly", async () => {
     const wrapper = mount(Address);
+    constants.WEB3_MAX_TRANSACTIONS = 7;
 
     // 9 promises get called in mounted() lifecycle hook
     for (let i = 0; i < 9; i++) {
+      constants.WEB3_MAX_TRANSACTIONS = 7;
       await wrapper.vm.$nextTick();
     }
 
@@ -165,10 +164,10 @@ describe('_address.vue', () => {
     expect(rows.length).toBe(8)
 
     const row1Entries = rows.at(1).findAllComponents({ name: 'md-table-cell' })
-    expect(row1Entries.at(0).text()).toBe(MOCK_OTHER_TXNS[0].transactionHash)
-    expect(parseFloat(row1Entries.at(1).text())).toBe(MOCK_OTHER_TXNS[0].data)
-    expect(row1Entries.at(2).text()).toBe(MOCK_OTHER_TXNS[0].topics[1])
-    expect(row1Entries.at(3).text()).toBe(MOCK_OTHER_TXNS[0].topics[2])
+    expect(row1Entries.at(0).text()).toBe(MOCK_RECEIVER_TXNS[0].transactionHash)
+    expect(parseFloat(row1Entries.at(1).text())).toBe(MOCK_RECEIVER_TXNS[0].data)
+    expect(row1Entries.at(2).text()).toBe(MOCK_RECEIVER_TXNS[0].topics[1])
+    expect(row1Entries.at(3).text()).toBe(MOCK_RECEIVER_TXNS[0].topics[2])
   });
 
   it("paginates correctly", async () => {
@@ -181,6 +180,8 @@ describe('_address.vue', () => {
         topics: [TRANSACTION_TOPIC, `0x24690`, MOCK_WALLET_ADDRESS]
       })
     }
+
+    constants.WEB3_MAX_TRANSACTIONS = 7 + 21
 
     // MOCK_RECEIVER_TXNS now has 24 transactions (8 copies of the same 3 original items)
     // for a total of 27 transactions with the 3 in MOCK_SENDER_TXNS

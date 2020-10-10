@@ -61,6 +61,17 @@ const MOCK_OTHER_TXNS = [
 jest.mock('web3', () => class Web3 {
   get eth() {
     return {
+      Contract: class Contract {
+        constructor() {
+          this.methods = {
+            decimals: () => {
+              return {
+                call: () => new Promise((res) => res(6))
+              }
+            }
+          };
+        }
+      },
       getBlockNumber: async function () {
         return "0x7";
       },

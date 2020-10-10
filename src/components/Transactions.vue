@@ -96,9 +96,6 @@ export default {
   props: ["address"],
   computed: {
     totalItems() {
-      // TODO: this number is hard-coded. We need to calculate the total number of transactions
-      if (!this.address) return 7500;
-
       return this.transactions.length;
     },
     tableName() {

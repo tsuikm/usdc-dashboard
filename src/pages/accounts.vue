@@ -19,7 +19,7 @@ import Table from '@/components/Table';
 import Web3 from 'web3';
 import * as constants from '@/utils/constants';
 import { toHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
-import { getBalance } from '@/components/Overview';
+import { getBalance, getTotalSupply } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
 const web3 = new Web3(Web3.givenProvider);
@@ -103,6 +103,37 @@ export default {
     },
 
     /**
+     * Indicates if the passed-in address is 'valid'. A valid address is truth-y and has less than
+     * WEB3_BALANCEOF_ADDRESS_LENGTH digits (not including '0x').
+     * Addresses that are too long are not compatible with getBalance.
+     *
+     * @param {string|null} address
+     * @return {boolean}
+     */
+    isValidAddress(address) {
+      return address && removeLeadingZeros(address).length <= constants.WEB3_BALANCEOF_ADDRESS_LENGTH + 2;
+    },
+
+    /**
+     * Gets the corresponding balances of an Iterable containing addresses.
+     * Uses Promise.all() to aggregate the responses.
+     *
+     * @param {Iterable.<string>} addresses
+     * @return {string[]}
+     */
+    async getBalancesFor(addresses) {
+
+      // Get the promises that resolve balance of each address.
+      const balancePromises = [];
+
+      for (const address of addresses) {
+        balancePromises.push(getBalance(address));
+      }
+
+      return Promise.all(balancePromises);
+    },
+
+    /**
      * Gets all accounts (addresses) and their balances/percentages.
      *
      * @return {Object[]}
@@ -110,29 +141,24 @@ export default {
     async getAccounts() {
       const transactions = await this.getAllTransactions();
 
-      // Get all of the addresses of all transactions in a Set.
+      // Get all of the valid addresses of all transactions in a Set.
       const addresses = new Set();
       for (const txn of transactions) {
-        txn.topics[1] && addresses.add(removeLeadingZeros(txn.topics[1]));
-        txn.topics[2] && addresses.add(removeLeadingZeros(txn.topics[2]));
+        this.isValidAddress(txn.topics[1]) && addresses.add(removeLeadingZeros(txn.topics[1]));
+        this.isValidAddress(txn.topics[2]) && addresses.add(removeLeadingZeros(txn.topics[2]));
       }
+
+      // Fetch the totalSupply of USDC and all of the balances of each address.
+      const totalSupply = await getTotalSupply();
+      const balances = await this.getBalancesFor(addresses);
 
       const accounts = [];
-      let totalBalance = 0;
-
-      // Fetch the balance of each address.
+      let i = 0;
       for (const address of addresses) {
-        if (address.length <= constants.WEB3_BALANCEOF_ADDRESS_LENGTH + 2) {
-          const balance = await getBalance(address);
-          totalBalance += balance;
+        const balance = balances[i++];
+        const percentage = `${roundToNearest(balance / totalSupply * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
 
-          accounts.push({ address, balance });
-        }
-      }
-
-      // Compute the 'percentage' of each address.
-      for (const account of accounts) {
-        account.percentage = `${roundToNearest(account.balance / totalBalance * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
+        accounts.push({address, balance, percentage});
       }
 
       // Sort (in reverse order) the account addresses by balance.

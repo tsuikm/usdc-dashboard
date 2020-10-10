@@ -149,11 +149,10 @@ describe('_address.vue', () => {
 
   it("renders all transactions correctly", async () => {
     const wrapper = mount(Address);
-    constants.WEB3_MAX_TRANSACTIONS = 7;
+    constants.WEB3_MAX_TRANSACTIONS = MOCK_RECEIVER_TXNS.length + MOCK_SENDER_TXNS.length + MOCK_OTHER_TXNS.length;
 
     // 9 promises get called in mounted() lifecycle hook
     for (let i = 0; i < 9; i++) {
-      constants.WEB3_MAX_TRANSACTIONS = 7;
       await wrapper.vm.$nextTick();
     }
 
@@ -172,7 +171,8 @@ describe('_address.vue', () => {
 
   it("paginates correctly", async () => {
     // Push more transactions to have over 25 and enable pagination
-    for (let i = 0; i < 21; i++) {
+    const ADDED_TXNS = 21;
+    for (let i = 0; i < ADDED_TXNS; i++) {
       MOCK_RECEIVER_TXNS.push({
         data: '0x300011',
         transactionHash: `0x${i.toString(16)}`,
@@ -181,7 +181,10 @@ describe('_address.vue', () => {
       })
     }
 
-    constants.WEB3_MAX_TRANSACTIONS = 7 + 21
+    constants.WEB3_MAX_TRANSACTIONS = MOCK_RECEIVER_TXNS.length +
+                                      MOCK_SENDER_TXNS.length +
+                                      MOCK_OTHER_TXNS.length +
+                                      ADDED_TXNS;
 
     // MOCK_RECEIVER_TXNS now has 24 transactions (8 copies of the same 3 original items)
     // for a total of 27 transactions with the 3 in MOCK_SENDER_TXNS

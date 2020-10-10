@@ -7,7 +7,6 @@
       :schema="this.tableSchema"
       :content="this.transactions"
       :keyField="'Transaction Hash'"
-      @page:change="this.pageChange"
       ref="table"
     />
   </div>
@@ -17,6 +16,7 @@
 import Web3 from "web3";
 import moment from "moment";
 import Table from "./Table";
+import { getAllTransactions } from "@/pages/accounts"
 import {
   fromHex,
   removeLeadingZeros,
@@ -54,14 +54,6 @@ export const getLogs = async (address, fromBlock) => {
       t.to = removeLeadingZeros(t.topics[2]);
       t.data = fromHex(t.data) / 10 ** 6;
     });
-
-    // Querying for all transactions; receiverTxns should include all
-    if (address === null) {
-      return removeDuplicates(
-        receiverTxns.sort((a, b) => a.blockNumber - b.blockNumber),
-        (t) => t.transactionHash
-      );
-    }
 
     // Txns where wallet is sender
     const senderTxns = await web3.eth.getPastLogs({
@@ -177,29 +169,13 @@ export default {
   data() {
     return {
       transactions: [],
-      page: 0,
       loading: true,
     };
   },
   methods: {
     async getAllTransactions() {
-      const latest = await web3.eth.getBlockNumber();
-      let transactions = [];
-      let blocks = 0;
-      const count = 1000;
-
-      // Loop to find enough transactions to display on the selected page.
-      while (transactions.length <= this.pageLength * (this.page + 2)) {
-        const from = Math.max(latest - count * blocks, 0);
-        transactions = await getLogs(null, from);
-
-        // If its the last page, we don't have to display 50.
-        if (from === 0) {
-          break;
-        }
-
-        blocks += 1;
-      }
+      let transactions = await getAllTransactions();
+      transactions = removeDuplicates(transactions, (t) => t.transactionHash);
 
       // Since some of the transactions have the same block number, use a
       // dictionary to keep track of the age of the block for performance.
@@ -240,10 +216,9 @@ export default {
 
         transaction.age = blockNumberToAge.get(transaction.blockNumber);
       }
-
+      // sort by age
       this.transactions = transactions
-        .reverse()
-        .slice(0, WEB3_MAX_TRANSACTIONS);
+        .sort((a, b) => b.age - a.age);
       this.loading = false;
     },
     async getWalletTransactions() {
@@ -288,13 +263,6 @@ export default {
       this.transactions = transactions
         .reverse()
         .slice(0, WEB3_MAX_TRANSACTIONS);
-    },
-    async pageChange(page) {
-      this.page = page;
-
-      if (!this.address) {
-        this.getAllTransactions();
-      }
     },
   },
   created() {

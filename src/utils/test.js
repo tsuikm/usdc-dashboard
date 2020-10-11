@@ -21,8 +21,9 @@ import { TRANSACTION_TOPIC } from './constants'
  * @param {Transaction[]} MOCK_TRANSACTIONS Array of mock transactions (Transaction structure above)
  * @param {String[]} VALID_ADDRESSES Array of valid addresses (for utils.isAddress)
  * @param {String[]} CONTRACT_ADDRESSES Subset of VALID_ADDRESSES that are contract addresses (for getCode)
+ * @param {Integer} TOTAL_SUPPLY Total supply 
  */
-export default (MOCK_ACCOUNTS, MOCK_TRANSACTIONS, VALID_ADDRESSES, CONTRACT_ADDRESSES) => {
+export const Web3MockBuilder = (MOCK_ACCOUNTS, MOCK_TRANSACTIONS, VALID_ADDRESSES, CONTRACT_ADDRESSES, TOTAL_SUPPLY) => {
   return class Web3 {
     get eth() {
       return {
@@ -44,12 +45,12 @@ export default (MOCK_ACCOUNTS, MOCK_TRANSACTIONS, VALID_ADDRESSES, CONTRACT_ADDR
                   call: async () => MOCK_ACCOUNTS[address].minter
                 }
               },
-              isPauser: address => {
+              pauser: address => {
                 return {
                   call: async () => MOCK_ACCOUNTS[address].pauser
                 }
               },
-              isOwner: address => {
+              owner: address => {
                 return {
                   call: async () => MOCK_ACCOUNTS[address].owner
                 }
@@ -58,23 +59,28 @@ export default (MOCK_ACCOUNTS, MOCK_TRANSACTIONS, VALID_ADDRESSES, CONTRACT_ADDR
                 return {
                   call: async () => MOCK_ACCOUNTS[address].blacklisted
                 }
+              },
+              totalSupply: () => {
+                return {
+                  call: async () => TOTAL_SUPPLY
+                }
               }
             };
           }
         },
-        getBlockNumber: async () => {
+        async getBlockNumber() {
           // Map MOCK_TRANSACTIONS to block numbers, take max
           // max of the block numbers
           return Math.max(...MOCK_TRANSACTIONS.map(transaction => transaction.blockNumber));
         },
-        getBlock: async (blockNumber) => {
+        async getBlock(blockNumber) {
           return {
             // The only part of getBlock that is used is the timestamp
             // We simulate timestamp to be blockNumber * 1000
             timestamp: blockNumber * 1000
           }
         },
-        getPastLogs: async ({ fromBlock, toBlock, topics }) => {
+        async getPastLogs({ fromBlock, toBlock, topics }) {
           if (toBlock === 'latest') toBlock = await this.getBlockNumber()
 
           return MOCK_TRANSACTIONS.filter(transaction => {
@@ -100,7 +106,7 @@ export default (MOCK_ACCOUNTS, MOCK_TRANSACTIONS, VALID_ADDRESSES, CONTRACT_ADDR
             }
           })
         },
-        getCode: async (address) => {
+        async getCode(address) {
           if (CONTRACT_ADDRESSES.includes(address)) {
             return "0xabcdef1234567890"
           }

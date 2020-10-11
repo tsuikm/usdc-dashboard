@@ -34,6 +34,7 @@ import {
 } from "@/utils/constants";
 
 const web3 = new Web3(Web3.givenProvider);
+console.log(web3);
 
 /**
  * Gets transaction logs for a wallet starting from fromBlock until latest.
@@ -245,7 +246,6 @@ export default {
 
       let transactions = await getLogs(address, 0);
       if (transactions !== null) {
-
         // We have all transactions in history for this address
         this.transactions = transactions
           .reverse()

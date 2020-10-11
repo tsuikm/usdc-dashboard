@@ -6,32 +6,6 @@ import VueMaterial from "vue-material";
 
 Vue.use(VueMaterial);
 
-const MOCK_ACCOUNTS = {
-  '0x0000000000000000000000000000000011111111': {
-    balance: 1000,
-    minter: true,
-    pauser: false,
-    owner: false
-  },
-  '0x0000000000000000000000000000000000000000': {
-    balance: 3000,
-    minter: false,
-    pauser: true,
-    owner: false
-  },
-  '0x0000000000000000000000111111100000000000': {
-    balance: 3000,
-    minter: false,
-    pauser: false,
-    owner: true
-  },
-}
-
-jest.mock('web3', async () => {
-  const Web3MockBuilder = await import('@/utils/test');
-  return Web3MockBuilder(MOCK_ACCOUNTS)
-})
-
 describe("BalanceCard", () => {
   it("ValueDisplay renders onto BalanceCard", () => {
     const wrapper = mount(BalanceCard);

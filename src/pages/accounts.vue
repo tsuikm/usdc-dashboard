@@ -79,11 +79,13 @@ export default {
       // Binary search to find the block number that gets MAX_TRANSACTIONS.
       while (transactions === null || transactions.length < constants.WEB3_MAX_TRANSACTIONS - 1) {
 
-        // NOTE: this is a hot fix for https://github.com/selinafeng/usdc-dashboard/issues/33
-        //       This is NOT our intended solution for the future, as the '100' is hard-coded for safety.
-        //       We will delete this code once we start work on that issue.
+        // If the range is too small, find the first non-null result.
         if (range[1] - range[0] <= 1) {
-          return await this.getTransactions(midpoint + 100, latest);
+          let i = 0;
+          while (transactions === null) {
+            transactions = await this.getTransactions(midpoint + i++, latest);
+          }
+          break;
         }
 
         if (transactions === null) {

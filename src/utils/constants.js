@@ -6,7 +6,7 @@ export const WEB3_MAX_TRANSACTIONS = 10000;
 // Ropsten USDC Address
 export const USDC_CONTRACT_ADDRESS = "0x07865c6E87B9F70255377e024ace6630C1Eaa37F";
 
-// Mainnet USDC Address
+// Mainnet USDC Address - currently errors on totalSupply
 // export const USDC_CONTRACT_ADDRESS = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48";
 
 export const TRANSACTION_TOPIC =

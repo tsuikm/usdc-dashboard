@@ -36,17 +36,17 @@ describe("Transaction Details", () => {
       }
     });
 
-    expect(getByText('Hash:')).not.toBeNull();;
-    expect(getByText('From:')).not.toBeNull();;
-    expect(getByText('To:')).not.toBeNull();;
-    expect(getByText('Block:')).not.toBeNull();;
-    expect(getByText('Gas:')).not.toBeNull();;
+    expect(getByText('Hash:')).not.toBeNull();
+    expect(getByText('From:')).not.toBeNull();
+    expect(getByText('To:')).not.toBeNull();
+    expect(getByText('Block:')).not.toBeNull();
+    expect(getByText('Gas:')).not.toBeNull();
 
-    expect(findByText('0x123456')).not.toBeNull();;
-    expect(findByText('0xaaaaa')).not.toBeNull();;
-    expect(findByText('0xbbbbb')).not.toBeNull();;
-    expect(findByText('0')).not.toBeNull();;
-    expect(findByText('1')).not.toBeNull();;
+    expect(findByText('0x123456')).not.toBeNull();
+    expect(findByText('0xaaaaa')).not.toBeNull();
+    expect(findByText('0xbbbbb')).not.toBeNull();
+    expect(findByText('0')).not.toBeNull();
+    expect(findByText('1')).not.toBeNull();
   });
 
   it("Redirects to 404 with incorrect hash", async () => {
@@ -60,9 +60,7 @@ describe("Transaction Details", () => {
       }
     });
 
-    await updateProps({
-      hash: 'invalid'
-    }) ;
+    await updateProps({ hash: 'invalid' });
 
     expect(window.location.href).toEqual('/404');
   });

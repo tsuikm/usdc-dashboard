@@ -123,7 +123,7 @@ export default {
      */
     async getBalancesFor(addresses) {
 
-      // Get the promises that resolve balance of each address.
+      // Get the promises that resolve to the balance of each address.
       const balancePromises = [];
 
       for (const address of addresses) {

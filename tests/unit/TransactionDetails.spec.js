@@ -50,6 +50,7 @@ describe("Transaction Details", () => {
   });
 
   it("Redirects to 404 with incorrect hash", async () => {
+    delete global.window.location;
     global.window = Object.create(window);
     window.location = {}
 

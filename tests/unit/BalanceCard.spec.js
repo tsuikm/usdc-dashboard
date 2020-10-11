@@ -27,54 +27,10 @@ const MOCK_ACCOUNTS = {
   },
 }
 
-jest.mock('web3', () => class Web3 {
-  get eth() {
-    return {
-      Contract: class {
-        constructor() {
-          this.methods = {
-            balanceOf(address) {
-              return {
-                call(cb) {
-                  cb(null, MOCK_ACCOUNTS[address].balance)
-                }
-              }
-            },
-            isMinter(address) {
-              return {
-                call(cb) {
-                  cb(null, MOCK_ACCOUNTS[address].minter)
-                }
-              }
-            },
-            isPauser(address) {
-              return {
-                call(cb) {
-                  cb(null, MOCK_ACCOUNTS[address].pauser)
-                }
-              }
-            },
-            isOwner(address) {
-              return {
-                call(cb) {
-                  cb(null, MOCK_ACCOUNTS[address].owner)
-                }
-              }
-            },
-            decimals() {
-              return {
-                call(cb) {
-                  cb(null, 6)
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-});
-
+jest.mock('web3', async () => {
+  const Web3MockBuilder = await import('@/utils/test');
+  return Web3MockBuilder(MOCK_ACCOUNTS)
+})
 
 describe("BalanceCard", () => {
   it("ValueDisplay renders onto BalanceCard", () => {
@@ -119,7 +75,7 @@ describe("BalanceCard", () => {
         owner: false
       }
     });
-    
+
     const roleDisplay = wrapper.findComponent(RoleDisplay);
     expect(roleDisplay.exists()).toBeTruthy();
     expect(roleDisplay.props().pauser).toBeTruthy();
@@ -137,7 +93,7 @@ describe("BalanceCard", () => {
         owner: true
       }
     });
-    
+
     const roleDisplay = wrapper.findComponent(RoleDisplay);
     expect(roleDisplay.exists()).toBeTruthy();
     expect(roleDisplay.props().owner).toBeTruthy();

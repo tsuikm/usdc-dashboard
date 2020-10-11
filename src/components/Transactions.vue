@@ -167,14 +167,12 @@ export default {
           },
         });
       }
-      if (this.address) {
-        transactionSchema.push({
-          name: "Block Number",
-          getter(t) {
-            return t.blockNumber;
-          },
-        });
-      }
+      transactionSchema.push({
+        name: "Block Number",
+        getter(t) {
+          return t.blockNumber;
+        },
+      });
 
       return transactionSchema;
     },

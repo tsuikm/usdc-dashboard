@@ -50,14 +50,18 @@ describe("Transaction Details", () => {
   });
 
   it("Redirects to 404 with incorrect hash", async () => {
-    delete global.window.location; 
     global.window = Object.create(window);
+    window.location = {}
 
-    await render(TransactionDetails, {
+    const { updateProps } = render(TransactionDetails, {
       props: {
-        hash: 'invalid'
+        hash: MOCK_TRANSACTION.transactionHash
       }
     });
+
+    await updateProps({
+      hash: 'invalid'
+    }) ;
 
     expect(window.location.href).toEqual('/404');
   });

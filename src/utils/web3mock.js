@@ -1,5 +1,4 @@
 import { TRANSACTION_TOPIC } from './constants'
-import { padHex } from './utils'
 /**
  * Transaction: {
  *    transactionHash: String,
@@ -47,7 +46,9 @@ export default class Web3 {
             },
             isMinter: address => {
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].minter
+                call: async () => {
+                  return Web3.MOCK_ACCOUNTS[address].minter
+                }
               }
             },
             pauser: address => {
@@ -67,7 +68,7 @@ export default class Web3 {
             },
             totalSupply: () => {
               return {
-                call: async () => Web3.TOTAL_SUPPLY
+                call: async () => Web3.TOTAL_SUPPLY.toString()
               }
             }
           };

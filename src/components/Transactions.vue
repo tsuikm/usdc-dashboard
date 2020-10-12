@@ -34,7 +34,6 @@ import {
 } from "@/utils/constants";
 
 const web3 = new Web3(Web3.givenProvider);
-console.log(web3);
 
 /**
  * Gets transaction logs for a wallet starting from fromBlock until latest.

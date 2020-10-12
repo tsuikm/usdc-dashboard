@@ -130,6 +130,7 @@ describe('_address.vue', () => {
     expect(parseFloat(row1Entries.at(1).text())).toBe(MOCK_SENDER_TXNS[2].data)
     expect(row1Entries.at(2).text()).toBe(MOCK_SENDER_TXNS[2].topics[1])
     expect(row1Entries.at(3).text()).toBe(MOCK_SENDER_TXNS[2].topics[2])
+    expect(row1Entries.at(4).text()).toBe(MOCK_SENDER_TXNS[2].blockNumber)
 
 
     const row6Entries = rows.at(6).findAllComponents({ name: 'md-table-cell' })
@@ -137,6 +138,8 @@ describe('_address.vue', () => {
     expect(parseFloat(row6Entries.at(1).text())).toBe(MOCK_RECEIVER_TXNS[0].data)
     expect(row6Entries.at(2).text()).toBe(MOCK_RECEIVER_TXNS[0].topics[1])
     expect(row6Entries.at(3).text()).toBe(MOCK_RECEIVER_TXNS[0].topics[2])
+    expect(row6Entries.at(4).text()).toBe(MOCK_RECEIVER_TXNS[0].blockNumber)
+    // expect (row number column) to match input
   });
 
   it("renders all transactions correctly", async () => {
@@ -158,6 +161,8 @@ describe('_address.vue', () => {
     expect(parseFloat(row1Entries.at(1).text())).toBe(MOCK_OTHER_TXNS[0].data)
     expect(row1Entries.at(2).text()).toBe(MOCK_OTHER_TXNS[0].topics[1])
     expect(row1Entries.at(3).text()).toBe(MOCK_OTHER_TXNS[0].topics[2])
+    expect(row1Entries.at(5).text()).toBe(MOCK_OTHER_TXNS[0].blockNumber)
+    
   });
 
   it("paginates correctly", async () => {
@@ -198,6 +203,8 @@ describe('_address.vue', () => {
     expect(parseFloat(row1Entries.at(1).text())).toBe(MOCK_SENDER_TXNS[2].data)
     expect(row1Entries.at(2).text()).toBe(MOCK_SENDER_TXNS[2].topics[1])
     expect(row1Entries.at(3).text()).toBe(MOCK_SENDER_TXNS[2].topics[2])
+    expect(row1Entries.at(4).text()).toBe(MOCK_SENDER_TXNS[2].blockNumber)
+
 
     // Go to next page
     const paginationButtons = wrapper.findAllComponents({ name: 'md-button' })
@@ -214,5 +221,7 @@ describe('_address.vue', () => {
     expect(parseFloat(lastRowEntries.at(1).text())).toBe(MOCK_RECEIVER_TXNS[0].data)
     expect(lastRowEntries.at(2).text()).toBe(MOCK_RECEIVER_TXNS[0].topics[1])
     expect(lastRowEntries.at(3).text()).toBe(MOCK_RECEIVER_TXNS[0].topics[2])
+    expect(lastRowEntries.at(4).text()).toBe(MOCK_RECEIVER_TXNS[0].blockNumber)
+
   });
 });

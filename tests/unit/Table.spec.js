@@ -173,3 +173,4 @@ describe('Table', () => {
     expect(getByText('Row 30 B')).not.toBeNull();
   });
 });
+

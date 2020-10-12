@@ -97,7 +97,6 @@ export default class Web3 {
 
           // Filter out transactions sent from not topics[1]
           if (topics[1] && transaction.sender !== topics[1]) {
-            console.log(transaction.sender, topics[1])
             return false;
           }
 

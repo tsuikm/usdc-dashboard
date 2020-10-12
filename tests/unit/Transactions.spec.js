@@ -3,7 +3,7 @@ import Address, { getLogs } from '@/components/Transactions';
 import Vue from 'vue'
 import VueMaterial from 'vue-material'
 import Web3 from 'web3';
-import { padHex } from "@/utils/utils";
+import { padHex, removeLeadingZeros } from "@/utils/utils";
 
 Vue.use(VueMaterial);
 
@@ -99,16 +99,16 @@ describe('_address.vue', () => {
 
     const row1Entries = rows.at(1).findAllComponents({ name: 'md-table-cell' })
     expect(row1Entries.at(0).text()).toBe(MOCK_TRANSACTIONS[2].transactionHash)
-    expect(parseFloat(row1Entries.at(1).text())).toBe(MOCK_TRANSACTIONS[2].data)
-    expect(row1Entries.at(2).text()).toBe(MOCK_TRANSACTIONS[2].sender)
-    expect(row1Entries.at(3).text()).toBe(MOCK_TRANSACTIONS[2].receiver)
+    expect(parseFloat(row1Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6)
+    expect(row1Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender))
+    expect(row1Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver))
 
 
     const row6Entries = rows.at(6).findAllComponents({ name: 'md-table-cell' })
     expect(row6Entries.at(0).text()).toBe(MOCK_TRANSACTIONS[3].transactionHash)
-    expect(parseFloat(row6Entries.at(1).text())).toBe(MOCK_TRANSACTIONS[3].data)
-    expect(row6Entries.at(2).text()).toBe(MOCK_TRANSACTIONS[3].sender)
-    expect(row6Entries.at(3).text()).toBe(MOCK_TRANSACTIONS[3].receiver)
+    expect(parseFloat(row6Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6)
+    expect(row6Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender))
+    expect(row6Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver))
   });
 
   it("renders all transactions correctly", async () => {
@@ -127,9 +127,9 @@ describe('_address.vue', () => {
 
     const row1Entries = rows.at(1).findAllComponents({ name: 'md-table-cell' })
     expect(row1Entries.at(0).text()).toBe(MOCK_TRANSACTIONS[6].transactionHash)
-    expect(parseFloat(row1Entries.at(1).text())).toBe(MOCK_TRANSACTIONS[6].data)
-    expect(row1Entries.at(2).text()).toBe(MOCK_TRANSACTIONS[6].sender)
-    expect(row1Entries.at(3).text()).toBe(MOCK_TRANSACTIONS[6].receiver)
+    expect(parseFloat(row1Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[6].data) / 10 ** 6)
+    expect(row1Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[6].sender))
+    expect(row1Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[6].receiver))
   });
 
   it("paginates correctly", async () => {
@@ -168,9 +168,9 @@ describe('_address.vue', () => {
     // First row should be latest txn with block number 6
     const row1Entries = rows.at(1).findAllComponents({ name: 'md-table-cell' })
     expect(row1Entries.at(0).text()).toBe(MOCK_TRANSACTIONS[2].transactionHash)
-    expect(parseFloat(row1Entries.at(1).text())).toBe(MOCK_TRANSACTIONS[2].data)
-    expect(row1Entries.at(2).text()).toBe(MOCK_TRANSACTIONS[2].sender)
-    expect(row1Entries.at(3).text()).toBe(MOCK_TRANSACTIONS[2].receiver)
+    expect(parseFloat(row1Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6)
+    expect(row1Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender))
+    expect(row1Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver))
 
     // Go to next page
     const paginationButtons = wrapper.findAllComponents({ name: 'md-button' })
@@ -184,8 +184,8 @@ describe('_address.vue', () => {
     // Last row should be earliest txn with block number 1
     const lastRowEntries = nextRows.at(2).findAllComponents({ name: 'md-table-cell' })
     expect(lastRowEntries.at(0).text()).toBe(MOCK_TRANSACTIONS[3].transactionHash)
-    expect(parseFloat(lastRowEntries.at(1).text())).toBe(MOCK_TRANSACTIONS[3].data)
-    expect(lastRowEntries.at(2).text()).toBe(MOCK_TRANSACTIONS[3].sender)
-    expect(lastRowEntries.at(3).text()).toBe(MOCK_TRANSACTIONS[3].receiver)
+    expect(parseFloat(lastRowEntries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6)
+    expect(lastRowEntries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender))
+    expect(lastRowEntries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver))
   });
 });

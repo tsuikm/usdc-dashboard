@@ -44,7 +44,7 @@ export const getLogs = async (address, fromBlock) => {
   try {
     // Txns where wallet is receiver
     const receiverTxns = await web3.eth.getPastLogs({
-      fromBlock: toHex(fromBlock),
+      fromBlock,
       toBlock: "latest",
       address: USDC_CONTRACT_ADDRESS,
       topics: [TRANSACTION_TOPIC, null, address],
@@ -66,7 +66,7 @@ export const getLogs = async (address, fromBlock) => {
 
     // Txns where wallet is sender
     const senderTxns = await web3.eth.getPastLogs({
-      fromBlock: toHex(fromBlock),
+      fromBlock,
       toBlock: "latest",
       address: USDC_CONTRACT_ADDRESS,
       topics: [TRANSACTION_TOPIC, address, null],

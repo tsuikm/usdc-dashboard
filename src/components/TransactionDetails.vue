@@ -16,13 +16,13 @@
       </md-table-row>
 
       <md-table-row>
-        <md-table-cell> From: </md-table-cell>
-        <md-table-cell><a :href="'/address/' + from">{{from}}</a></md-table-cell>
+        <md-table-cell> Sender: </md-table-cell>
+        <md-table-cell><a :href="'/address/' + sender">{{sender}}</a></md-table-cell>
       </md-table-row>
 
       <md-table-row>
-        <md-table-cell> To: </md-table-cell>
-        <md-table-cell><a :href="'/address/' + to">{{to}}</a></md-table-cell>
+        <md-table-cell> Receiver: </md-table-cell>
+        <md-table-cell><a :href="'/address/' + receiver">{{receiver}}</a></md-table-cell>
       </md-table-row>
 
       <md-table-row>
@@ -52,8 +52,8 @@ export default {
   data() {
     return {
       gas: null,
-      from: null,
-      to: null,
+      sender: null,
+      receiver: null,
       blockNumber: null
     };
   },
@@ -61,8 +61,8 @@ export default {
     try {
       const transaction = await web3.eth.getTransaction(padHex(this.hash, TRANSACTION_HASH_LENGTH));
 
-      this.from = transaction.from;
-      this.to = transaction.to;
+      this.sender = transaction.from;
+      this.receiver = transaction.to;
       this.gas = transaction.gas;
       this.blockNumber = transaction.blockNumber;
     }

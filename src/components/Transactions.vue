@@ -21,7 +21,6 @@ import {
   fromHex,
   removeLeadingZeros,
   removeDuplicates,
-  toHex,
   padHex,
 } from "@/utils/utils";
 

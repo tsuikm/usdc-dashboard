@@ -2,7 +2,7 @@ import { render, fireEvent } from "@testing-library/vue";
 import accounts from "@/pages/accounts";
 import Vue from "vue";
 import VueMaterial from "vue-material";
-import { fromHex, toHex, padHex, removeLeadingZeros } from "@/utils/utils";
+import { toHex, padHex, removeLeadingZeros } from "@/utils/utils";
 import Web3 from 'web3';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from "../../src/utils/constants";
 

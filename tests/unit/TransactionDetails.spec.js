@@ -37,8 +37,8 @@ describe("Transaction Details", () => {
     });
 
     expect(getByText('Hash:')).not.toBeNull();
-    expect(getByText('From:')).not.toBeNull();
-    expect(getByText('To:')).not.toBeNull();
+    expect(getByText('Sender:')).not.toBeNull();
+    expect(getByText('Receiver:')).not.toBeNull();
     expect(getByText('Block:')).not.toBeNull();
     expect(getByText('Gas:')).not.toBeNull();
 

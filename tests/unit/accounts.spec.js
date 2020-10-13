@@ -4,6 +4,7 @@ import Vue from "vue";
 import VueMaterial from "vue-material";
 import { fromHex, toHex, padHex, removeLeadingZeros } from "@/utils/utils";
 import Web3 from 'web3';
+import { WEB3_BALANCEOF_ADDRESS_LENGTH } from "../../src/utils/constants";
 
 Vue.use(VueMaterial);
 
@@ -12,7 +13,8 @@ for (let i = 0; i < 101; i++) {
   const randomQuantity = Math.random() * 109502;
   MOCK_TRANSACTIONS.push({
     data: toHex(randomQuantity),
-    sender: padHex(toHex(i), 20)
+    sender: padHex(toHex(i), WEB3_BALANCEOF_ADDRESS_LENGTH),
+    blockNumber: 1
   });
 }
 
@@ -47,8 +49,8 @@ describe("accounts", () => {
 
     // top 25 accounts by balance
     for (let i = 0; i < 25; i++) {
-      expect(findByText(removeLeadingZeros(addresses[i][0]))).not.toBeNull();
-      expect(findByText(addresses[i][1])).not.toBeNull();
+      expect(findByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
+      expect(findByText(MOCK_ACCOUNTS[addresses[i]].balance)).not.toBeNull();
     }
 
     // go to page 2
@@ -59,8 +61,8 @@ describe("accounts", () => {
 
     // next top 25 accounts by balance
     for (let i = 25; i < 50; i++) {
-      expect(findByText(removeLeadingZeros(addresses[i][0]))).not.toBeNull();
-      expect(findByText(addresses[i][1])).not.toBeNull();
+      expect(findByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
+      expect(findByText(MOCK_ACCOUNTS[addresses[i]].balance)).not.toBeNull();
     }
   });
 });

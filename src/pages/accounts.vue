@@ -12,14 +12,13 @@
 </template>
 
 <script>
-
 // modules
-import NavBar from '@/components/NavBar';
-import Table from '@/components/Table';
-import Web3 from 'web3';
-import * as constants from '@/utils/constants';
-import { toHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
-import { getBalance } from '@/components/Overview';
+import NavBar from "@/components/NavBar";
+import Table from "@/components/Table";
+import Web3 from "web3";
+import * as constants from "@/utils/constants";
+import { toHex, removeLeadingZeros, roundToNearest } from "@/utils/utils";
+import { getBalance } from "@/components/Overview";
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
 const web3 = new Web3(Web3.givenProvider);
@@ -27,18 +26,17 @@ const web3 = new Web3(Web3.givenProvider);
 export default {
   components: {
     Table,
-    NavBar
+    NavBar,
   },
   data() {
     return {
-      accounts: []
+      accounts: [],
     };
   },
   async created() {
     this.accounts = await this.getAccounts();
   },
   methods: {
-
     /**
      * Gets the transactions from one block to another block.
      *
@@ -51,10 +49,9 @@ export default {
         return await web3.eth.getPastLogs({
           fromBlock: toHex(from),
           toBlock: toHex(to),
-          address: constants.USDC_CONTRACT_ADDRESS
+          address: constants.USDC_CONTRACT_ADDRESS,
         });
-      }
-      catch (error) {
+      } catch (error) {
         if (error.code === constants.WEB3_RESULT_TOO_LARGE_ERROR_CODE) {
           // More than MAX_TRANSACTIONS results
           return null;
@@ -77,8 +74,10 @@ export default {
       let transactions = await this.getTransactions(midpoint, latest);
 
       // Binary search to find the block number that gets MAX_TRANSACTIONS.
-      while (transactions === null || transactions.length < constants.WEB3_MAX_TRANSACTIONS - 1) {
-
+      while (
+        transactions === null ||
+        transactions.length < constants.WEB3_MAX_TRANSACTIONS - 1
+      ) {
         // If the range is too small, find the first non-null result.
         if (range[1] - range[0] <= 1) {
           let i = 0;
@@ -91,12 +90,12 @@ export default {
         if (transactions === null) {
           // Still too many transactions.
           range[0] = midpoint;
-        }
-        else {
+        } else {
           // Not enough transactions.
           range[1] = midpoint;
         }
         midpoint = Math.floor((range[0] + range[1]) / 2);
+        if (midpoint === 0) return transactions;
         transactions = await this.getTransactions(midpoint, latest);
       }
       return transactions;
@@ -132,13 +131,16 @@ export default {
 
       // Compute the 'percentage' of each address.
       for (const account of accounts) {
-        account.percentage = `${roundToNearest(account.balance / totalBalance * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
+        account.percentage = `${roundToNearest(
+          (account.balance / totalBalance) * 100,
+          PERCENTAGE_DECIMAL_PLACES
+        )}%`;
       }
 
       // Sort (in reverse order) the account addresses by balance.
       accounts.sort((a, b) => b.balance - a.balance);
       return accounts;
-    }
+    },
   },
   computed: {
     totalItems() {
@@ -147,20 +149,20 @@ export default {
     tableSchema() {
       return [
         {
-          name: 'Address',
-          getter: account => account.address,
-          link: account => `/address/${account.address}`
+          name: "Address",
+          getter: (account) => account.address,
+          link: (account) => `/address/${account.address}`,
         },
         {
-          name: 'Balance',
-          getter: account => account.balance
+          name: "Balance",
+          getter: (account) => account.balance,
         },
         {
-          name: 'Percentage',
-          getter: account => account.percentage
-        }
+          name: "Percentage",
+          getter: (account) => account.percentage,
+        },
       ];
-    }
-  }
+    },
+  },
 };
 </script>

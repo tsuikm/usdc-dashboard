@@ -114,24 +114,15 @@ export default {
       return `Transactions for Wallet ${this.address}`;
     },
     tableSchema() {
-      // const transactionSchema = {
-      //   "Transaction Hash": (t) => t.transactionHash,
-      //   Quantity: (t) => t.data,
-      //   Sender: (t) => ({
-      //     value: t.from,
-      //     link: `/address/${t.from}`,
-      //   }),
-      //   Receiver: (t) => ({
-      //     value: t.to,
-      //     link: `/address/${t.to}`,
-      //   }),
-      // };
       const transactionSchema = [
         {
           name: "Transaction Hash",
           getter(t) {
             return t.transactionHash;
           },
+          link(t) {
+            return `/transaction/${t.transactionHash}`;
+          }
         },
         {
           name: "Quantity",

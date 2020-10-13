@@ -97,12 +97,12 @@ export default class Web3 {
           if (transaction.blockNumber > toBlock) return false;
 
           // Filter out transactions sent from not topics[1]
-          if (topics[1] && transaction.sender !== topics[1]) {
+          if (topics && topics[1] && transaction.sender !== topics[1]) {
             return false;
           }
 
           // Filter out transactions received by not topics[2]
-          if (topics[2] && transaction.receiver !== topics[2]) return false;
+          if (topics && topics[2] && transaction.receiver !== topics[2]) return false;
 
           return true;
         }).map(transaction => {

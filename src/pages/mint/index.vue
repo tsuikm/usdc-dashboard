@@ -14,7 +14,8 @@
 
 // modules
 import NavBar from '@/components/NavBar';
-import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { padHex } from '@/utils/utils'
 import Web3 from 'web3';
 
 const web3 = new Web3(Web3.givenProvider);
@@ -50,9 +51,15 @@ export default {
   async created() {
   },
   methods: {
-      mint() {
-          console.log('im minting')
+      async mint() {
+        if (! await contract.methods.isMinter(padHex(this.walletAddress, WEB3_BALANCEOF_ADDRESS_LENGTH)).call()) {
+          //not allowed to mint
+          console.log("not allowed");
+          return;
+        } else {
+          console.log(await contract.methods.mint(this.toAddress, this.amount).call());
+        }
       }
-  }
+    }
   };
 </script>

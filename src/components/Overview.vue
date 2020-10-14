@@ -89,13 +89,6 @@ const abi = [
     name: "isBlacklisted",
     outputs: [{ name: "", type: "bool" }],
     type: "function",
-  },
-  {
-    inputs: [{ name:"_to", type: "address"}, {name:"_amount", type:"uint256"}],
-    name: "mint",
-    outputs: [{ name:"", type: "bool" }],
-    stateMutability: "nonpayable",
-    type:"function",
   }
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
@@ -132,7 +125,6 @@ export default {
   created: function () {
     this.lookupBalance();
     this.lookupBlacklisted();
-    console.log(contract.methods.mint);
   },
   updated: function () {
     this.update();

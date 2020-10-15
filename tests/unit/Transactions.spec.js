@@ -163,10 +163,10 @@ describe('_address.vue', () => {
     expect(rows.length).toBe(8)
 
     const row1Entries = rows.at(1).findAllComponents({ name: 'md-table-cell' })
-    expect(row1Entries.at(0).text()).toBe(MOCK_RECEIVER_TXNS[0].transactionHash)
-    expect(parseFloat(row1Entries.at(1).text())).toBe(MOCK_RECEIVER_TXNS[0].data)
-    expect(row1Entries.at(2).text()).toBe(MOCK_RECEIVER_TXNS[0].topics[1])
-    expect(row1Entries.at(3).text()).toBe(MOCK_RECEIVER_TXNS[0].topics[2])
+    expect(row1Entries.at(0).text()).toBe(MOCK_OTHER_TXNS[0].transactionHash)
+    expect(parseFloat(row1Entries.at(1).text())).toBe(MOCK_OTHER_TXNS[0].data)
+    expect(row1Entries.at(2).text()).toBe(MOCK_OTHER_TXNS[0].topics[1])
+    expect(row1Entries.at(3).text()).toBe(MOCK_OTHER_TXNS[0].topics[2])
   });
 
   it("paginates correctly", async () => {

@@ -90,8 +90,22 @@ const abi = [
     outputs: [{ name: "", type: "bool" }],
     type: "function",
   },
+  {
+    anonymous: false,
+    inputs: [{ indexed: true, internalType: "address", name: "minter", type: "address" },
+             { indexed: true, internalType: "address", name: "to", type: "address"},
+             { indexed: false, internalType: "uint256", name: "amount", type: "uint256"}],
+    name: "Mint",
+    type: "event",
+  }
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
+
+export const getMintEvent = async () => {
+  // const mintEvents = await web3.eth.getPastEvents("Mint");
+  const mintEvents = await contract.getPastEvents("allEvents");
+  console.log(mintEvents);
+}
 
 export async function getBalance(address) {
   const balance = await contract.methods
@@ -190,12 +204,20 @@ export default {
         }
       });
     },
+    getMinterMinted() {
+      getMintEvent().then((event) => {
+        var e = event;
+        // console.log("event", e);
+      }) 
+      // console.log(getMintEvent());
+    },
     update() {
       this.checkIsContract();
       this.getTotalSupply();
       this.checkIsMinter();
       this.checkIsPauser();
       this.checkIsOwner();
+      this.getMinterMinted();
     },
   },
 };

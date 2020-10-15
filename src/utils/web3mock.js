@@ -76,7 +76,6 @@ export default class Web3 {
       },
       async getBlockNumber() {
         // Map MOCK_TRANSACTIONS to block numbers, take max
-        // max of the block numbers
         return Math.max(...Web3.MOCK_TRANSACTIONS.map(transaction => transaction.blockNumber));
       },
       async getBlock(blockNumber) {

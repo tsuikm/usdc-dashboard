@@ -21,7 +21,6 @@ import {
   fromHex,
   removeLeadingZeros,
   removeDuplicates,
-  toHex,
   padHex,
 } from "@/utils/utils";
 
@@ -43,7 +42,7 @@ export const getLogs = async (address, fromBlock) => {
   try {
     // Txns where wallet is receiver
     const receiverTxns = await web3.eth.getPastLogs({
-      fromBlock: toHex(fromBlock),
+      fromBlock,
       toBlock: "latest",
       address: USDC_CONTRACT_ADDRESS,
       topics: [TRANSACTION_TOPIC, null, address],
@@ -65,7 +64,7 @@ export const getLogs = async (address, fromBlock) => {
 
     // Txns where wallet is sender
     const senderTxns = await web3.eth.getPastLogs({
-      fromBlock: toHex(fromBlock),
+      fromBlock,
       toBlock: "latest",
       address: USDC_CONTRACT_ADDRESS,
       topics: [TRANSACTION_TOPIC, address, null],
@@ -245,7 +244,6 @@ export default {
 
       let transactions = await getLogs(address, 0);
       if (transactions !== null) {
-
         // We have all transactions in history for this address
         this.transactions = transactions
           .reverse()

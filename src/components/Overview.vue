@@ -137,58 +137,35 @@ export default {
 
       this.balance = await getBalance(this.walletAddress);
     },
-    lookupBlacklisted() {
+    async lookupBlacklisted() {
       if (this.walletAddress === "") {
         return;
       }
 
-      contract.methods
+      this.isBlacklisted = await contract.methods
         .isBlacklisted(
           padHex(this.walletAddress, WEB3_BALANCEOF_ADDRESS_LENGTH)
         )
-        .call((error, isBlacklisted) => {
-          this.isBlacklisted = isBlacklisted;
-        });
+        .call();
     },
-    getTotalSupply() {
-      contract.methods.totalSupply().call((error, totalSupply) => {
-        this.totalSupply = totalSupply;
-      });
+    async getTotalSupply() {
+      this.totalSupply = await contract.methods.totalSupply().call();
     },
-    checkIsMinter() {
-      contract.methods.isMinter(this.walletAddress).call((error, minter) => {
-        this.minter = minter;
-      });
+    async checkIsMinter() {
+      this.minter = await contract.methods.isMinter(this.walletAddress).call();
     },
-    checkIsPauser() {
-      contract.methods.pauser().call((error, pauser) => {
-        var pauserAddress = pauser;
-        if (pauserAddress === this.walletAddress) {
-          this.pauser = true;
-        } else {
-          this.pauser = false;
-        }
-      });
+    async checkIsPauser() {
+      const pauserAddress = await contract.methods.pauser().call();
+      this.pauser = pauserAddress === this.walletAddress;
     },
-    checkIsOwner() {
-      contract.methods.owner().call((error, owner) => {
-        var ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
-        if (ownerAddress === this.walletAddress) {
-          this.owner = true;
-        } else {
-          this.owner = false;
-        }
-      });
+    async checkIsOwner() {
+      const owner = await contract.methods.owner().call();
+      const ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
+      this.owner = ownerAddress === this.walletAddress;
     },
-    checkIsContract() {
-      web3.eth.getCode(this.walletAddress).then((addressType) => {
-        var address = addressType;
-        if (address !== "0x") {
-          this.isContract = true;
-        } else {
-          this.isContract = false;
-        }
-      });
+    async checkIsContract() {
+      const address = await web3.eth.getCode(this.walletAddress);
+      this.isContract = address !== "0x";
     },
     update() {
       this.checkIsContract();

@@ -47,14 +47,14 @@ const web3 = new Web3(Web3.givenProvider);
 export default {
   name: 'TransactionDetails',
   props: {
-    hash: String
+    hash: String,
   },
   data() {
     return {
       gas: null,
       sender: null,
       receiver: null,
-      blockNumber: null
+      blockNumber: null,
     };
   },
   async created() {
@@ -69,6 +69,6 @@ export default {
     catch (error) {
       window.location.href = '/404';
     }
-  }
+  },
 };
 </script>

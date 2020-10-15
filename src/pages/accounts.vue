@@ -12,13 +12,12 @@
 </template>
 
 <script>
-// modules
-import NavBar from "@/components/NavBar";
-import Table from "@/components/Table";
-import Web3 from "web3";
-import * as constants from "@/utils/constants";
-import { toHex, removeLeadingZeros, roundToNearest } from "@/utils/utils";
-import { getBalance } from "@/components/Overview";
+import * as constants from '@/utils/constants';
+import { removeLeadingZeros, roundToNearest, toHex } from '@/utils/utils';
+import NavBar from '@/components/NavBar';
+import Table from '@/components/Table';
+import Web3 from 'web3';
+import { getBalance } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
 const web3 = new Web3(Web3.givenProvider);
@@ -133,7 +132,7 @@ export default {
       for (const account of accounts) {
         account.percentage = `${roundToNearest(
           (account.balance / totalBalance) * 100,
-          PERCENTAGE_DECIMAL_PLACES
+          PERCENTAGE_DECIMAL_PLACES,
         )}%`;
       }
 
@@ -149,16 +148,16 @@ export default {
     tableSchema() {
       return [
         {
-          name: "Address",
+          name: 'Address',
           getter: (account) => account.address,
           link: (account) => `/address/${account.address}`,
         },
         {
-          name: "Balance",
+          name: 'Balance',
           getter: (account) => account.balance,
         },
         {
-          name: "Percentage",
+          name: 'Percentage',
           getter: (account) => account.percentage,
         },
       ];

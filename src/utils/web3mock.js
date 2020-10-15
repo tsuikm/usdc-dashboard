@@ -1,4 +1,4 @@
-import { TRANSACTION_TOPIC } from './constants'
+import { TRANSACTION_TOPIC } from './constants';
 /**
  * Transaction: {
  *    transactionHash: String,
@@ -36,41 +36,41 @@ export default class Web3 {
           this.methods = {
             balanceOf: address => {
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].balance
+                call: async () => Web3.MOCK_ACCOUNTS[address].balance,
               };
             },
             decimals: () => {
               return {
-                call: async () => 6
-              }
+                call: async () => 6,
+              };
             },
             isMinter: address => {
               return {
                 call: async () => {
-                  return Web3.MOCK_ACCOUNTS[address].minter
-                }
-              }
+                  return Web3.MOCK_ACCOUNTS[address].minter;
+                },
+              };
             },
             pauser: address => {
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].pauser
-              }
+                call: async () => Web3.MOCK_ACCOUNTS[address].pauser,
+              };
             },
             owner: address => {
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].owner
-              }
+                call: async () => Web3.MOCK_ACCOUNTS[address].owner,
+              };
             },
             isBlacklisted: address => {
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].blacklisted
-              }
+                call: async () => Web3.MOCK_ACCOUNTS[address].blacklisted,
+              };
             },
             totalSupply: () => {
               return {
-                call: async () => Web3.TOTAL_SUPPLY.toString()
-              }
-            }
+                call: async () => Web3.TOTAL_SUPPLY.toString(),
+              };
+            },
           };
         }
       },
@@ -82,11 +82,11 @@ export default class Web3 {
         return {
           // The only part of getBlock that is used is the timestamp
           // We simulate timestamp to be blockNumber * 1000
-          timestamp: blockNumber * 1000
-        }
+          timestamp: blockNumber * 1000,
+        };
       },
       async getPastLogs({ fromBlock, toBlock, topics }) {
-        if (toBlock === 'latest') toBlock = await this.getBlockNumber()
+        if (toBlock === 'latest') toBlock = await this.getBlockNumber();
 
         return Web3.MOCK_TRANSACTIONS.filter(transaction => {
           // Filter out transactions before from
@@ -110,22 +110,22 @@ export default class Web3 {
             transactionHash: transaction.transactionHash,
             blockNumber: transaction.blockNumber,
             topics: [TRANSACTION_TOPIC, transaction.sender, transaction.receiver],
-          }
-        })
+          };
+        });
       },
       async getCode(address) {
         if (Web3.CONTRACT_ADDRESSES.includes(address)) {
-          return "0xabcdef1234567890"
+          return '0xabcdef1234567890';
         }
 
-        return "0x"
+        return '0x';
       },
-    }
+    };
   }
 
   get utils() {
     return {
-      isAddress: address => Web3.VALID_ADDRESSES.includes(address)
-    }
+      isAddress: address => Web3.VALID_ADDRESSES.includes(address),
+    };
   }
 }

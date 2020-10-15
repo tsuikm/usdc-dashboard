@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "Pagination",
+  name: 'Pagination',
   props: {
     totalPages: Number,
   },
@@ -27,7 +27,7 @@ export default {
     changePage(page) {
       page = Math.min(this.totalPages - 1, Math.max(page, 0));
       this.page = page;
-      this.$emit("page:change", page);
+      this.$emit('page:change', page);
     },
   },
 };

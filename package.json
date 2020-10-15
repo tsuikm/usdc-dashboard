@@ -28,9 +28,10 @@
     "@vue/cli-plugin-eslint": "^4.5.0",
     "@vue/cli-service": "^4.5.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
+    "eslint": "^6.8.0",
     "eslint-plugin-jest": "^24.0.2",
     "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-vue-scoped-css": "^1.0.0",
     "node-sass": "^4.14.1",
     "sass-loader": "^10.0.2",
     "vue-template-compiler": "^2.6.11"
@@ -44,12 +45,35 @@
     "extends": [
       "plugin:vue/essential",
       "eslint:recommended",
-      "plugin:jest/recommended"
+      "plugin:jest/recommended",
+      "plugin:vue-scoped-css/vue3-recommended"
     ],
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "indent": [
+        "error",
+        2
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "sort-imports": 2,
+      "eol-last": "error",
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ],
+      "vue-scoped-css/no-unused-selector": [
+        "off"
+      ]
+    }
   },
   "browserslist": [
     "> 1%",

@@ -41,10 +41,10 @@
 </template>
 
 <script>
-import Pagination from "./Pagination";
+import Pagination from './Pagination';
 
 export default {
-  name: "Table",
+  name: 'Table',
   components: {
     Pagination,
   },
@@ -57,7 +57,7 @@ export default {
   methods: {
     pageChange(page) {
       this.page = page;
-      this.$emit("page:change", page);
+      this.$emit('page:change', page);
     },
   },
   props: {

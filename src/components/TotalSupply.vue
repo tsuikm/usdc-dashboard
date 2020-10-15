@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: "TotalSupply",
+  name: 'TotalSupply',
   props: {
     usdcBalance: Number,
     totalSupply: String,
@@ -29,14 +29,14 @@ export default {
   data() {
     return {
       usdcPercent: null,
-    }
+    };
   },
   methods: {
     async calculatePercentage() {
       await this.usdcBalance;
       var percentage = (this.usdcBalance / parseInt(this.totalSupply)) * 100;
       if (percentage < 0.001) {
-          this.usdcPercent = "<.001"
+        this.usdcPercent = '<.001';
       } else {
         this.usdcPercent = Number.parseFloat(percentage).toPrecision(3);
       }

@@ -18,20 +18,20 @@
 </template>
 
 <script>
-import ValueDisplay from "@/components/ValueDisplay";
-import RoleDisplay from "@/components/RoleDisplay";
+import RoleDisplay from '@/components/RoleDisplay';
+import ValueDisplay from '@/components/ValueDisplay';
 export default {
-  name: "BalanceCard",
+  name: 'BalanceCard',
   components: {
     ValueDisplay,
-    RoleDisplay
+    RoleDisplay,
   },
   props: {
     usdcBalance: Number,
     minter: Boolean,
     pauser: Boolean,
-    owner: Boolean
-  }
+    owner: Boolean,
+  },
 };
 </script>
 

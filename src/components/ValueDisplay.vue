@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: "ValueDisplay",
+  name: 'ValueDisplay',
   props: {
     usdcBalance: Number,
   },

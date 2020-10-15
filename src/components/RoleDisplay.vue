@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: "RoleDisplay",
+  name: 'RoleDisplay',
   props: {
     minter: Boolean,
     pauser: Boolean,

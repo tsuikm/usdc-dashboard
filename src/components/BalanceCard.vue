@@ -7,7 +7,7 @@
           <RoleDisplay :minter="minter" :pauser="pauser" :owner="owner" />
         </div>
         <div>
-          <img src="../assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
+          <img src="@/assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
         </div>
       </div>
       <div class="card-content">

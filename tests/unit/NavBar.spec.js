@@ -1,5 +1,5 @@
 import { fireEvent, render } from '@testing-library/vue';
-import NavBar from '../../src/components/NavBar.vue';
+import NavBar from '@/components/NavBar.vue';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import Web3 from 'web3';

@@ -2,7 +2,7 @@ import {
   fireEvent,
   render,
 } from '@testing-library/vue';
-import Table from '../../src/components/Table.vue';
+import Table from '@/components/Table.vue';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 

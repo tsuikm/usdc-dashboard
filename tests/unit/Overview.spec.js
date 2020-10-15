@@ -1,9 +1,9 @@
-import Overview from '../../src/components/Overview.vue';
+import Overview from '@/components/Overview.vue';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
-import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '../../src/utils/constants';
+import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import Web3 from 'web3';
-import { padHex } from '../../src/utils/utils';
+import { padHex } from '@/utils/utils';
 import { render } from '@testing-library/vue';
 
 Vue.use(VueMaterial);

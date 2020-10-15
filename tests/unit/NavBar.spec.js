@@ -1,5 +1,5 @@
-import { render, fireEvent } from '@testing-library/vue';
-import NavBar from '../../src/components/NavBar.vue';
+import { fireEvent, render } from '@testing-library/vue';
+import NavBar from '@/components/NavBar.vue';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import Web3 from 'web3';
@@ -10,14 +10,14 @@ Web3.VALID_ADDRESSES = [
   '0x36f80a0bde5020ab0880ab54',
   '0xfa2ec023f531cf6fa04c3536',
   '0x0bd4dcdf07629fee5d4363c7',
-  '0xe7e31d0ef8c598b13e0992e2'
-]
+  '0xe7e31d0ef8c598b13e0992e2',
+];
 
 function setWindowUrl(url) {
   Object.defineProperty(window, 'location', {
     value: {
-      href: url
-    }
+      href: url,
+    },
   });
 }
 

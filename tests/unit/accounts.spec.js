@@ -1,10 +1,10 @@
-import { render, fireEvent } from "@testing-library/vue";
-import accounts from "@/pages/accounts";
-import Vue from "vue";
-import VueMaterial from "vue-material";
-import { toHex, padHex, removeLeadingZeros } from "@/utils/utils";
+import { fireEvent, render } from '@testing-library/vue';
+import { padHex, removeLeadingZeros, toHex } from '@/utils/utils';
+import Vue from 'vue';
+import VueMaterial from 'vue-material';
+import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import Web3 from 'web3';
-import { WEB3_BALANCEOF_ADDRESS_LENGTH } from "../../src/utils/constants";
+import accounts from '@/pages/accounts';
 
 Vue.use(VueMaterial);
 
@@ -14,27 +14,27 @@ for (let i = 0; i < 101; i++) {
   MOCK_TRANSACTIONS.push({
     data: toHex(randomQuantity),
     sender: padHex(toHex(i), WEB3_BALANCEOF_ADDRESS_LENGTH),
-    blockNumber: 1
+    blockNumber: 1,
   });
 }
 
 const MOCK_ACCOUNTS = {};
 for (let transaction of MOCK_TRANSACTIONS) {
-  let address = transaction.sender
+  let address = transaction.sender;
   if (!(address in MOCK_ACCOUNTS)) {
     MOCK_ACCOUNTS[address] = {
-      balance: transaction.data
-    }
+      balance: transaction.data,
+    };
   } else {
-    MOCK_ACCOUNTS[address].balance += transaction.data
+    MOCK_ACCOUNTS[address].balance += transaction.data;
   }
 }
 
-Web3.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS
-Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS
+Web3.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
+Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 
-describe("accounts", () => {
-  it("accounts displays a table titled Accounts with columns for Address, Balance and Percentage", () => {
+describe('accounts', () => {
+  it('accounts displays a table titled Accounts with columns for Address, Balance and Percentage', () => {
     const { getByText } = render(accounts);
     expect(getByText('Accounts')).not.toBeNull();
     expect(getByText('Address')).not.toBeNull();
@@ -42,7 +42,7 @@ describe("accounts", () => {
     expect(getByText('Percentage')).not.toBeNull();
   });
 
-  it("orders accounts by balance", async () => {
+  it('orders accounts by balance', async () => {
     const { findByText, getByText } = render(accounts);
 
     let addresses = [...Object.keys(MOCK_ACCOUNTS)].sort((a, b) => b[1] - a[1]);

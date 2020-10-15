@@ -1,7 +1,7 @@
-import { render } from "@testing-library/vue";
-import TransactionDetails from "@/components/TransactionDetails";
-import Vue from "vue";
-import VueMaterial from "vue-material";
+import TransactionDetails from '@/components/TransactionDetails';
+import Vue from 'vue';
+import VueMaterial from 'vue-material';
+import { render } from '@testing-library/vue';
 
 Vue.use(VueMaterial);
 
@@ -10,8 +10,8 @@ const MOCK_TRANSACTION = {
   from: '0xaaaaa',
   to: '0xbbbbb',
   blockNumber: 0,
-  gas: 10
-}
+  gas: 10,
+};
 
 jest.mock('web3', () => class Web3 {
   get eth() {
@@ -22,18 +22,18 @@ jest.mock('web3', () => class Web3 {
           return MOCK_TRANSACTION;
         }
         throw new Error();
-      }
-    }
+      },
+    };
   }
 } );
 
 
-describe("Transaction Details", () => {
-  it("Renders transaction details correctly for correct hash", () => {
+describe('Transaction Details', () => {
+  it('Renders transaction details correctly for correct hash', () => {
     const { getByText, findByText } = render(TransactionDetails, {
       props: {
-        hash: MOCK_TRANSACTION.transactionHash
-      }
+        hash: MOCK_TRANSACTION.transactionHash,
+      },
     });
 
     expect(getByText('Hash:')).not.toBeNull();
@@ -49,15 +49,15 @@ describe("Transaction Details", () => {
     expect(findByText('1')).not.toBeNull();
   });
 
-  it("Redirects to 404 with incorrect hash", async () => {
+  it('Redirects to 404 with incorrect hash', async () => {
     delete global.window.location;
     global.window = Object.create(window);
-    window.location = {}
+    window.location = {};
 
     const { updateProps } = render(TransactionDetails, {
       props: {
-        hash: MOCK_TRANSACTION.transactionHash
-      }
+        hash: MOCK_TRANSACTION.transactionHash,
+      },
     });
 
     await updateProps({ hash: 'invalid' });

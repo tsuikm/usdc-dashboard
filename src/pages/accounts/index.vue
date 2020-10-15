@@ -3,22 +3,21 @@
     <NavBar />
     <Table
       :name="'Accounts'"
-      :totalItems="this.totalItems"
+      :total-items="this.totalItems"
       :schema="this.tableSchema"
       :content="this.accounts"
-      :keyField="'address'"
+      :key-field="'address'"
     />
   </div>
 </template>
 
 <script>
-// modules
-import NavBar from "@/components/NavBar";
-import Table from "@/components/Table";
-import Web3 from "web3";
-import * as constants from "@/utils/constants";
-import { toHex, removeLeadingZeros, roundToNearest } from "@/utils/utils";
-import { getBalance } from "@/components/Overview";
+import * as constants from '@/utils/constants';
+import { removeLeadingZeros, roundToNearest, toHex } from '@/utils/utils';
+import NavBar from '@/components/NavBar';
+import Table from '@/components/Table';
+import Web3 from 'web3';
+import { getBalance } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
 const web3 = new Web3(Web3.givenProvider);
@@ -32,6 +31,28 @@ export default {
     return {
       accounts: [],
     };
+  },
+  computed: {
+    totalItems() {
+      return this.accounts.length;
+    },
+    tableSchema() {
+      return [
+        {
+          name: 'Address',
+          getter: (account) => account.address,
+          link: (account) => `/address/${account.address}`,
+        },
+        {
+          name: 'Balance',
+          getter: (account) => account.balance,
+        },
+        {
+          name: 'Percentage',
+          getter: (account) => account.percentage,
+        },
+      ];
+    },
   },
   async created() {
     this.accounts = await this.getAccounts();
@@ -133,35 +154,13 @@ export default {
       for (const account of accounts) {
         account.percentage = `${roundToNearest(
           (account.balance / totalBalance) * 100,
-          PERCENTAGE_DECIMAL_PLACES
+          PERCENTAGE_DECIMAL_PLACES,
         )}%`;
       }
 
       // Sort (in reverse order) the account addresses by balance.
       accounts.sort((a, b) => b.balance - a.balance);
       return accounts;
-    },
-  },
-  computed: {
-    totalItems() {
-      return this.accounts.length;
-    },
-    tableSchema() {
-      return [
-        {
-          name: "Address",
-          getter: (account) => account.address,
-          link: (account) => `/address/${account.address}`,
-        },
-        {
-          name: "Balance",
-          getter: (account) => account.balance,
-        },
-        {
-          name: "Percentage",
-          getter: (account) => account.percentage,
-        },
-      ];
     },
   },
 };

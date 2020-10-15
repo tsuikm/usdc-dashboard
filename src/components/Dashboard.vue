@@ -13,7 +13,7 @@ export default {
   name: 'Dashboard',
   components: {
     Transactions,
-    NavBar
-  }
+    NavBar,
+  },
 };
 </script>

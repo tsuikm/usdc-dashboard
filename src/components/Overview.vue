@@ -3,92 +3,93 @@
     <div class="summaryCards">
       <div class="leftSummary">
         <Address
-          :walletAddress="walletAddress"
-          :isContract="this.isContract"
-          :isBlacklisted="isBlacklisted"
+          :wallet-address="walletAddress"
+          :is-contract="this.isContract"
+          :is-blacklisted="isBlacklisted"
         />
         <BalanceCard
-          :usdcBalance="this.balance"
+          :usdc-balance="this.balance"
           :minter="this.minter"
           :pauser="this.pauser"
           :owner="this.owner"
         />
       </div>
       <TotalSupply
-        :usdcBalance="this.balance"
-        :totalSupply="this.totalSupply"
+        :usdc-balance="this.balance"
+        :total-supply="this.totalSupply"
       />
     </div>
   </div>
 </template>
 
 <script>
-import Web3 from "web3";
-import { padHex } from "@/utils/utils";
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
-} from "@/utils/constants";
-import BalanceCard from "./BalanceCard";
-import TotalSupply from "@/components/TotalSupply";
-import Address from "./Address";
+} from '@/utils/constants';
+import Address from './Address';
+import BalanceCard from './BalanceCard';
+import TotalSupply from '@/components/TotalSupply';
+import Web3 from 'web3';
+import { padHex } from '@/utils/utils';
+
 const web3 = new Web3(Web3.givenProvider);
 
 const abi = [
   {
     constant: true,
-    inputs: [{ name: "_owner", type: "address" }],
-    name: "balanceOf",
-    outputs: [{ name: "balance", type: "uint256" }],
-    type: "function",
+    inputs: [{ name: '_owner', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: 'balance', type: 'uint256' }],
+    type: 'function',
   },
   {
     constant: true,
     inputs: [],
-    name: "decimals",
-    outputs: [{ name: "", type: "uint8" }],
-    type: "function",
+    name: 'decimals',
+    outputs: [{ name: '', type: 'uint8' }],
+    type: 'function',
   },
   {
     constant: true,
     inputs: [],
-    name: "totalSupply",
-    outputs: [{ name: "", type: "uint256" }],
-    type: "function",
+    name: 'totalSupply',
+    outputs: [{ name: '', type: 'uint256' }],
+    type: 'function',
   },
   {
     constant: true,
-    inputs: [{ name: "account", type: "address" }],
-    name: "isMinter",
-    outputs: [{ name: "", type: "bool" }],
-    type: "function",
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: "pauser",
-    outputs: [{ name: "", type: "address" }],
-    type: "function",
+    inputs: [{ name: 'account', type: 'address' }],
+    name: 'isMinter',
+    outputs: [{ name: '', type: 'bool' }],
+    type: 'function',
   },
   {
     constant: true,
     inputs: [],
-    name: "owner",
-    outputs: [{ name: "", type: "address" }],
-    type: "function",
+    name: 'pauser',
+    outputs: [{ name: '', type: 'address' }],
+    type: 'function',
   },
   {
     constant: true,
-    inputs: [{ name: "account", type: "address" }],
-    name: "isContract",
-    outputs: [{ name: "", type: "bool" }],
-    type: "function",
+    inputs: [],
+    name: 'owner',
+    outputs: [{ name: '', type: 'address' }],
+    type: 'function',
   },
   {
-    inputs: [{ name: "_account", type: "address" }],
-    name: "isBlacklisted",
-    outputs: [{ name: "", type: "bool" }],
-    type: "function",
+    constant: true,
+    inputs: [{ name: 'account', type: 'address' }],
+    name: 'isContract',
+    outputs: [{ name: '', type: 'bool' }],
+    type: 'function',
+  },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'isBlacklisted',
+    outputs: [{ name: '', type: 'bool' }],
+    type: 'function',
   },
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
@@ -108,6 +109,9 @@ export default {
     TotalSupply,
     Address,
   },
+  props: {
+    walletAddress: String,
+  },
   data() {
     return {
       balance: null,
@@ -119,9 +123,6 @@ export default {
       isContract: null,
     };
   },
-  props: {
-    walletAddress: String,
-  },
   created: function () {
     this.lookupBalance();
     this.lookupBlacklisted();
@@ -131,20 +132,20 @@ export default {
   },
   methods: {
     async lookupBalance() {
-      if (this.walletAddress === "") {
+      if (this.walletAddress === '') {
         return;
       }
 
       this.balance = await getBalance(this.walletAddress);
     },
     async lookupBlacklisted() {
-      if (this.walletAddress === "") {
+      if (this.walletAddress === '') {
         return;
       }
 
       this.isBlacklisted = await contract.methods
         .isBlacklisted(
-          padHex(this.walletAddress, WEB3_BALANCEOF_ADDRESS_LENGTH)
+          padHex(this.walletAddress, WEB3_BALANCEOF_ADDRESS_LENGTH),
         )
         .call();
     },
@@ -165,7 +166,7 @@ export default {
     },
     async checkIsContract() {
       const address = await web3.eth.getCode(this.walletAddress);
-      this.isContract = address !== "0x";
+      this.isContract = address !== '0x';
     },
     update() {
       this.checkIsContract();

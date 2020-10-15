@@ -275,7 +275,7 @@ export default {
     },
   },
   created() {
-    if (this.agddress) {
+    if (this.address) {
       this.getWalletTransactions();
     } else {
       this.getAllTransactions();

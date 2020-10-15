@@ -46,7 +46,7 @@
       "plugin:vue/recommended",
       "eslint:recommended",
       "plugin:jest/recommended",
-      "plugin:vue-scoped-css/vue3-recommended"
+      "plugin:vue-scoped-css/recommended"
     ],
     "parserOptions": {
       "parser": "babel-eslint"

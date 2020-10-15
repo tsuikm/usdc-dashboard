@@ -270,6 +270,8 @@ export default {
       this.transactions = transactions
         .reverse()
         .slice(0, WEB3_MAX_TRANSACTIONS);
+
+      await this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
     },
   },
   created() {

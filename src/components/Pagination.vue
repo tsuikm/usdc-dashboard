@@ -1,6 +1,8 @@
 <template>
   <div class="page">
-    <md-button @click="changePage(0)">First</md-button>
+    <md-button @click="changePage(0)">
+      First
+    </md-button>
     <md-button @click="changePage(page - 1)">
       <md-icon>navigate_before</md-icon>
     </md-button>
@@ -8,7 +10,9 @@
     <md-button @click="changePage(page + 1)">
       <md-icon>navigate_next</md-icon>
     </md-button>
-    <md-button @click="changePage(totalPages - 1)">Last</md-button>
+    <md-button @click="changePage(totalPages - 1)">
+      Last
+    </md-button>
   </div>
 </template>
 

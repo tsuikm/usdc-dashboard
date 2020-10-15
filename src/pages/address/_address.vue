@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavBar />
-    <Overview :walletAddress="this.$route.params.address" />
+    <Overview :wallet-address="this.$route.params.address" />
     <Transactions :address="this.$route.params.address" />
   </div>
 </template>

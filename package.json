@@ -43,7 +43,7 @@
       "jest": true
     },
     "extends": [
-      "plugin:vue/essential",
+      "plugin:vue/recommended",
       "eslint:recommended",
       "plugin:jest/recommended",
       "plugin:vue-scoped-css/vue3-recommended"
@@ -71,6 +71,12 @@
         "always-multiline"
       ],
       "vue-scoped-css/no-unused-selector": [
+        "off"
+      ],
+      "vue/this-in-template": [
+        "off"
+      ],
+      "vue/require-default-prop": [
         "off"
       ]
     }

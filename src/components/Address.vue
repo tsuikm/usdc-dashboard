@@ -12,11 +12,20 @@
         </div>
       </div>
       <div>
-        <img src="@/assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
+        <img
+          src="@/assets/gray-bar.svg"
+          alt="gray-bar"
+          class="gray-bar"
+        >
       </div>
       <div class="subheading">
         <div>{{ this.walletAddress }}</div>
-        <md-icon v-if="this.isBlacklisted" title="Blacklisted">block</md-icon>
+        <md-icon
+          v-if="this.isBlacklisted"
+          title="Blacklisted"
+        >
+          block
+        </md-icon>
       </div>
     </md-card>
   </div>

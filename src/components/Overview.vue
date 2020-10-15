@@ -3,20 +3,20 @@
     <div class="summaryCards">
       <div class="leftSummary">
         <Address
-          :walletAddress="walletAddress"
-          :isContract="this.isContract"
-          :isBlacklisted="isBlacklisted"
+          :wallet-address="walletAddress"
+          :is-contract="this.isContract"
+          :is-blacklisted="isBlacklisted"
         />
         <BalanceCard
-          :usdcBalance="this.balance"
+          :usdc-balance="this.balance"
           :minter="this.minter"
           :pauser="this.pauser"
           :owner="this.owner"
         />
       </div>
       <TotalSupply
-        :usdcBalance="this.balance"
-        :totalSupply="this.totalSupply"
+        :usdc-balance="this.balance"
+        :total-supply="this.totalSupply"
       />
     </div>
   </div>
@@ -109,6 +109,9 @@ export default {
     TotalSupply,
     Address,
   },
+  props: {
+    walletAddress: String,
+  },
   data() {
     return {
       balance: null,
@@ -119,9 +122,6 @@ export default {
       owner: null,
       isContract: null,
     };
-  },
-  props: {
-    walletAddress: String,
   },
   created: function () {
     this.lookupBalance();

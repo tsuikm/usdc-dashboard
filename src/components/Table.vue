@@ -1,22 +1,27 @@
 <template>
   <div id="table-and-loading-container">
     <md-progress-bar
-      data-testid="progress-bar-test-id"
       v-if="loading"
+      data-testid="progress-bar-test-id"
       md-mode="indeterminate"
-    ></md-progress-bar>
+    />
     <md-table md-card>
       <md-table-toolbar>
-        <h1 class="md-title">{{ name }}</h1>
+        <h1 class="md-title">
+          {{ name }}
+        </h1>
         <Pagination
-          :totalPages="Math.ceil(this.totalItems / pageLength)"
+          :total-pages="Math.ceil(this.totalItems / pageLength)"
           @page:change="this.pageChange"
         />
       </md-table-toolbar>
 
       <md-table-row>
-        <md-table-head v-for="{ name } in schema" :key="name">
-          {{ name }}
+        <md-table-head
+          v-for="field in schema"
+          :key="field.name"
+        >
+          {{ field.name }}
         </md-table-head>
       </md-table-row>
 
@@ -27,12 +32,18 @@
         )"
         :key="item[keyField]"
       >
-        <md-table-cell v-for="{ name, getter, link } in schema" :key="name">
-          <a v-if="link" :href="link(item)">
-            {{ getter(item) }}
+        <md-table-cell
+          v-for="field in schema"
+          :key="field.name"
+        >
+          <a
+            v-if="field.link"
+            :href="field.link(item)"
+          >
+            {{ field.getter(item) }}
           </a>
           <template v-else>
-            {{ getter(item) }}
+            {{ field.getter(item) }}
           </template>
         </md-table-cell>
       </md-table-row>
@@ -47,18 +58,6 @@ export default {
   name: 'Table',
   components: {
     Pagination,
-  },
-  data() {
-    return {
-      page: 0,
-      pageLength: 25,
-    };
-  },
-  methods: {
-    pageChange(page) {
-      this.page = page;
-      this.$emit('page:change', page);
-    },
   },
   props: {
     name: String,
@@ -96,6 +95,18 @@ export default {
     // Array of the 'content' in the table. Can dynamically change.
     // For instance: [{age: 100, to: ...}, {age: 0, to: ...}, ...]
     content: Array,
+  },
+  data() {
+    return {
+      page: 0,
+      pageLength: 25,
+    };
+  },
+  methods: {
+    pageChange(page) {
+      this.page = page;
+      this.$emit('page:change', page);
+    },
   },
 };
 </script>

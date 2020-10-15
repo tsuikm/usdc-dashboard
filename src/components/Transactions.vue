@@ -1,14 +1,14 @@
 <template>
   <div>
     <Table
+      ref="table"
       :loading="loading"
       :name="this.tableName"
-      :totalItems="this.totalItems"
+      :total-items="this.totalItems"
       :schema="this.tableSchema"
       :content="this.transactions"
-      :keyField="'Transaction Hash'"
+      :key-field="'Transaction Hash'"
       @page:change="this.pageChange"
-      ref="table"
     />
   </div>
 </template>
@@ -101,7 +101,16 @@ export default {
     // Pagination,
     Table,
   },
-  props: ['address'],
+  props: {
+    address: String,
+  },
+  data() {
+    return {
+      transactions: [],
+      page: 0,
+      loading: true,
+    };
+  },
   computed: {
     totalItems() {
       // TODO: this number is hard-coded. We need to calculate the total number of transactions
@@ -165,12 +174,12 @@ export default {
       return this.$refs.table.pageLength;
     },
   },
-  data() {
-    return {
-      transactions: [],
-      page: 0,
-      loading: true,
-    };
+  created() {
+    if (this.address) {
+      this.getWalletTransactions();
+    } else {
+      this.getAllTransactions();
+    }
   },
   methods: {
     async getAllTransactions() {
@@ -286,13 +295,6 @@ export default {
         this.getAllTransactions();
       }
     },
-  },
-  created() {
-    if (this.address) {
-      this.getWalletTransactions();
-    } else {
-      this.getAllTransactions();
-    }
   },
 };
 </script>

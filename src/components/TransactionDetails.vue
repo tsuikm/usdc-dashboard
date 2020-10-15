@@ -2,32 +2,34 @@
   <div>
     <md-table md-card>
       <md-table-toolbar>
-        <h1 class="md-title">Transaction Details</h1>
+        <h1 class="md-title">
+          Transaction Details
+        </h1>
       </md-table-toolbar>
 
       <md-table-row>
         <md-table-cell> Hash: </md-table-cell>
-        <md-table-cell> {{hash}} </md-table-cell>
+        <md-table-cell> {{ hash }} </md-table-cell>
       </md-table-row>
 
       <md-table-row>
         <md-table-cell> Block: </md-table-cell>
-        <md-table-cell> {{blockNumber}} </md-table-cell>
+        <md-table-cell> {{ blockNumber }} </md-table-cell>
       </md-table-row>
 
       <md-table-row>
         <md-table-cell> Sender: </md-table-cell>
-        <md-table-cell><a :href="'/address/' + sender">{{sender}}</a></md-table-cell>
+        <md-table-cell><a :href="'/address/' + sender">{{ sender }}</a></md-table-cell>
       </md-table-row>
 
       <md-table-row>
         <md-table-cell> Receiver: </md-table-cell>
-        <md-table-cell><a :href="'/address/' + receiver">{{receiver}}</a></md-table-cell>
+        <md-table-cell><a :href="'/address/' + receiver">{{ receiver }}</a></md-table-cell>
       </md-table-row>
 
       <md-table-row>
         <md-table-cell> Gas: </md-table-cell>
-        <md-table-cell> {{gas}} </md-table-cell>
+        <md-table-cell> {{ gas }} </md-table-cell>
       </md-table-row>
     </md-table>
   </div>

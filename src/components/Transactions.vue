@@ -109,18 +109,6 @@ export default {
       return `Transactions for Wallet ${this.address}`;
     },
     tableSchema() {
-      // const transactionSchema = {
-      //   "Transaction Hash": (t) => t.transactionHash,
-      //   Quantity: (t) => t.data,
-      //   Sender: (t) => ({
-      //     value: t.from,
-      //     link: `/address/${t.from}`,
-      //   }),
-      //   Receiver: (t) => ({
-      //     value: t.to,
-      //     link: `/address/${t.to}`,
-      //   }),
-      // };
       const transactionSchema = [
         {
           name: "Transaction Hash",
@@ -152,16 +140,13 @@ export default {
             return `/address/${t.to}`;
           },
         },
-      ];
-
-      if (!this.address) {
-        transactionSchema.push({
+        {
           name: "Age",
           getter(t) {
             return t.age;
           },
-        });
-      }
+        }
+      ];
 
       return transactionSchema;
     },
@@ -288,7 +273,7 @@ export default {
     },
   },
   created() {
-    if (this.address) {
+    if (this.agddress) {
       this.getWalletTransactions();
     } else {
       this.getAllTransactions();

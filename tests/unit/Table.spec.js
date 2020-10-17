@@ -94,7 +94,7 @@ describe('Loading bar', () => {
   });
   it('Loading bar disappears after table renders', () => {
     const {
-      getByTestId,
+      queryByTestId,
     } = render(Table, {
       props: {
         ...testProps,
@@ -102,7 +102,7 @@ describe('Loading bar', () => {
       },
     });
 
-    expect(getByTestId('progress-bar-test-id')).toBeNull();
+    expect(queryByTestId('progress-bar-test-id')).toBeNull();
   });
 
 });

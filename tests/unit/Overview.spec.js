@@ -29,8 +29,8 @@ describe('Overview', () => {
   });
 
   it('Correctly hides blacklisted label', () => {
-    const { getByText } = render(Overview, { props: { walletAddress: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH) } });
+    const { queryByText } = render(Overview, { props: { walletAddress: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH) } });
 
-    expect(getByText('block')).toBeNull();
+    expect(queryByText('block')).toBeNull();
   });
 });

@@ -7,17 +7,17 @@ Vue.use(VueMaterial);
 
 describe('BalanceCard', () => {
   it('ValueDisplay renders onto BalanceCard', () => {
-    const { queryByText } = render(BalanceCard);
-    expect(queryByText('USDC BALANCE ($)')).not.toBeNull();
+    const { getByText } = render(BalanceCard);
+    expect(getByText('USDC BALANCE ($)')).not.toBeNull();
   });
 
   it('Displays privileged roles components', () => {
-    const { queryByTestId } = render(BalanceCard);
-    expect(queryByTestId('role-container')).not.toBeNull();
+    const { getByTestId } = render(BalanceCard);
+    expect(getByTestId('role-container')).not.toBeNull();
   });
 
   it('Diplays minter badge for minter', () => {
-    const { queryByTestId, queryByText } = render(BalanceCard, {
+    const { getByTestId, getByText } = render(BalanceCard, {
       propsData: {
         usdcBalance: 1000,
         usdValue: 1000,
@@ -28,12 +28,12 @@ describe('BalanceCard', () => {
       },
     });
 
-    expect(queryByTestId('role-container')).not.toBeNull();
-    expect(queryByText('MINTER')).not.toBeNull();
+    expect(getByTestId('role-container')).not.toBeNull();
+    expect(getByText('MINTER')).not.toBeNull();
   });
 
   it('Diplays pauser badge for pauser', () => {
-    const { queryByTestId, queryByText } = render(BalanceCard, {
+    const { getByTestId, getByText } = render(BalanceCard, {
       propsData: {
         usdcBalance: 1000,
         usdValue: 1000,
@@ -44,12 +44,12 @@ describe('BalanceCard', () => {
       },
     });
 
-    expect(queryByTestId('role-container')).not.toBeNull();
-    expect(queryByText('PAUSER')).not.toBeNull();
+    expect(getByTestId('role-container')).not.toBeNull();
+    expect(getByText('PAUSER')).not.toBeNull();
   });
 
   it('Diplays owner badge for owner', () => {
-    const { queryByTestId, queryByText } = render(BalanceCard, {
+    const { getByTestId, getByText } = render(BalanceCard, {
       propsData: {
         usdcBalance: 1000,
         usdValue: 1000,
@@ -60,7 +60,7 @@ describe('BalanceCard', () => {
       },
     });
 
-    expect(queryByTestId('role-container')).not.toBeNull();
-    expect(queryByText('OWNER')).not.toBeNull();
+    expect(getByTestId('role-container')).not.toBeNull();
+    expect(getByText('OWNER')).not.toBeNull();
   });
 });

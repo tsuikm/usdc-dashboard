@@ -9,23 +9,23 @@ Vue.use(VueMaterial);
 describe('Address', () => {
   it('Wallet address displays correctly', () => {
     const testAddress = '0xc0539c310393165705265dc9865a0E495202771B'; // Normal Wallet Address
-    const { queryByText } = render(Address, {
+    const { getByText } = render(Address, {
       propsData: {
         walletAddress: testAddress,
       },
     });
     
-    expect(queryByText(testAddress)).not.toBeNull();
+    expect(getByText(testAddress)).not.toBeNull();
   });
 
   it('Contract address displays correctly', () => {
-    const { queryByText } = render(Address, {
+    const { getByText } = render(Address, {
       propsData: {
         walletAddress: USDC_CONTRACT_ADDRESS,
       },
     });
     
-    expect(queryByText(USDC_CONTRACT_ADDRESS)).not.toBeNull();
+    expect(getByText(USDC_CONTRACT_ADDRESS)).not.toBeNull();
   });
 
   it('Displays whether the wallet address is a contract or a regular address', () => {

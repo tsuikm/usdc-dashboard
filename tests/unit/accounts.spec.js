@@ -43,26 +43,26 @@ describe('accounts', () => {
   });
 
   it('orders accounts by balance', async () => {
-    const { queryByText, getByText } = render(accounts);
+    const { getByText } = render(accounts);
 
     let addresses = [...Object.keys(MOCK_ACCOUNTS)].sort((a, b) => b[1] - a[1]);
 
     // top 25 accounts by balance
     for (let i = 0; i < 25; i++) {
-      expect(queryByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
-      expect(queryByText(MOCK_ACCOUNTS[addresses[i]].balance)).not.toBeNull();
+      expect(getByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
+      expect(getByText(MOCK_ACCOUNTS[addresses[i]].balance)).not.toBeNull();
     }
 
     // go to page 2
     await fireEvent.click(getByText('navigate_next'));
     getByText('First');
-    queryByText('Page 2 of ' + Math.ceil(addresses.length / 25));
+    getByText('Page 2 of ' + Math.ceil(addresses.length / 25));
     getByText('Last');
 
     // next top 25 accounts by balance
     for (let i = 25; i < 50; i++) {
-      expect(queryByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
-      expect(queryByText(MOCK_ACCOUNTS[addresses[i]].balance)).not.toBeNull();
+      expect(getByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
+      expect(getByText(MOCK_ACCOUNTS[addresses[i]].balance)).not.toBeNull();
     }
   });
 });

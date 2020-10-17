@@ -30,7 +30,7 @@ jest.mock('web3', () => class Web3 {
 
 describe('Transaction Details', () => {
   it('Renders transaction details correctly for correct hash', () => {
-    const { getByText, findByText } = render(TransactionDetails, {
+    const { getByText, queryByText } = render(TransactionDetails, {
       props: {
         hash: MOCK_TRANSACTION.transactionHash,
       },
@@ -42,11 +42,11 @@ describe('Transaction Details', () => {
     expect(getByText('Block:')).not.toBeNull();
     expect(getByText('Gas:')).not.toBeNull();
 
-    expect(findByText('0x123456')).not.toBeNull();
-    expect(findByText('0xaaaaa')).not.toBeNull();
-    expect(findByText('0xbbbbb')).not.toBeNull();
-    expect(findByText('0')).not.toBeNull();
-    expect(findByText('1')).not.toBeNull();
+    expect(queryByText('0x123456')).not.toBeNull();
+    expect(queryByText('0xaaaaa')).not.toBeNull();
+    expect(queryByText('0xbbbbb')).not.toBeNull();
+    expect(queryByText('0')).not.toBeNull();
+    expect(queryByText('1')).not.toBeNull();
   });
 
   it('Redirects to 404 with incorrect hash', async () => {

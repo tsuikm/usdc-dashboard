@@ -80,7 +80,7 @@ describe('_address.vue', () => {
   });
 
   it('renders wallet transactions correctly', async () => {
-    const { findByTestId, findByText } = render(Address, {
+    const { queryByTestId, queryByText } = render(Address, {
       propsData: {
         address: MOCK_WALLET_ADDRESS,
       },
@@ -91,33 +91,33 @@ describe('_address.vue', () => {
     await Vue.nextTick();
     await Vue.nextTick();
 
-    expect(findByTestId('md-table')).not.toBeNull();
+    expect(queryByTestId('md-table')).not.toBeNull();
 
-    expect(findByText(MOCK_TRANSACTIONS[2].transactionHash)).not.toBeNull();
-    expect(findByText(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6)).not.toBeNull();
-    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender))).not.toBeNull();
-    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver))).not.toBeNull();
+    expect(queryByText(MOCK_TRANSACTIONS[2].transactionHash)).not.toBeNull();
+    expect(queryByText(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6)).not.toBeNull();
+    expect(queryByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender))).not.toBeNull();
+    expect(queryByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver))).not.toBeNull();
 
-    expect(findByText(MOCK_TRANSACTIONS[3].transactionHash)).not.toBeNull();
-    expect(findByText(parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6)).not.toBeNull();
-    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender))).not.toBeNull();
-    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver))).not.toBeNull();
+    expect(queryByText(MOCK_TRANSACTIONS[3].transactionHash)).not.toBeNull();
+    expect(queryByText(parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6)).not.toBeNull();
+    expect(queryByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender))).not.toBeNull();
+    expect(queryByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver))).not.toBeNull();
   });
 
   it('renders all transactions correctly', async () => {
-    const { findByTestId, findByText } = render(Address);
+    const { queryByTestId, queryByText } = render(Address);
 
     // 9 promises get called in mounted() lifecycle hook
     for (let i = 0; i < 9; i++) {
       await Vue.nextTick();
     }
 
-    expect(findByTestId('md-table')).not.toBeNull();
+    expect(queryByTestId('md-table')).not.toBeNull();
 
-    expect(findByText(MOCK_TRANSACTIONS[6].transactionHash)).not.toBeNull();
-    expect(findByText(parseInt(MOCK_TRANSACTIONS[6].data) / 10 ** 6)).not.toBeNull();
-    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[6].sender))).not.toBeNull();
-    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[6].receiver))).not.toBeNull();
+    expect(queryByText(MOCK_TRANSACTIONS[6].transactionHash)).not.toBeNull();
+    expect(queryByText(parseInt(MOCK_TRANSACTIONS[6].data) / 10 ** 6)).not.toBeNull();
+    expect(queryByText(removeLeadingZeros(MOCK_TRANSACTIONS[6].sender))).not.toBeNull();
+    expect(queryByText(removeLeadingZeros(MOCK_TRANSACTIONS[6].receiver))).not.toBeNull();
   });
 
   it('paginates correctly', async () => {
@@ -135,7 +135,7 @@ describe('_address.vue', () => {
     // MOCK_RECEIVER_TXNS now has 24 transactions (8 copies of the same 3 original items)
     // for a total of 27 transactions with the 3 in MOCK_SENDER_TXNS
 
-    const { findByTestId, findByText, getByText } = render(Address, {
+    const { queryByTestId, queryByText, getByText } = render(Address, {
       propsData: {
         address: MOCK_WALLET_ADDRESS,
       },
@@ -147,21 +147,21 @@ describe('_address.vue', () => {
     await Vue.nextTick();
     await Vue.nextTick();
 
-    expect(findByTestId('md-table')).not.toBeNull();
+    expect(queryByTestId('md-table')).not.toBeNull();
 
-    expect(findByText(MOCK_TRANSACTIONS[2].transactionHash)).not.toBeNull();
-    expect(findByText(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6)).not.toBeNull();
-    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender))).not.toBeNull();
-    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver))).not.toBeNull();
+    expect(queryByText(MOCK_TRANSACTIONS[2].transactionHash)).not.toBeNull();
+    expect(queryByText(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6)).not.toBeNull();
+    expect(queryByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender))).not.toBeNull();
+    expect(queryByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver))).not.toBeNull();
 
     // Go to next page
     await fireEvent.click(getByText('navigate_next'));
 
     await Vue.nextTick();
 
-    expect(findByText(MOCK_TRANSACTIONS[3].transactionHash)).not.toBeNull();
-    expect(findByText(parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6)).not.toBeNull();
-    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender))).not.toBeNull();
-    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver))).not.toBeNull();
+    expect(queryByText(MOCK_TRANSACTIONS[3].transactionHash)).not.toBeNull();
+    expect(queryByText(parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6)).not.toBeNull();
+    expect(queryByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender))).not.toBeNull();
+    expect(queryByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver))).not.toBeNull();
   });
 });

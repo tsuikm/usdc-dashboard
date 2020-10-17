@@ -5,7 +5,10 @@
       data-testid="progress-bar-test-id"
       md-mode="indeterminate"
     />
-    <md-table md-card>
+    <md-table
+      md-card
+      data-testid="md-table"
+    >
       <md-table-toolbar>
         <h1 class="md-title">
           {{ name }}
@@ -16,7 +19,7 @@
         />
       </md-table-toolbar>
 
-      <md-table-row>
+      <md-table-row data-testid="md-table-row">
         <md-table-head
           v-for="field in schema"
           :key="field.name"
@@ -31,6 +34,7 @@
           (page + 1) * pageLength
         )"
         :key="item[keyField]"
+        data-testid="md-table-row"
       >
         <md-table-cell
           v-for="field in schema"

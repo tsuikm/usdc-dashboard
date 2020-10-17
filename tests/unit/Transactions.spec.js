@@ -1,9 +1,9 @@
 import Address, { getLogs } from '@/components/Transactions';
+import { fireEvent, render } from '@testing-library/vue';
 import { padHex, removeLeadingZeros } from '@/utils/utils';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import Web3 from 'web3';
-import { mount } from '@vue/test-utils';
 
 Vue.use(VueMaterial);
 
@@ -80,56 +80,44 @@ describe('_address.vue', () => {
   });
 
   it('renders wallet transactions correctly', async () => {
-    const wrapper = mount(Address, {
+    const { findByTestId, findByText } = render(Address, {
       propsData: {
         address: MOCK_WALLET_ADDRESS,
       },
     });
 
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
+    await Vue.nextTick();
+    await Vue.nextTick();
+    await Vue.nextTick();
+    await Vue.nextTick();
 
-    const table = wrapper.findComponent({ name: 'md-table' });
-    expect(table.exists()).toBeTruthy();
+    expect(findByTestId('md-table')).not.toBeNull();
 
-    const rows = wrapper.findAllComponents({ name: 'md-table-row' });
-    expect(rows.length).toBe(7);
+    expect(findByText(MOCK_TRANSACTIONS[2].transactionHash)).not.toBeNull();
+    expect(findByText(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6)).not.toBeNull();
+    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender))).not.toBeNull();
+    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver))).not.toBeNull();
 
-    const row1Entries = rows.at(1).findAllComponents({ name: 'md-table-cell' });
-    expect(row1Entries.at(0).text()).toBe(MOCK_TRANSACTIONS[2].transactionHash);
-    expect(parseFloat(row1Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6);
-    expect(row1Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender));
-    expect(row1Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver));
-
-
-    const row6Entries = rows.at(6).findAllComponents({ name: 'md-table-cell' });
-    expect(row6Entries.at(0).text()).toBe(MOCK_TRANSACTIONS[3].transactionHash);
-    expect(parseFloat(row6Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6);
-    expect(row6Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender));
-    expect(row6Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver));
+    expect(findByText(MOCK_TRANSACTIONS[3].transactionHash)).not.toBeNull();
+    expect(findByText(parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6)).not.toBeNull();
+    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender))).not.toBeNull();
+    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver))).not.toBeNull();
   });
 
   it('renders all transactions correctly', async () => {
-    const wrapper = mount(Address);
+    const { findByTestId, findByText } = render(Address);
 
     // 9 promises get called in mounted() lifecycle hook
     for (let i = 0; i < 9; i++) {
-      await wrapper.vm.$nextTick();
+      await Vue.nextTick();
     }
 
-    const table = wrapper.findComponent({ name: 'md-table' });
-    expect(table.exists()).toBeTruthy();
+    expect(findByTestId('md-table')).not.toBeNull();
 
-    const rows = wrapper.findAllComponents({ name: 'md-table-row' });
-    expect(rows.length).toBe(8);
-
-    const row1Entries = rows.at(1).findAllComponents({ name: 'md-table-cell' });
-    expect(row1Entries.at(0).text()).toBe(MOCK_TRANSACTIONS[6].transactionHash);
-    expect(parseFloat(row1Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[6].data) / 10 ** 6);
-    expect(row1Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[6].sender));
-    expect(row1Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[6].receiver));
+    expect(findByText(MOCK_TRANSACTIONS[6].transactionHash)).not.toBeNull();
+    expect(findByText(parseInt(MOCK_TRANSACTIONS[6].data) / 10 ** 6)).not.toBeNull();
+    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[6].sender))).not.toBeNull();
+    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[6].receiver))).not.toBeNull();
   });
 
   it('paginates correctly', async () => {
@@ -147,45 +135,33 @@ describe('_address.vue', () => {
     // MOCK_RECEIVER_TXNS now has 24 transactions (8 copies of the same 3 original items)
     // for a total of 27 transactions with the 3 in MOCK_SENDER_TXNS
 
-    const wrapper = mount(Address, {
+    const { findByTestId, findByText, getByText } = render(Address, {
       propsData: {
         address: MOCK_WALLET_ADDRESS,
       },
     });
 
     // This works we don't know why
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
+    await Vue.nextTick();
+    await Vue.nextTick();
+    await Vue.nextTick();
+    await Vue.nextTick();
 
-    const table = wrapper.findComponent({ name: 'md-table' });
-    expect(table.exists()).toBeTruthy();
+    expect(findByTestId('md-table')).not.toBeNull();
 
-    const rows = wrapper.findAllComponents({ name: 'md-table-row' });
-    expect(rows.length).toBe(26);
-
-    // First row should be latest txn with block number 6
-    const row1Entries = rows.at(1).findAllComponents({ name: 'md-table-cell' });
-    expect(row1Entries.at(0).text()).toBe(MOCK_TRANSACTIONS[2].transactionHash);
-    expect(parseFloat(row1Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6);
-    expect(row1Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender));
-    expect(row1Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver));
+    expect(findByText(MOCK_TRANSACTIONS[2].transactionHash)).not.toBeNull();
+    expect(findByText(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6)).not.toBeNull();
+    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender))).not.toBeNull();
+    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver))).not.toBeNull();
 
     // Go to next page
-    const paginationButtons = wrapper.findAllComponents({ name: 'md-button' });
-    await paginationButtons.at(2).trigger('click');
+    await fireEvent.click(getByText('navigate_next'));
 
-    await wrapper.vm.$nextTick();
+    await Vue.nextTick();
 
-    const nextRows = wrapper.findAllComponents({ name: 'md-table-row' });
-    expect(nextRows.length).toBe(3);
-
-    // Last row should be earliest txn with block number 1
-    const lastRowEntries = nextRows.at(2).findAllComponents({ name: 'md-table-cell' });
-    expect(lastRowEntries.at(0).text()).toBe(MOCK_TRANSACTIONS[3].transactionHash);
-    expect(parseFloat(lastRowEntries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6);
-    expect(lastRowEntries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender));
-    expect(lastRowEntries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver));
+    expect(findByText(MOCK_TRANSACTIONS[3].transactionHash)).not.toBeNull();
+    expect(findByText(parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6)).not.toBeNull();
+    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender))).not.toBeNull();
+    expect(findByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver))).not.toBeNull();
   });
 });

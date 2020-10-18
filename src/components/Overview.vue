@@ -103,8 +103,19 @@ const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export const getMintEvent = async () => {
   // const mintEvents = await web3.eth.getPastEvents("Mint");
-  const mintEvents = await contract.getPastEvents("allEvents");
-  console.log(mintEvents);
+  // const mintEvents = await contract.getPastEvents("allEvents");
+  // console.log(mintEvents);
+  const mintTest = contract.events.Mint();
+  console.log(mintTest);
+  // const mintEvents = contract.events.Mint({ 
+  //   filter: { minter: this.walletAddress }, 
+  //   fromBlock: startBlock})
+  //   .on('data', (function(event) {
+  //     let total = this.state.mintedAmount;
+  //     total = total.plus(event.returnValues.amount);
+  //     this.mintedAmount = total;
+  //   }))
+  // console.log(mintEvents);
 }
 
 export async function getBalance(address) {
@@ -131,6 +142,7 @@ export default {
       pauser: null,
       owner: null,
       isContract: null,
+      mintedAmount: null,
     };
   },
   props: {
@@ -207,7 +219,7 @@ export default {
     getMinterMinted() {
       getMintEvent().then((event) => {
         var e = event;
-        // console.log("event", e);
+        console.log("event", e);
       }) 
       // console.log(getMintEvent());
     },

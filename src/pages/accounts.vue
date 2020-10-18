@@ -18,7 +18,7 @@ import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 import Web3 from 'web3';
 import * as constants from '@/utils/constants';
-import { toHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
+import { padHex, toHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
 import { getBalance, getTotalSupply } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
@@ -70,30 +70,25 @@ export default {
      */
     async getAllTransactions() {
       const latest = await web3.eth.getBlockNumber();
-
       // Range of the possible 'from' block numbers that gets MAX_TRANSACTIONS.
       const range = [0, latest];
       let midpoint = Math.floor((range[0] + range[1]) / 2);
+      let lastTransactionFetched = [];
       let transactions = await this.getTransactions(midpoint, latest);
-
       // Binary search to find the block number that gets MAX_TRANSACTIONS.
       while (transactions === null || transactions.length < constants.WEB3_MAX_TRANSACTIONS - 1) {
-
         // If the range is too small, find the first non-null result.
         if (range[1] - range[0] <= 1) {
-          let i = 0;
-          while (transactions === null) {
-            transactions = await this.getTransactions(midpoint + i++, latest);
-          }
+          transactions = lastTransactionFetched;
           break;
         }
-
         if (transactions === null) {
           // Still too many transactions.
           range[0] = midpoint;
         }
         else {
           // Not enough transactions.
+          lastTransactionFetched = transactions
           range[1] = midpoint;
         }
         midpoint = Math.floor((range[0] + range[1]) / 2);
@@ -122,15 +117,20 @@ export default {
      * @return {string[]}
      */
     async getBalancesFor(addresses) {
-
-      // Get the promises that resolve to the balance of each address.
+      //Get the promises that resolve to the balance of each address.
+      const balances = []
       const balancePromises = [];
 
       for (const address of addresses) {
-        balancePromises.push(getBalance(address));
+        if (balancePromises.length < 25) {
+          balancePromises.push(getBalance(address));
+        } else {
+            balances.concat(await Promise.all(balancePromises));
+            balancePromises = [];
+        }
       }
-
-      return Promise.all(balancePromises);
+      balances.concat(await Promise.all(balancePromises));
+      return balances;
     },
 
     /**
@@ -155,7 +155,7 @@ export default {
       const accounts = [];
       let i = 0;
       for (const address of addresses) {
-        const balance = balances[i++];
+        const balance = balances[i++]/(10**6);
         const percentage = `${roundToNearest(balance / totalSupply * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
 
         accounts.push({address, balance, percentage});

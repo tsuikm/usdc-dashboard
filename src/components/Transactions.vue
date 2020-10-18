@@ -1,38 +1,38 @@
 <template>
   <div>
     <Table
+      ref="table"
       :loading="loading"
       :name="this.tableName"
-      :totalItems="this.totalItems"
+      :total-items="this.totalItems"
       :schema="this.tableSchema"
       :content="this.transactions"
-      :keyField="'Transaction Hash'"
+      :key-field="'Transaction Hash'"
       @page:change="this.pageChange"
-      ref="table"
     />
   </div>
 </template>
 
 <script>
-import Web3 from "web3";
-import moment from "moment";
-import Table from "./Table";
 import { getAllTransactions } from "@/pages/accounts"
 import {
-  fromHex,
-  removeLeadingZeros,
-  removeDuplicates,
-  toHex,
-  padHex,
-} from "@/utils/utils";
+  TRANSACTION_TOPIC,
+  USDC_CONTRACT_ADDRESS,
+  WEB3_GET_LOGS_ADDRESS_LENGTH,
+  WEB3_MAX_TRANSACTIONS,
+  WEB3_RESULT_TOO_LARGE_ERROR_CODE,
+} from '@/utils/constants';
 
 import {
-  USDC_CONTRACT_ADDRESS,
-  TRANSACTION_TOPIC,
-  WEB3_RESULT_TOO_LARGE_ERROR_CODE,
-  WEB3_MAX_TRANSACTIONS,
-  WEB3_GET_LOGS_ADDRESS_LENGTH,
-} from "@/utils/constants";
+  fromHex,
+  padHex,
+  removeDuplicates,
+  removeLeadingZeros,
+} from '@/utils/utils';
+
+import Table from './Table';
+import Web3 from 'web3';
+import moment from 'moment';
 
 const web3 = new Web3(Web3.givenProvider);
 
@@ -44,8 +44,8 @@ export const getLogs = async (address, fromBlock) => {
   try {
     // Txns where wallet is receiver
     const receiverTxns = await web3.eth.getPastLogs({
-      fromBlock: toHex(fromBlock),
-      toBlock: "latest",
+      fromBlock,
+      toBlock: 'latest',
       address: USDC_CONTRACT_ADDRESS,
       topics: [TRANSACTION_TOPIC, null, address],
     });
@@ -56,10 +56,18 @@ export const getLogs = async (address, fromBlock) => {
       t.data = fromHex(t.data) / 10 ** 6;
     });
 
+    // Querying for all transactions; receiverTxns should include all
+    if (address === null) {
+      return removeDuplicates(
+        receiverTxns.sort((a, b) => a.blockNumber - b.blockNumber),
+        (t) => t.transactionHash,
+      );
+    }
+
     // Txns where wallet is sender
     const senderTxns = await web3.eth.getPastLogs({
-      fromBlock: toHex(fromBlock),
-      toBlock: "latest",
+      fromBlock,
+      toBlock: 'latest',
       address: USDC_CONTRACT_ADDRESS,
       topics: [TRANSACTION_TOPIC, address, null],
     });
@@ -74,10 +82,10 @@ export const getLogs = async (address, fromBlock) => {
       receiverTxns
         .concat(
           // Prevent internal transactions from being counted twice
-          senderTxns.filter((log) => log.topics[1] !== log.topics[2])
+          senderTxns.filter((log) => log.topics[1] !== log.topics[2]),
         )
         .sort((a, b) => a.blockNumber - b.blockNumber),
-      (t) => t.transactionHash
+      (t) => t.transactionHash,
     );
   } catch (e) {
     if (e.code === WEB3_RESULT_TOO_LARGE_ERROR_CODE) {
@@ -94,36 +102,47 @@ const blockNumberToAge = new Map();
 const now = moment();
 
 export default {
-  name: "Transactions",
+  name: 'Transactions',
   components: {
     // Pagination,
     Table,
   },
-  props: ["address"],
+  props: {
+    address: String,
+  },
+  data() {
+    return {
+      transactions: [],
+      loading: true,
+    };
+  },
   computed: {
     totalItems() {
       return this.transactions.length;
     },
     tableName() {
-      if (!this.address) return "All Transactions";
+      if (!this.address) return 'All Transactions';
       return `Transactions for Wallet ${this.address}`;
     },
     tableSchema() {
       const transactionSchema = [
         {
-          name: "Transaction Hash",
+          name: 'Transaction Hash',
           getter(t) {
             return t.transactionHash;
           },
+          link(t) {
+            return `/transaction/${t.transactionHash}`;
+          },
         },
         {
-          name: "Quantity",
+          name: 'Quantity',
           getter(t) {
             return t.data;
           },
         },
         {
-          name: "Sender",
+          name: 'Sender',
           getter(t) {
             return t.from;
           },
@@ -132,7 +151,7 @@ export default {
           },
         },
         {
-          name: "Receiver",
+          name: 'Receiver',
           getter(t) {
             return t.to;
           },
@@ -154,11 +173,12 @@ export default {
       return this.$refs.table.pageLength;
     },
   },
-  data() {
-    return {
-      transactions: [],
-      loading: true
-    };
+  created() {
+    if (this.address) {
+      this.getWalletTransactions();
+    } else {
+      this.getAllTransactions();
+    }
   },
   methods: {
     async getAge(transaction) {
@@ -236,7 +256,6 @@ export default {
 
       let transactions = await getLogs(address, 0);
       if (transactions !== null) {
-
         // We have all transactions in history for this address
         this.transactions = transactions
           .reverse()
@@ -273,13 +292,6 @@ export default {
 
       await this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
     },
-  },
-  created() {
-    if (this.address) {
-      this.getWalletTransactions();
-    } else {
-      this.getAllTransactions();
-    }
   },
 };
 </script>

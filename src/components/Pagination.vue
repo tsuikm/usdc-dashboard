@@ -1,6 +1,8 @@
 <template>
   <div class="page">
-    <md-button @click="changePage(0)">First</md-button>
+    <md-button @click="changePage(0)">
+      First
+    </md-button>
     <md-button @click="changePage(page - 1)">
       <md-icon>navigate_before</md-icon>
     </md-button>
@@ -8,13 +10,15 @@
     <md-button @click="changePage(page + 1)">
       <md-icon>navigate_next</md-icon>
     </md-button>
-    <md-button @click="changePage(totalPages - 1)">Last</md-button>
+    <md-button @click="changePage(totalPages - 1)">
+      Last
+    </md-button>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Pagination",
+  name: 'Pagination',
   props: {
     totalPages: Number,
   },
@@ -27,7 +31,7 @@ export default {
     changePage(page) {
       page = Math.min(this.totalPages - 1, Math.max(page, 0));
       this.page = page;
-      this.$emit("page:change", page);
+      this.$emit('page:change', page);
     },
   },
 };

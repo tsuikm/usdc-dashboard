@@ -2,18 +2,32 @@
   <div>
     <md-card class="container">
       <div class="card-header">
-        <div class="heading">TOTAL SUPPLY</div>
+        <div class="heading">
+          TOTAL SUPPLY
+        </div>
         <div>
-          <img src="@/assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
+          <img
+            src="@/assets/gray-bar.svg"
+            alt="gray-bar"
+            class="gray-bar"
+          >
         </div>
       </div>
       <div class="card-content">
-        <div class="subheading">PERCENTAGE OF USDC HELD</div>
-        <div class="value">{{ usdcPercent }} %</div>
+        <div class="subheading">
+          PERCENTAGE OF USDC HELD
+        </div>
+        <div class="value">
+          {{ usdcPercent }} %
+        </div>
       </div>
       <div class="card-footer">
-        <div class="subheading">TOTAL SUPPLY:</div>
-        <div class="content">{{ totalSupply }} USDC</div>
+        <div class="subheading">
+          TOTAL SUPPLY:
+        </div>
+        <div class="content">
+          {{ totalSupply }} USDC
+        </div>
       </div>
     </md-card>
   </div>
@@ -21,7 +35,7 @@
 
 <script>
 export default {
-  name: "TotalSupply",
+  name: 'TotalSupply',
   props: {
     usdcBalance: Number,
     totalSupply: String,
@@ -29,21 +43,21 @@ export default {
   data() {
     return {
       usdcPercent: null,
-    }
+    };
+  },
+  updated: function () {
+    this.calculatePercentage();
   },
   methods: {
     async calculatePercentage() {
       await this.usdcBalance;
       var percentage = (this.usdcBalance / parseInt(this.totalSupply)) * 100;
       if (percentage < 0.001) {
-          this.usdcPercent = "<.001"
+        this.usdcPercent = '<.001';
       } else {
         this.usdcPercent = Number.parseFloat(percentage).toPrecision(3);
       }
     },
-  },
-  updated: function () {
-    this.calculatePercentage();
   },
 };
 </script>

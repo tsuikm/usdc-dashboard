@@ -102,7 +102,7 @@ describe('_address.vue', () => {
     expect(parseFloat(row1Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6);
     expect(row1Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender));
     expect(row1Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver));
-    expect(row1Entries.at(4).text()).toBe(MOCK_TRANSACTIONS[2].blockNumber.toString());
+    expect(row1Entries.at(5).text()).toBe(MOCK_TRANSACTIONS[2].blockNumber.toString());
 
 
     const row6Entries = rows.at(6).findAllComponents({ name: 'md-table-cell' });

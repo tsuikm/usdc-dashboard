@@ -128,9 +128,10 @@ export default {
       for (const address of addresses) {
         if (balancePromises.length < constants.OPTIMAL_PROMISE_ALL_SIZE) {
           balancePromises.push(getBalance(address));
-        } else {
-            pushAll(balances, await Promise.all(balancePromises));
-            balancePromises = [];
+        }
+        else {
+          pushAll(balances, await Promise.all(balancePromises));
+          balancePromises = [];
         }
       }
       pushAll(balances, await Promise.all(balancePromises));
@@ -143,7 +144,7 @@ export default {
      * @return {Object[]}
      */
     async getAccounts() {
-      const transactions = await this.getAllTransactions();
+      const transactions = await getAllTransactions();
 
       // Get all of the valid addresses of all transactions in a Set.
       const addresses = new Set();

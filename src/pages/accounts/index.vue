@@ -121,7 +121,7 @@ export default {
      * @return {string[]}
      */
     async getBalancesFor(addresses) {
-      //Get the promises that resolve to the balance of every chunk of OPTIMAL_PROMISE_ALL_SIZE addresses.
+      // Get the promises that resolve to the balance of every chunk of OPTIMAL_PROMISE_ALL_SIZE addresses.
       const balances = [];
       let balancePromises = [];
 

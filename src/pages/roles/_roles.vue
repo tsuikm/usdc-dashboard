@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import Pauser from '@/pages/roles/_pauser';
-import Owner from '@/pages/roles/_owner';
-import Blacklister from '@/pages/roles/_blacklister';
+import Pauser from '@/components/PauserControl';
+import Owner from '@/components/OwnerControl';
+import Blacklister from '@/components/BlacklisterControl';
 
 export default {
   components: {

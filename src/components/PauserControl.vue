@@ -4,7 +4,7 @@
     <div>Contract is currently</div>
     <div class="container">
       <div v-if="this.contractPaused">
-        <button class="status">
+        <button v-on:click="handleUnpause" class="status">
           PAUSED
         </button>
         <div> 
@@ -15,7 +15,7 @@
         </div>
       </div>
       <div v-else>
-        <button class="status">
+        <button v-on:click="handlePause" class="status">
           UNPAUSED
         </button>
         <div> 
@@ -35,7 +35,26 @@ import Web3 from 'web3';
 
 const web3 = new Web3(Web3.givenProvider);
 
-const abi = [];
+const abi = [
+  {
+    anonymous: false,
+    inputs: [],
+    name: 'Unpause',
+    type: 'event'
+  },
+  {
+    anonymous: false,
+    inputs: [],
+    name: 'Pause',
+    type: 'event'
+  },
+  {
+    inputs: [],
+    name: 'paused',
+    outputs: [{ name: '', type: 'bool'}],
+    type: 'function',
+  }
+];
 
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
@@ -49,15 +68,18 @@ export default {
   created: function() {
     this.lookupContractStatus();
   },
-  updated: function() {
-    this.changeContractStatus();
-  },
   methods: {
-    lookupContractStatus() {
-      //TODO: check contract status
+    async handleUnpause() {
+      //events wouldn't work?
+      console.log(await contract.events.Unpause());
+      this.contractPaused = false;
     },
-    changeContractStatus() {
-      //TODO: change contract status
+    async handlePause() {
+      console.log(await contract.events.Pause());
+      this.contractPaused = true;
+    },
+    async lookupContractStatus() {
+      this.contractPaused = await contract.methods.paused().call();
     },
   },
 };

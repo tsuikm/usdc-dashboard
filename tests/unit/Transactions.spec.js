@@ -102,6 +102,7 @@ describe('_address.vue', () => {
     expect(parseFloat(row1Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6);
     expect(row1Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender));
     expect(row1Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver));
+    expect(row1Entries.at(4).text()).toBe(MOCK_TRANSACTIONS[2].blockNumber.toString());
 
 
     const row6Entries = rows.at(6).findAllComponents({ name: 'md-table-cell' });
@@ -109,6 +110,7 @@ describe('_address.vue', () => {
     expect(parseFloat(row6Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6);
     expect(row6Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender));
     expect(row6Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver));
+    expect(row6Entries.at(4).text()).toBe(MOCK_TRANSACTIONS[3].blockNumber.toString());
   });
 
   it('renders all transactions correctly', async () => {
@@ -130,6 +132,7 @@ describe('_address.vue', () => {
     expect(parseFloat(row1Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[6].data) / 10 ** 6);
     expect(row1Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[6].sender));
     expect(row1Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[6].receiver));
+    expect(row1Entries.at(5).text()).toBe(MOCK_TRANSACTIONS[6].blockNumber.toString());
   });
 
   it('paginates correctly', async () => {
@@ -171,6 +174,8 @@ describe('_address.vue', () => {
     expect(parseFloat(row1Entries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6);
     expect(row1Entries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender));
     expect(row1Entries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver));
+    expect(row1Entries.at(4).text()).toBe(MOCK_TRANSACTIONS[2].blockNumber.toString());
+
 
     // Go to next page
     const paginationButtons = wrapper.findAllComponents({ name: 'md-button' });
@@ -187,5 +192,6 @@ describe('_address.vue', () => {
     expect(parseFloat(lastRowEntries.at(1).text())).toBe(parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6);
     expect(lastRowEntries.at(2).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender));
     expect(lastRowEntries.at(3).text()).toBe(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver));
+    expect(lastRowEntries.at(4).text()).toBe(MOCK_TRANSACTIONS[3].blockNumber.toString());
   });
 });

@@ -166,6 +166,12 @@ export default {
             return t.age;
           },
         },
+        {
+          name: 'Block Number',
+          getter(t) {
+            return t.blockNumber;
+          },
+        },
       ];
 
       return transactionSchema;

@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import { getAllTransactions } from "@/pages/accounts"
 import {
   TRANSACTION_TOPIC,
   USDC_CONTRACT_ADDRESS,
@@ -29,6 +28,8 @@ import {
   removeDuplicates,
   removeLeadingZeros,
 } from '@/utils/utils';
+
+import { getAllTransactions } from '@/pages/accounts';
 
 import Table from './Table';
 import Web3 from 'web3';
@@ -160,11 +161,11 @@ export default {
           },
         },
         {
-          name: "Age",
+          name: 'Age',
           getter(t) {
             return t.age;
           },
-        }
+        },
       ];
 
       return transactionSchema;
@@ -197,17 +198,17 @@ export default {
         } else if (days == 0 && hours == 0) {
           blockNumberToAge.set(
             transaction.blockNumber,
-            `${minutes} mins ${seconds} s ago`
+            `${minutes} mins ${seconds} s ago`,
           );
         } else if (days == 0) {
           blockNumberToAge.set(
             transaction.blockNumber,
-            `${hours} hrs ${minutes} mins ago`
+            `${hours} hrs ${minutes} mins ago`,
           );
         } else {
           blockNumberToAge.set(
             transaction.blockNumber,
-            `${days} days ${hours} hrs ago`
+            `${days} days ${hours} hrs ago`,
           );
         }
       }

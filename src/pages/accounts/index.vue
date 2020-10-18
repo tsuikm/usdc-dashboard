@@ -13,11 +13,11 @@
 
 <script>
 import * as constants from '@/utils/constants';
+import { getBalance, getTotalSupply } from '@/components/Overview';
 import { removeLeadingZeros, roundToNearest, toHex } from '@/utils/utils';
 import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 import Web3 from 'web3';
-import { getBalance, getTotalSupply } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
 const web3 = new Web3(Web3.givenProvider);
@@ -34,7 +34,7 @@ async function getTransactions(from, to) {
     return await web3.eth.getPastLogs({
       fromBlock: toHex(from),
       toBlock: toHex(to),
-      address: constants.USDC_CONTRACT_ADDRESS
+      address: constants.USDC_CONTRACT_ADDRESS,
     });
   }
   catch (error) {

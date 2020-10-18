@@ -3,21 +3,23 @@
     <NavBar />
     <Table
       :name="'Accounts'"
-      :total-items="this.totalItems"
+      :totalItems="this.totalItems"
       :schema="this.tableSchema"
       :content="this.accounts"
-      :key-field="'address'"
+      :keyField="'address'"
     />
   </div>
 </template>
 
 <script>
-import * as constants from '@/utils/constants';
-import { getBalance, getTotalSupply } from '@/components/Overview';
-import { removeLeadingZeros, roundToNearest, toHex } from '@/utils/utils';
+
+// modules
 import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 import Web3 from 'web3';
+import * as constants from '@/utils/constants';
+import { toHex, removeLeadingZeros, roundToNearest, pushAll } from '@/utils/utils';
+import { getBalance, getTotalSupply } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
 const web3 = new Web3(Web3.givenProvider);
@@ -88,34 +90,12 @@ export async function getAllTransactions() {
 export default {
   components: {
     Table,
-    NavBar,
+    NavBar
   },
   data() {
     return {
-      accounts: [],
+      accounts: []
     };
-  },
-  computed: {
-    totalItems() {
-      return this.accounts.length;
-    },
-    tableSchema() {
-      return [
-        {
-          name: 'Address',
-          getter: (account) => account.address,
-          link: (account) => `/address/${account.address}`,
-        },
-        {
-          name: 'Balance',
-          getter: (account) => account.balance,
-        },
-        {
-          name: 'Percentage',
-          getter: (account) => account.percentage,
-        },
-      ];
-    },
   },
   async created() {
     this.accounts = await this.getAccounts();
@@ -141,15 +121,21 @@ export default {
      * @return {string[]}
      */
     async getBalancesFor(addresses) {
-
-      // Get the promises that resolve balance of each address.
-      const balancePromises = [];
+      // Get the promises that resolve to the balance of every chunk of OPTIMAL_PROMISE_ALL_SIZE addresses.
+      const balances = [];
+      let balancePromises = [];
 
       for (const address of addresses) {
-        balancePromises.push(getBalance(address));
+        if (balancePromises.length < constants.OPTIMAL_PROMISE_ALL_SIZE) {
+          balancePromises.push(getBalance(address));
+        }
+        else {
+          pushAll(balances, await Promise.all(balancePromises));
+          balancePromises = [];
+        }
       }
-
-      return Promise.all(balancePromises);
+      pushAll(balances, await Promise.all(balancePromises));
+      return balances;
     },
 
     /**
@@ -176,13 +162,36 @@ export default {
       for (const address of addresses) {
         const balance = balances[i++];
         const percentage = `${roundToNearest(balance / totalSupply * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
+
         accounts.push({address, balance, percentage});
       }
 
       // Sort (in reverse order) the account addresses by balance.
       accounts.sort((a, b) => b.balance - a.balance);
       return accounts;
-    },
+    }
   },
+  computed: {
+    totalItems() {
+      return this.accounts.length;
+    },
+    tableSchema() {
+      return [
+        {
+          name: 'Address',
+          getter: account => account.address,
+          link: account => `/address/${account.address}`
+        },
+        {
+          name: 'Balance',
+          getter: account => account.balance
+        },
+        {
+          name: 'Percentage',
+          getter: account => account.percentage
+        }
+      ];
+    }
+  }
 };
 </script>

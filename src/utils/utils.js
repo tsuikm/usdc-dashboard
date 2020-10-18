@@ -30,3 +30,10 @@ export function removeDuplicates(a, key) {
 export function roundToNearest(num, decimalPlaces) {
     return Math.round(num * 10**decimalPlaces)/(10**decimalPlaces)
 }
+
+export function pushAll(dst, src) {
+    for (const elem of src) {
+      dst.push(elem);
+    }
+    return dst;
+}

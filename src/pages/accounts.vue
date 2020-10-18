@@ -18,7 +18,7 @@ import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 import Web3 from 'web3';
 import * as constants from '@/utils/constants';
-import { padHex, toHex, removeLeadingZeros, roundToNearest } from '@/utils/utils';
+import { padHex, toHex, removeLeadingZeros, roundToNearest, pushAll } from '@/utils/utils';
 import { getBalance, getTotalSupply } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
@@ -62,7 +62,6 @@ export default {
         throw error;
       }
     },
-
     /**
      * Gets all transactions in the entire block-chain, capped at MAX_TRANSACTIONS.
      *
@@ -117,19 +116,19 @@ export default {
      * @return {string[]}
      */
     async getBalancesFor(addresses) {
-      //Get the promises that resolve to the balance of each address.
-      const balances = []
-      const balancePromises = [];
+      //Get the promises that resolve to the balance of every 25 addresses.
+      const balances = [];
+      let balancePromises = [];
 
       for (const address of addresses) {
         if (balancePromises.length < 25) {
           balancePromises.push(getBalance(address));
         } else {
-            balances.concat(await Promise.all(balancePromises));
+            pushAll(balances, await Promise.all(balancePromises));
             balancePromises = [];
         }
       }
-      balances.concat(await Promise.all(balancePromises));
+      pushAll(balances, await Promise.all(balancePromises));
       return balances;
     },
 
@@ -155,7 +154,7 @@ export default {
       const accounts = [];
       let i = 0;
       for (const address of addresses) {
-        const balance = balances[i++]/(10**6);
+        const balance = balances[i++];
         const percentage = `${roundToNearest(balance / totalSupply * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
 
         accounts.push({address, balance, percentage});

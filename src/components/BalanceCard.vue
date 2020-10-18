@@ -3,35 +3,45 @@
     <md-card class="container">
       <div class="card-header">
         <div class="card-subheader">
-          <div class="heading">SUMMARY</div>
-          <RoleDisplay :minter="minter" :pauser="pauser" :owner="owner" />
+          <div class="heading">
+            SUMMARY
+          </div>
+          <RoleDisplay
+            :minter="minter"
+            :pauser="pauser"
+            :owner="owner"
+          />
         </div>
         <div>
-          <img src="../assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
+          <img
+            src="@/assets/gray-bar.svg"
+            alt="gray-bar"
+            class="gray-bar"
+          >
         </div>
       </div>
       <div class="card-content">
-        <ValueDisplay :usdcBalance="usdcBalance"/>
+        <ValueDisplay :usdc-balance="usdcBalance" />
       </div>
     </md-card>
   </div>
 </template>
 
 <script>
-import ValueDisplay from "@/components/ValueDisplay";
-import RoleDisplay from "@/components/RoleDisplay";
+import RoleDisplay from '@/components/RoleDisplay';
+import ValueDisplay from '@/components/ValueDisplay';
 export default {
-  name: "BalanceCard",
+  name: 'BalanceCard',
   components: {
     ValueDisplay,
-    RoleDisplay
+    RoleDisplay,
   },
   props: {
     usdcBalance: Number,
     minter: Boolean,
     pauser: Boolean,
-    owner: Boolean
-  }
+    owner: Boolean,
+  },
 };
 </script>
 

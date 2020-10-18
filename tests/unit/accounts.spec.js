@@ -75,20 +75,20 @@ describe("accounts", () => {
 
     // top 25 accounts by balance
     for (let i = 0; i < 25; i++) {
-      expect(findByText(removeLeadingZeros(addresses[i][0]))).not.toBeNull();
-      expect(findByText(addresses[i][1])).not.toBeNull();
+      expect(await findByText(removeLeadingZeros(addresses[i][0]))).not.toBeNull();
+      expect(await findByText(addresses[i][1])).not.toBeNull();
     }
     
     // go to page 2
     await fireEvent.click(getByText('navigate_next'));
     getByText('First');
-    findByText('Page 2 of ' + Math.ceil(addresses.length/25));
+    await findByText('Page 2 of ' + Math.ceil(addresses.length/25));
     getByText('Last');
 
     // next top 25 accounts by balance
     for (let i = 25; i < 50; i++) {
-      expect(findByText(removeLeadingZeros(addresses[i][0]))).not.toBeNull();
-      expect(findByText(addresses[i][1])).not.toBeNull();
+      expect(await findByText(removeLeadingZeros(addresses[i][0]))).not.toBeNull();
+      expect(await findByText(addresses[i][1])).not.toBeNull();
     }
   });
 });

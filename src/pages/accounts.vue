@@ -116,12 +116,12 @@ export default {
      * @return {string[]}
      */
     async getBalancesFor(addresses) {
-      //Get the promises that resolve to the balance of every 25 addresses.
+      //Get the promises that resolve to the balance of every chunk of OPTIMAL_PROMISE_ALL_SIZE addresses.
       const balances = [];
       let balancePromises = [];
 
       for (const address of addresses) {
-        if (balancePromises.length < 25) {
+        if (balancePromises.length < constants.OPTIMAL_PROMISE_ALL_SIZE) {
           balancePromises.push(getBalance(address));
         } else {
             pushAll(balances, await Promise.all(balancePromises));

@@ -18,7 +18,7 @@ import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 import Web3 from 'web3';
 import * as constants from '@/utils/constants';
-import { padHex, toHex, removeLeadingZeros, roundToNearest, pushAll } from '@/utils/utils';
+import { toHex, removeLeadingZeros, roundToNearest, pushAll } from '@/utils/utils';
 import { getBalance, getTotalSupply } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;

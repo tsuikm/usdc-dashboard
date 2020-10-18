@@ -1,24 +1,24 @@
 <template>
   <div>
-    <md-card class="transferCard">
+    <md-card class="transferCard" data-testid="transfers-card-test-id">
       <md-card-header class="transferCardHeader">
         <div class="md-title">Transfer USDC</div>
       </md-card-header>
-      <md-field class="transferInput">
+      <md-field class="transferInput" data-testid="transfers-card-from-input">
         <label>From</label>
         <md-input></md-input>
       </md-field>
 
-      <md-field class="transferInput">
+      <md-field class="transferInput" data-testid="transfers-card-to-input">
         <label>To</label>
         <md-input></md-input>
       </md-field>
-      <md-field class="transferInput">
+      <md-field class="transferInput" data-testid="transfers-card-amount-input">
         <label>Transfer Amount</label>
         <md-input></md-input>
       </md-field>
       <md-card-actions>
-        <md-button>Send</md-button>
+        <md-button data-testid="transfers-card-send-button">Send</md-button>
       </md-card-actions>
     </md-card>
   </div>

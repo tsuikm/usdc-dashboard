@@ -167,6 +167,12 @@ export default {
           },
         });
       }
+      transactionSchema.push({
+        name: "Block Number",
+        getter(t) {
+          return t.blockNumber;
+        },
+      });
 
       return transactionSchema;
     },

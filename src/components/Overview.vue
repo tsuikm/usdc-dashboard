@@ -19,6 +19,8 @@
         :totalSupply="this.totalSupply"
       />
     </div>
+    <div> From the 10000 latest transactions, this minter has minted {{ this.mintedAmount }}
+    </div>
   </div>
 </template>
 
@@ -29,6 +31,7 @@ import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
   TRANSACTION_TOPIC,
+  WEB3_GET_LOGS_ADDRESS_LENGTH,
 } from "@/utils/constants";
 import BalanceCard from "./BalanceCard";
 import TotalSupply from "@/components/TotalSupply";
@@ -234,51 +237,88 @@ export default {
         }
       });
     },
-    getMinterMinted() {
-      getMintEvent();
-    },
+    // getMinterMinted() {
+    //   getMintEvent();
+    // },
     async getFilteredMintEvents() {
-      let address = this.walletAaddress;
+      if (!this.minter) {
+        console.log("currently not a minter");
+        return;
+      }
+      let address = this.walletAddress;
       if (!address || address.length === 0) return;
 
       address = padHex(address, WEB3_GET_LOGS_ADDRESS_LENGTH);
 
-      let mintEvents = await getPastEvents(address, 0);
-      if (transactions !== null) {
+      let mintEvents = null;
+      try {
+        mintEvents = await contract.getPastEvents("Mint", {
+          fromBlock: 0,
+          toBlock: 'latest',
+          topics: [null, null, null],
+          filter: { minter: this.walletAddress }
+        });
+      } catch (e) {
+        mintEvents = null;
+      }
 
-        // We have all transactions in history for this address
-        this.transactions = transactions
-          .reverse()
-          .slice(0, WEB3_MAX_TRANSACTIONS);
-        this.loading = false;
+      if (mintEvents !== null) {
+        this.mintedAmount += parseInt(mintEvents.returnValues.amount);
         return;
       }
 
+      console.log("past first null check");
+
       let range = [0, await web3.eth.getBlockNumber()];
       let fromBlock = Math.floor((range[0] + range[1]) / 2);
-      transactions = await getLogs(address, fromBlock);
+      try {
+        mintEvents = await contract.getPastEvents("Mint", {
+          fromBlock: fromBlock,
+          toBlock: 'latest',
+          topics: [null, null, null],
+          filter: { minter: this.walletAddress }
+        });
+      } catch (e) {
+        mintEvents = null;
+        console.log("errors again in the while");
+      }
+      console.log("mint events in second mintevent check", mintEvents);
 
-      // Over MAX_TRANSACTIONS transactions; binary search to find block number that gets us just over MAX_TRANSACTIONS
       while (
-        transactions === null ||
-        transactions.length < WEB3_MAX_TRANSACTIONS
+        mintEvents === null ||
+        mintEvents.length < 10000
       ) {
-        if (transactions === null) {
-          // Still too many transactions
+        console.log('inside while statement');
+        if (mintEvents === null) {
+          // Still too many mint events
+          console.log('resetting 0');
           range[0] = fromBlock;
         } else {
-          // Not enough transactions
+          // Not enough mint events
+          console.log('resettting 1')
           range[1] = fromBlock;
         }
 
         fromBlock = Math.floor((range[0] + range[1]) / 2);
-        transactions = await getLogs(address, fromBlock);
+        console.log("fromBlock inside while", fromBlock);
+        try {
+          mintEvents = await contract.getPastEvents("Mint", {
+            fromBlock: fromBlock,
+            toBlock: 'latest',
+            topics: [null, null, null],
+            filter: { minter: this.walletAddress }
+          });
+          console.log('completed getting mint events inside while statement');
+          console.log("mint events inside while", mintEvents);
+        } catch (e) {
+          mintEvents = null;
+          console.log("errors in while loop");
+        }
       }
+      console.log("exits while loop");
 
-      // We have the latest MAX_TRANSACTIONS transactions
-      this.transactions = transactions
-        .reverse()
-        .slice(0, WEB3_MAX_TRANSACTIONS);
+      // We have the latest 10000 mint events
+      this.mintedAmount += parseInt(mintEvents.returnValues.amount);
     },
     update() {
       this.checkIsContract();
@@ -286,7 +326,7 @@ export default {
       this.checkIsMinter();
       this.checkIsPauser();
       this.checkIsOwner();
-      this.getMinterMinted();
+      this.getFilteredMintEvents();
     },
   },
 };

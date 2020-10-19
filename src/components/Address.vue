@@ -12,11 +12,20 @@
         </div>
       </div>
       <div>
-        <img src="@/assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
+        <img
+          src="@/assets/gray-bar.svg"
+          alt="gray-bar"
+          class="gray-bar"
+        >
       </div>
       <div class="subheading">
         <div>{{ this.walletAddress }}</div>
-        <md-icon v-if="this.isBlacklisted" title="Blacklisted">block</md-icon>
+        <md-icon
+          v-if="this.isBlacklisted"
+          title="Blacklisted"
+        >
+          block
+        </md-icon>
       </div>
     </md-card>
   </div>
@@ -24,7 +33,7 @@
 
 <script>
 export default {
-  name: "Address",
+  name: 'Address',
   props: {
     isBlacklisted: Boolean,
     isContract: Boolean,
@@ -35,7 +44,7 @@ export default {
 
 <style scoped>
 .container {
-  width: 750px;
+  width: 700px;
   height: 120px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);

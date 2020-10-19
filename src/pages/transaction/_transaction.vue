@@ -1,19 +1,20 @@
 <template>
   <div>
     <NavBar />
-    <Transactions />
+    <TransactionDetails :hash="this.$route.params.transaction" />
   </div>
 </template>
 
 <script>
+
+// modules
 import NavBar from '@/components/NavBar';
-import Transactions from '@/components/Transactions';
+import TransactionDetails from '@/components/TransactionDetails';
 
 export default {
-  name: 'Dashboard',
   components: {
-    Transactions,
     NavBar,
+    TransactionDetails,
   },
 };
 </script>

@@ -1,37 +1,39 @@
 <template>
   <div>
     <Table
+      ref="table"
       :loading="loading"
       :name="this.tableName"
-      :totalItems="this.totalItems"
+      :total-items="this.totalItems"
       :schema="this.tableSchema"
       :content="this.transactions"
-      :keyField="'Transaction Hash'"
+      :key-field="'Transaction Hash'"
       @page:change="this.pageChange"
-      ref="table"
     />
   </div>
 </template>
 
 <script>
-import Web3 from "web3";
-import moment from "moment";
-import Table from "./Table";
 import {
-  fromHex,
-  removeLeadingZeros,
-  removeDuplicates,
-  toHex,
-  padHex,
-} from "@/utils/utils";
+  TRANSACTION_TOPIC,
+  USDC_CONTRACT_ADDRESS,
+  WEB3_GET_LOGS_ADDRESS_LENGTH,
+  WEB3_MAX_TRANSACTIONS,
+  WEB3_RESULT_TOO_LARGE_ERROR_CODE,
+} from '@/utils/constants';
 
 import {
-  USDC_CONTRACT_ADDRESS,
-  TRANSACTION_TOPIC,
-  WEB3_RESULT_TOO_LARGE_ERROR_CODE,
-  WEB3_MAX_TRANSACTIONS,
-  WEB3_GET_LOGS_ADDRESS_LENGTH,
-} from "@/utils/constants";
+  fromHex,
+  padHex,
+  removeDuplicates,
+  removeLeadingZeros,
+} from '@/utils/utils';
+
+import { getAllTransactions } from '@/pages/accounts';
+
+import Table from './Table';
+import Web3 from 'web3';
+import moment from 'moment';
 
 const web3 = new Web3(Web3.givenProvider);
 
@@ -43,8 +45,8 @@ export const getLogs = async (address, fromBlock) => {
   try {
     // Txns where wallet is receiver
     const receiverTxns = await web3.eth.getPastLogs({
-      fromBlock: toHex(fromBlock),
-      toBlock: "latest",
+      fromBlock,
+      toBlock: 'latest',
       address: USDC_CONTRACT_ADDRESS,
       topics: [TRANSACTION_TOPIC, null, address],
     });
@@ -59,14 +61,14 @@ export const getLogs = async (address, fromBlock) => {
     if (address === null) {
       return removeDuplicates(
         receiverTxns.sort((a, b) => a.blockNumber - b.blockNumber),
-        (t) => t.transactionHash
+        (t) => t.transactionHash,
       );
     }
 
     // Txns where wallet is sender
     const senderTxns = await web3.eth.getPastLogs({
-      fromBlock: toHex(fromBlock),
-      toBlock: "latest",
+      fromBlock,
+      toBlock: 'latest',
       address: USDC_CONTRACT_ADDRESS,
       topics: [TRANSACTION_TOPIC, address, null],
     });
@@ -81,10 +83,10 @@ export const getLogs = async (address, fromBlock) => {
       receiverTxns
         .concat(
           // Prevent internal transactions from being counted twice
-          senderTxns.filter((log) => log.topics[1] !== log.topics[2])
+          senderTxns.filter((log) => log.topics[1] !== log.topics[2]),
         )
         .sort((a, b) => a.blockNumber - b.blockNumber),
-      (t) => t.transactionHash
+      (t) => t.transactionHash,
     );
   } catch (e) {
     if (e.code === WEB3_RESULT_TOO_LARGE_ERROR_CODE) {
@@ -95,52 +97,53 @@ export const getLogs = async (address, fromBlock) => {
   }
 };
 
+// Since some of the transactions have the same block number, use a
+// dictionary to keep track of the age of the block for performance.
+const blockNumberToAge = new Map();
+const now = moment();
+
 export default {
-  name: "Transactions",
+  name: 'Transactions',
   components: {
     // Pagination,
     Table,
   },
-  props: ["address"],
+  props: {
+    address: String,
+  },
+  data() {
+    return {
+      transactions: [],
+      loading: true,
+    };
+  },
   computed: {
     totalItems() {
-      // TODO: this number is hard-coded. We need to calculate the total number of transactions
-      if (!this.address) return 7500;
-
       return this.transactions.length;
     },
     tableName() {
-      if (!this.address) return "All Transactions";
+      if (!this.address) return 'All Transactions';
       return `Transactions for Wallet ${this.address}`;
     },
     tableSchema() {
-      // const transactionSchema = {
-      //   "Transaction Hash": (t) => t.transactionHash,
-      //   Quantity: (t) => t.data,
-      //   Sender: (t) => ({
-      //     value: t.from,
-      //     link: `/address/${t.from}`,
-      //   }),
-      //   Receiver: (t) => ({
-      //     value: t.to,
-      //     link: `/address/${t.to}`,
-      //   }),
-      // };
       const transactionSchema = [
         {
-          name: "Transaction Hash",
+          name: 'Transaction Hash',
           getter(t) {
             return t.transactionHash;
           },
+          link(t) {
+            return `/transaction/${t.transactionHash}`;
+          },
         },
         {
-          name: "Quantity",
+          name: 'Quantity',
           getter(t) {
             return t.data;
           },
         },
         {
-          name: "Sender",
+          name: 'Sender',
           getter(t) {
             return t.from;
           },
@@ -149,7 +152,7 @@ export default {
           },
         },
         {
-          name: "Receiver",
+          name: 'Receiver',
           getter(t) {
             return t.to;
           },
@@ -157,24 +160,19 @@ export default {
             return `/address/${t.to}`;
           },
         },
-      ];
-
-      if (!this.address) {
-        transactionSchema.push({
-          name: "Age",
+        {
+          name: 'Age',
           getter(t) {
             return t.age;
           },
-        });
-      }
-      if (this.address) {
-        transactionSchema.push({
-          name: "Block Number",
+        },
+        {
+          name: 'Block Number',
           getter(t) {
             return t.blockNumber;
           },
-        });
-      }
+        },
+      ];
 
       return transactionSchema;
     },
@@ -182,76 +180,79 @@ export default {
       return this.$refs.table.pageLength;
     },
   },
-  data() {
-    return {
-      transactions: [],
-      page: 0,
-      loading: true,
-    };
+  created() {
+    if (this.address) {
+      this.getWalletTransactions();
+    } else {
+      this.getAllTransactions();
+    }
   },
   methods: {
+    async getAge(transaction) {
+      if (!blockNumberToAge.has(transaction.blockNumber)) {
+        const block = await web3.eth.getBlock(transaction.blockNumber);
+        const blockTime = moment.unix(block.timestamp);
+        const age = moment.duration(now.diff(blockTime));
+
+        const seconds = age.seconds();
+        const minutes = age.minutes();
+        const hours = age.hours();
+        const days = age.days();
+
+        if (days == 0 && hours == 0 && minutes == 0) {
+          blockNumberToAge.set(transaction.blockNumber, `${seconds} s ago`);
+        } else if (days == 0 && hours == 0) {
+          blockNumberToAge.set(
+            transaction.blockNumber,
+            `${minutes} mins ${seconds} s ago`,
+          );
+        } else if (days == 0) {
+          blockNumberToAge.set(
+            transaction.blockNumber,
+            `${hours} hrs ${minutes} mins ago`,
+          );
+        } else {
+          blockNumberToAge.set(
+            transaction.blockNumber,
+            `${days} days ${hours} hrs ago`,
+          );
+        }
+      }
+
+      return blockNumberToAge.get(transaction.blockNumber);
+    },
+    async fetchAgesOfDisplayedTransactions(page) {
+      const pageLength = this.$refs.table.pageLength;
+      const upperBound = Math.min((page + 1) * pageLength, this.totalItems);
+      const promises = [];
+
+      for (let i = page * pageLength; i < upperBound; i++) {
+        promises.push(this.getAge(this.transactions[i]));
+      }
+
+      const ages = await Promise.all(promises);
+
+      for (let i = page * pageLength; i < upperBound; i++) {
+        this.transactions[i].age = ages[i - page * pageLength];
+      }
+    },
     async getAllTransactions() {
-      const latest = await web3.eth.getBlockNumber();
-      let transactions = [];
-      let blocks = 0;
-      const count = 1000;
+      let transactions = await getAllTransactions();
+      transactions = removeDuplicates(transactions, (t) => t.transactionHash);
 
-      // Loop to find enough transactions to display on the selected page.
-      while (transactions.length <= this.pageLength * (this.page + 2)) {
-        const from = Math.max(latest - count * blocks, 0);
-        transactions = await getLogs(null, from);
-
-        // If its the last page, we don't have to display 50.
-        if (from === 0) {
-          break;
-        }
-
-        blocks += 1;
-      }
-
-      // Since some of the transactions have the same block number, use a
-      // dictionary to keep track of the age of the block for performance.
-      const blockNumberToAge = new Map();
-      const now = moment();
-
-      for (const transaction of transactions) {
-        if (!blockNumberToAge.has(transaction.blockNumber)) {
-          const block = await web3.eth.getBlock(transaction.blockNumber);
-          const blockTime = moment.unix(block.timestamp);
-          const age = moment.duration(now.diff(blockTime));
-
-          const seconds = age.seconds();
-          const minutes = age.minutes();
-          const hours = age.hours();
-          const days = age.days();
-
-          // TODO: Factor this out to a separate util function? Also consider when minutes/hours/days is singular!
-          if (days == 0 && hours == 0 && minutes == 0) {
-            blockNumberToAge.set(transaction.blockNumber, `${seconds} s ago`);
-          } else if (days == 0 && hours == 0) {
-            blockNumberToAge.set(
-              transaction.blockNumber,
-              `${minutes} mins ${seconds} s ago`
-            );
-          } else if (days == 0) {
-            blockNumberToAge.set(
-              transaction.blockNumber,
-              `${hours} hrs ${minutes} mins ago`
-            );
-          } else {
-            blockNumberToAge.set(
-              transaction.blockNumber,
-              `${days} days ${hours} hrs ago`
-            );
-          }
-        }
-
-        transaction.age = blockNumberToAge.get(transaction.blockNumber);
-      }
-
-      this.transactions = transactions
-        .reverse()
-        .slice(0, WEB3_MAX_TRANSACTIONS);
+      // sort by age
+      this.transactions = transactions.sort((a, b) => b.blockNumber - a.blockNumber);
+      this.transactions.forEach(transaction => {
+        transaction.from = transaction.topics[1] ? removeLeadingZeros(transaction.topics[1]) : '';
+        transaction.to = transaction.topics[2] ? removeLeadingZeros(transaction.topics[2]) : '';
+        transaction.data = fromHex(transaction.data) / 10 ** 6;
+      });
+      await this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
+      this.loading = false;
+    },
+    async pageChange(page) {
+      this.loading = true;
+      await this.fetchAgesOfDisplayedTransactions(page);
       this.loading = false;
     },
     async getWalletTransactions() {
@@ -295,21 +296,9 @@ export default {
       this.transactions = transactions
         .reverse()
         .slice(0, WEB3_MAX_TRANSACTIONS);
-    },
-    async pageChange(page) {
-      this.page = page;
 
-      if (!this.address) {
-        this.getAllTransactions();
-      }
+      await this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
     },
-  },
-  created() {
-    if (this.address) {
-      this.getWalletTransactions();
-    } else {
-      this.getAllTransactions();
-    }
   },
 };
 </script>

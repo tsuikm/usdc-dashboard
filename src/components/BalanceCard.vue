@@ -3,49 +3,52 @@
     <md-card class="container">
       <div class="card-header">
         <div class="card-subheader">
-          <div class="heading">SUMMARY</div>
-          <RoleDisplay :minter="minter" :pauser="pauser" :owner="owner" />
+          <div class="heading">
+            SUMMARY
+          </div>
+          <RoleDisplay
+            :minter="minter"
+            :pauser="pauser"
+            :owner="owner"
+          />
         </div>
         <div>
-          <img src="../assets/gray-bar.svg" alt="gray-bar" class="gray-bar" />
+          <img
+            src="@/assets/gray-bar.svg"
+            alt="gray-bar"
+            class="gray-bar"
+          >
         </div>
       </div>
       <div class="card-content">
-        <ValueDisplay :usdcBalance="usdcBalance" :usdValue="usdValue" />
-      </div>
-      <div class="card-footer">
-        <ConversionDisplay :conversionRate="conversionRate" />
+        <ValueDisplay :usdc-balance="usdcBalance" />
       </div>
     </md-card>
   </div>
 </template>
 
 <script>
-import ValueDisplay from "@/components/ValueDisplay";
-import ConversionDisplay from "@/components/ConversionDisplay";
-import RoleDisplay from "@/components/RoleDisplay";
+import RoleDisplay from '@/components/RoleDisplay';
+import ValueDisplay from '@/components/ValueDisplay';
 export default {
-  name: "BalanceCard",
+  name: 'BalanceCard',
   components: {
     ValueDisplay,
-    ConversionDisplay,
-    RoleDisplay
+    RoleDisplay,
   },
   props: {
     usdcBalance: Number,
-    usdValue: Number,
-    conversionRate: String,
     minter: Boolean,
     pauser: Boolean,
-    owner: Boolean
-  }
+    owner: Boolean,
+  },
 };
 </script>
 
 <style scoped>
 .container {
-  width: 750px;
-  height: 300px;
+  width: 700px;
+  height: 250px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
   padding: 30px;
@@ -61,11 +64,7 @@ export default {
   align-items: center;
 }
 .card-content {
-  height: 145px;
-}
-.card-footer {
-  height: 30px;
-  display: flex;
+  height: 140px;
 }
 .heading {
   font-weight: 800;

@@ -28,6 +28,7 @@ import { padHex } from "@/utils/utils";
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
+  TRANSACTION_TOPIC,
 } from "@/utils/constants";
 import BalanceCard from "./BalanceCard";
 import TotalSupply from "@/components/TotalSupply";
@@ -102,21 +103,24 @@ const abi = [
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export const getMintEvent = async () => {
-  // const filter = web3.eth.filter({
-  //   fromBlock: 0,
-  //   toBlock: 'latest',
-  //   address: USDC_CONTRACT_ADDRESS,
+  const mintEvents = await contract.getPastEvents("Mint", {
+    fromBlock: 7990000,
+    toBlock: 8000000,
+    topics: [null, null, null],
+    filter: {
+      minter: '0xE0E70f654975171e56f3A06ce67a46C653dd3EF4'
+    }
+  })
+  console.log(mintEvents)
+
+  // contract.events.({
   // })
-  contract.events.allEvents({
-    fromBlock: 0,
-    toBlock: 2
-  })
-  .on('data', (event) => {
-    console.log(event);
-  })
-  .on('error', console.error);
+  // .on('data', (event) => {
+  //   console.log(event);
+  // })
+  // .on('error', console.error);
   
-  // const mintEvents = await contract.getPastEvents("Transfer",
+  // const mintEvents = await contract.getPastEvents("Mint",
   // {
   //   fromBlock: 7700000,
   //   toBlock: 7701000
@@ -232,11 +236,49 @@ export default {
     },
     getMinterMinted() {
       getMintEvent();
-      // getMintEvent().then((event) => {
-      //   var e = event;
-      //   console.log("event", e);
-      // }) 
-      // console.log(getMintEvent());
+    },
+    async getFilteredMintEvents() {
+      let address = this.walletAaddress;
+      if (!address || address.length === 0) return;
+
+      address = padHex(address, WEB3_GET_LOGS_ADDRESS_LENGTH);
+
+      let mintEvents = await getPastEvents(address, 0);
+      if (transactions !== null) {
+
+        // We have all transactions in history for this address
+        this.transactions = transactions
+          .reverse()
+          .slice(0, WEB3_MAX_TRANSACTIONS);
+        this.loading = false;
+        return;
+      }
+
+      let range = [0, await web3.eth.getBlockNumber()];
+      let fromBlock = Math.floor((range[0] + range[1]) / 2);
+      transactions = await getLogs(address, fromBlock);
+
+      // Over MAX_TRANSACTIONS transactions; binary search to find block number that gets us just over MAX_TRANSACTIONS
+      while (
+        transactions === null ||
+        transactions.length < WEB3_MAX_TRANSACTIONS
+      ) {
+        if (transactions === null) {
+          // Still too many transactions
+          range[0] = fromBlock;
+        } else {
+          // Not enough transactions
+          range[1] = fromBlock;
+        }
+
+        fromBlock = Math.floor((range[0] + range[1]) / 2);
+        transactions = await getLogs(address, fromBlock);
+      }
+
+      // We have the latest MAX_TRANSACTIONS transactions
+      this.transactions = transactions
+        .reverse()
+        .slice(0, WEB3_MAX_TRANSACTIONS);
     },
     update() {
       this.checkIsContract();

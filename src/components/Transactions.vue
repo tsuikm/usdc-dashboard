@@ -189,6 +189,8 @@ export default {
     } else {
       this.getAllTransactions();
     }
+    await this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
+    this.loading = false;
   },
   methods: {
     async getAge(transaction) {
@@ -251,8 +253,6 @@ export default {
         transaction.to = transaction.topics[2] ? removeLeadingZeros(transaction.topics[2]) : '';
         transaction.data = fromHex(transaction.data) / (10**decimals);
       });
-      await this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
-      this.loading = false;
     },
     async pageChange(page) {
       this.loading = true;
@@ -271,8 +271,6 @@ export default {
         this.transactions = transactions
           .reverse()
           .slice(0, WEB3_MAX_TRANSACTIONS);
-        await this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
-        this.loading = false;
         return;
       }
 
@@ -301,9 +299,6 @@ export default {
       this.transactions = transactions
         .reverse()
         .slice(0, WEB3_MAX_TRANSACTIONS);
-
-      await this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
-      this.loading = false;
     },
   },
 };

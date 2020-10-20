@@ -80,7 +80,7 @@ describe('_address.vue', () => {
   });
 
   it('renders wallet transactions correctly', async () => {
-    const wrapper = mount(Address, {
+    const wrapper = await mount(Address, {
       propsData: {
         address: MOCK_WALLET_ADDRESS,
       },
@@ -114,7 +114,7 @@ describe('_address.vue', () => {
   });
 
   it('renders all transactions correctly', async () => {
-    const wrapper = mount(Address);
+    const wrapper = await mount(Address);
 
     // 9 promises get called in mounted() lifecycle hook
     for (let i = 0; i < 9; i++) {
@@ -150,7 +150,7 @@ describe('_address.vue', () => {
     // MOCK_RECEIVER_TXNS now has 24 transactions (8 copies of the same 3 original items)
     // for a total of 27 transactions with the 3 in MOCK_SENDER_TXNS
 
-    const wrapper = mount(Address, {
+    const wrapper = await mount(Address, {
       propsData: {
         address: MOCK_WALLET_ADDRESS,
       },

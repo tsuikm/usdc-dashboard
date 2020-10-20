@@ -3,10 +3,10 @@
     <NavBar />
     <Table
       :name="'Accounts'"
-      :totalItems="this.totalItems"
+      :total-items="this.totalItems"
       :schema="this.tableSchema"
       :content="this.accounts"
-      :keyField="'address'"
+      :key-field="'address'"
     />
   </div>
 </template>
@@ -90,12 +90,34 @@ export async function getAllTransactions() {
 export default {
   components: {
     Table,
-    NavBar
+    NavBar,
   },
   data() {
     return {
-      accounts: []
+      accounts: [],
     };
+  },
+  computed: {
+    totalItems() {
+      return this.accounts.length;
+    },
+    tableSchema() {
+      return [
+        {
+          name: 'Address',
+          getter: account => account.address,
+          link: account => `/address/${account.address}`,
+        },
+        {
+          name: 'Balance',
+          getter: account => account.balance,
+        },
+        {
+          name: 'Percentage',
+          getter: account => account.percentage,
+        },
+      ];
+    },
   },
   async created() {
     this.accounts = await this.getAccounts();
@@ -167,29 +189,7 @@ export default {
       // Sort (in reverse order) the account addresses by balance.
       accounts.sort((a, b) => b.balance - a.balance);
       return accounts;
-    }
-  },
-  computed: {
-    totalItems() {
-      return this.accounts.length;
     },
-    tableSchema() {
-      return [
-        {
-          name: 'Address',
-          getter: account => account.address,
-          link: account => `/address/${account.address}`
-        },
-        {
-          name: 'Balance',
-          getter: account => account.balance
-        },
-        {
-          name: 'Percentage',
-          getter: account => account.percentage
-        }
-      ];
-    }
-  }
+  },
 };
 </script>

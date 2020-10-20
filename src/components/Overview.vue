@@ -94,11 +94,15 @@ const abi = [
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
+export async function getDecimals() {
+  return await contract.methods.decimals().call();
+}
+
 export async function getBalance(address) {
   const balance = await contract.methods
     .balanceOf(padHex(address, WEB3_BALANCEOF_ADDRESS_LENGTH))
     .call();
-  const decimals = await contract.methods.decimals().call();
+  const decimals = await getDecimals();
 
   return balance / (10 ** decimals);
 }

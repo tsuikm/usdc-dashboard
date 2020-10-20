@@ -183,13 +183,13 @@ export default {
       return this.$refs.table.pageLength;
     },
   },
-  created() {
+  mounted() {
     if (this.address) {
       this.getWalletTransactions();
     } else {
       this.getAllTransactions();
     }
-    await this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
+    this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
     this.loading = false;
   },
   methods: {

@@ -94,11 +94,13 @@ describe('_address.vue', () => {
     expect(getByText((parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6).toString())).not.toBeNull();
     expect(getAllByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender))).not.toBeNull();
     expect(getByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver))).not.toBeNull();
+    expect(getByText(MOCK_TRANSACTIONS[2].blockNumber.toString())).not.toBeNull();
 
     expect(getByText(MOCK_TRANSACTIONS[3].transactionHash)).not.toBeNull();
     expect(getByText((parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6).toString())).not.toBeNull();
     expect(getAllByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender))).not.toBeNull();
     expect(getAllByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver))).not.toBeNull();
+    expect(getByText(MOCK_TRANSACTIONS[3].blockNumber.toString())).not.toBeNull();
   });
 
   it('renders all transactions correctly', async () => {
@@ -113,6 +115,7 @@ describe('_address.vue', () => {
     expect(getByText((parseInt(MOCK_TRANSACTIONS[6].data) / 10 ** 6).toString())).not.toBeNull();
     expect(getByText(removeLeadingZeros(MOCK_TRANSACTIONS[6].sender))).not.toBeNull();
     expect(getByText(removeLeadingZeros(MOCK_TRANSACTIONS[6].receiver))).not.toBeNull();
+    expect(getByText(MOCK_TRANSACTIONS[6].blockNumber.toString())).not.toBeNull();
   });
 
   it('paginates correctly', async () => {
@@ -145,6 +148,7 @@ describe('_address.vue', () => {
     expect(getByText((parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6).toString())).not.toBeNull();
     expect(getAllByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender))).not.toBeNull();
     expect(getByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver))).not.toBeNull();
+    expect(getByText(MOCK_TRANSACTIONS[2].blockNumber.toString())).not.toBeNull();
 
     // Go to next page
     await fireEvent.click(getByText('navigate_next'));
@@ -155,5 +159,6 @@ describe('_address.vue', () => {
     expect(getByText((parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6).toString())).not.toBeNull();
     expect(getByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender))).not.toBeNull();
     expect(getAllByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver))).not.toBeNull();
+    expect(getByText(MOCK_TRANSACTIONS[3].blockNumber.toString())).not.toBeNull();
   });
 });

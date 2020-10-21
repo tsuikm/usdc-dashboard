@@ -100,7 +100,12 @@ export async function getBalance(address) {
     .call();
   const decimals = await contract.methods.decimals().call();
 
-  return balance / 10 ** decimals;
+  return balance / (10 ** decimals);
+}
+
+export async function getTotalSupply() {
+  const decimals = await contract.methods.decimals().call();
+  return await contract.methods.totalSupply().call() / (10 ** decimals);
 }
 
 export default {
@@ -149,8 +154,11 @@ export default {
         )
         .call();
     },
+    convertToUSD() {
+      this.usdValue = this.balance * this.conversionRate;
+    },
     async getTotalSupply() {
-      this.totalSupply = await contract.methods.totalSupply().call();
+      this.totalSupply = await getTotalSupply();
     },
     async checkIsMinter() {
       this.minter = await contract.methods.isMinter(this.walletAddress).call();

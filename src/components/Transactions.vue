@@ -30,6 +30,7 @@ import {
 } from '@/utils/utils';
 
 import { getAllTransactions } from '@/pages/accounts';
+import { getDecimals } from '@/components/Overview';
 
 import Table from './Table';
 import Web3 from 'web3';
@@ -51,10 +52,12 @@ export const getLogs = async (address, fromBlock) => {
       topics: [TRANSACTION_TOPIC, null, address],
     });
 
+    const decimals = await getDecimals();
+
     receiverTxns.forEach((t) => {
       t.from = removeLeadingZeros(t.topics[1]);
       t.to = removeLeadingZeros(t.topics[2]);
-      t.data = fromHex(t.data) / 10 ** 6;
+      t.data = fromHex(t.data) / (10**decimals);
     });
 
     // Querying for all transactions; receiverTxns should include all
@@ -76,7 +79,7 @@ export const getLogs = async (address, fromBlock) => {
     senderTxns.forEach((t) => {
       t.from = removeLeadingZeros(t.topics[1]);
       t.to = removeLeadingZeros(t.topics[2]);
-      t.data = fromHex(t.data) / 10 ** 6;
+      t.data = fromHex(t.data) / (10**decimals);
     });
 
     return removeDuplicates(
@@ -180,12 +183,14 @@ export default {
       return this.$refs.table.pageLength;
     },
   },
-  created() {
+  async mounted() {
     if (this.address) {
-      this.getWalletTransactions();
+      await this.getWalletTransactions();
     } else {
-      this.getAllTransactions();
+      await this.getAllTransactions();
     }
+    await this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
+    this.loading = false;
   },
   methods: {
     async getAge(transaction) {
@@ -239,16 +244,15 @@ export default {
     async getAllTransactions() {
       let transactions = await getAllTransactions();
       transactions = removeDuplicates(transactions, (t) => t.transactionHash);
+      const decimals = await getDecimals();
 
       // sort by age
       this.transactions = transactions.sort((a, b) => b.blockNumber - a.blockNumber);
       this.transactions.forEach(transaction => {
         transaction.from = transaction.topics[1] ? removeLeadingZeros(transaction.topics[1]) : '';
         transaction.to = transaction.topics[2] ? removeLeadingZeros(transaction.topics[2]) : '';
-        transaction.data = fromHex(transaction.data) / 10 ** 6;
+        transaction.data = fromHex(transaction.data) / (10**decimals);
       });
-      await this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
-      this.loading = false;
     },
     async pageChange(page) {
       this.loading = true;
@@ -267,7 +271,6 @@ export default {
         this.transactions = transactions
           .reverse()
           .slice(0, WEB3_MAX_TRANSACTIONS);
-        this.loading = false;
         return;
       }
 
@@ -296,8 +299,6 @@ export default {
       this.transactions = transactions
         .reverse()
         .slice(0, WEB3_MAX_TRANSACTIONS);
-
-      await this.fetchAgesOfDisplayedTransactions(this.$refs.table.page);
     },
   },
 };

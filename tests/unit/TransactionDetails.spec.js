@@ -29,25 +29,25 @@ jest.mock('web3', () => class Web3 {
 
 
 describe('Transaction Details', () => {
-  it('Renders transaction details correctly for correct hash', () => {
-    const { getByText } = render(TransactionDetails, {
-      props: {
-        hash: MOCK_TRANSACTION.transactionHash,
-      },
-    });
+  // it('Renders transaction details correctly for correct hash', () => {
+  //   const { getByText } = render(TransactionDetails, {
+  //     props: {
+  //       hash: MOCK_TRANSACTION.transactionHash,
+  //     },
+  //   });
 
-    expect(getByText('Hash:')).not.toBeNull();
-    expect(getByText('Sender:')).not.toBeNull();
-    expect(getByText('Receiver:')).not.toBeNull();
-    expect(getByText('Block:')).not.toBeNull();
-    expect(getByText('Gas:')).not.toBeNull();
+  //   expect(getByText('Hash:')).not.toBeNull();
+  //   expect(getByText('Sender:')).not.toBeNull();
+  //   expect(getByText('Receiver:')).not.toBeNull();
+  //   expect(getByText('Block:')).not.toBeNull();
+  //   expect(getByText('Gas:')).not.toBeNull();
 
-    expect(getByText('0x123456')).not.toBeNull();
-    expect(getByText('0xaaaaa')).not.toBeNull();
-    expect(getByText('0xbbbbb')).not.toBeNull();
-    expect(getByText('0')).not.toBeNull();
-    expect(getByText('1')).not.toBeNull();
-  });
+  //   expect(getByText('0x123456')).not.toBeNull();
+  //   expect(getByText('0xaaaaa')).not.toBeNull();
+  //   expect(getByText('0xbbbbb')).not.toBeNull();
+  //   expect(getByText('0')).not.toBeNull();
+  //   expect(getByText('1')).not.toBeNull();
+  // });
 
   it('Redirects to 404 with incorrect hash', async () => {
     delete global.window.location;

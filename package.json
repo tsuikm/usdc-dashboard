@@ -77,6 +77,9 @@
       ],
       "vue/require-default-prop": [
         "off"
+      ],
+      "jest/no-commented-out-tests": [
+        "off"
       ]
     }
   },

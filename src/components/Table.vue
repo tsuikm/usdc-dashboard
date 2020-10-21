@@ -19,7 +19,7 @@
         />
       </md-table-toolbar>
 
-      <md-table-row data-testid="md-table-row">
+      <md-table-row>
         <md-table-head
           v-for="field in schema"
           :key="field.name"
@@ -34,7 +34,6 @@
           (page + 1) * pageLength
         )"
         :key="item[keyField]"
-        data-testid="md-table-row"
       >
         <md-table-cell
           v-for="field in schema"

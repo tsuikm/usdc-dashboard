@@ -1,27 +1,23 @@
 import BalanceCard from '@/components/BalanceCard.vue';
-import RoleDisplay from '@/components/RoleDisplay.vue';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
-import { mount } from '@vue/test-utils';
+import { render } from '@testing-library/vue';
 
 Vue.use(VueMaterial);
 
 describe('BalanceCard', () => {
   it('ValueDisplay renders onto BalanceCard', () => {
-    const wrapper = mount(BalanceCard);
-    const valueDisplay = wrapper.findComponent({ name: 'ValueDisplay' });
-    expect(valueDisplay.exists()).toBeTruthy();
-    expect(valueDisplay.text()).toContain('USDC BALANCE ($)');
+    const { getByText } = render(BalanceCard);
+    expect(getByText('USDC BALANCE ($)')).not.toBeNull();
   });
 
   it('Displays privileged roles components', () => {
-    const wrapper = mount(BalanceCard);
-    const roleDisplay = wrapper.findComponent({ name: 'RoleDisplay' });
-    expect(roleDisplay.exists()).toBeTruthy();
+    const { getByTestId } = render(BalanceCard);
+    expect(getByTestId('role-container')).not.toBeNull();
   });
 
   it('Diplays minter badge for minter', () => {
-    const wrapper = mount(BalanceCard, {
+    const { getByTestId, getByText } = render(BalanceCard, {
       propsData: {
         usdcBalance: 1000,
         usdValue: 1000,
@@ -32,14 +28,12 @@ describe('BalanceCard', () => {
       },
     });
 
-    const roleDisplay = wrapper.findComponent(RoleDisplay);
-    expect(roleDisplay.exists()).toBeTruthy();
-    expect(roleDisplay.props().minter).toBeTruthy();
-    expect(roleDisplay.text()).toContain('MINTER');
+    expect(getByTestId('role-container')).not.toBeNull();
+    expect(getByText('MINTER')).not.toBeNull();
   });
 
   it('Diplays pauser badge for pauser', () => {
-    const wrapper = mount(BalanceCard, {
+    const { getByTestId, getByText } = render(BalanceCard, {
       propsData: {
         usdcBalance: 1000,
         usdValue: 1000,
@@ -50,14 +44,12 @@ describe('BalanceCard', () => {
       },
     });
 
-    const roleDisplay = wrapper.findComponent(RoleDisplay);
-    expect(roleDisplay.exists()).toBeTruthy();
-    expect(roleDisplay.props().pauser).toBeTruthy();
-    expect(roleDisplay.text()).toContain('PAUSER');
+    expect(getByTestId('role-container')).not.toBeNull();
+    expect(getByText('PAUSER')).not.toBeNull();
   });
 
   it('Diplays owner badge for owner', () => {
-    const wrapper = mount(BalanceCard, {
+    const { getByTestId, getByText } = render(BalanceCard, {
       propsData: {
         usdcBalance: 1000,
         usdValue: 1000,
@@ -68,9 +60,7 @@ describe('BalanceCard', () => {
       },
     });
 
-    const roleDisplay = wrapper.findComponent(RoleDisplay);
-    expect(roleDisplay.exists()).toBeTruthy();
-    expect(roleDisplay.props().owner).toBeTruthy();
-    expect(roleDisplay.text()).toContain('OWNER');
+    expect(getByTestId('role-container')).not.toBeNull();
+    expect(getByText('OWNER')).not.toBeNull();
   });
 });

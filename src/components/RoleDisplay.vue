@@ -1,5 +1,8 @@
 <template>
-  <div class="role-container">
+  <div
+    class="role-container"
+    data-testid="role-container"
+  >
     <div v-if="this.minter">
       <md-chip class="chip">
         MINTER

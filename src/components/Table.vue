@@ -5,7 +5,10 @@
       data-testid="progress-bar-test-id"
       md-mode="indeterminate"
     />
-    <md-table md-card>
+    <md-table
+      md-card
+      data-testid="md-table"
+    >
       <md-table-toolbar>
         <h1 class="md-title">
           {{ name }}

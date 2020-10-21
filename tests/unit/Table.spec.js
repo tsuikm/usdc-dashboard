@@ -83,14 +83,14 @@ for (let i = 1; i <= 30; i++) {
 describe('Loading bar', () => {
   it('Loading bar renders if table has not loaded yet', () => {
     const {
-      queryByTestId,
+      getByTestId,
     } = render(Table, {
       props: {
         ...testProps,
         loading: true,
       },
     });
-    expect(queryByTestId('progress-bar-test-id')).not.toBeNull();
+    expect(getByTestId('progress-bar-test-id')).not.toBeNull();
   });
   it('Loading bar disappears after table renders', () => {
     const {

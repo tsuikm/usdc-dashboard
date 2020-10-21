@@ -86,10 +86,7 @@ describe('_address.vue', () => {
       },
     });
 
-    await Vue.nextTick();
-    await Vue.nextTick();
-    await Vue.nextTick();
-    await Vue.nextTick();
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(getByTestId('md-table')).not.toBeNull();
 
@@ -107,10 +104,8 @@ describe('_address.vue', () => {
   it('renders all transactions correctly', async () => {
     const { getByTestId, getByText } = render(Address);
 
-    // 9 promises get called in mounted() lifecycle hook
-    for (let i = 0; i < 9; i++) {
-      await Vue.nextTick();
-    }
+    // Finish all promises
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(getByTestId('md-table')).not.toBeNull();
 
@@ -141,11 +136,8 @@ describe('_address.vue', () => {
       },
     });
 
-    // This works we don't know why
-    await Vue.nextTick();
-    await Vue.nextTick();
-    await Vue.nextTick();
-    await Vue.nextTick();
+    // Finish all promises
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(getByTestId('md-table')).not.toBeNull();
 

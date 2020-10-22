@@ -142,7 +142,6 @@ label {
   background: #1ED67D;
   border-radius: 5px;
   color: #FFFFFF;
-  color: #FFFFFF;
   font-family: Proxima Nova;
   font-size: 14px;
   font-style: normal;

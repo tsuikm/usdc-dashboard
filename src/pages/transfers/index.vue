@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NavBar />
     <md-card
       class="transferCard"
       data-testid="transfers-card-test-id"
@@ -22,17 +23,26 @@
         data-testid="transfers-card-to-input"
       >
         <label>To</label>
-        <md-input />
+        <md-input v-model="to" />
       </md-field>
       <md-field
         class="transferInput"
         data-testid="transfers-card-amount-input"
       >
         <label>Transfer Amount</label>
-        <md-input />
+        <md-input v-model="amount" />
       </md-field>
       <md-card-actions>
-        <md-button data-testid="transfers-card-send-button">
+        <md-button
+          data-testid="transfers-card-connect-button"
+          @click="connectMetamask"
+        >
+          Connect to Metamask
+        </md-button>
+        <md-button
+          data-testid="transfers-card-send-button"
+          @click="sendUSDC"
+        >
           Send
         </md-button>
       </md-card-actions>
@@ -41,7 +51,44 @@
 </template>
 
 <script>
-export default {};
+import NavBar from '@/components/NavBar';
+
+export default {
+  components: {
+    NavBar,
+  },
+  data() {
+    return {
+      to: '',
+      amount: '',
+      accounts: [],
+    };
+  },
+  methods: {
+    async connectMetamask() {
+      // eslint-disable-next-line
+      this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    },
+    async sendUSDC() {
+      // eslint-disable-next-line
+      const txHash = await ethereum
+        .request({
+          method: 'eth_sendTransaction',
+          params: [
+            {
+              from: this.accounts[0],
+              to: this.to,
+              value: this.amount,
+              gasPrice: '0x09184e72a000',
+              gas: '0x2710',
+            },
+          ],
+        });
+    },
+  },
+};
+
+
 </script>
 
 <style scoped>

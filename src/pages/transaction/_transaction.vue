@@ -14,7 +14,7 @@ import TransactionDetails from '@/components/TransactionDetails';
 export default {
   components: {
     NavBar,
-    TransactionDetails
-  }
+    TransactionDetails,
+  },
 };
 </script>

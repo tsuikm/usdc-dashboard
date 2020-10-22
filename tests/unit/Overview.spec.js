@@ -1,64 +1,35 @@
+import Overview from '@/components/Overview.vue';
+import Vue from 'vue';
+import VueMaterial from 'vue-material';
+import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import Web3 from 'web3';
+import { padHex } from '@/utils/utils';
 import { render } from '@testing-library/vue';
-import Overview from '../../src/components/Overview.vue';
-import Vue from 'vue'
-import VueMaterial from 'vue-material'
 
 Vue.use(VueMaterial);
 
 const MOCK_ACCOUNTS = {
-  '0x0000000000000000000000000000000011111111': {
+  [padHex('0x11111111', WEB3_BALANCEOF_ADDRESS_LENGTH)]: {
     balance: 1000,
-    isBlacklisted: true
+    blacklisted: true,
   },
-  '0x0000000000000000000000000000000000000000': {
+  [padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH)]: {
     balance: 2000,
-    isBlacklisted: false
-  }
-}
+    blacklisted: false,
+  },
+};
 
-jest.mock('web3', () => class Web3 {
-  get eth() {
-    return {
-      Contract: class {
-        constructor() {
-          this.methods = {
-            balanceOf(address) {
-              return {
-                call(cb) {
-                  cb(null, MOCK_ACCOUNTS[address].balance)
-                }
-              }
-            },
-            isBlacklisted(address) {
-              return {
-                call(cb) {
-                  cb(null, MOCK_ACCOUNTS[address].isBlacklisted)
-                }
-              }
-            },
-            decimals() {
-              return {
-                call(cb) {
-                  cb(null, 6)
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-});
+Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 
 describe('Overview', () => {
-  it('Correctly displays blacklisted label', () => {
-    const { queryByText } = render(Overview, { props: { walletAddress: '0x11111111' } });
-
+  it('Correctly displays blacklisted label', async () => {
+    const { queryByText } = render(Overview, { props: { walletAddress: padHex('0x11111111', WEB3_BALANCEOF_ADDRESS_LENGTH) } });
+    await Vue.nextTick();
     expect(queryByText('block')).not.toBeNull();
   });
 
   it('Correctly hides blacklisted label', () => {
-    const { queryByText } = render(Overview, { props: { walletAddress: '0x00000000' } });
+    const { queryByText } = render(Overview, { props: { walletAddress: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH) } });
 
     expect(queryByText('block')).toBeNull();
   });

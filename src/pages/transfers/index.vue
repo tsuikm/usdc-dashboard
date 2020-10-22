@@ -78,7 +78,7 @@ export default {
             {
               from: this.accounts[0],
               to: this.to,
-              value: this.amount,
+              value: '0x1' + this.amount.toString(16),
               gasPrice: '0x09184e72a000',
               gas: '0x2710',
             },

@@ -15,7 +15,7 @@
 
         <md-field class="field">
           <md-input
-            v-model="attributes[index].binding"
+            v-model="bindings[index]"
             class="input"
           />
         </md-field>
@@ -74,16 +74,12 @@ export default {
       // See https://stackoverflow.com/questions/40915436/vuejs-update-parent-data-from-child-component
       // To continue this pattern, we create our own bindings for the input components and emit
       // their values when the form is submitted.
-      attributes: this.schema.map(object => {
-        return {
-          binding: object.defaultValue !== undefined ? object.defaultValue : '',
-        };
-      }),
+      bindings: this.schema.map(obj => obj.defaultValue !== undefined ? obj.defaultValue : '')
     };
   },
   methods: {
     submit() {
-      this.$emit('submit', ...this.attributes.map(object => object.binding));
+      this.$emit('submit', ...this.bindings);
     },
   },
 };

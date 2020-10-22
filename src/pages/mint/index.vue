@@ -1,38 +1,26 @@
 <template>
-  <div>
-    <md-card class="card">
-      <md-card-header class="header">
-        <div class="md-title">Mint USDC</div>
-      </md-card-header>
-
-      <label>Wallet address:</label>
-      <md-field class="field">
-        <md-input class="input" v-model="walletAddress"></md-input>
-      </md-field>
-
-      <label>To address:</label>
-      <md-field class="field">
-        <md-input class="input" v-model="toAddress"></md-input>
-      </md-field>
-
-
-      <label>Amount:</label>
-      <md-field class="field">
-        <md-input class="input" v-model="amount"></md-input>
-      </md-field>
-
-      <md-card-actions>
-        <span class="center-span">
-          <md-button class="button" md-alignment="center">Send</md-button>
-        </span>
-      </md-card-actions>
-    </md-card>
-  </div>
+  <Form
+    :name="'Mint USDC'"
+    :schema=" [
+      {
+        label: 'Wallet Address:',
+      },
+      {
+        label: 'To Address:',
+      },
+      {
+        label: 'Amount:',
+        defaultValue: 0
+      }
+    ]"
+    @submit="this.submit"
+  />
 </template>
 
 <script>
 
 // modules
+import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
 import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import { padHex } from '@/utils/utils'
@@ -59,14 +47,8 @@ const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
   components: {
-    NavBar
-  },
-  data() {
-    return {
-        walletAddress: '',
-        toAddress: '',
-        amount: 0
-    };
+    NavBar,
+    Form
   },
 
   head() {
@@ -84,90 +66,17 @@ export default {
     }
   },
 
-  async created() {
-  },
   methods: {
-    async mint() {
-      if (! await contract.methods.isMinter(padHex(this.walletAddress, WEB3_BALANCEOF_ADDRESS_LENGTH)).call()) {
-        //not allowed to mint
-        console.log("not allowed");
-        return;
-      } else {
-        console.log(await contract.methods.mint(this.toAddress, this.amount).call());
-      }
+    async submit(walletAddress, toAddress, amount) {
+      console.log(walletAddress, toAddress, amount);
+      // if (! await contract.methods.isMinter(padHex(this.walletAddress, WEB3_BALANCEOF_ADDRESS_LENGTH)).call()) {
+      //   //not allowed to mint
+      //   console.log("not allowed");
+      //   return;
+      // } else {
+      //   console.log(await contract.methods.mint(this.toAddress, this.amount).call());
+      // }
     }
   }
 };
 </script>
-
-<style scoped>
-.input {
-  width: 25%;
-  left: 37.5%;
-  box-sizing: border-box;
-  border-radius: 5px;
-  display: block;
-  text-align: left;
-  margin-bottom: 14px;
-  font-family: Roboto Mono;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 18px;
-  letter-spacing: 0.03em;
-  color: #717171;
-}
-
-.card {
-  width: 50%;
-  left: 25%;
-  padding: 5%;
-  background-color: #FFF;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 16px;
-}
-
-label {
-  font-family: Proxima Nova;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 11px;
-  line-height: 13px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: #3D3652;
-  display: block;
-}
-
-.header {
-  color: white;
-}
-
-.field {
-  border: 1px solid #DBDCDC;
-  box-sizing: border-box;
-  border-radius: 5px;
-}
-
-.button {
-  font-family: Proxima Nova;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 17px;
-  letter-spacing: 1.05px;
-  text-transform: uppercase;
-  color: #FFFFFF;
-  background: #1ED67D;
-  border-radius: 5px;
-  padding: 17px 50px;
-  height: 50px;
-  color: #FFFFFF;
-}
-
-.center-span {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>

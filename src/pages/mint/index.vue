@@ -20,8 +20,11 @@
       <md-field class="field">
         <md-input class="input" v-model="amount"></md-input>
       </md-field>
+
       <md-card-actions>
-        <md-button>Send</md-button>
+        <span class="center-span">
+          <md-button class="button" md-alignment="center">Send</md-button>
+        </span>
       </md-card-actions>
     </md-card>
   </div>
@@ -144,5 +147,27 @@ label {
   border: 1px solid #DBDCDC;
   box-sizing: border-box;
   border-radius: 5px;
+}
+
+.button {
+  font-family: Proxima Nova;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 1.05px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: #1ED67D;
+  border-radius: 5px;
+  padding: 17px 50px;
+  height: 50px;
+  color: #FFFFFF;
+}
+
+.center-span {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

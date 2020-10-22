@@ -32,8 +32,8 @@ export function roundToNearest(num, decimalPlaces) {
 }
 
 export function pushAll(dst, src) {
-    for (const elem of src) {
-      dst.push(elem);
-    }
-    return dst;
+  for (const elem of src) {
+    dst.push(elem);
+  }
+  return dst;
 }

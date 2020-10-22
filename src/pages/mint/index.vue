@@ -23,7 +23,7 @@
 import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
 import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
-import { padHex } from '@/utils/utils'
+import { padHex } from '@/utils/utils';
 import Web3 from 'web3';
 
 const web3 = new Web3(Web3.givenProvider);
@@ -41,29 +41,14 @@ const abi = [
     outputs: [{ name:'', type: 'bool' }],
     stateMutability: 'nonpayable',
     type:'function',
-  }
+  },
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
   components: {
     NavBar,
-    Form
-  },
-
-  head() {
-    return {
-      link: [
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css?family=Proxima+Nova&display=swap'
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap'
-        }
-      ]
-    }
+    Form,
   },
 
   methods: {
@@ -76,7 +61,22 @@ export default {
       // } else {
       //   console.log(await contract.methods.mint(this.toAddress, this.amount).call());
       // }
-    }
-  }
+    },
+  },
+
+  head() {
+    return {
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css?family=Proxima+Nova&display=swap',
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap',
+        },
+      ],
+    };
+  },
 };
 </script>

@@ -2,23 +2,34 @@
   <div>
     <md-card class="card">
       <md-card-header class="header">
-        <div class="md-title">{{title}}</div>
+        <div class="md-title">
+          {{ title }}
+        </div>
       </md-card-header>
 
-      <div v-for="(object, index) in schema" :key="object.label">
+      <div
+        v-for="(object, index) in schema"
+        :key="object.label"
+      >
         <label>{{ object.label }}</label>
 
         <md-field class="field">
-          <md-input class="input" v-model="attributes[index].binding"></md-input>
+          <md-input
+            v-model="attributes[index].binding"
+            class="input"
+          />
         </md-field>
       </div>
 
       <md-card-actions>
         <span class="center-span">
-          <md-button class="button" md-alignment="center" @click="this.submit">Send</md-button>
+          <md-button
+            class="button"
+            md-alignment="center"
+            @click="this.submit"
+          >Send</md-button>
         </span>
       </md-card-actions>
-
     </md-card>
   </div>
 </template>
@@ -49,9 +60,9 @@ export default {
       validator: prop => {
 
         // Every field in schema should have a label.
-        return prop.every(({ label, field }) => label !== undefined);
+        return prop.every(({ label }) => label !== undefined);
       },
-    }
+    },
   },
   data() {
     return {
@@ -63,12 +74,12 @@ export default {
       // See https://stackoverflow.com/questions/40915436/vuejs-update-parent-data-from-child-component
       // To continue this pattern, we create our own bindings for the input components and emit
       // their values when the form is submitted.
-      attributes: this.schema.map((object, index) => {
+      attributes: this.schema.map(object => {
         return {
-          binding: object.defaultValue !== undefined ? object.defaultValue : ''
-        }
-      })
-    }
+          binding: object.defaultValue !== undefined ? object.defaultValue : '',
+        };
+      }),
+    };
   },
   methods: {
     submit() {
@@ -80,41 +91,41 @@ export default {
 
 <style scoped>
 .input {
-  width: 25%;
-  left: 37.5%;
-  box-sizing: border-box;
   border-radius: 5px;
+  box-sizing: border-box;
+  color: #717171;
   display: block;
-  text-align: left;
-  margin-bottom: 14px;
   font-family: Roboto Mono;
+  font-size: 14px;
   font-style: normal;
   font-weight: bold;
-  font-size: 14px;
-  line-height: 18px;
+  left: 37.5%;
   letter-spacing: 0.03em;
-  color: #717171;
+  line-height: 18px;
+  margin-bottom: 14px;
+  text-align: left;
+  width: 25%;
 }
 
 .card {
-  width: 50%;
+  background-color: #FFF;
+  border-radius: 16px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
   left: 25%;
   padding: 5%;
-  background-color: #FFF;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 16px;
+  width: 50%;
 }
 
 label {
-  font-family: Proxima Nova;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 11px;
-  line-height: 13px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
   color: #3D3652;
   display: block;
+  font-family: Proxima Nova;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: 1px;
+  line-height: 13px;
+  text-transform: uppercase;
 }
 
 .header {
@@ -122,30 +133,30 @@ label {
 }
 
 .field {
+  border-radius: 5px;
   border: 1px solid #DBDCDC;
   box-sizing: border-box;
-  border-radius: 5px;
 }
 
 .button {
-  font-family: Proxima Nova;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 17px;
-  letter-spacing: 1.05px;
-  text-transform: uppercase;
-  color: #FFFFFF;
   background: #1ED67D;
   border-radius: 5px;
-  padding: 17px 50px;
-  height: 50px;
   color: #FFFFFF;
+  color: #FFFFFF;
+  font-family: Proxima Nova;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: bold;
+  height: 50px;
+  letter-spacing: 1.05px;
+  line-height: 17px;
+  padding: 17px 50px;
+  text-transform: uppercase;
 }
 
 .center-span {
-  text-align: center;
   margin-left: auto;
   margin-right: auto;
+  text-align: center;
 }
 </style>

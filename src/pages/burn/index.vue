@@ -3,8 +3,14 @@
     <NavBar />
     <div>
       <form @submit.prevent="burn">
-        <input placeholder='Wallet address:' v-model="walletAddress" />
-        <input placeholder='amount:' v-model="amount" />
+        <input
+          v-model="walletAddress"
+          placeholder="Wallet address:"
+        >
+        <input
+          v-model="amount"
+          placeholder="amount:"
+        >
         <button>Submit burn event</button>
       </form>
     </div>
@@ -25,27 +31,27 @@ const abi = [
     name: 'burn',
     outputs:[],
     stateMutability:'nonpayable',
-    type:'function'
-  }
+    type:'function',
+  },
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
   components: {
-    NavBar
+    NavBar,
   },
   data() {
     return {
       walletAddress: '',
-      amount: 0
+      amount: 0,
     };
   },
   async created() {
   },
   methods: {
     burn() {
-      console.log("burn")
-    }
-  }
-  };
+      console.log('burn');
+    },
+  },
+};
 </script>

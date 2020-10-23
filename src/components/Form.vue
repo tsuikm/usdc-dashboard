@@ -85,7 +85,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .input {
   border-radius: 5px;
   box-sizing: border-box;
@@ -135,7 +135,8 @@ label {
 }
 
 .button {
-  background: #1ED67D;
+  /** background: #1ED67D; */
+  background: $circle-green;
   border-radius: 5px;
   color: #FFFFFF;
   font-family: Proxima Nova;

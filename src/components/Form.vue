@@ -1,12 +1,7 @@
 <template>
-  <div>
+  <div class="container">
+    <div class="title">{{ title }}</div>
     <md-card class="card">
-      <md-card-header class="header">
-        <div class="md-title">
-          {{ title }}
-        </div>
-      </md-card-header>
-
       <div
         v-for="(object, index) in schema"
         :key="object.label"
@@ -82,14 +77,52 @@ export default {
       this.$emit('submit', ...this.bindings);
     },
   },
+  head() {
+    return {
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css?family=Proxima+Nova&display=swap',
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap',
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css?family=Poppins&display=swap',
+        },
+      ],
+    };
+  },
 };
 </script>
 
 <style scoped lang="scss">
+@import "@/assets/styles/variables/_colors.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.title {
+  padding: 8% 0 0 8%;
+  width: fit-content;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 54px;
+  letter-spacing: 0.03em;
+  color: $circle-black;
+}
+
 .input {
   border-radius: 5px;
   box-sizing: border-box;
-  color: #717171;
+  color: $circle-grey;
   display: block;
   font-family: Roboto Mono;
   font-size: 14px;
@@ -107,13 +140,13 @@ export default {
   background-color: #FFF;
   border-radius: 16px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  left: 25%;
+  left: 15%;
   padding: 5%;
-  width: 50%;
+  width: 60%;
 }
 
 label {
-  color: #3D3652;
+  color: $circle-black;
   display: block;
   font-family: Proxima Nova;
   font-size: 11px;
@@ -122,10 +155,6 @@ label {
   letter-spacing: 1px;
   line-height: 13px;
   text-transform: uppercase;
-}
-
-.header {
-  color: white;
 }
 
 .field {

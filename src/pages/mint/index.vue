@@ -1,20 +1,23 @@
 <template>
-  <Form
-    :name="'Mint USDC'"
-    :schema=" [
-      {
-        label: 'Wallet Address:',
-      },
-      {
-        label: 'To Address:',
-      },
-      {
-        label: 'Amount:',
-        defaultValue: 0
-      }
-    ]"
-    @submit="this.submit"
-  />
+  <div>
+    <NavBar />
+    <Form
+      :title="'Mint USDC'"
+      :schema=" [
+        {
+          label: 'Wallet Address:',
+        },
+        {
+          label: 'To Address:',
+        },
+        {
+          label: 'Amount:',
+          defaultValue: 0
+        }
+      ]"
+      @submit="this.submit"
+    />
+  </div>
 </template>
 
 <script>
@@ -62,21 +65,6 @@ export default {
       //   console.log(await contract.methods.mint(this.toAddress, this.amount).call());
       // }
     },
-  },
-
-  head() {
-    return {
-      link: [
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css?family=Proxima+Nova&display=swap',
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap',
-        },
-      ],
-    };
   },
 };
 </script>

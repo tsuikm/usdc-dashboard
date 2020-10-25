@@ -1,27 +1,26 @@
 <template>
-  <div>
-    <NavBar />
-    <div>
-      <form @submit.prevent="burn">
-        <input
-          v-model="walletAddress"
-          placeholder="Wallet address:"
-        >
-        <input
-          v-model="amount"
-          placeholder="amount:"
-        >
-        <button>Submit burn event</button>
-      </form>
-    </div>
-  </div>
+  <Form
+    :title="'Burn USDC'"
+    :schema=" [
+      {
+        label: 'Wallet Address:',
+      },
+      {
+        label: 'Amount:',
+        defaultValue: 0
+      }
+    ]"
+    @submit="this.submit"
+  />
 </template>
 
 <script>
 
 // modules
+import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
-import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { padHex } from '@/utils/utils';
 import Web3 from 'web3';
 
 const web3 = new Web3(Web3.givenProvider);
@@ -39,18 +38,12 @@ const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 export default {
   components: {
     NavBar,
+    Form,
   },
-  data() {
-    return {
-      walletAddress: '',
-      amount: 0,
-    };
-  },
-  async created() {
-  },
+
   methods: {
-    burn() {
-      console.log('burn');
+    async submit(walletAddress, amount) {
+      console.log(walletAddress, amount);
     },
   },
 };

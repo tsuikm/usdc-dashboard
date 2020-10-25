@@ -113,12 +113,14 @@ export default {
                 amount: this.amount,
                 data: contract.methods.transfer(this.to, this.amount).encodeABI(),
                 gasPrice: '0x09184e72a000',
+                gasLimit: '0x5208',
                 gas: '0x2710',
               },
             ],
           });
       } catch (e) {
         console.log(e);
+        //show error
       }
     },
   },

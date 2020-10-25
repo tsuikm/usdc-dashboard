@@ -1,10 +1,12 @@
-import { render } from '@testing-library/vue';
+import { render, fireEvent } from '@testing-library/vue';
 import { fromHex, padHex, toHex, removeLeadingZeros } from '@/utils/utils';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import Web3 from 'web3';
 import accounts from '@/pages/accounts';
+
+const DECIMALS = 6;
 
 Vue.use(VueMaterial);
 
@@ -55,7 +57,7 @@ describe('accounts', () => {
     // top 25 accounts by balance
     for (let i = 0; i < 25; i++) {
       expect(getByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
-      expect(getByText(`${MOCK_ACCOUNTS[addresses[i]].balance / 10 ** 6}`)).not.toBeNull();
+      expect(getByText(`${MOCK_ACCOUNTS[addresses[i]].balance / 10 ** DECIMALS}`)).not.toBeNull();
     }
 
     // go to page 2
@@ -67,7 +69,7 @@ describe('accounts', () => {
     // next top 25 accounts by balance
     for (let i = 25; i < 50; i++) {
       expect(getByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
-      expect(getByText(MOCK_ACCOUNTS[addresses[i]].balance)).not.toBeNull();
+      expect(getByText(`${MOCK_ACCOUNTS[addresses[i]].balance / 10 ** DECIMALS}`)).not.toBeNull();
     }
   });
 });

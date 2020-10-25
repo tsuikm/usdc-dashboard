@@ -52,7 +52,38 @@
 
 <script>
 import NavBar from '@/components/NavBar';
+import Web3 from 'web3';
+import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
+const web3 = new Web3(Web3.givenProvider);
+const abi = [
+  {
+    'inputs': [
+      {
+        'internalType': 'address',
+        'name': 'to',
+        'type': 'address',
+      },
+      {
+        'internalType': 'uint256',
+        'name': 'value',
+        'type': 'uint256',
+      },
+    ],
+    'name': 'transfer',
+    'outputs': [
+      {
+        'internalType': 'bool',
+        'name': '',
+        'type': 'bool',
+      },
+    ],
+    'stateMutability': 'nonpayable',
+    'type': 'function',
+  },
 
+];
+const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
+// contractData = contract.transfer.getData(this.to, this.from);
 export default {
   components: {
     NavBar,
@@ -70,20 +101,25 @@ export default {
       this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     },
     async sendUSDC() {
-      // eslint-disable-next-line
-      const txHash = await ethereum
-        .request({
-          method: 'eth_sendTransaction',
-          params: [
-            {
-              from: this.accounts[0],
-              to: this.to,
-              value: '0x1' + this.amount.toString(16),
-              gasPrice: '0x09184e72a000',
-              gas: '0x2710',
-            },
-          ],
-        });
+      try {
+        // eslint-disable-next-line
+        const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: this.accounts[0],
+                to: this.to,
+                amount: this.amount,
+                data: contract.methods.transfer(this.to, this.amount).encodeABI(),
+                gasPrice: '0x09184e72a000',
+                gas: '0x2710',
+              },
+            ],
+          });
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 };

@@ -14,7 +14,6 @@
 <script>
 
 // modules
-import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 import Web3 from 'web3';

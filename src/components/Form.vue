@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <div class="title">{{ title }}</div>
+    <div class="title">
+      {{ title }}
+    </div>
     <md-card class="card">
       <div
         v-for="(object, index) in schema"
@@ -69,7 +71,7 @@ export default {
       // See https://stackoverflow.com/questions/40915436/vuejs-update-parent-data-from-child-component
       // To continue this pattern, we create our own bindings for the input components and emit
       // their values when the form is submitted.
-      bindings: this.schema.map(obj => obj.defaultValue !== undefined ? obj.defaultValue : '')
+      bindings: this.schema.map(obj => obj.defaultValue !== undefined ? obj.defaultValue : ''),
     };
   },
   methods: {

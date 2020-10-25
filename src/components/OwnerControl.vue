@@ -49,13 +49,13 @@
       </div>
     </div>
     <div class="update-button">
-      <button v-on:click="updateRoles">UPDATE ROLES</button>
+      <button v-on:click="updateRoles">SAVE</button>
     </div>
   </div>
 </template>
 
 <script>
-import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, BLACKLISTER_ADDRESS } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
 
@@ -89,27 +89,6 @@ const abi = [
     outputs: [{ name: '', type: 'bool' }],
     type: 'function',
   },
-  // {
-  //   internalType: 'address',
-  //   name: 'newPauser',
-  //   type: 'address',
-  // },
-  // {
-  //   internalType: 'address',
-  //   name: 'newBlacklister',
-  //   type: 'address',
-  // },
-  // {
-  //   internalType: 'address',
-  //   name: 'newOwner',
-  //   type: 'address',
-  // },
-  // {
-  //   inputs: [{ name: 'minter', type: 'address'}],
-  //   name: 'removeMinter',
-  //   outputs: [{ name: "", type: "bool"}],
-  //   type: "function",
-  // },
 ];
 
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
@@ -134,12 +113,7 @@ export default {
       if (this.address === '') {
         return;
       }
-
-      this.blacklister = await contract.methods
-        .isBlacklisted(
-          padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH),
-        )
-        .call();
+      this.blacklister = this.address === BLACKLISTER_ADDRESS;
       this.newBlacklister = this.blacklister;
     },
     async checkIsMinter() {
@@ -158,7 +132,6 @@ export default {
       this.newOwner = this.owner;
     },
     checkRoles() {
-      console.log('called');
       this.lookupBlacklisted();
       this.checkIsMinter();
       this.checkIsPauser();

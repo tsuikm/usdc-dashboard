@@ -37,18 +37,6 @@ const web3 = new Web3(Web3.givenProvider);
 
 const abi = [
   {
-    anonymous: false,
-    inputs: [],
-    name: 'Unpause',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [],
-    name: 'Pause',
-    type: 'event'
-  },
-  {
     inputs: [],
     name: 'paused',
     outputs: [{ name: '', type: 'bool'}],
@@ -70,12 +58,9 @@ export default {
   },
   methods: {
     async handleUnpause() {
-      //events wouldn't work?
-      console.log(await contract.events.Unpause());
       this.contractPaused = false;
     },
     async handlePause() {
-      console.log(await contract.events.Pause());
       this.contractPaused = true;
     },
     async lookupContractStatus() {

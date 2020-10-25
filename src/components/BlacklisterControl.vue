@@ -1,6 +1,6 @@
 <template>
   <div class="blacklister">
-    <div class="header">
+    <div class="header" data-testid="header">
       Check and Blacklist Roles
     </div>
     <form @submit.prevent="lookupBlacklistStatus">
@@ -12,20 +12,20 @@
     </form>
     <div
       v-if="this.isBlacklisted === true"
-      class="check-blacklisted"
+      data-testid="check-blacklisted"
     > 
       <div> This address is currently blacklisted. </div>
-      <button @click="handleUnblacklist">
+      <button @click="handleUnblacklist" data-testid="unblacklist">
         UNBLACKLIST
       </button>
       <div> Click to unblacklist. </div>
     </div>
     <div
       v-else-if="this.isBlacklisted === false"
-      class="check-unblacklisted"
+      data-testid="check-unblacklisted"
     > 
       <div> This address is not currently blacklisted. </div>
-      <button @click="handleBlacklist">
+      <button @click="handleBlacklist" data-testid="blacklist">
         BLACKLIST
       </button>
       <div> Click to blacklist. </div>

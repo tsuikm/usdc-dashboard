@@ -55,34 +55,229 @@ import NavBar from '@/components/NavBar';
 import Web3 from 'web3';
 import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
 const web3 = new Web3(Web3.givenProvider);
-const abi = [
+var abi = [
   {
+    'constant': true,
+    'inputs': [],
+    'name': 'name',
+    'outputs': [
+      {
+        'name': '',
+        'type': 'string',
+      },
+    ],
+    'payable': false,
+    'stateMutability': 'view',
+    'type': 'function',
+  },
+  {
+    'constant': false,
     'inputs': [
       {
-        'internalType': 'address',
-        'name': 'to',
+        'name': '_spender',
         'type': 'address',
       },
       {
-        'internalType': 'uint256',
-        'name': 'value',
+        'name': '_value',
+        'type': 'uint256',
+      },
+    ],
+    'name': 'approve',
+    'outputs': [
+      {
+        'name': '',
+        'type': 'bool',
+      },
+    ],
+    'payable': false,
+    'stateMutability': 'nonpayable',
+    'type': 'function',
+  },
+  {
+    'constant': true,
+    'inputs': [],
+    'name': 'totalSupply',
+    'outputs': [
+      {
+        'name': '',
+        'type': 'uint256',
+      },
+    ],
+    'payable': false,
+    'stateMutability': 'view',
+    'type': 'function',
+  },
+  {
+    'constant': false,
+    'inputs': [
+      {
+        'name': '_from',
+        'type': 'address',
+      },
+      {
+        'name': '_to',
+        'type': 'address',
+      },
+      {
+        'name': '_value',
+        'type': 'uint256',
+      },
+    ],
+    'name': 'transferFrom',
+    'outputs': [
+      {
+        'name': '',
+        'type': 'bool',
+      },
+    ],
+    'payable': false,
+    'stateMutability': 'nonpayable',
+    'type': 'function',
+  },
+  {
+    'constant': true,
+    'inputs': [],
+    'name': 'decimals',
+    'outputs': [
+      {
+        'name': '',
+        'type': 'uint8',
+      },
+    ],
+    'payable': false,
+    'stateMutability': 'view',
+    'type': 'function',
+  },
+  {
+    'constant': true,
+    'inputs': [
+      {
+        'name': '_owner',
+        'type': 'address',
+      },
+    ],
+    'name': 'balanceOf',
+    'outputs': [
+      {
+        'name': 'balance',
+        'type': 'uint256',
+      },
+    ],
+    'payable': false,
+    'stateMutability': 'view',
+    'type': 'function',
+  },
+  {
+    'constant': true,
+    'inputs': [],
+    'name': 'symbol',
+    'outputs': [
+      {
+        'name': '',
+        'type': 'string',
+      },
+    ],
+    'payable': false,
+    'stateMutability': 'view',
+    'type': 'function',
+  },
+  {
+    'constant': false,
+    'inputs': [
+      {
+        'name': '_to',
+        'type': 'address',
+      },
+      {
+        'name': '_value',
         'type': 'uint256',
       },
     ],
     'name': 'transfer',
     'outputs': [
       {
-        'internalType': 'bool',
         'name': '',
         'type': 'bool',
       },
     ],
+    'payable': false,
     'stateMutability': 'nonpayable',
     'type': 'function',
   },
-
+  {
+    'constant': true,
+    'inputs': [
+      {
+        'name': '_owner',
+        'type': 'address',
+      },
+      {
+        'name': '_spender',
+        'type': 'address',
+      },
+    ],
+    'name': 'allowance',
+    'outputs': [
+      {
+        'name': '',
+        'type': 'uint256',
+      },
+    ],
+    'payable': false,
+    'stateMutability': 'view',
+    'type': 'function',
+  },
+  {
+    'payable': true,
+    'stateMutability': 'payable',
+    'type': 'fallback',
+  },
+  {
+    'anonymous': false,
+    'inputs': [
+      {
+        'indexed': true,
+        'name': 'owner',
+        'type': 'address',
+      },
+      {
+        'indexed': true,
+        'name': 'spender',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'name': 'value',
+        'type': 'uint256',
+      },
+    ],
+    'name': 'Approval',
+    'type': 'event',
+  },
+  {
+    'anonymous': false,
+    'inputs': [
+      {
+        'indexed': true,
+        'name': 'from',
+        'type': 'address',
+      },
+      {
+        'indexed': true,
+        'name': 'to',
+        'type': 'address',
+      },
+      {
+        'indexed': false,
+        'name': 'value',
+        'type': 'uint256',
+      },
+    ],
+    'name': 'Transfer',
+    'type': 'event',
+  },
 ];
-const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
+const contract = new web3.eth.Contract(abi).at(USDC_CONTRACT_ADDRESS);
 // contractData = contract.transfer.getData(this.to, this.from);
 export default {
   components: {
@@ -110,10 +305,12 @@ export default {
               {
                 from: this.accounts[0],
                 to: this.to,
-                amount: this.amount,
+                // amount: this.amount, 
+                // value: this.amount,
                 data: contract.methods.transfer(this.to, this.amount).encodeABI(),
+                // data: contract.transfer.getData(this.to, this.amount),
                 gasPrice: '0x09184e72a000',
-                gasLimit: '0x5208',
+                gasLimit: '0x520800000000',
                 gas: '0x2710',
               },
             ],

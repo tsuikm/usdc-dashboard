@@ -1,33 +1,46 @@
 <template>
   <div class="blacklister">
-    <div class="header" data-testid="header">
-      Check and Blacklist Roles
+    <div
+      class="header"
+      data-testid="header"
+    >
+      Check and Blacklist Addresses
     </div>
     <form @submit.prevent="lookupBlacklistStatus">
-      <input
-        v-model="address"
-        placeholder="Enter Wallet Address Here"
-      >
-      <button> CHECK STATUS</button>
+      <md-field class="input-form">
+        <md-input
+          v-model="address"
+          class="input"
+          placeholder="Enter address here"
+        />
+        <md-button
+          class="button"
+          @click="lookupBlacklistStatus"
+        >
+          CHECK STATUS
+        </md-button>
+      </md-field>
     </form>
     <div
       v-if="this.isBlacklisted === true"
-      data-testid="check-blacklisted"
+      class="blacklist-true"
+      data-testid="blacklist-true"
     > 
       <div> This address is currently blacklisted. </div>
-      <button @click="handleUnblacklist" data-testid="unblacklist">
+      <md-button @click="handleUnblacklist">
         UNBLACKLIST
-      </button>
+      </md-button>
       <div> Click to unblacklist. </div>
     </div>
     <div
       v-else-if="this.isBlacklisted === false"
-      data-testid="check-unblacklisted"
+      class="blacklist-false"
+      data-testid="blacklist-false"
     > 
       <div> This address is not currently blacklisted. </div>
-      <button @click="handleBlacklist" data-testid="blacklist">
+      <md-button @click="handleBlacklist">
         BLACKLIST
-      </button>
+      </md-button>
       <div> Click to blacklist. </div>
     </div>
   </div>
@@ -88,21 +101,30 @@ export default {
   margin: 40px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 50%;
 }
+
 .header {
   font-size: 20px;
   font-weight: 900;
   padding-bottom: 3%;
 }
-.check-blacklisted {
+
+.button {
+  margin-bottom: 5px;
+}
+
+.input-form {
+  align-items: center;
+}
+
+.blacklist-true {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.check-unblacklisted {
+
+.blacklist-false {
   display: flex;
   flex-direction: column;
   align-items: center;

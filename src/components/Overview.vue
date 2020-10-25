@@ -94,13 +94,22 @@ const abi = [
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
+export async function getDecimals() {
+  return await contract.methods.decimals().call();
+}
+
 export async function getBalance(address) {
   const balance = await contract.methods
     .balanceOf(padHex(address, WEB3_BALANCEOF_ADDRESS_LENGTH))
     .call();
-  const decimals = await contract.methods.decimals().call();
+  const decimals = await getDecimals();
 
-  return balance / 10 ** decimals;
+  return balance / (10 ** decimals);
+}
+
+export async function getTotalSupply() {
+  const decimals = await contract.methods.decimals().call();
+  return await contract.methods.totalSupply().call() / (10 ** decimals);
 }
 
 export default {
@@ -149,8 +158,11 @@ export default {
         )
         .call();
     },
+    convertToUSD() {
+      this.usdValue = this.balance * this.conversionRate;
+    },
     async getTotalSupply() {
-      this.totalSupply = await contract.methods.totalSupply().call();
+      this.totalSupply = await getTotalSupply();
     },
     async checkIsMinter() {
       this.minter = await contract.methods.isMinter(this.walletAddress).call();

@@ -4,7 +4,10 @@
     <div>Contract is currently</div>
     <div class="container">
       <div v-if="this.contractPaused">
-        <button v-on:click="handleUnpause" class="status">
+        <button
+          class="status"
+          @click="handleUnpause"
+        >
           PAUSED
         </button>
         <div> 
@@ -15,7 +18,10 @@
         </div>
       </div>
       <div v-else>
-        <button v-on:click="handlePause" class="status">
+        <button
+          class="status"
+          @click="handlePause"
+        >
           UNPAUSED
         </button>
         <div> 
@@ -41,7 +47,7 @@ const abi = [
     name: 'paused',
     outputs: [{ name: '', type: 'bool'}],
     type: 'function',
-  }
+  },
 ];
 
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);

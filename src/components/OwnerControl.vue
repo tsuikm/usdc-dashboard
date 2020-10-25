@@ -2,54 +2,83 @@
   <div class="owner">
     <div>OWNER CONTROLS: RE-ASSIGN ROLES</div>
     <form @submit.prevent="checkRoles">
-       <input placeholder="Enter Wallet Address Here" v-model="address" />
-       <button>CHECK ROLES</button>
-     </form>
+      <input
+        v-model="address"
+        placeholder="Enter Wallet Address Here"
+      >
+      <button>CHECK ROLES</button>
+    </form>
     <div>Current Roles:</div>
     <div class="role-container">
       <div v-if="this.minter">
-        <button v-on:click="clickMinter" class="button-colored">
+        <button
+          class="button-colored"
+          @click="clickMinter"
+        >
           MINTER
         </button>
       </div>
       <div v-else>
-        <button v-on:click="clickMinter" class="button-gray">
+        <button
+          class="button-gray"
+          @click="clickMinter"
+        >
           MINTER
         </button>
       </div>
       <div v-if="this.pauser">
-        <button v-on:click="clickPauser" class="button-colored">
+        <button
+          class="button-colored"
+          @click="clickPauser"
+        >
           PAUSER
         </button>
       </div>
       <div v-else>
-        <button v-on:click="clickPauser" class="button-gray">
+        <button
+          class="button-gray"
+          @click="clickPauser"
+        >
           PAUSER
         </button>
       </div>
       <div v-if="this.owner">
-        <button v-on:click="clickOwner" class="button-colored">
+        <button
+          class="button-colored"
+          @click="clickOwner"
+        >
           OWNER
         </button>
       </div>
       <div v-else>
-        <button v-on:click="clickOwner" class="button-gray">
+        <button
+          class="button-gray"
+          @click="clickOwner"
+        >
           OWNER
         </button>
       </div>
       <div v-if="this.blacklister">
-        <button v-on:click="clickBlacklister" class="button-colored">
+        <button
+          class="button-colored"
+          @click="clickBlacklister"
+        >
           BLACKLISTER
         </button>
       </div>
       <div v-else>
-        <button v-on:click="clickBlacklister" class="button-gray">
+        <button
+          class="button-gray"
+          @click="clickBlacklister"
+        >
           BLACKLISTER
         </button>
       </div>
     </div>
     <div class="update-button">
-      <button v-on:click="updateRoles">SAVE</button>
+      <button @click="updateRoles">
+        SAVE
+      </button>
     </div>
   </div>
 </template>
@@ -97,7 +126,7 @@ export default {
   name: 'Owner',
   data() {
     return {
-      address: "",
+      address: '',
       minter: null,
       pauser: null,
       owner: null,

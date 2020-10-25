@@ -1,22 +1,33 @@
 <template>
   <div class="blacklister">
-    <div class="header">Check and Blacklist Roles</div>
+    <div class="header">
+      Check and Blacklist Roles
+    </div>
     <form @submit.prevent="lookupBlacklistStatus">
-       <input placeholder="Enter Wallet Address Here" v-model="address" />
-       <button > CHECK STATUS</button>
-     </form>
-    <div class="post-check" v-if="this.isBlacklisted === true"> 
+      <input
+        v-model="address"
+        placeholder="Enter Wallet Address Here"
+      >
+      <button> CHECK STATUS</button>
+    </form>
+    <div
+      v-if="this.isBlacklisted === true"
+      class="check-blacklisted"
+    > 
       <div> This address is currently blacklisted. </div>
-      <button v-on:click="handleUnblacklist">
-          UNBLACKLIST
-        </button>
+      <button @click="handleUnblacklist">
+        UNBLACKLIST
+      </button>
       <div> Click to unblacklist. </div>
     </div>
-    <div class="post-check" v-else-if="this.isBlacklisted === false"> 
+    <div
+      v-else-if="this.isBlacklisted === false"
+      class="check-unblacklisted"
+    > 
       <div> This address is not currently blacklisted. </div>
-      <button v-on:click="handleBlacklist">
-          BLACKLIST
-        </button>
+      <button @click="handleBlacklist">
+        BLACKLIST
+      </button>
       <div> Click to blacklist. </div>
     </div>
   </div>
@@ -47,7 +58,7 @@ export default {
   name: 'Blacklister',
   data() {
     return {
-      address: "",
+      address: '',
       isBlacklisted: null,
     };
   },
@@ -59,10 +70,13 @@ export default {
       this.isBlacklisted = false;
     },
     async lookupBlacklistStatus() {
-      console.log(this.address);
+      if (this.address === '') {
+        this.isBlacklisted = null;
+        return;
+      }
       this.isBlacklisted = await contract.methods
-      .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
-      .call();
+        .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+        .call();
     },
   },
 };
@@ -83,7 +97,12 @@ export default {
   font-weight: 900;
   padding-bottom: 3%;
 }
-.post-check {
+.check-blacklisted {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.check-unblacklisted {
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -6,6 +6,8 @@ import { fromHex, padHex } from '@/utils/utils';
 import { TRANSACTION_HASH_LENGTH } from '@/utils/constants';
 import Web3 from 'web3';
 
+Vue.use(VueMaterial);
+
 Web3.MOCK_TRANSACTIONS = [{
   transactionHash: '0x123456',
   from: '0xaaaaa',
@@ -44,12 +46,11 @@ describe('Transaction Details', () => {
 
     const { updateProps } = render(TransactionDetails, {
       props: {
-        hash: Web3.MOCK_TRANSACTIONS[0].transactionHash,
+        hash: 'invalid'
       },
     });
 
-    await updateProps({ hash: 'invalid' });
-
+    await new Promise((resolve) => setTimeout(resolve, 0));
     expect(window.location.href).toEqual('/404');
   });
 });

@@ -39,8 +39,14 @@
           v-for="field in schema"
           :key="field.name"
         >
+          <nuxt-link
+            v-if="field.link && field.link(item).startsWith('/')"
+            :to="field.link(item)"
+          >
+            {{ field.getter(item) }}
+          </nuxt-link>
           <a
-            v-if="field.link"
+            v-else-if="field.link"
             :href="field.link(item)"
           >
             {{ field.getter(item) }}

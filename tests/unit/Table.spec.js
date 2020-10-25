@@ -89,6 +89,9 @@ describe('Loading bar', () => {
         ...testProps,
         loading: true,
       },
+      stubs: {
+        NuxtLink: true,
+      },
     });
     expect(getByTestId('progress-bar-test-id')).not.toBeNull();
   });
@@ -99,6 +102,9 @@ describe('Loading bar', () => {
       props: {
         ...testProps,
         loading: false,
+      },
+      stubs: {
+        NuxtLink: true,
       },
     });
 
@@ -113,6 +119,9 @@ describe('Table', () => {
       getByText,
     } = render(Table, {
       props: testProps,
+      stubs: {
+        NuxtLink: true,
+      },
     });
 
     expect(getByText('A')).not.toBeNull();
@@ -124,6 +133,9 @@ describe('Table', () => {
       getByText,
     } = render(Table, {
       props: testProps,
+      stubs: {
+        NuxtLink: true,
+      },
     });
 
     expect(getByText('Row 1 A')).not.toBeNull();
@@ -137,6 +149,9 @@ describe('Table', () => {
       getByText,
     } = render(Table, {
       props: testPropsLinks,
+      stubs: {
+        NuxtLink: true,
+      },
     });
 
     const a1 = getByText('Row 1 A');
@@ -144,12 +159,13 @@ describe('Table', () => {
     const a2 = getByText('Row 2 A');
     const b2 = getByText('Row 2 B');
 
-    expect(a1).toBeInstanceOf(HTMLAnchorElement);
-    expect(a2).toBeInstanceOf(HTMLAnchorElement);
-    expect(a1.getAttribute('href')).toBe('/a-link');
-    expect(a2.getAttribute('href')).toBe('/a-link');
-    expect(b1).not.toBeInstanceOf(HTMLAnchorElement);
-    expect(b2).not.toBeInstanceOf(HTMLAnchorElement);
+    expect(a1.tagName).toBe('NUXTLINK-STUB');
+    expect(a2.tagName).toBe('NUXTLINK-STUB');
+    expect(a1.getAttribute('to')).toBe('/a-link');
+    expect(a2.getAttribute('to')).toBe('/a-link');
+
+    expect(b1.tagName).not.toBe('NUXTLINK-STUB');
+    expect(b2.tagName).not.toBe('NUXTLINK-STUB');
   });
 
   it('Pagination functionality', async () => {
@@ -157,6 +173,9 @@ describe('Table', () => {
       getByText,
     } = render(Table, {
       props: testPropsLarge,
+      stubs: {
+        NuxtLink: true,
+      },
     });
 
     expect(getByText('Row 1 A')).not.toBeNull();

@@ -30,11 +30,14 @@ jest.mock('web3', () => class Web3 {
 
 describe('Transaction Details', () => {
   // it('Renders transaction details correctly for correct hash', () => {
-  //   const { getByText } = render(TransactionDetails, {
-  //     props: {
-  //       hash: MOCK_TRANSACTION.transactionHash,
-  //     },
-  //   });
+  // const { getByText } = render(TransactionDetails, {
+  //   props: {
+  //     hash: MOCK_TRANSACTION.transactionHash,
+  //   },
+  //   stubs: {
+  //     NuxtLink: true,
+  //   },
+  // });
 
   //   expect(getByText('Hash:')).not.toBeNull();
   //   expect(getByText('Sender:')).not.toBeNull();
@@ -57,6 +60,9 @@ describe('Transaction Details', () => {
     const { updateProps } = render(TransactionDetails, {
       props: {
         hash: MOCK_TRANSACTION.transactionHash,
+      },
+      stubs: {
+        NuxtLink: true,
       },
     });
 

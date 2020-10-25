@@ -2,52 +2,40 @@ import TransactionDetails from '@/components/TransactionDetails';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import { render } from '@testing-library/vue';
+import { fromHex, padHex } from '@/utils/utils';
+import { TRANSACTION_HASH_LENGTH } from '@/utils/constants';
+import Web3 from 'web3';
 
-Vue.use(VueMaterial);
-
-const MOCK_TRANSACTION = {
+Web3.MOCK_TRANSACTIONS = [{
   transactionHash: '0x123456',
   from: '0xaaaaa',
   to: '0xbbbbb',
   blockNumber: 0,
   gas: 10,
-};
-
-jest.mock('web3', () => class Web3 {
-  get eth() {
-    return {
-
-      async getTransaction(hash) {
-        if (hash === MOCK_TRANSACTION.transactionHash) {
-          return MOCK_TRANSACTION;
-        }
-        throw new Error();
-      },
-    };
-  }
-} );
-
+}];
 
 describe('Transaction Details', () => {
-  // it('Renders transaction details correctly for correct hash', () => {
-  //   const { getByText } = render(TransactionDetails, {
-  //     props: {
-  //       hash: MOCK_TRANSACTION.transactionHash,
-  //     },
-  //   });
+  it('Renders transaction details correctly for correct hash', async () => {
+    const { getByText } = render(TransactionDetails, {
+      props: {
+        hash: Web3.MOCK_TRANSACTIONS[0].transactionHash,
+      },
+    });
 
-  //   expect(getByText('Hash:')).not.toBeNull();
-  //   expect(getByText('Sender:')).not.toBeNull();
-  //   expect(getByText('Receiver:')).not.toBeNull();
-  //   expect(getByText('Block:')).not.toBeNull();
-  //   expect(getByText('Gas:')).not.toBeNull();
+    expect(getByText('Hash:')).not.toBeNull();
+    expect(getByText('Sender:')).not.toBeNull();
+    expect(getByText('Receiver:')).not.toBeNull();
+    expect(getByText('Block:')).not.toBeNull();
+    expect(getByText('Gas:')).not.toBeNull();
 
-  //   expect(getByText('0x123456')).not.toBeNull();
-  //   expect(getByText('0xaaaaa')).not.toBeNull();
-  //   expect(getByText('0xbbbbb')).not.toBeNull();
-  //   expect(getByText('0')).not.toBeNull();
-  //   expect(getByText('1')).not.toBeNull();
-  // });
+    // Finish all promises
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(getByText(Web3.MOCK_TRANSACTIONS[0].transactionHash)).not.toBeNull();
+    expect(getByText(Web3.MOCK_TRANSACTIONS[0].from)).not.toBeNull();
+    expect(getByText(Web3.MOCK_TRANSACTIONS[0].to)).not.toBeNull();
+    expect(getByText(`${Web3.MOCK_TRANSACTIONS[0].blockNumber}`)).not.toBeNull();
+    expect(getByText(`${Web3.MOCK_TRANSACTIONS[0].gas}`)).not.toBeNull();
+  });
 
   it('Redirects to 404 with incorrect hash', async () => {
     delete global.window.location;
@@ -56,7 +44,7 @@ describe('Transaction Details', () => {
 
     const { updateProps } = render(TransactionDetails, {
       props: {
-        hash: MOCK_TRANSACTION.transactionHash,
+        hash: Web3.MOCK_TRANSACTIONS[0].transactionHash,
       },
     });
 

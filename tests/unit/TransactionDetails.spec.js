@@ -2,8 +2,6 @@ import TransactionDetails from '@/components/TransactionDetails';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import { render } from '@testing-library/vue';
-import { fromHex, padHex } from '@/utils/utils';
-import { TRANSACTION_HASH_LENGTH } from '@/utils/constants';
 import Web3 from 'web3';
 
 Vue.use(VueMaterial);
@@ -44,9 +42,9 @@ describe('Transaction Details', () => {
     global.window = Object.create(window);
     window.location = {};
 
-    const { updateProps } = render(TransactionDetails, {
+    render(TransactionDetails, {
       props: {
-        hash: 'invalid'
+        hash: 'invalid',
       },
     });
 

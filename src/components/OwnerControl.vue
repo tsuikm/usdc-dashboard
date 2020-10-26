@@ -86,7 +86,7 @@ export default {
     },
     update(minter, pauser, owner, blacklister) {
       this.minter = minter;
-      this.puaser = pauser;
+      this.pauser = pauser;
       this.owner = owner;
       this.blacklister = blacklister;
     },

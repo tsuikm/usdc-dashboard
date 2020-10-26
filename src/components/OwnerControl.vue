@@ -98,39 +98,9 @@
 import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, BLACKLISTER_ADDRESS } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
+import { abi } from '@/utils/web3abi';
 
 const web3 = new Web3(Web3.givenProvider);
-
-const abi = [
-  {
-    constant: true,
-    inputs: [{ name: 'account', type: 'address' }],
-    name: 'isMinter',
-    outputs: [{ name: '', type: 'bool' }],
-    type: 'function',
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'pauser',
-    outputs: [{ name: '', type: 'address' }],
-    type: 'function',
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'owner',
-    outputs: [{ name: '', type: 'address' }],
-    type: 'function',
-  },
-  {
-    inputs: [{ name: '_account', type: 'address' }],
-    name: 'isBlacklisted',
-    outputs: [{ name: '', type: 'bool' }],
-    type: 'function',
-  },
-];
-
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {

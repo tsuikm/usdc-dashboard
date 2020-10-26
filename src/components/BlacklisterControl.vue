@@ -23,7 +23,7 @@
     </form>
     <div
       v-if="this.isBlacklisted === true"
-      class="blacklist-true"
+      class="blacklist-clause"
       data-testid="blacklist-true"
     > 
       <div> This address is currently blacklisted. </div>
@@ -34,7 +34,7 @@
     </div>
     <div
       v-else-if="this.isBlacklisted === false"
-      class="blacklist-false"
+      class="blacklist-clause"
       data-testid="blacklist-false"
     > 
       <div> This address is not currently blacklisted. </div>
@@ -53,18 +53,9 @@ import {
 } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
+import { abi } from '@/utils/web3abi';
 
 const web3 = new Web3(Web3.givenProvider);
-
-const abi = [
-  {
-    inputs: [{ name: '_account', type: 'address' }],
-    name: 'isBlacklisted',
-    outputs: [{ name: '', type: 'bool' }],
-    type: 'function',
-  },
-];
-
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
@@ -118,13 +109,7 @@ export default {
   align-items: center;
 }
 
-.blacklist-true {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.blacklist-false {
+.blacklist-clause {
   display: flex;
   flex-direction: column;
   align-items: center;

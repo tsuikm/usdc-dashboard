@@ -54,18 +54,9 @@
 <script>
 import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
 import Web3 from 'web3';
+import { abi } from '@/utils/web3abi';
 
 const web3 = new Web3(Web3.givenProvider);
-
-const abi = [
-  {
-    inputs: [],
-    name: 'paused',
-    outputs: [{ name: '', type: 'bool'}],
-    type: 'function',
-  },
-];
-
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {

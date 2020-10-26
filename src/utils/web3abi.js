@@ -54,4 +54,10 @@ export const abi = [
     outputs: [{ name: '', type: 'bool' }],
     type: 'function',
   },
+  {
+    inputs: [],
+    name: 'paused',
+    outputs: [{ name: '', type: 'bool'}],
+    type: 'function',
+  },
 ];

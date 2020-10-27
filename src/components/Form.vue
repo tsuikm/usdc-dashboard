@@ -82,8 +82,8 @@ export default {
     submit() {
       this.$emit('submit', ...this.bindings);
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped lang="scss">

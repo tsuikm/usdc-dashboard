@@ -44,7 +44,7 @@ describe('accounts', () => {
 
   it('orders accounts by balance', async () => {
     const { getByText } = render(accounts);
-    const decimals = await (new Web3.Contract()).decimals();
+    const decimals = await (new (new Web3()).eth.Contract()).methods.decimals().call();
 
     let addresses = [...Object.keys(MOCK_ACCOUNTS)].sort((a, b) => {
       return MOCK_ACCOUNTS[b].balance - MOCK_ACCOUNTS[a].balance;

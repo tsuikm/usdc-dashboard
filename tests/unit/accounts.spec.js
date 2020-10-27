@@ -6,8 +6,6 @@ import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import Web3 from 'web3';
 import accounts from '@/pages/accounts';
 
-const DECIMALS = 6;
-
 Vue.use(VueMaterial);
 
 const MOCK_TRANSACTIONS = [];
@@ -46,6 +44,7 @@ describe('accounts', () => {
 
   it('orders accounts by balance', async () => {
     const { getByText } = render(accounts);
+    const decimals = await (new Web3.Contract()).decimals();
 
     let addresses = [...Object.keys(MOCK_ACCOUNTS)].sort((a, b) => {
       return MOCK_ACCOUNTS[b].balance - MOCK_ACCOUNTS[a].balance;
@@ -57,7 +56,7 @@ describe('accounts', () => {
     // top 25 accounts by balance
     for (let i = 0; i < 25; i++) {
       expect(getByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
-      expect(getByText(`${MOCK_ACCOUNTS[addresses[i]].balance / 10 ** DECIMALS}`)).not.toBeNull();
+      expect(getByText(`${MOCK_ACCOUNTS[addresses[i]].balance / 10 ** decimals}`)).not.toBeNull();
     }
 
     // go to page 2
@@ -69,7 +68,7 @@ describe('accounts', () => {
     // next top 25 accounts by balance
     for (let i = 25; i < 50; i++) {
       expect(getByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
-      expect(getByText(`${MOCK_ACCOUNTS[addresses[i]].balance / 10 ** DECIMALS}`)).not.toBeNull();
+      expect(getByText(`${MOCK_ACCOUNTS[addresses[i]].balance / 10 ** decimals}`)).not.toBeNull();
     }
   });
 });

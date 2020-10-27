@@ -148,13 +148,11 @@ export default {
       let balancePromises = [];
 
       for (const address of addresses) {
-        if (balancePromises.length < constants.OPTIMAL_PROMISE_ALL_SIZE) {
-          balancePromises.push(getBalance(address));
-        }
-        else {
+        if (balancePromises.length >= constants.OPTIMAL_PROMISE_ALL_SIZE) {
           pushAll(balances, await Promise.all(balancePromises));
           balancePromises = [];
         }
+        balancePromises.push(getBalance(address));
       }
       pushAll(balances, await Promise.all(balancePromises));
       return balances;

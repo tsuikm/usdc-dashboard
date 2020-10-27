@@ -54,6 +54,7 @@
 import NavBar from '@/components/NavBar';
 import Web3 from 'web3';
 import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
+import { toHex } from '@/utils/utils';
 const web3 = new Web3(Web3.givenProvider);
 var abi = [
   {
@@ -277,7 +278,7 @@ var abi = [
     'type': 'event',
   },
 ];
-const contract = new web3.eth.Contract(abi).at(USDC_CONTRACT_ADDRESS);
+const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 // contractData = contract.transfer.getData(this.to, this.from);
 export default {
   components: {
@@ -297,6 +298,7 @@ export default {
     },
     async sendUSDC() {
       try {
+        console.log(contract.methods.transfer(this.to, this.amount));
         // eslint-disable-next-line
         const txHash = await ethereum
           .request({
@@ -304,14 +306,9 @@ export default {
             params: [
               {
                 from: this.accounts[0],
-                to: this.to,
-                // amount: this.amount, 
-                // value: this.amount,
-                data: contract.methods.transfer(this.to, this.amount).encodeABI(),
-                // data: contract.transfer.getData(this.to, this.amount),
+                to: USDC_CONTRACT_ADDRESS,
+                data: contract.methods.transfer(this.to, toHex(Number(this.amount) * 1000000)).encodeABI(),
                 gasPrice: '0x09184e72a000',
-                gasLimit: '0x520800000000',
-                gas: '0x2710',
               },
             ],
           });

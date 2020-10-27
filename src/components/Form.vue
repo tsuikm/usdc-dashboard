@@ -38,20 +38,21 @@ export default {
   props: {
     title: String,
 
-    // List of objects, in the order in which they should be displayed.
-    // Each object must contain `label` field. May contain an
-    // optional `defaultValue` field (defaults to '').
-    //
-    // For instance,
-    // [
-    //   {
-    //     label: 'Wallet Address:',
-    //   },
-    //   {
-    //     label: 'Amount:',
-    //     defaultValue: 0
-    //   }
-    // ]
+    /** 
+     * List of objects, in the order in which they should be displayed.
+     * Each object must contain `label` field. May contain an
+     * optional `defaultValue` field (defaults to '').
+     * For instance,
+     * [
+     *  {
+     *    label: 'Wallet Address:',
+     *  },
+     *  {
+     *    label: 'Amount:',
+     *    defaultValue: 0
+     *  }
+     * ]
+     */ 
     schema: {
       type: Array,
       validator: prop => {
@@ -64,13 +65,16 @@ export default {
   data() {
     return {
 
-      // This is an index-aligned mapping of the schema object with an internal binding
-      // that is passed as the `v-model` for the `md-model` components.
-      //
-      // Two-way binding of attributes between child and parent components is now deprecated.
-      // See https://stackoverflow.com/questions/40915436/vuejs-update-parent-data-from-child-component
-      // To continue this pattern, we create our own bindings for the input components and emit
-      // their values when the form is submitted.
+      /** 
+       * This is an index-aligned mapping of the schema object with an internal binding
+       * that is passed as the `v-model` for the `md-model` components.
+       *
+       * Two-way binding of attributes between child and parent components is now deprecated.
+       * See https://stackoverflow.com/questions/40915436/vuejs-update-parent-data-from-child-component
+       * To continue this pattern, we create our own bindings for the input components and emit
+       * their values when the form is submitted.
+       */
+      
       bindings: this.schema.map(obj => obj.defaultValue !== undefined ? obj.defaultValue : ''),
     };
   },

@@ -5,13 +5,13 @@
       :title="'Mint USDC'"
       :schema=" [
         {
-          label: 'Wallet Address:',
+          label: 'Wallet Address',
         },
         {
-          label: 'To Address:',
+          label: 'To Address',
         },
         {
-          label: 'Amount:',
+          label: 'Amount',
           defaultValue: 0
         }
       ]"

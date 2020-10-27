@@ -78,26 +78,8 @@ export default {
     submit() {
       this.$emit('submit', ...this.bindings);
     },
-  },
-  head() {
-    return {
-      link: [
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css?family=Proxima+Nova&display=swap',
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap',
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css?family=Poppins&display=swap',
-        },
-      ],
-    };
-  },
-};
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -112,7 +94,7 @@ export default {
 .title {
   padding: 8% 0 0 8%;
   width: fit-content;
-  font-family: Poppins;
+  font-family: Proxima Nova;
   font-style: normal;
   font-weight: 600;
   font-size: 36px;
@@ -126,7 +108,7 @@ export default {
   box-sizing: border-box;
   color: $circle-grey;
   display: block;
-  font-family: Roboto Mono;
+  font-family: Proxima Nova;
   font-size: 14px;
   font-style: normal;
   font-weight: bold;
@@ -141,9 +123,10 @@ export default {
 .card {
   background-color: #FFF;
   border-radius: 16px;
+  border: 2px solid red;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  left: 15%;
-  padding: 5%;
+  padding: 24px;
+  margin: auto;
   width: 60%;
 }
 
@@ -159,14 +142,20 @@ label {
   text-transform: uppercase;
 }
 
+.md-field.md-theme-default::after {
+  background-color: rgba(0, 0, 0, 0);
+  min-height: 0px;
+}
+
+
 .field {
   border-radius: 5px;
   border: 1px solid #DBDCDC;
   box-sizing: border-box;
+  padding-left: 16px;
 }
 
 .button {
-  /** background: #1ED67D; */
   background: $circle-green;
   border-radius: 5px;
   color: #FFFFFF;
@@ -177,7 +166,7 @@ label {
   height: 50px;
   letter-spacing: 1.05px;
   line-height: 17px;
-  padding: 17px 50px;
+  padding: 17px 24px;
   text-transform: uppercase;
 }
 

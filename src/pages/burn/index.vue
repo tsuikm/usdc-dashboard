@@ -5,10 +5,10 @@
       :title="'Burn USDC'"
       :schema=" [
         {
-          label: 'Wallet Address:',
+          label: 'Wallet Address',
         },
         {
-          label: 'Amount:',
+          label: 'Amount',
           defaultValue: 0
         }
       ]"

@@ -74,7 +74,7 @@ export default {
        * To continue this pattern, we create our own bindings for the input components and emit
        * their values when the form is submitted.
        */
-      
+
       bindings: this.schema.map(obj => obj.defaultValue !== undefined ? obj.defaultValue : ''),
     };
   },
@@ -127,7 +127,6 @@ export default {
 .card {
   background-color: #FFF;
   border-radius: 16px;
-  border: 2px solid red;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
   padding: 24px;
   margin: auto;

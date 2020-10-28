@@ -35,7 +35,11 @@ Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 
 describe('accounts', () => {
   it('accounts displays a table titled Accounts with columns for Address, Balance and Percentage', () => {
-    const { getByText } = render(accounts);
+    const { getByText } = render(accounts, {
+      stubs: {
+        NuxtLink: true,
+      },
+    });
     expect(getByText('Accounts')).not.toBeNull();
     expect(getByText('Address')).not.toBeNull();
     expect(getByText('Balance')).not.toBeNull();
@@ -43,7 +47,11 @@ describe('accounts', () => {
   });
 
   it('orders accounts by balance', async () => {
-    const { getByText } = render(accounts);
+    const { getByText } = render(accounts, {
+      stubs: {
+        NuxtLink: true,
+      },
+    });
     const decimals = await (new (new Web3()).eth.Contract()).methods.decimals().call();
 
     let addresses = [...Object.keys(MOCK_ACCOUNTS)].sort((a, b) => {

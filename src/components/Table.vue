@@ -39,12 +39,21 @@
           v-for="field in schema"
           :key="field.name"
         >
+          <!-- Internal links start with "/"; e.g. "/pages" -->
+          <nuxt-link
+            v-if="field.link && field.link(item).startsWith('/')"
+            :to="field.link(item)"
+          >
+            {{ field.getter(item) }}
+          </nuxt-link>
+          <!-- All other links are external; e.g. "https://..." -->
           <a
-            v-if="field.link"
+            v-else-if="field.link"
             :href="field.link(item)"
           >
             {{ field.getter(item) }}
           </a>
+          <!-- Not a link if field.link doesn't exist -->
           <template v-else>
             {{ field.getter(item) }}
           </template>

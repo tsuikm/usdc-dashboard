@@ -23,13 +23,28 @@ Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 
 describe('Overview', () => {
   it('Correctly displays blacklisted label', async () => {
-    const { getByText } = render(Overview, { props: { walletAddress: padHex('0x11111111', WEB3_BALANCEOF_ADDRESS_LENGTH) } });
+    const { getByText } = render(Overview, { 
+      props: { 
+        walletAddress: padHex('0x11111111', WEB3_BALANCEOF_ADDRESS_LENGTH), 
+      }, 
+      stubs: {
+        NuxtLink: true,
+      },
+    });
+
     await Vue.nextTick();
     expect(getByText('block')).not.toBeNull();
   });
 
   it('Correctly hides blacklisted label', () => {
-    const { queryByText } = render(Overview, { props: { walletAddress: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH) } });
+    const { queryByText } = render(Overview, { 
+      props: { 
+        walletAddress: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH), 
+      },
+      stubs: {
+        NuxtLink: true,
+      },
+    });
 
     expect(queryByText('block')).toBeNull();
   });

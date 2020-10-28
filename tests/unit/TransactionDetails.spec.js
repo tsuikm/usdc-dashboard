@@ -20,6 +20,9 @@ describe('Transaction Details', () => {
       props: {
         hash: Web3.MOCK_TRANSACTIONS[0].transactionHash,
       },
+      stubs: {
+        NuxtLink: true,
+      },
     });
 
     expect(getByText('Hash:')).not.toBeNull();
@@ -45,6 +48,9 @@ describe('Transaction Details', () => {
     render(TransactionDetails, {
       props: {
         hash: 'invalid',
+      },
+      stubs: {
+        NuxtLink: true,
       },
     });
 

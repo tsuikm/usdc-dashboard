@@ -15,13 +15,19 @@
       </md-field>
     </form>
     <div class="role-control">
-      <CustomButton 
+      <!-- <CustomButton 
         :minter="this.minter"
         :pauser="this.pauser"
         :owner="this.owner"
         :blacklister="this.blacklister"
         @update-role="update"
-      />
+      /> -->
+      <div class="role-button-row">
+        <RoleButton :title="this.minterTitle" :roleActive="this.minter" :onClick="clickMinter"/>
+        <RoleButton :title="this.pauserTitle" :roleActive="this.pauser" :onClick="clickPauser"/>
+        <RoleButton :title="this.ownerTitle" :roleActive="this.owner" :onClick="clickOwner"/>
+        <RoleButton :title="this.blacklisterTitle" :roleActive="this.blacklister" :onClick="clickBlacklister"/>
+      </div>
       <div class="update-button">
         <md-button @click="updateRoles">
           SAVE
@@ -37,6 +43,7 @@ import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
 import { abi } from '@/utils/web3abi';
 import CustomButton from '@/components/CustomButton';
+import RoleButton from '@/components/RoleButton';
 
 const web3 = new Web3(Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
@@ -45,6 +52,7 @@ export default {
   name: 'Owner',
   components: {
     CustomButton,
+    RoleButton,
   },
   data() {
     return {
@@ -53,6 +61,14 @@ export default {
       pauser: null,
       owner: null,
       blacklister: null,
+      updatedMinter: null,
+      updatedPauser: null,
+      updatedOwner: null,
+      updatedBlacklister: null,
+      minterTitle: "MINTER",
+      pauserTitle: "PAUSER",
+      ownerTitle: "OWNER",
+      blacklisterTitle: "BLACKLISTER",
     };
   },
   methods: {
@@ -83,6 +99,19 @@ export default {
       this.checkIsMinter();
       this.checkIsPauser();
       this.checkIsOwner();
+    },
+    clickMinter() {
+      this.updatedMinter = !this.minter;
+      console.log("clickMinter");
+    },
+    clickPauser() {
+      this.updatedPauser = !this.pauser;
+    },
+    clickOwner() {
+      this.updatedOwner = !this.owner;
+    },
+    clickBlacklister() {
+      this.updatedBlacklister= !this.blacklister;
     },
     update(minter, pauser, owner, blacklister) {
       this.minter = minter;
@@ -119,6 +148,10 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.role-button-row {
+  display: flex;
 }
 
 .role-container {

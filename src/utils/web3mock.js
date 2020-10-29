@@ -1,4 +1,6 @@
-import { TRANSACTION_TOPIC } from './constants';
+import { TRANSACTION_TOPIC } from '@/utils/constants';
+import { fromHex } from '@/utils/utils';
+
 /**
  * Transaction: {
  *    transactionHash: String,
@@ -7,7 +9,7 @@ import { TRANSACTION_TOPIC } from './constants';
  *    receiver: String, // hex for receiver address
  *    blockNumber: Number
  * }
- * 
+ *
  * Account: {
  *    balance: Number,
  *    minter: Boolean,
@@ -15,12 +17,12 @@ import { TRANSACTION_TOPIC } from './constants';
  *    owner: Boolean,
  *    blacklisted: Boolean
  * }
- * 
+ *
  * @param {Object<key: String, value: Account>} MOCK_ACCOUNTS Map of wallet addresses to accounts
  * @param {Transaction[]} MOCK_TRANSACTIONS Array of mock transactions (Transaction structure above)
  * @param {String[]} VALID_ADDRESSES Array of valid addresses (for utils.isAddress)
  * @param {String[]} CONTRACT_ADDRESSES Subset of VALID_ADDRESSES that are contract addresses (for getCode)
- * @param {Integer} TOTAL_SUPPLY Total supply 
+ * @param {Integer} TOTAL_SUPPLY Total supply
  */
 export default class Web3 {
   static MOCK_ACCOUNTS = {};
@@ -119,6 +121,14 @@ export default class Web3 {
         }
 
         return '0x';
+      },
+      async getTransaction(hash) {
+        for (const transaction of Web3.MOCK_TRANSACTIONS) {
+          if (fromHex(transaction.transactionHash) === fromHex(hash)) {
+            return transaction;
+          }
+        }
+        throw new Error();
       },
     };
   }

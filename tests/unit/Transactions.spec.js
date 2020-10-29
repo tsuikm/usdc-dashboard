@@ -84,6 +84,9 @@ describe('_address.vue', () => {
       propsData: {
         address: MOCK_WALLET_ADDRESS,
       },
+      stubs: {
+        NuxtLink: true,
+      },
     });
 
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -104,7 +107,11 @@ describe('_address.vue', () => {
   });
 
   it('renders all transactions correctly', async () => {
-    const { getByTestId, getByText } = render(Address);
+    const { getByTestId, getByText } = render(Address, {
+      stubs: {
+        NuxtLink: true,
+      },
+    });
 
     // Finish all promises
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -136,6 +143,9 @@ describe('_address.vue', () => {
     const { getByTestId, getByText, getAllByText } = render(Address, {
       propsData: {
         address: MOCK_WALLET_ADDRESS,
+      },
+      stubs: {
+        NuxtLink: true,
       },
     });
 

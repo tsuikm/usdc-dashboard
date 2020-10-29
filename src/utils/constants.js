@@ -15,3 +15,28 @@ export const TRANSACTION_TOPIC =
 
 export const BLACKLISTER_ADDRESS = 
   '0x5db0115f3b72d19cea34dd697cf412ff86dc7e1b';
+export const NuxtLinkStub = {
+  name: 'NuxtLinkStub',
+  props: {
+    to: {
+      type: [String, Object],
+      required: true,
+    },
+    tag: {
+      type: String,
+      default: 'a',
+    },
+    exact: Boolean,
+    append: Boolean,
+    replace: Boolean,
+    activeClass: String,
+    exactActiveClass: String,
+    event: {
+      type: [String, Array],
+      default: 'click',
+    },
+  },
+  render: function render(h) {
+    return h(this.tag, undefined, this.$slots.default);
+  },
+};

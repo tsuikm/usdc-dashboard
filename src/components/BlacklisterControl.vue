@@ -24,7 +24,6 @@
     <div
       v-if="this.isBlacklisted === true"
       class="blacklist-clause"
-      data-testid="blacklist-true"
     > 
       <div> This address is currently blacklisted. </div>
       <md-button @click="handleUnblacklist">
@@ -35,7 +34,6 @@
     <div
       v-else-if="this.isBlacklisted === false"
       class="blacklist-clause"
-      data-testid="blacklist-false"
     > 
       <div> This address is not currently blacklisted. </div>
       <md-button @click="handleBlacklist">

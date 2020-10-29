@@ -14,7 +14,7 @@ describe('OwnerControl', () => {
 
 
   it('Displays minter tag if address is a minter', async () => {
-    const { getByTestId } = render(OwnerControl, {
+    const { getByText } = render(OwnerControl, {
       data: function() {
         return {
           address: '0x24bdd8771b08c2ea6fe0e898126e65bd49021be3',
@@ -29,11 +29,11 @@ describe('OwnerControl', () => {
         };
       },
     });
-    expect(getByTestId('minter')).not.toBeNull();
+    expect(getByText('MINTER')).not.toBeNull();
   });
 
   it('Displays owner and pauser tags if address is an owner and a pauser', async () => {
-    const { getByTestId } = render(OwnerControl, {
+    const { getByText } = render(OwnerControl, {
       data: function() {
         return {
           address: '0x24bdd8771b08c2ea6fe0e898126e65bd49021be3',
@@ -48,12 +48,12 @@ describe('OwnerControl', () => {
         };
       },
     });
-    expect(getByTestId('owner')).not.toBeNull();
-    expect(getByTestId('pauser')).not.toBeNull();
+    expect(getByText('OWNER')).not.toBeNull();
+    expect(getByText('PAUSER')).not.toBeNull();
   });
 
   it('Displays blacklister tag if address is a blacklister', async () => {
-    const { getByTestId } = render(OwnerControl, {
+    const { getByText } = render(OwnerControl, {
       data: function() {
         return {
           address: '0x24bdd8771b08c2ea6fe0e898126e65bd49021be3',
@@ -68,7 +68,7 @@ describe('OwnerControl', () => {
         };
       },
     });
-    expect(getByTestId('blacklister')).not.toBeNull();
+    expect(getByText('BLACKLISTER')).not.toBeNull();
   });
 
 });

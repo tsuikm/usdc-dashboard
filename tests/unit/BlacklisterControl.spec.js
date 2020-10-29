@@ -16,7 +16,7 @@ describe('BlacklisterControl', () => {
 
 
   it('Displays UNBLACKLIST when blacklisted address is looked up', async () => {
-    const { getByTestId, getByText } = render(BlacklisterControl, {
+    const { getByText } = render(BlacklisterControl, {
       data: function() {
         return {
           address: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH),
@@ -24,13 +24,13 @@ describe('BlacklisterControl', () => {
         };
       },
     });
-    expect(getByTestId('blacklist-true')).not.toBeNull();
     expect(getByText('This address is currently blacklisted.')).not.toBeNull();
+    expect(getByText('Click to unblacklist.')).not.toBeNull();
   });
 
 
   it('Displays BLACKLIST when unblacklisted address is looked up', async () => {
-    const { getByTestId, getByText } = render(BlacklisterControl, {
+    const { getByText } = render(BlacklisterControl, {
       data: function() {
         return {
           address: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH),
@@ -38,8 +38,8 @@ describe('BlacklisterControl', () => {
         };
       },
     });
-    expect(getByTestId('blacklist-false')).not.toBeNull();
     expect(getByText('This address is not currently blacklisted.')).not.toBeNull();
+    expect(getByText('Click to blacklist.')).not.toBeNull();
   });
 
 });

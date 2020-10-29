@@ -13,7 +13,6 @@
       >
         <md-button
           class="status"
-          data-testid="unpause-button"
           @click="handleUnpause"
         >
           PAUSED
@@ -30,7 +29,6 @@
       <div
         v-else
         class="content"
-        data-testid="pause-button"
       >
         <md-button
           class="status"

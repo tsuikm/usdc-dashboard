@@ -14,27 +14,29 @@ describe('PauserControl', () => {
 
 
   it('Displays unpause button when contract is paused', async () => {
-    const { getByTestId, getByText } = render(PauserControl, {
+    const { getByText } = render(PauserControl, {
       data: function() {
         return {
           contractPaused: true,
         };
       },
     });
-    expect(getByTestId('unpause-button')).not.toBeNull();
+    expect(getByText('PAUSED')).not.toBeNull();
+    expect(getByText('Click to unpause contract.')).not.toBeNull();
     expect(getByText('All transfers, minting, and burning are PAUSED.')).not.toBeNull();
   });
 
 
   it('Displays pause button when contract is unpaused', async () => {
-    const { getByTestId, getByText } = render(PauserControl, {
+    const { getByText } = render(PauserControl, {
       data: function() {
         return {
           contractPaused: false,
         };
       },
     });
-    expect(getByTestId('pause-button')).not.toBeNull();
+    expect(getByText('UNPAUSED')).not.toBeNull();
+    expect(getByText('Click to pause contract.')).not.toBeNull();
     expect(getByText('All transfers, minting, and burning are ACTIVE.')).not.toBeNull();
   });
 

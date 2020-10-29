@@ -1,5 +1,5 @@
-const HelloWorld = artifacts.require('./HelloWorld.sol');
+const LocalERC20 = artifacts.require('./LocalERC20.sol');
 
 module.exports = deployer => {
-  deployer.deploy(HelloWorld);
+  deployer.deploy(LocalERC20);
 }

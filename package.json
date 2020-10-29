@@ -11,6 +11,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^3.2.0",
     "@testing-library/vue": "^5.1.0",
     "@vue/cli-plugin-unit-jest": "^4.5.7",
     "@vue/test-utils": "^1.1.0",

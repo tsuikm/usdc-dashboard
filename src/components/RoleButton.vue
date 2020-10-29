@@ -3,7 +3,7 @@
     <button 
       :class="{'button-colored': roleActive, 'button-gray': !roleActive}" 
       @click="onClick"
-      >
+    >
       {{ title }}
     </button>
   </div>
@@ -17,9 +17,9 @@ export default {
     roleActive: Boolean,
     onClick: {
       type: Function,
-    }
+    },
   },
-}
+};
 </script>
 
 <style scoped>

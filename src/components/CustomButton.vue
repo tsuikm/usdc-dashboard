@@ -43,22 +43,22 @@ export default {
   methods: {
     clickMinter() {
       let updatedMinter = !this.minter;
-      this.$emit("update-role", updatedMinter, this.pauser, this.owner, this.blacklister);
+      this.$emit('update-role', updatedMinter, this.pauser, this.owner, this.blacklister);
     },
     clickPauser() {
       let updatedPauser = !this.pauser;
-      this.$emit("update-role", this.minter, updatedPauser, this.owner, this.blacklister);
+      this.$emit('update-role', this.minter, updatedPauser, this.owner, this.blacklister);
     },
     clickOwner() {
       let updatedOwner = !this.owner;
-      this.$emit("update-role", this.minter, this.pauser, updatedOwner, this.blacklister);
+      this.$emit('update-role', this.minter, this.pauser, updatedOwner, this.blacklister);
     },
     clickBlacklister() {
       let updatedBlacklister= !this.blacklister;
-      this.$emit("update-role", this.minter, this.pauser, this.owner, updatedBlacklister);
+      this.$emit('update-role', this.minter, this.pauser, this.owner, updatedBlacklister);
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

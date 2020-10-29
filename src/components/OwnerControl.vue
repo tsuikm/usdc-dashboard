@@ -23,10 +23,26 @@
         @update-role="update"
       /> -->
       <div class="role-button-row">
-        <RoleButton :title="this.minterTitle" :roleActive="this.minter" :onClick="clickMinter"/>
-        <RoleButton :title="this.pauserTitle" :roleActive="this.pauser" :onClick="clickPauser"/>
-        <RoleButton :title="this.ownerTitle" :roleActive="this.owner" :onClick="clickOwner"/>
-        <RoleButton :title="this.blacklisterTitle" :roleActive="this.blacklister" :onClick="clickBlacklister"/>
+        <RoleButton
+          :title="this.minterTitle"
+          :role-active="this.minter"
+          :on-click="clickMinter"
+        />
+        <RoleButton
+          :title="this.pauserTitle"
+          :role-active="this.pauser"
+          :on-click="clickPauser"
+        />
+        <RoleButton
+          :title="this.ownerTitle"
+          :role-active="this.owner"
+          :on-click="clickOwner"
+        />
+        <RoleButton
+          :title="this.blacklisterTitle"
+          :role-active="this.blacklister"
+          :on-click="clickBlacklister"
+        />
       </div>
       <div class="update-button">
         <md-button @click="updateRoles">
@@ -42,7 +58,7 @@ import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, BLACKLISTER_ADDRE
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
 import { abi } from '@/utils/web3abi';
-import CustomButton from '@/components/CustomButton';
+// import CustomButton from '@/components/CustomButton';
 import RoleButton from '@/components/RoleButton';
 
 const web3 = new Web3(Web3.givenProvider);
@@ -51,7 +67,7 @@ const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 export default {
   name: 'Owner',
   components: {
-    CustomButton,
+    // CustomButton,
     RoleButton,
   },
   data() {
@@ -65,10 +81,10 @@ export default {
       updatedPauser: null,
       updatedOwner: null,
       updatedBlacklister: null,
-      minterTitle: "MINTER",
-      pauserTitle: "PAUSER",
-      ownerTitle: "OWNER",
-      blacklisterTitle: "BLACKLISTER",
+      minterTitle: 'MINTER',
+      pauserTitle: 'PAUSER',
+      ownerTitle: 'OWNER',
+      blacklisterTitle: 'BLACKLISTER',
     };
   },
   methods: {
@@ -102,7 +118,7 @@ export default {
     },
     clickMinter() {
       this.updatedMinter = !this.minter;
-      console.log("clickMinter");
+      console.log('clickMinter');
     },
     clickPauser() {
       this.updatedPauser = !this.pauser;

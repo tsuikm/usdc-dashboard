@@ -1,29 +1,19 @@
 <template>
-  <md-toolbar>
-    <div class="md-toolbar-row">
-      <div class="md-toolbar-section-start">
-        <img
-          id="logo"
-          src="@/assets/usdc-logo.png"
-        >
-      </div>
-      <div class="md-toolbar-section-end">
-        <form @submit.prevent="submitAddress">
-          <md-field>
-            <label>Wallet Address</label>
-            <md-input
-              v-model="walletAddress"
-              type="text"
-              class="input"
-            />
-            <button @click="submitAddress">
-              <md-icon>search</md-icon>
-            </button>
-          </md-field>
-        </form>
-      </div>
-    </div>
-  </md-toolbar>
+  <div id="navbar">
+    <img src="@/assets/logo.svg">
+    <nuxt-link
+      to="/accounts"
+      class="link"
+    >
+      Accounts
+    </nuxt-link>
+    <nuxt-link
+      to="/accounts"
+      class="link"
+    >
+      Transfer
+    </nuxt-link>
+  </div>
 </template>
 
 <script>
@@ -55,25 +45,18 @@ export default {
 };
 </script>
 
-<style scoped>
-.md-toolbar {
-  padding-top: 8px;
-}
-#logo {
-  height: 40px;
-}
+<style lang="scss" scoped>
+#navbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 
-button {
-  background-color: transparent;
-  border: none;
-}
-button:hover {
-  cursor: pointer;
-  opacity: 0.7;
-}
+  img {
+    margin-right: auto;
+  }
 
-.input {
-  width: 400px;
+  .link {
+    margin-left: 2rem;
+  }
 }
-
 </style>

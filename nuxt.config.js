@@ -23,4 +23,17 @@ module.exports = {
       },
     ],
   },
+  css: [
+    { src: '@/assets/styles/styles.scss', lang: 'scss'},
+  ],
+  build: {
+    extend (config, { isDev, isClient }) {
+      config.node = {
+        fs: 'empty',
+        child_process: 'empty',
+        tls: 'empty',
+        net: 'empty',
+      };
+    },
+  },
 };

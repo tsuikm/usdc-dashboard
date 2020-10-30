@@ -5,20 +5,20 @@
       data-testid="progress-bar-test-id"
       md-mode="indeterminate"
     />
+    <md-table-toolbar>
+      <h1 class="md-title">
+        {{ name }}
+      </h1>
+      <Pagination
+        :total-pages="Math.ceil(this.totalItems / pageLength)"
+        @page:change="this.pageChange"
+      />
+    </md-table-toolbar>
     <md-table
       md-card
       data-testid="md-table"
+      class="table"
     >
-      <md-table-toolbar>
-        <h1 class="md-title">
-          {{ name }}
-        </h1>
-        <Pagination
-          :total-pages="Math.ceil(this.totalItems / pageLength)"
-          @page:change="this.pageChange"
-        />
-      </md-table-toolbar>
-
       <md-table-row>
         <md-table-head
           v-for="field in schema"
@@ -122,3 +122,16 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+@import "@/assets/styles/variables/_colors.scss";
+
+.table {
+  background: #FFFFFF;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+  width: 90%;
+  margin: auto;
+}
+
+</style>

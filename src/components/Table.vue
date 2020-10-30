@@ -41,7 +41,7 @@
         >
           <span>
             <!-- Internal links start with "/"; e.g. "/pages" -->
-            <nuxt-link
+            <nuxt-link 
               v-if="field.link && field.link(item).startsWith('/')"
               :to="field.link(item)"
             >
@@ -128,12 +128,16 @@ export default {
 <style scoped lang="scss">
 @import "@/assets/styles/variables/_colors.scss";
 
+#table-and-loading-container {
+  width: 90%;
+  font-family: Proxima Nova;
+  margin: auto;
+}
+
 .table {
   background: #FFFFFF;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
   border-radius: 16px;
-  width: 90%;
-  margin: auto;
 }
 
 span {

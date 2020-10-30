@@ -35,7 +35,6 @@ export default {
   font-weight: 700;
   float: left;
   border-radius: 25px;
-  /* border: none; */
 }
 
 .button-gray {
@@ -46,6 +45,5 @@ export default {
   font-weight: 700;
   float: left;
   border-radius: 25px;
-  /* border: none; */
 }
 </style>

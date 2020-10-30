@@ -15,13 +15,6 @@
       </md-field>
     </form>
     <div class="role-control">
-      <!-- <CustomButton 
-        :minter="this.minter"
-        :pauser="this.pauser"
-        :owner="this.owner"
-        :blacklister="this.blacklister"
-        @update-role="update"
-      /> -->
       <div class="role-button-row">
         <RoleButton
           :title="this.minterTitle"
@@ -45,7 +38,7 @@
         />
       </div>
       <div class="update-button">
-        <md-button @click="updateRoles">
+        <md-button>
           SAVE
         </md-button>
       </div>
@@ -58,7 +51,6 @@ import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, BLACKLISTER_ADDRE
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
 import { abi } from '@/utils/web3abi';
-// import CustomButton from '@/components/CustomButton';
 import RoleButton from '@/components/RoleButton';
 
 const web3 = new Web3(Web3.givenProvider);
@@ -67,7 +59,6 @@ const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 export default {
   name: 'Owner',
   components: {
-    // CustomButton,
     RoleButton,
   },
   data() {
@@ -77,10 +68,6 @@ export default {
       pauser: null,
       owner: null,
       blacklister: null,
-      updatedMinter: null,
-      updatedPauser: null,
-      updatedOwner: null,
-      updatedBlacklister: null,
       minterTitle: 'MINTER',
       pauserTitle: 'PAUSER',
       ownerTitle: 'OWNER',
@@ -93,22 +80,18 @@ export default {
         return;
       }
       this.blacklister = this.address === BLACKLISTER_ADDRESS;
-      this.newBlacklister = this.blacklister;
     },
     async checkIsMinter() {
       this.minter = await contract.methods.isMinter(this.address).call();
-      this.newMinter = this.minter;
     },
     async checkIsPauser() {
       const pauserAddress = await contract.methods.pauser().call();
       this.pauser = pauserAddress === this.address;
-      this.newPauser = this.pauser;
     },
     async checkIsOwner() {
       const owner = await contract.methods.owner().call();
       const ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
       this.owner = ownerAddress === this.address;
-      this.newOwner = this.owner;
     },
     checkRoles() {
       this.lookupBlacklisted();
@@ -117,25 +100,16 @@ export default {
       this.checkIsOwner();
     },
     clickMinter() {
-      this.updatedMinter = !this.minter;
-      console.log('clickMinter');
+      this.minter = !this.minter;
     },
     clickPauser() {
-      this.updatedPauser = !this.pauser;
+      this.pauser = !this.pauser;
     },
     clickOwner() {
-      this.updatedOwner = !this.owner;
+      this.owner = !this.owner;
     },
     clickBlacklister() {
-      this.updatedBlacklister= !this.blacklister;
-    },
-    update(minter, pauser, owner, blacklister) {
-      this.minter = minter;
-      this.pauser = pauser;
-      this.owner = owner;
-      this.blacklister = blacklister;
-    },
-    updateRoles() {
+      this.blacklister= !this.blacklister;
     },
   },
 };

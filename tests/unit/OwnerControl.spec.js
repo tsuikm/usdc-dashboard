@@ -15,7 +15,7 @@ describe('OwnerControl', () => {
 
   it('Displays minter tag if address is a minter', async () => {
     const { getByText } = render(OwnerControl, {
-      data: function() {
+      data: function () {
         return {
           address: '0x24bdd8771b08c2ea6fe0e898126e65bd49021be3',
           minter: true,
@@ -34,7 +34,7 @@ describe('OwnerControl', () => {
 
   it('Displays owner and pauser tags if address is an owner and a pauser', async () => {
     const { getByText } = render(OwnerControl, {
-      data: function() {
+      data: function () {
         return {
           address: '0x24bdd8771b08c2ea6fe0e898126e65bd49021be3',
           minter: false,
@@ -54,7 +54,7 @@ describe('OwnerControl', () => {
 
   it('Displays blacklister tag if address is a blacklister', async () => {
     const { getByText } = render(OwnerControl, {
-      data: function() {
+      data: function () {
         return {
           address: '0x24bdd8771b08c2ea6fe0e898126e65bd49021be3',
           minter: false,

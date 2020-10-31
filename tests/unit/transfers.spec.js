@@ -2,20 +2,16 @@ import { render, fireEvent } from '@testing-library/vue';
 import transfers from '@/pages/transfers/index';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
-import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
-// import Web3 from '@/utils/web3mock';
 Vue.use(VueMaterial);
 
 const MOCK_WALLET_ADDRESS = '0xdC1e071D120FD40fB1173BCcc86c74F47645F4E0';
+
 global.ethereum = {
   request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
 };
-// console.log(Web3);
-// const contractClass = new Web3().eth.Contract;
-// // console.log(contractClass);
-// const contract = new contractClass();
-// console.log(contract.methods);
+
 describe('Transfers page', () => {
   test('Transfers card renders', async () => {
     const { queryByTestId } = render(transfers);
@@ -40,6 +36,7 @@ describe('Transfers page', () => {
 
   test('Send USDC button works', async () => {
     const TO_WALLET_ADDRESS = '0x12345';
+    const AMOUNT_TEXT = '100';
     const { queryByTestId } = render(transfers);
 
     const connectMetaMaskButton = queryByTestId('transfers-card-connect-button');
@@ -52,7 +49,7 @@ describe('Transfers page', () => {
 
     await fireEvent.update(fromInput, MOCK_WALLET_ADDRESS);
     await fireEvent.update(toInput, TO_WALLET_ADDRESS);
-    await fireEvent.update(amountInput, '100');
+    await fireEvent.update(amountInput, AMOUNT_TEXT);
     await fireEvent.click(sendButton);
 
     // eslint-disable-next-line
@@ -62,8 +59,8 @@ describe('Transfers page', () => {
         {
           from: MOCK_WALLET_ADDRESS,
           to: USDC_CONTRACT_ADDRESS,
-          data: TO_WALLET_ADDRESS + ', ' + toHex(Number(100) * 1000000),
-          gasPrice: '0x09184e72a000',
+          data: TO_WALLET_ADDRESS + ', ' + toHex(Number(AMOUNT_TEXT) * 1000000),
+          gasPrice: DEFAULT_GAS_PRICE,
         },
       ],
     }]);

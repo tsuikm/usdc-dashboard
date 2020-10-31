@@ -56,7 +56,7 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Web3 from 'web3';
-import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
 const web3 = new Web3(Web3.givenProvider);
 var abi = [
@@ -310,7 +310,7 @@ export default {
                 from: this.accounts[0],
                 to: USDC_CONTRACT_ADDRESS,
                 data: contract.methods.transfer(this.to, toHex(Number(this.amount) * 1000000)).encodeABI(),
-                gasPrice: '0x09184e72a000',
+                gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
           });

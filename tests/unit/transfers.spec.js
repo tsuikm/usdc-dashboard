@@ -41,24 +41,28 @@ describe('Transfers page', () => {
   test('Send USDC button works', async () => {
     const TO_WALLET_ADDRESS = '0x12345';
     const { queryByTestId } = render(transfers);
+
     const connectMetaMaskButton = queryByTestId('transfers-card-connect-button');
     await fireEvent.click(connectMetaMaskButton);
+
     const sendButton = queryByTestId('transfers-card-send-button');
     const amountInput = queryByTestId('transfers-card-amount-input');
     const toInput = queryByTestId('transfers-card-to-input');
     const fromInput = queryByTestId('transfers-card-from-input');
-    await fireEvent.change(fromInput, {target: {value: MOCK_WALLET_ADDRESS}});
-    await fireEvent.change(toInput, {target: {value: TO_WALLET_ADDRESS}});
-    await fireEvent.change(amountInput, {target: {value: 100}});
+
+    await fireEvent.update(fromInput, MOCK_WALLET_ADDRESS);
+    await fireEvent.update(toInput, TO_WALLET_ADDRESS);
+    await fireEvent.update(amountInput, '100');
     await fireEvent.click(sendButton);
+
     // eslint-disable-next-line
-    expect(ethereum.request.mock.calls[1]).toEqual([{
+    expect(ethereum.request.mock.calls[2]).toEqual([{
       method: 'eth_sendTransaction',
       params: [
         {
           from: MOCK_WALLET_ADDRESS,
           to: USDC_CONTRACT_ADDRESS,
-          data: MOCK_WALLET_ADDRESS + ', ' + toHex(Number(100) * 1000000),
+          data: TO_WALLET_ADDRESS + ', ' + toHex(Number(100) * 1000000),
           gasPrice: '0x09184e72a000',
         },
       ],

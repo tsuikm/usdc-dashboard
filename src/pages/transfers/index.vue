@@ -12,25 +12,28 @@
       </md-card-header>
       <md-field
         class="transferInput"
-        data-testid="transfers-card-from-input"
       >
         <label>From</label>
-        <md-input />
+        <md-input data-testid="transfers-card-from-input" />
       </md-field>
 
       <md-field
         class="transferInput"
-        data-testid="transfers-card-to-input"
       >
         <label>To</label>
-        <md-input v-model="to" />
+        <md-input
+          v-model="to"
+          data-testid="transfers-card-to-input"
+        />
       </md-field>
       <md-field
         class="transferInput"
-        data-testid="transfers-card-amount-input"
       >
         <label>Transfer Amount</label>
-        <md-input v-model="amount" />
+        <md-input
+          v-model="amount"
+          data-testid="transfers-card-amount-input"
+        />
       </md-field>
       <md-card-actions>
         <md-button

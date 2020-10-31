@@ -279,7 +279,6 @@ var abi = [
   },
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
-// contractData = contract.transfer.getData(this.to, this.from);
 export default {
   components: {
     NavBar,
@@ -298,7 +297,7 @@ export default {
     },
     async sendUSDC() {
       try {
-        console.log(contract.methods.transfer(this.to, this.amount));
+        // console.log(contract.methods.transfer(this.to, this.amount));
         // eslint-disable-next-line
         const txHash = await ethereum
           .request({

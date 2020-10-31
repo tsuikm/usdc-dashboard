@@ -13,6 +13,11 @@
     >
       Transfer
     </nuxt-link>
+    <input
+      v-model="walletAddress"
+      placeholder="Wallet Address or Txn Hash"
+      class="search"
+    >
   </div>
 </template>
 
@@ -56,7 +61,7 @@ export default {
   }
 
   .link {
-    margin-left: 2rem;
+    margin-right: 2rem;
   }
 }
 </style>

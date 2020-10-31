@@ -2,8 +2,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
 @import './variables/colors';
 
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: normal;
+  src: url("../fonts/Proxima\ Nova\ Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  font-weight: bold;
+  src: url("../fonts/Proxima\ Nova\ Bold.otf") format("opentype");
+}
+
 * {
-  font-family: 'Poppins';
+  font-family: 'Proxima Nova';
   margin: 0;
   color: $circle-black;
 
@@ -26,6 +38,10 @@ body {
 
 #__nuxt, #__layout, #__layout > div {
   height: 100%;
+}
+
+h1, h2 {
+  font-family: 'Poppins';
 }
 
 h2 {
@@ -61,8 +77,22 @@ h2 {
 }
 
 .link {
-  color: $circle-black;
+  color: $circle-black !important;
+  text-decoration: none;
   text-transform: uppercase;
   font-weight: bold;
   letter-spacing: 0.03rem;
 }
+
+input {
+  font-size: 16px;
+
+  &.search {
+    width: 16rem;
+
+    border: none;
+    border-bottom: 2px solid $circle-grey;
+  }
+}
+
+

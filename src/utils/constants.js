@@ -14,3 +14,29 @@ export const TRANSACTION_TOPIC =
   '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
 
 export const DEFAULT_GAS_PRICE = '0x09184e72a000';
+
+export const NuxtLinkStub = {
+  name: 'NuxtLinkStub',
+  props: {
+    to: {
+      type: [String, Object],
+      required: true,
+    },
+    tag: {
+      type: String,
+      default: 'a',
+    },
+    exact: Boolean,
+    append: Boolean,
+    replace: Boolean,
+    activeClass: String,
+    exactActiveClass: String,
+    event: {
+      type: [String, Array],
+      default: 'click',
+    },
+  },
+  render: function render(h) {
+    return h(this.tag, undefined, this.$slots.default);
+  },
+};

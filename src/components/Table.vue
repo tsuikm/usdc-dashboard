@@ -109,11 +109,13 @@ export default {
     content: Array,
   },
   data() {
-    console.log(this.$route.query.page)
     return {
-      page: this.$route.query.page || 0,
+      page: 0,
       pageLength: 25,
     };
+  },
+  created() {
+    this.pageChange(this.$route.query.page);
   },
   methods: {
     pageChange(page) {

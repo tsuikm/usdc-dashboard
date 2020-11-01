@@ -10,6 +10,10 @@ export const OPTIMAL_PROMISE_ALL_SIZE = 500;
 // Mainnet USDC Address
 // export const USDC_CONTRACT_ADDRESS = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
 
+// Locally hosted blockchain contract address.
+// See https://github.com/selinafeng/usdc-dashboard/wiki/Setting-up-a-locally-hosted-blockchain/
+// export const USDC_CONTRACT_ADDRESS = '{{LOCAL_SPECIFIC_CONTRACT}}'
+
 export const TRANSACTION_TOPIC =
   '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
 

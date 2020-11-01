@@ -109,8 +109,9 @@ export default {
     content: Array,
   },
   data() {
+    console.log(this.$route.query.page)
     return {
-      page: 0,
+      page: this.$route.query.page || 0,
       pageLength: 25,
     };
   },

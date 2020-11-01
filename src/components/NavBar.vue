@@ -14,9 +14,10 @@
       Transfer
     </nuxt-link>
     <input
-      v-model="walletAddress"
+      v-model="address"
       placeholder="Wallet Address or Txn Hash"
       class="search"
+      @keydown.enter.prevent="searchAddress"
     >
   </div>
 </template>
@@ -32,15 +33,16 @@ export default {
   name: 'NavBar',
   data() {
     return {
-      walletAddress: '',
+      address: '',
     };
   },
   methods: {
-    submitAddress() {
-      this.walletAddress = padHex(this.walletAddress.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
+    searchAddress() {
+      console.log(this.address);
+      this.address = padHex(this.address.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
 
-      if (web3.utils.isAddress(this.walletAddress)) {
-        window.location.href = `/address/${this.walletAddress}`;
+      if (web3.utils.isAddress(this.address)) {
+        window.location.href = `/address/${this.address}`;
       }
       else {
         window.location.href = '/404';

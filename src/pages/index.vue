@@ -82,7 +82,7 @@ export default {
   },
   created: function () {
     this.lookupRoles();
-    // this.queryMinterConfigured();
+    this.queryMinterConfigured();
   },
   methods: {
     async lookupRoles() {
@@ -94,7 +94,7 @@ export default {
       });
     },
     async queryMinterConfigured() {
-      const sqlQuery = 'SELECT minter DISTINCT FROM `blockchain-etl.ethereum_usdc.FiatTokenV1_event_MinterConfigured` LIMIT 1000';
+      const sqlQuery = 'SELECT minter FROM `blockchain-etl.ethereum_usdc.FiatTokenV1_event_MinterConfigured` LIMIT 1000';
       const options = {
         query: sqlQuery,
         location: 'US',

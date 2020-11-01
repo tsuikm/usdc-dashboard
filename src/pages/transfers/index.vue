@@ -300,7 +300,6 @@ export default {
     },
     async sendUSDC() {
       try {
-        // console.log(contract.methods.transfer(this.to, this.amount));
         // eslint-disable-next-line
         const txHash = await ethereum
           .request({

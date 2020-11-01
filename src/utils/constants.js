@@ -17,6 +17,8 @@ export const OPTIMAL_PROMISE_ALL_SIZE = 500;
 export const TRANSACTION_TOPIC =
   '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
 
+export const BLACKLISTER_ADDRESS = 
+  '0x5db0115f3b72d19cea34dd697cf412ff86dc7e1b';
 export const NuxtLinkStub = {
   name: 'NuxtLinkStub',
   props: {

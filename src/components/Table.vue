@@ -16,6 +16,7 @@
         <Pagination
           :total-pages="Math.ceil(this.totalItems / pageLength)"
           @page:change="this.pageChange"
+          ref="pagination"
         />
       </md-table-toolbar>
 
@@ -114,8 +115,9 @@ export default {
       pageLength: 25,
     };
   },
-  created() {
+  mounted() {
     this.pageChange(this.$route.query.page);
+    this.$refs.pagination.page = this.$route.query.page;
   },
   methods: {
     pageChange(page) {

@@ -116,8 +116,10 @@ export default {
     };
   },
   mounted() {
-    this.pageChange(this.$route.query.page);
-    this.$refs.pagination.page = this.$route.query.page;
+    if (this.$route.query.page) {
+      this.page = parseInt(this.$route.query.page) - 1; // subtract 1 since pages are 0-indexed.
+      this.$refs.pagination.page = this.page;
+    }
   },
   methods: {
     pageChange(page) {

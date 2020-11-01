@@ -48,7 +48,7 @@ export const getLogs = async (address, fromBlock) => {
     const receiverTxns = await web3.eth.getPastLogs({
       fromBlock,
       toBlock: 'latest',
-      // address: USDC_CONTRACT_ADDRESS,
+      address: USDC_CONTRACT_ADDRESS,
       topics: [TRANSACTION_TOPIC, null, address],
     });
 
@@ -72,7 +72,7 @@ export const getLogs = async (address, fromBlock) => {
     const senderTxns = await web3.eth.getPastLogs({
       fromBlock,
       toBlock: 'latest',
-      // address: USDC_CONTRACT_ADDRESS,
+      address: USDC_CONTRACT_ADDRESS,
       topics: [TRANSACTION_TOPIC, address, null],
     });
 

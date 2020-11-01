@@ -34,6 +34,10 @@ html, body {
 
 body {
   padding: 2rem 6rem;
+
+  @media only screen and (max-width: 800px) {
+    padding: 2rem 2rem;
+  }
 }
 
 #__nuxt, #__layout, #__layout > div {

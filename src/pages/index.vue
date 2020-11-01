@@ -112,13 +112,8 @@ export default {
     height: calc(100% - 10.25rem);
 
     .card {
-      &:not(:first-child) {
-        margin-left: 1rem;
-      }
-
-      &:not(:last-child) {
-        margin-right: 1rem;
-      }
+      margin-left: 1rem;
+      margin-right: 1rem;
 
       flex: 1;
 
@@ -129,6 +124,13 @@ export default {
         }
       }
 
+      a {
+        display: inline-block;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
       .mono {
         margin-bottom: 0.5rem;
       }
@@ -136,6 +138,10 @@ export default {
 
     @media only screen and (max-width: 800px) {
       flex-direction: column;
+
+      .card {
+        margin: 1rem 0;
+      }
     }
   }
 </style>

@@ -82,6 +82,7 @@ export default {
   },
   created: function () {
     this.lookupRoles();
+    // this.queryMinterConfigured();
   },
   methods: {
     async lookupRoles() {
@@ -93,7 +94,13 @@ export default {
       });
     },
     async queryMinterConfigured() {
-      const sqlQuery = 'SELECT * FROM `blockchain-etl.ethereum_usdc.FiatTokenV1_event_MinterConfigured` LIMIT 1000';
+      const sqlQuery = 'SELECT minter DISTINCT FROM `blockchain-etl.ethereum_usdc.FiatTokenV1_event_MinterConfigured` LIMIT 1000';
+      const options = {
+        query: sqlQuery,
+        location: 'US',
+      };
+      const [rows] = await bigqueryClient.query(options);
+      console.log(rows);
     },
   },
 };
@@ -125,6 +132,10 @@ export default {
       .mono {
         margin-bottom: 0.5rem;
       }
+    }
+
+    @media only screen and (max-width: 800px) {
+      flex-direction: column;
     }
   }
 </style>

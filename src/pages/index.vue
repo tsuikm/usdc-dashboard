@@ -17,15 +17,25 @@
           </router-link>
         </div>
         <h2>Pausers</h2>
-        <a>
+        <div>
           <router-link
             :to="'address/' + this.pauser"
             class="mono"
           >
             {{ this.pauser }}
           </router-link>
-        </a>
+        </div>
         <h2>Minters</h2>
+        <div>
+          <router-link
+            v-for="minter in minters"
+            :key="minter"
+            :to="'address/' + minter"
+            class="mono"
+          >
+            {{ minter }}
+          </router-link>
+        </div>
       </div>
       <div
         id="content-blocks"
@@ -76,8 +86,9 @@ export default {
   },
   data() {
     return {
-      owner: String,
-      pauser: String, 
+      owner: '',
+      pauser: '', 
+      minters: [],
     };
   },
   created: function () {
@@ -99,8 +110,19 @@ export default {
         query: sqlQuery,
         location: 'US',
       };
-      const [rows] = await bigqueryClient.query(options);
-      console.log(rows);
+
+      try {
+        const [rows] = await bigqueryClient.query(options);
+        const minters = new Set();
+        for (const { minter } of rows) {
+          minters.add(minter);
+        }
+
+        this.minters = Array.from(minters);
+      } catch (e) {
+        console.log(e);
+      }
+      console.log(this.minters);
     },
   },
 };

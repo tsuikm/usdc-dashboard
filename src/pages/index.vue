@@ -57,9 +57,6 @@
 import NavBar from '@/components/NavBar';
 import Web3 from 'web3';
 import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
-import { BigQuery } from '@google-cloud/bigquery';
-
-const bigqueryClient = new BigQuery();
 
 const web3 = new Web3(Web3.givenProvider);
 const abi = [
@@ -93,36 +90,20 @@ export default {
   },
   created: function () {
     this.lookupRoles();
-    this.queryMinterConfigured();
   },
   methods: {
     async lookupRoles() {
       contract.methods.pauser().call((error, pauser) => {
         this.pauser = pauser;
       });
+
       contract.methods.owner().call((error, owner) => {
         this.owner = owner;
       });
-    },
-    async queryMinterConfigured() {
-      const sqlQuery = 'SELECT minter FROM `blockchain-etl.ethereum_usdc.FiatTokenV1_event_MinterConfigured` LIMIT 1000';
-      const options = {
-        query: sqlQuery,
-        location: 'US',
-      };
 
-      try {
-        const [rows] = await bigqueryClient.query(options);
-        const minters = new Set();
-        for (const { minter } of rows) {
-          minters.add(minter);
-        }
-
-        this.minters = Array.from(minters);
-      } catch (e) {
-        console.log(e);
-      }
-      console.log(this.minters);
+      // TODO: update localhost:3000 with actual domain, or use env vars
+      const mintersResponse = await fetch('http://localhost:3000/api/minters');
+      this.minters = await mintersResponse.json();
     },
   },
 };

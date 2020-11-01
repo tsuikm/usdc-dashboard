@@ -8,7 +8,7 @@
 // modules
 import { abi } from '@/utils/testTokenABI.js';
 import Web3 from 'web3';
-import { TEST_TOKEN_CONTRACT_ADDRESS, TEST_TOKEN_OWNER_ADDRESS, TEST_TOKEN_PAUSER_ADDRESS } from '@/utils/constants.js';
+import { TEST_TOKEN_CONTRACT_ADDRESS, TEST_TOKEN_OWNER_ADDRESS, TEST_TOKEN_PAUSER_ADDRESS, TEST_TOKEN_MASTER_MINTER_ADDRESS } from '@/utils/constants.js';
 
 const web3 = new Web3(Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, TEST_TOKEN_CONTRACT_ADDRESS);
@@ -90,6 +90,20 @@ async function unblacklist(address) {
 
 export default {
   computed: {
+    async testMint() {
+      return await mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
+    },
+    async testBurn() {
+      return await burn('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
+    },
+    async testPause() {
+      await pause();
+      return await mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
+    },
+    async testUnpause() {
+      await unpause();
+      return await mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
+    }
     
   },
   async created() {

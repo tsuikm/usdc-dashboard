@@ -13,7 +13,7 @@ export const USDC_CONTRACT_ADDRESS = '0x07865c6E87B9F70255377e024ace6630C1Eaa37F
 export const TRANSACTION_TOPIC =
   '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
 
-export const DEFAULT_GAS_PRICE = '0x09184e72a000';
+export const DEFAULT_GAS_PRICE = '0x09184e72a000'; // Decimal value is 10,000,000,000,000
 
 export const NuxtLinkStub = {
   name: 'NuxtLinkStub',

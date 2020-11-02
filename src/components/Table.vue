@@ -126,7 +126,7 @@ export default {
       this.page = page;
 
       // Change the ?page query parameter to match the page. We add 1 since pages are 0-indexed internally.
-      this.$router.push({query: { page: page + 1 }});
+      this.$router && this.$router.push({query: { page: page + 1 }});
       this.$emit('page:change', page);
     },
   },

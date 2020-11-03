@@ -42,6 +42,9 @@
         class="card"
       >
         <h2>Latest Blocks</h2>
+        <router-link to="/blocks">
+          See all blocks
+        </router-link>
         <nuxt-link
           v-for="block in blocks"
           :key="block"
@@ -56,6 +59,9 @@
         class="card"
       >
         <h2>Recent Transactions</h2>
+        <router-link to="/transactions">
+          See all transactions
+        </router-link>
         <router-link
           v-for="transaction in transactions"
           :key="transaction.transactionHash"
@@ -159,6 +165,10 @@ export default {
       margin-right: 1rem;
       min-width: 240px;
       flex: 1;
+
+      @media screen and (min-width: 800px) {
+        overflow-y: scroll;
+      }
 
       h2 {
         margin-bottom: 1rem;

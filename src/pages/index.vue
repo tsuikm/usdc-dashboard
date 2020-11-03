@@ -57,7 +57,7 @@
         <div class="list">
           <nuxt-link
             v-for="block in blocks"
-            :key="block"
+            :key="block.hex"
             :to="'block/' + block.decimal"
             class="mono"
           >
@@ -76,7 +76,7 @@
         <div class="list">
           <router-link
             v-for="transaction in transactions"
-            :key="transaction.transactionHash"
+            :key="transaction.logIndex"
             :to="'transaction/' + transaction.transactionHash"
             class="mono"
           >

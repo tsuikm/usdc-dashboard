@@ -1,6 +1,5 @@
 <template>
-  <div>
-  </div>
+  <div />
 </template>
 
 <script>
@@ -8,7 +7,7 @@
 // modules
 import { abi } from '@/utils/testTokenABI.js';
 import Web3 from 'web3';
-import { TEST_TOKEN_CONTRACT_ADDRESS, TEST_TOKEN_OWNER_ADDRESS, TEST_TOKEN_PAUSER_ADDRESS, TEST_TOKEN_MASTER_MINTER_ADDRESS } from '@/utils/constants.js';
+import { TEST_TOKEN_CONTRACT_ADDRESS, TEST_TOKEN_OWNER_ADDRESS, TEST_TOKEN_PAUSER_ADDRESS, TEST_TOKEN_MASTER_MINTER_ADDRESS, TEST_TOKEN_BLACKLISTER_ADDRESS } from '@/utils/constants.js';
 
 const web3 = new Web3(Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, TEST_TOKEN_CONTRACT_ADDRESS);
@@ -26,6 +25,7 @@ async function addMinter(address, allowance) {
   return await contract.methods.isMinter(address);
 }
 
+
 /**
  * Adds a minter to the test token contract
  *
@@ -37,6 +37,10 @@ async function addMinter(address, allowance) {
 async function mint(minter_address, to_address, amount) {
   //await contract.methods.pause(address, allowance).call();
   await address.mint(to_address, amount);
+}
+
+async function isMinter() {
+  await console.log(abi[3]);
 }
 
 /**
@@ -90,6 +94,9 @@ async function unblacklist(address) {
 
 export default {
   computed: {
+    // testMint: async function() {
+    //   return  mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
+    // },
     async testMint() {
       return await mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
     },
@@ -103,7 +110,7 @@ export default {
     async testUnpause() {
       await unpause();
       return await mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
-    }
+    },
     
   },
   async created() {
@@ -112,4 +119,6 @@ export default {
   methods: {
   },
 };
+addMinter('0x5df6c542e318966CC5FB8862Faf25452574A6c5D', 100);
+console.log(isMinter('0xdC1e071D120FD40fB1173BCcc86c74F47645F4E0'));
 </script>

@@ -1,24 +1,47 @@
 <template>
-  <div id="navbar">
+  <div
+    id="navbar"
+  >
     <img src="@/assets/logo.svg">
-    <nuxt-link
-      to="/accounts"
-      class="link"
+    <div
+      id="menu-items"
+      :class="menuOpen ? 'open' : ''"
     >
-      Accounts
-    </nuxt-link>
-    <nuxt-link
-      to="/accounts"
-      class="link"
+      <nuxt-link
+        to="/accounts"
+        class="link"
+      >
+        Accounts
+      </nuxt-link>
+      <nuxt-link
+        to="/accounts"
+        class="link"
+      >
+        Transfer
+      </nuxt-link>
+      <input
+        v-model="address"
+        placeholder="Wallet Address or Txn Hash"
+        class="search"
+        @keydown.enter.prevent="searchAddress"
+      >
+    </div>
+    <i
+      v-if="menuOpen"
+      id="hamburger"
+      class="md-icon md-icon-font md-theme-default"
+      @click="toggleMenu"
     >
-      Transfer
-    </nuxt-link>
-    <input
-      v-model="address"
-      placeholder="Wallet Address or Txn Hash"
-      class="search"
-      @keydown.enter.prevent="searchAddress"
+      close
+    </i>
+    <i
+      v-else
+      id="hamburger"
+      class="md-icon md-icon-font md-theme-default"
+      @click="toggleMenu"
     >
+      menu
+    </i>
   </div>
 </template>
 
@@ -34,6 +57,7 @@ export default {
   data() {
     return {
       address: '',
+      menuOpen: false,
     };
   },
   methods: {
@@ -48,22 +72,9 @@ export default {
         window.location.href = '/404';
       }
     },
+    toggleMenu() {
+      this.menuOpen = !this.menuOpen;
+    },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-#navbar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-
-  img {
-    margin-right: auto;
-  }
-
-  .link {
-    margin-right: 2rem;
-  }
-}
-</style>

@@ -41,13 +41,29 @@
         id="content-blocks"
         class="card"
       >
-        <h2>Blocks</h2>
+        <h2>Latest Blocks</h2>
+        <nuxt-link
+          v-for="block in blocks"
+          :key="block"
+          :to="'block/' + block.decimal"
+          class="mono"
+        >
+          {{ block.decimal }} / {{ block.hex }}
+        </nuxt-link>
       </div>
       <div
         id="content-transactions"
         class="card"
       >
-        <h2>Transactions</h2>
+        <h2>Recent Transactions</h2>
+        <router-link
+          v-for="transaction in transactions"
+          :key="transaction.transactionHash"
+          :to="'transaction/' + transaction.transactionHash"
+          class="mono"
+        >
+          {{ transaction.transactionHash }}
+        </router-link>
       </div>
     </div>
   </div>
@@ -56,7 +72,8 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Web3 from 'web3';
-import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, TRANSACTION_TOPIC } from '@/utils/constants';
+import { toHex } from '@/utils/utils';
 
 const web3 = new Web3(Web3.givenProvider);
 const abi = [
@@ -86,10 +103,14 @@ export default {
       owner: '',
       pauser: '', 
       minters: [],
+      blocks: [],
+      transactions: [],
     };
   },
   created: function () {
     this.lookupRoles();
+    this.lookupBlocks();
+    this.lookupTransactions();
   },
   methods: {
     async lookupRoles() {
@@ -105,6 +126,25 @@ export default {
       const mintersResponse = await fetch('http://localhost:3000/api/minters');
       this.minters = await mintersResponse.json();
     },
+    async lookupBlocks() {
+      const currentBlock = await web3.eth.getBlockNumber();
+      this.blocks = [];
+      for (let i = 0; i < 20; i++) this.blocks.push({
+        decimal: currentBlock - i,
+        hex: toHex(currentBlock - i),
+      });
+    },
+    async lookupTransactions() {
+      const currentBlock = await web3.eth.getBlockNumber();
+      const txns = await web3.eth.getPastLogs({
+        fromBlock: currentBlock - 10,
+        toBlock: 'latest',
+        address: USDC_CONTRACT_ADDRESS,
+        topics: [TRANSACTION_TOPIC, null, null],
+      });
+
+      this.transactions = txns.slice(0, 20);
+    },
   },
 };
 </script>
@@ -117,7 +157,7 @@ export default {
     .card {
       margin-left: 1rem;
       margin-right: 1rem;
-
+      min-width: 240px;
       flex: 1;
 
       h2 {
@@ -135,8 +175,12 @@ export default {
       }
 
       .mono {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.25rem;
       }
+    }
+
+    #content-blocks {
+      flex: 0;
     }
 
     @media only screen and (max-width: 800px) {

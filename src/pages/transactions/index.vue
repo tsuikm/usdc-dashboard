@@ -1,13 +1,19 @@
 <template>
-  <Dashboard />
+  <div>
+    <NavBar />
+    <Transactions />
+  </div>
 </template>
 
 <script>
-import Dashboard from '@/components/Dashboard';
+import NavBar from '@/components/NavBar';
+import Transactions from '@/components/Transactions';
 
 export default {
+  name: 'Transactions',
   components: {
-    Dashboard,
+    Transactions,
+    NavBar,
   },
 };
 </script>

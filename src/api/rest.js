@@ -7,7 +7,7 @@ const bigqueryClient = new BigQuery();
 app.use(bodyParser.json());
 
 app.get('/minters', async (req, res) => {
-  const sqlQuery = 'SELECT minter FROM `blockchain-etl.ethereum_usdc.FiatTokenV1_event_MinterConfigured` LIMIT 1000';
+  const sqlQuery = 'SELECT minter FROM `blockchain-etl.ethereum_usdc.FiatTokenV1_event_MinterConfigured` GROUP BY minter';
   const options = {
     query: sqlQuery,
     location: 'US',
@@ -15,12 +15,22 @@ app.get('/minters', async (req, res) => {
 
   try {
     const [rows] = await bigqueryClient.query(options);
-    const minters = new Set();
-    for (const { minter } of rows) {
-      minters.add(minter);
-    }
+    res.json(rows.map(m => m.minter));
+  } catch (e) {
+    res.status(500).end();
+  }
+});
 
-    res.json(Array.from(minters));
+app.get('/blacklister', async (req, res) => {
+  const sqlQuery = 'SELECT block_number, newBlacklister FROM `blockchain-etl.ethereum_usdc.FiatTokenV1_event_BlacklisterChanged` ORDER BY block_number DESC LIMIT 1';
+  const options = {
+    query: sqlQuery,
+    location: 'US',
+  };
+
+  try {
+    const [rows] = await bigqueryClient.query(options);
+    res.json(rows[0].newBlacklister);
   } catch (e) {
     res.status(500).end();
   }

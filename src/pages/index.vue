@@ -25,6 +25,15 @@
             {{ this.pauser }}
           </router-link>
         </div>
+        <h2>Blacklister</h2>
+        <div>
+          <router-link
+            :to="'address/' + blacklister"
+            class="mono"
+          >
+            {{ blacklister }}
+          </router-link>
+        </div>
         <h2>Minters</h2>
         <div>
           <router-link
@@ -109,6 +118,7 @@ export default {
       owner: '',
       pauser: '', 
       minters: [],
+      blacklister: '',
       blocks: [],
       transactions: [],
     };
@@ -129,8 +139,13 @@ export default {
       });
 
       // TODO: update localhost:3000 with actual domain, or use env vars
-      const mintersResponse = await fetch('http://localhost:3000/api/minters');
-      this.minters = await mintersResponse.json();
+      fetch('http://localhost:3000/api/minters').then(async (mintersResponse) => {
+        this.minters = await mintersResponse.json();
+      });
+      
+      fetch('http://localhost:3000/api/blacklister').then(async (blacklisterResponse) => {
+        this.blacklister = await blacklisterResponse.json();
+      });
     },
     async lookupBlocks() {
       const currentBlock = await web3.eth.getBlockNumber();

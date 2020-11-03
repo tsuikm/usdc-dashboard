@@ -54,14 +54,16 @@
         <router-link to="/blocks">
           See all blocks
         </router-link>
-        <nuxt-link
-          v-for="block in blocks"
-          :key="block"
-          :to="'block/' + block.decimal"
-          class="mono"
-        >
-          {{ block.decimal }} / {{ block.hex }}
-        </nuxt-link>
+        <div class="list">
+          <nuxt-link
+            v-for="block in blocks"
+            :key="block"
+            :to="'block/' + block.decimal"
+            class="mono"
+          >
+            {{ block.decimal }} / {{ block.hex }}
+          </nuxt-link>
+        </div>
       </div>
       <div
         id="content-transactions"
@@ -71,14 +73,16 @@
         <router-link to="/transactions">
           See all transactions
         </router-link>
-        <router-link
-          v-for="transaction in transactions"
-          :key="transaction.transactionHash"
-          :to="'transaction/' + transaction.transactionHash"
-          class="mono"
-        >
-          {{ transaction.transactionHash }}
-        </router-link>
+        <div class="list">
+          <router-link
+            v-for="transaction in transactions"
+            :key="transaction.transactionHash"
+            :to="'transaction/' + transaction.transactionHash"
+            class="mono"
+          >
+            {{ transaction.transactionHash }}
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -181,10 +185,6 @@ export default {
       min-width: 240px;
       flex: 1;
 
-      @media screen and (min-width: 800px) {
-        overflow-y: scroll;
-      }
-
       h2 {
         margin-bottom: 1rem;
         &:not(:first-of-type) {
@@ -201,6 +201,13 @@ export default {
 
       .mono {
         margin-bottom: 0.25rem;
+      }
+
+      .list {
+        @media screen and (min-width: 800px) {
+          height: calc(100% - 4rem);
+          overflow-y: scroll;
+        }
       }
     }
 

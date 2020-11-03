@@ -119,6 +119,8 @@ describe('SummaryPage', () => {
     });
     expect(findByText('Owner')).not.toBeNull();
     expect(findByText('Pausers')).not.toBeNull();
+    expect(findByText('Blacklister')).not.toBeNull();
+    expect(findByText('Minters')).not.toBeNull();
     expect(findByText(MOCK_WALLET_ADDRESS)).not.toBeNull();
   });
 });

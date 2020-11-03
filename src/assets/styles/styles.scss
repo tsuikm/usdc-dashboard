@@ -70,10 +70,18 @@ h2 {
 
 #navbar {
   margin-bottom: 4rem;
+
+  @media only screen and (max-width: 800px) {
+    margin-bottom: 2rem;
+  }
 }
 
 #content {
   margin-top: 2rem;
+
+  @media only screen and (max-width: 800px) {
+    margin-top: 1rem;
+  }
 }
 
 .card {

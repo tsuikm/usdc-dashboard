@@ -178,6 +178,12 @@ export default {
   #content {
     display: flex;
     height: calc(100% - 10.25rem);
+    padding: 10px;
+    overflow-y: scroll;
+
+    @media only screen and (max-width: 800px) {
+      height: calc(100% - 126px);
+    }
 
     .card {
       margin-left: 1rem;

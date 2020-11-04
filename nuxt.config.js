@@ -35,7 +35,7 @@ module.exports = {
     { src: '@/assets/styles/styles.scss', lang: 'scss'},
   ],
   build: {
-    extend (config, { isDev, isClient }) {
+    extend (config) {
       config.node = {
         fs: 'empty',
         child_process: 'empty',

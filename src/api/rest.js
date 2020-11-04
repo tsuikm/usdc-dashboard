@@ -7,7 +7,6 @@ const bigqueryClient = new BigQuery();
 app.use(bodyParser.json());
 
 app.get('/minters', async (req, res) => {
-  console.log('SEND HELPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP');
   const sqlQuery = 'SELECT minter FROM `blockchain-etl.ethereum_usdc.FiatTokenV1_event_MinterConfigured` GROUP BY minter';
   const options = {
     query: sqlQuery,

@@ -10,12 +10,7 @@
           Transfer USDC
         </div>
       </md-card-header>
-      <md-field
-        class="transferInput"
-      >
-        <label>From</label>
-        <md-input data-testid="transfers-card-from-input" />
-      </md-field>
+
 
       <md-field
         class="transferInput"

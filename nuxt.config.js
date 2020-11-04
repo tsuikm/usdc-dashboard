@@ -23,7 +23,7 @@ module.exports = {
       },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Proxima+Nova:400,500,700&display=swap',
+        href: 'https://fonts.googleapis.com/css?family=Proxima+Nova&display=swap',
       },
     ],
   },

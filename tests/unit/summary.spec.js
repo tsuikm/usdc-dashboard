@@ -140,5 +140,7 @@ describe('SummaryPage', () => {
     expect(findByText('Blacklister')).not.toBeNull();
     expect(findByText('Minters')).not.toBeNull();
     expect(findByText(MOCK_WALLET_ADDRESS)).not.toBeNull();
+    expect(findByText(MOCK_MINTERS)).not.toBeNull();
+    expect(findByText(MOCK_BLACKLISTER)).not.toBeNull();
   });
 });

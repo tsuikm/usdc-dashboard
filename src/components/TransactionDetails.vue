@@ -19,12 +19,20 @@
 
       <md-table-row>
         <md-table-cell> Sender: </md-table-cell>
-        <md-table-cell><a :href="'/address/' + sender">{{ sender }}</a></md-table-cell>
+        <md-table-cell>
+          <nuxt-link :to="'/address/' + sender">
+            {{ sender }}
+          </nuxt-link>
+        </md-table-cell>
       </md-table-row>
 
       <md-table-row>
         <md-table-cell> Receiver: </md-table-cell>
-        <md-table-cell><a :href="'/address/' + receiver">{{ receiver }}</a></md-table-cell>
+        <md-table-cell>
+          <nuxt-link :to="'/address/' + receiver">
+            {{ receiver }}
+          </nuxt-link>
+        </md-table-cell>
       </md-table-row>
 
       <md-table-row>

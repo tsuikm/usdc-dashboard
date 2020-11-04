@@ -12,6 +12,11 @@ import { TEST_TOKEN_CONTRACT_ADDRESS, TEST_TOKEN_OWNER_ADDRESS, TEST_TOKEN_PAUSE
 const web3 = new Web3(Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, TEST_TOKEN_CONTRACT_ADDRESS);
 
+ async function connectMetamask() {
+      // eslint-disable-next-line
+      await ethereum.request({ method: 'eth_requestAccounts' });
+  }
+
 /**
  * Adds a minter to the test token contract
  *

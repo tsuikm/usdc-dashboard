@@ -29,6 +29,13 @@ export const abi = [
   },
   {
     constant: true,
+    inputs: [{ name: 'account', type: 'address' }],
+    name: 'isPauser',
+    outputs: [{ name: '', type: 'bool' }],
+    type: 'function',
+  },
+  {
+    constant: true,
     inputs: [],
     name: 'pauser',
     outputs: [{ name: '', type: 'address' }],

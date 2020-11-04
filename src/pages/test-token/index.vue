@@ -54,14 +54,14 @@ async function burn(minter_address, amount) {
  * Pauses the test token contract
  */
 async function pause() {
-  await contract.methods.pause(TEST_TOKEN_PAUSER_ADDRESS).call();
+  await contract.methods.pause().call();
 }
 
 /**
  * Unpauses the test token contract
  */
 async function unpause() {
-  await contract.methods.unpause(TEST_TOKEN_PAUSER_ADDRESS, allowance).call();
+  await contract.methods.unpause(allowance).call();
 }
 
 /**
@@ -114,7 +114,7 @@ export default {
 // console.log(contract.methods.isMinter('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb').call());
 // console.log(contract.methods.minterAllowance('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb').call());
 // console.log(mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 10));
-console.log(contract.methods.isPauser(TEST_TOKEN_PAUSER_ADDRESS).call());
+console.log(contract.methods.pause(TEST_TOKEN_PAUSER_ADDRESS).call());
 console.log(addMinter(TEST_TOKEN_OWNER_ADDRESS, 100));
 
 console.log(contract.methods.isMinter(TEST_TOKEN_OWNER_ADDRESS).call());

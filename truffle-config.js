@@ -30,14 +30,14 @@ module.exports = {
     development: {
       host: 'localhost',
       port: 8545,
-      network_id: '*'
-    }
+      network_id: '*',
+    },
   },
 
   // Configure compilers.
   compilers: {
     solc: {
-      version: '^0.6.0'  // Fetch exact version from solc-bin (default: truffle's version)
-    }
-  }
+      version: '^0.6.0',  // Fetch exact version from solc-bin (default: truffle's version)
+    },
+  },
 };

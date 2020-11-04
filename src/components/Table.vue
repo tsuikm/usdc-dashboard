@@ -5,21 +5,21 @@
       data-testid="progress-bar-test-id"
       md-mode="indeterminate"
     />
+    <md-table-toolbar>
+      <h1 class="md-title">
+        {{ name }}
+      </h1>
+      <Pagination
+        ref="pagination"
+        :total-pages="Math.ceil(this.totalItems / pageLength)"
+        @page:change="this.pageChange"
+      />
+    </md-table-toolbar>
     <md-table
       md-card
       data-testid="md-table"
+      class="table"
     >
-      <md-table-toolbar>
-        <h1 class="md-title">
-          {{ name }}
-        </h1>
-        <Pagination
-          ref="pagination"
-          :total-pages="Math.ceil(this.totalItems / pageLength)"
-          @page:change="this.pageChange"
-        />
-      </md-table-toolbar>
-
       <md-table-row>
         <md-table-head
           v-for="field in schema"
@@ -40,24 +40,26 @@
           v-for="field in schema"
           :key="field.name"
         >
-          <!-- Internal links start with "/"; e.g. "/pages" -->
-          <nuxt-link
-            v-if="field.link && field.link(item).startsWith('/')"
-            :to="field.link(item)"
-          >
-            {{ field.getter(item) }}
-          </nuxt-link>
-          <!-- All other links are external; e.g. "https://..." -->
-          <a
-            v-else-if="field.link"
-            :href="field.link(item)"
-          >
-            {{ field.getter(item) }}
-          </a>
-          <!-- Not a link if field.link doesn't exist -->
-          <template v-else>
-            {{ field.getter(item) }}
-          </template>
+          <span>
+            <!-- Internal links start with "/"; e.g. "/pages" -->
+            <nuxt-link
+              v-if="field.link && field.link(item).startsWith('/')"
+              :to="field.link(item)"
+            >
+              {{ field.getter(item) }}
+            </nuxt-link>
+            <!-- All other links are external; e.g. "https://..." -->
+            <a
+              v-else-if="field.link"
+              :href="field.link(item)"
+            >
+              {{ field.getter(item) }}
+            </a>
+            <!-- Not a link if field.link doesn't exist -->
+            <template v-else>
+              {{ field.getter(item) }}
+            </template>
+          </span>
         </md-table-cell>
       </md-table-row>
     </md-table>
@@ -132,3 +134,28 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+@import "@/assets/styles/variables/_colors.scss";
+
+#table-and-loading-container {
+  width: 90%;
+  font-family: Proxima Nova;
+  margin: auto;
+}
+
+.table {
+  background: #FFFFFF;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+}
+
+span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  display: inline-block;
+}
+
+</style>

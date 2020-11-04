@@ -7,43 +7,45 @@
         id="content-roles"
         class="card"
       >
-        <h2>Owner</h2>
-        <div>
-          <nuxt-link
-            :to="'address/' + this.owner"
-            class="mono"
-          >
-            {{ this.owner }}
-          </nuxt-link>
-        </div>
-        <h2>Pausers</h2>
-        <div>
-          <nuxt-link
-            :to="'address/' + this.pauser"
-            class="mono"
-          >
-            {{ this.pauser }}
-          </nuxt-link>
-        </div>
-        <h2>Blacklister</h2>
-        <div>
-          <nuxt-link
-            :to="'address/' + blacklister"
-            class="mono"
-          >
-            {{ blacklister }}
-          </nuxt-link>
-        </div>
-        <h2>Minters</h2>
-        <div>
-          <nuxt-link
-            v-for="minter in minters"
-            :key="minter"
-            :to="'address/' + minter"
-            class="mono"
-          >
-            {{ minter }}
-          </nuxt-link>
+        <div class="list">
+          <h2>Owner</h2>
+          <div>
+            <nuxt-link
+              :to="'address/' + this.owner"
+              class="mono"
+            >
+              {{ this.owner }}
+            </nuxt-link>
+          </div>
+          <h2>Pausers</h2>
+          <div>
+            <nuxt-link
+              :to="'address/' + this.pauser"
+              class="mono"
+            >
+              {{ this.pauser }}
+            </nuxt-link>
+          </div>
+          <h2>Blacklister</h2>
+          <div>
+            <nuxt-link
+              :to="'address/' + blacklister"
+              class="mono"
+            >
+              {{ blacklister }}
+            </nuxt-link>
+          </div>
+          <h2>Minters</h2>
+          <div>
+            <nuxt-link
+              v-for="minter in minters"
+              :key="minter"
+              :to="'address/' + minter"
+              class="mono"
+            >
+              {{ minter }}
+            </nuxt-link>
+          </div>
         </div>
       </div>
       <div
@@ -219,6 +221,12 @@ export default {
 
     #content-blocks {
       flex: 0;
+    }
+
+    #content-roles {
+      .list {
+        height: 100%;
+      }
     }
 
     @media only screen and (max-width: 800px) {

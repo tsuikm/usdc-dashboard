@@ -10,6 +10,7 @@
         {{ name }}
       </h1>
       <Pagination
+        ref="pagination"
         :total-pages="Math.ceil(this.totalItems / pageLength)"
         @page:change="this.pageChange"
       />
@@ -41,7 +42,7 @@
         >
           <span>
             <!-- Internal links start with "/"; e.g. "/pages" -->
-            <nuxt-link 
+            <nuxt-link
               v-if="field.link && field.link(item).startsWith('/')"
               :to="field.link(item)"
             >
@@ -116,9 +117,18 @@ export default {
       pageLength: 25,
     };
   },
+  mounted() {
+    if (this.$route && this.$route.query.page) {
+      this.page = parseInt(this.$route.query.page) - 1; // subtract 1 since pages are 0-indexed.
+      this.$refs.pagination.page = this.page;
+    }
+  },
   methods: {
     pageChange(page) {
       this.page = page;
+
+      // Change the ?page query parameter to match the page. We add 1 since pages are 0-indexed internally.
+      this.$router && this.$router.push({query: { page: page + 1 }});
       this.$emit('page:change', page);
     },
   },

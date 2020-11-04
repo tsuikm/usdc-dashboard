@@ -30,7 +30,7 @@ describe('RoleButton', () => {
       },
     });
     const event = createEvent.click(getByText('MINTER'));
-    expect(fireEvent(getByText('MINTER'), event)).not.toBeNull();;
-  })
+    expect(fireEvent(getByText('MINTER'), event)).not.toBeNull();
+  });
 
 });

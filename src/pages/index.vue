@@ -9,41 +9,41 @@
       >
         <h2>Owner</h2>
         <div>
-          <router-link
+          <nuxt-link
             :to="'address/' + this.owner"
             class="mono"
           >
             {{ this.owner }}
-          </router-link>
+          </nuxt-link>
         </div>
         <h2>Pausers</h2>
         <div>
-          <router-link
+          <nuxt-link
             :to="'address/' + this.pauser"
             class="mono"
           >
             {{ this.pauser }}
-          </router-link>
+          </nuxt-link>
         </div>
         <h2>Blacklister</h2>
         <div>
-          <router-link
+          <nuxt-link
             :to="'address/' + blacklister"
             class="mono"
           >
             {{ blacklister }}
-          </router-link>
+          </nuxt-link>
         </div>
         <h2>Minters</h2>
         <div>
-          <router-link
+          <nuxt-link
             v-for="minter in minters"
             :key="minter"
             :to="'address/' + minter"
             class="mono"
           >
             {{ minter }}
-          </router-link>
+          </nuxt-link>
         </div>
       </div>
       <div
@@ -51,9 +51,9 @@
         class="card"
       >
         <h2>Latest Blocks</h2>
-        <router-link to="/blocks">
+        <nuxt-link to="/blocks">
           See all blocks
-        </router-link>
+        </nuxt-link>
         <div class="list">
           <nuxt-link
             v-for="block in blocks"
@@ -70,18 +70,18 @@
         class="card"
       >
         <h2>Recent Transactions</h2>
-        <router-link to="/transactions">
+        <nuxt-link to="/transactions">
           See all transactions
-        </router-link>
+        </nuxt-link>
         <div class="list">
-          <router-link
+          <nuxt-link
             v-for="transaction in transactions"
             :key="transaction.logIndex"
             :to="'transaction/' + transaction.transactionHash"
             class="mono"
           >
             {{ transaction.transactionHash }}
-          </router-link>
+          </nuxt-link>
         </div>
       </div>
     </div>

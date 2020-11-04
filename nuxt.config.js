@@ -21,6 +21,10 @@ module.exports = {
         rel: 'stylesheet',
         href: 'https://unpkg.com/vue-material/dist/theme/default.css',
       },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css?family=Proxima+Nova&display=swap',
+      },
     ],
   },
 };

@@ -75,14 +75,14 @@ export const abi = [
     type:'function',
   },
   {
-    inputs: [{}],
+    inputs: [],
     name: 'pause',
     outputs: [{ name:'', type: 'bool' }],
     stateMutability: 'nonpayable',
     type:'function',
   },
   {
-    inputs: [{}],
+    inputs: [],
     name: 'unpause',
     outputs: [{ name:'', type: 'bool' }],
     stateMutability: 'nonpayable',

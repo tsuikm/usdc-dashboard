@@ -10,7 +10,7 @@ import Web3 from 'web3';
 import { TEST_TOKEN_CONTRACT_ADDRESS, TEST_TOKEN_OWNER_ADDRESS, TEST_TOKEN_PAUSER_ADDRESS, TEST_TOKEN_MASTER_MINTER_ADDRESS, TEST_TOKEN_BLACKLISTER_ADDRESS } from '@/utils/constants.js';
 
 const web3 = new Web3(Web3.givenProvider);
-const contract = new web3.eth.Contract(abi, TEST_TOKEN_CONTRACT_ADDRESS);
+const contract = new web3.eth.Contract(abi, '0xd96125fdc0b3b8db6d5d88146306b661cb42fbd6');
 
 /**
  * Adds a minter to the test token contract
@@ -57,6 +57,11 @@ async function pause() {
   await contract.methods.pause().call();
 }
 
+async function paused() {
+  await contract.methods.paused().call();
+}
+
+
 /**
  * Unpauses the test token contract
  */
@@ -82,42 +87,47 @@ async function unblacklist(address) {
   await contract.methods.unblacklist(TEST_TOKEN_BLACKLISTER_ADDRESS, address).call();
 }
 
+async function owner() {
+  return contract.methods.owner().call();
+}
 
 export default {
-  computed: {
-    // testMint: async function() {
-    //   return  mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
-    // },
-    async testMint() {
-      return await mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
-    },
-    async testBurn() {
-      return await burn('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
-    },
-    async testPause() {
-      await pause();
-      return await mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
-    },
-    async testUnpause() {
-      await unpause();
-      return await mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
-    },
+  // computed: {
+  //   // testMint: async function() {
+  //   //   return  mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
+  //   // },
+  //   async testMint() {
+  //     return await mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
+  //   },
+  //   async testBurn() {
+  //     return await burn('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
+  //   },
+  //   async testPause() {
+  //     await pause();
+  //     return await mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
+  //   },
+  //   async testUnpause() {
+  //     await unpause();
+  //     return await mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 3);
+  //   },
     
-  },
-  async created() {
+  // },
+  //   async created() {
     
-  },
-  methods: {
-  },
+//   },
+//   methods: {
+//   },
 };
 // console.log(addMinter('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', 100));
 // console.log(contract.methods.isMinter('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb').call());
 // console.log(contract.methods.minterAllowance('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb').call());
 // console.log(mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 10));
-console.log(contract.methods.pause(TEST_TOKEN_PAUSER_ADDRESS).call());
-console.log(addMinter(TEST_TOKEN_OWNER_ADDRESS, 100));
+console.log(1);
+console.log(owner().then(console.log));
+console.log(2);
+// console.log(addMinter(TEST_TOKEN_OWNER_ADDRESS, 100));
 
-console.log(contract.methods.isMinter(TEST_TOKEN_OWNER_ADDRESS).call());
-console.log(mint(TEST_TOKEN_OWNER_ADDRESS, TEST_TOKEN_MASTER_MINTER_ADDRESS, 10));
+// console.log(contract.methods.isMinter(TEST_TOKEN_OWNER_ADDRESS).call());
+// console.log(mint(TEST_TOKEN_OWNER_ADDRESS, TEST_TOKEN_MASTER_MINTER_ADDRESS, 10));
 
 </script>

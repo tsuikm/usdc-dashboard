@@ -7,36 +7,36 @@ import Web3 from 'web3';
 
 Vue.use(VueMaterial);
 
-const MOCK_ACCOUNTS = [
-  {
+const MOCK_ACCOUNTS = {
+  '0x1': {
     balance: 10000,
     minter: true,
     pauser: false,
     owner: false,
     blacklisted: false,
   },
-  {
+  '0x2': {
     balance: 10000,
     minter: false,
     pauser: true,
     owner: false,
     blacklisted: false,
   },
-  {
+  '0x3': {
     balance: 10000,
     minter: false,
     pauser: false,
     owner: true,
     blacklisted: false,
   },
-  {
+  '0x4': {
     balance: 10000,
     minter: false,
     pauser: false,
     owner: false,
     blacklisted: true,
   },
-];
+};
 const MOCK_WALLET_ADDRESS = padHex('0x123456789abcdef', 64);
 const MOCK_TRANSACTIONS = [
   {

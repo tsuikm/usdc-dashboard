@@ -53,14 +53,24 @@ export default class Web3 {
                 },
               };
             },
-            pauser: address => {
+            pauser: () => {
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].pauser,
+                call: async (cb) => {
+                  if (cb) {
+                    return cb(null, Object.keys(Web3.MOCK_ACCOUNTS).filter(addr => Web3.MOCK_ACCOUNTS[addr].pauser)[0]);
+                  }
+                  return Object.keys(Web3.MOCK_ACCOUNTS).filter(addr => Web3.MOCK_ACCOUNTS[addr].pauser)[0];
+                },
               };
             },
-            owner: address => {
+            owner: () => {
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].owner,
+                call: async (cb) => {
+                  if (cb) {
+                    return cb(null, Object.keys(Web3.MOCK_ACCOUNTS).filter(addr => Web3.MOCK_ACCOUNTS[addr].owner)[0]);
+                  }
+                  return Object.keys(Web3.MOCK_ACCOUNTS).filter(addr => Web3.MOCK_ACCOUNTS[addr].owner)[0];
+                },
               };
             },
             isBlacklisted: address => {

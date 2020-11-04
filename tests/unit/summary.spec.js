@@ -72,6 +72,24 @@ const MOCK_TRANSACTIONS = [
 Web3.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
 Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 
+const MOCK_MINTERS = ['0x5', '0x6'];
+const MOCK_BLACKLISTER = '0x7';
+
+global.fetch = async (url) => {
+  switch(url) {
+  case 'http://localhost:3000/api/minters':
+    return {
+      json: async () => MOCK_MINTERS,
+    };
+  case 'http://localhost:3000/api/blacklister':
+    return {
+      json: async () => MOCK_BLACKLISTER,
+    };
+  default:
+    break;
+  }
+};
+
 describe('SummaryPage', () => {
   it('Header renders properly', () => {
     const { findByText } = render(SummaryPage, {

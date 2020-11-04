@@ -191,4 +191,43 @@ describe('Table', () => {
     expect(getByText('Row 30 A')).not.toBeNull();
     expect(getByText('Row 30 B')).not.toBeNull();
   });
+
+  it('Pagination Query Parameter Tests', async () => {
+    const router = [];
+
+    const { findByText, getByText } = render(Table, {
+      props: testPropsLarge,
+      stubs: {
+        NuxtLink: true,
+      },
+      mocks: {
+        $route: {
+          query: {
+            page: 2, // Load with ?page=2
+          },
+        },
+        $router: router,
+      },
+    });
+
+    // Ensure that page 2 is loaded.
+    expect(await findByText('Page 2 of 2')).not.toBeNull();
+    expect(await findByText('Row 26 A')).not.toBeNull();
+    expect(await findByText('Row 26 B')).not.toBeNull();
+    expect(await findByText('Row 30 A')).not.toBeNull();
+    expect(await findByText('Row 30 B')).not.toBeNull();
+
+    // Press the back button once.
+    await fireEvent.click(getByText('navigate_before'));
+
+    // Ensure that the page query parameter changed to ?page=1.
+    expect(router.length).toBe(1);
+    expect(router[0].query.page).toBe(1);
+
+    // Ensure page 1 is loaded.
+    expect(getByText('Row 1 A')).not.toBeNull();
+    expect(getByText('Row 1 B')).not.toBeNull();
+    expect(getByText('Row 25 A')).not.toBeNull();
+    expect(getByText('Row 25 B')).not.toBeNull();
+  });
 });

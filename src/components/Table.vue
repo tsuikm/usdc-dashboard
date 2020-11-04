@@ -14,9 +14,9 @@
           {{ name }}
         </h1>
         <Pagination
+          ref="pagination"
           :total-pages="Math.ceil(this.totalItems / pageLength)"
           @page:change="this.pageChange"
-          ref="pagination"
         />
       </md-table-toolbar>
 

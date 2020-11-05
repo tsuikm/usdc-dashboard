@@ -2,7 +2,7 @@ import SummaryPage from '@/pages/index';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import { render } from '@testing-library/vue';
-import { padHex } from '@/utils/utils';
+import { padHex, toHex } from '@/utils/utils';
 import Web3 from 'web3';
 
 Vue.use(VueMaterial);
@@ -92,55 +92,68 @@ global.fetch = async (url) => {
 
 describe('SummaryPage', () => {
   it('Header renders properly', () => {
-    const { findByText } = render(SummaryPage, {
+    const { getByText } = render(SummaryPage, {
       stubs: {
         NuxtLink: true,
       },
     });
     const header = 'USDC Dashboard';
-    expect(findByText(header)).not.toBeNull();
+    expect(getByText(header)).not.toBeNull();
   });
 
   it('Renders recent transactions', async () => {
-    const { findByText } = render(SummaryPage, {
+    const { getByText } = render(SummaryPage, {
       stubs: {
         NuxtLink: true,
       },
     });
-    expect(findByText('Recent Transactions')).not.toBeNull();
-    expect(findByText('See all transactions')).not.toBeNull();
-    expect(findByText(MOCK_TRANSACTIONS[0].transactionHash)).not.toBeNull();
-    expect(findByText(MOCK_TRANSACTIONS[1].transactionHash)).not.toBeNull();
-    expect(findByText(MOCK_TRANSACTIONS[2].transactionHash)).not.toBeNull();
-    expect(findByText(MOCK_TRANSACTIONS[3].transactionHash)).not.toBeNull();
+    expect(getByText('Recent Transactions')).not.toBeNull();
+    expect(getByText('See all transactions')).not.toBeNull();
+
+    // Finish all promises
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    
+    expect(getByText(MOCK_TRANSACTIONS[0].transactionHash)).not.toBeNull();
+    expect(getByText(MOCK_TRANSACTIONS[1].transactionHash)).not.toBeNull();
+    expect(getByText(MOCK_TRANSACTIONS[2].transactionHash)).not.toBeNull();
+    expect(getByText(MOCK_TRANSACTIONS[3].transactionHash)).not.toBeNull();
   });
 
   it('Renders latest blocks', async () => {
-    const { findByText } = render(SummaryPage, {
+    const { getByText } = render(SummaryPage, {
       stubs: {
         NuxtLink: true,
       },
     });
-    expect(findByText('Latest Blocks')).not.toBeNull();
-    expect(findByText('See all blocks')).not.toBeNull();
-    expect(findByText(MOCK_TRANSACTIONS[0].blockNumber)).not.toBeNull();
-    expect(findByText(MOCK_TRANSACTIONS[1].blockNumber)).not.toBeNull();
-    expect(findByText(MOCK_TRANSACTIONS[2].blockNumber)).not.toBeNull();
-    expect(findByText(MOCK_TRANSACTIONS[3].blockNumber)).not.toBeNull();
+    expect(getByText('Latest Blocks')).not.toBeNull();
+    expect(getByText('See all blocks')).not.toBeNull();
+
+    // Finish all promises
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(getByText(MOCK_TRANSACTIONS[0].blockNumber.toString() + ' / ' + toHex(MOCK_TRANSACTIONS[0].blockNumber))).not.toBeNull();
+    expect(getByText(MOCK_TRANSACTIONS[1].blockNumber.toString() + ' / ' + toHex(MOCK_TRANSACTIONS[1].blockNumber))).not.toBeNull();
+    expect(getByText(MOCK_TRANSACTIONS[2].blockNumber.toString() + ' / ' + toHex(MOCK_TRANSACTIONS[2].blockNumber))).not.toBeNull();
+    expect(getByText(MOCK_TRANSACTIONS[3].blockNumber.toString() + ' / ' + toHex(MOCK_TRANSACTIONS[3].blockNumber))).not.toBeNull();
   });
 
   it('Renders privileged roles', async () => {
-    const { findByText } = render(SummaryPage, {
+    const { getByText } = render(SummaryPage, {
       stubs: {
         NuxtLink: true,
       },
     });
-    expect(findByText('Owner')).not.toBeNull();
-    expect(findByText('Pausers')).not.toBeNull();
-    expect(findByText('Blacklister')).not.toBeNull();
-    expect(findByText('Minters')).not.toBeNull();
-    expect(findByText(MOCK_WALLET_ADDRESS)).not.toBeNull();
-    expect(findByText(MOCK_MINTERS)).not.toBeNull();
-    expect(findByText(MOCK_BLACKLISTER)).not.toBeNull();
+    expect(getByText('Owner')).not.toBeNull();
+    expect(getByText('Pausers')).not.toBeNull();
+    expect(getByText('Blacklister')).not.toBeNull();
+    expect(getByText('Minters')).not.toBeNull();
+
+    // Finish all promises
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(getByText(MOCK_BLACKLISTER)).not.toBeNull();
+    for (const minter of MOCK_MINTERS) {
+      expect(getByText(minter)).not.toBeNull();
+    }
   });
 });

@@ -18,10 +18,10 @@
           PAUSED
         </md-button>
         <div class="content">
-          <div class="content-text"> 
+          <div class="content-text">
             Click to unpause contract.
           </div>
-          <div class="content-subtext"> 
+          <div class="content-subtext">
             All transfers, minting, and burning are PAUSED.
           </div>
         </div>
@@ -37,10 +37,10 @@
           UNPAUSED
         </md-button>
         <div class="content">
-          <div class="content-text"> 
+          <div class="content-text">
             Click to pause contract.
           </div>
-          <div class="content-subtext"> 
+          <div class="content-subtext">
             All transfers, minting, and burning are ACTIVE.
           </div>
         </div>
@@ -72,6 +72,8 @@ export default {
       this.contractPaused = false;
     },
     async handlePause() {
+      await contract.pause().call();
+
       this.contractPaused = true;
     },
     async lookupContractStatus() {

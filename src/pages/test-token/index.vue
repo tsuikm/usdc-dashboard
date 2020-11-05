@@ -127,15 +127,35 @@ export default {
     //   return await contract.methods.isContract(address).call();
     // }
 
+
     /**
-     * Adds a minter to the test token contract
+     * Mints money to an address
      *
-     * @param {string} to_address - as a hex string.
+     * @param {string} address - as a hex string.
      * @param {number} amount - as a base-10 number.
-     *  WORK IN PROGRESS
+     * @return {number} - returns the balance of target address.
+     * 
      */
     async mint(to_address, amount) {
-      return await contract.methods.mint(to_address, amount).call();
+      try {
+        // eslint-disable-next-line
+        const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: this.accounts[0],
+                to: TEST_TOKEN_CONTRACT_ADDRESS,
+                data: contract.methods.mint(to_address, amount).encodeABI(),
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          }).then(() => this.balanceOf(to_address).then(console.log,
+          ));
+      } catch (e) {
+        console.log(e);
+        //show error
+      }
     },
 
 
@@ -152,6 +172,7 @@ export default {
 
     /**
      * Pauses the test token contract
+     * @return {bool} - returns if the contract is paused or not.
      */
     async pause() {  
       try {
@@ -188,8 +209,34 @@ export default {
     /**
      * Unpauses the test token contract
      */
-    async unpause() {
-      return await contract.methods.unpause().call();
+    // async unpause() {
+    //   return await contract.methods.unpause().call();
+    // },
+    /**
+     * Pauses the test token contract
+     * @return {bool} - returns if the contract is paused or not.
+     */
+    async pause() {  
+      try {
+        // eslint-disable-next-line
+        const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: this.accounts[0],
+                to: TEST_TOKEN_CONTRACT_ADDRESS,
+                data: contract.methods.pause().encodeABI(),
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          }).then(() => this.paused().then(bool => {
+            return bool;
+          }));
+      } catch (e) {
+        console.log(e);
+        //show error
+      }
     },
 
     /**
@@ -197,10 +244,38 @@ export default {
      *  WORK IN PROGRESS
      * @param {string} address - as a hex string.
      */
-    async blacklist(address) {
-      contract.methods.blacklist(address).call().then(() => this.isBlacklisted(address).then(bool => {
-        return bool;
-      }));
+    // async blacklist(address) {
+    //   contract.methods.blacklist(address).call().then(() => this.isBlacklisted(address).then(bool => {
+    //     return bool;
+    //   }));
+    // },
+    /**
+     * Blacklists an address
+     *  WORK IN PROGRESS
+     * @param {string} address - as a hex string.
+     * @return {bool} - Returns if address is blacklisted.
+     */
+    async blacklist(address) {  
+      try {
+        // eslint-disable-next-line
+        const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: this.accounts[0],
+                to: TEST_TOKEN_CONTRACT_ADDRESS,
+                data: contract.methods.blacklist(address).encodeABI(),
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          }).then(() => this.isBlacklisted(address).then(bool => {
+            return bool;
+          }));
+      } catch (e) {
+        console.log(e);
+        //show error
+      }
     },
 
 
@@ -213,13 +288,42 @@ export default {
       return await contract.methods.isBlacklisted(address).call();
     },
 
+    // /**
+    //  * Unblacklists an address
+    //  *  WORK IN PROGRESS
+    //  * @param {string} address - as a hex string.
+    //  */
+    // async unblacklist(address) {
+    //   return await contract.methods.unblacklist(address).call();
+    // },
+    
     /**
-     * Unblacklists an address
+     * Unlacklists an address
      *  WORK IN PROGRESS
      * @param {string} address - as a hex string.
+     * @return {bool} - Returns if address is blacklisted.
      */
-    async unblacklist(address) {
-      return await contract.methods.unblacklist(address).call();
+    async blacklist(address) {  
+      try {
+        // eslint-disable-next-line
+        const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: this.accounts[0],
+                to: TEST_TOKEN_CONTRACT_ADDRESS,
+                data: contract.methods.blacklist(address).encodeABI(),
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          }).then(() => this.isBlacklisted(address).then(bool => {
+            return bool;
+          }));
+      } catch (e) {
+        console.log(e);
+        //show error
+      }
     },
 
 

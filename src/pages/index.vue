@@ -93,7 +93,7 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Web3 from 'web3';
-import { USDC_CONTRACT_ADDRESS, TRANSACTION_TOPIC } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, TRANSACTION_TOPIC, API_BASE_URL } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
 
 const web3 = new Web3(Web3.givenProvider);
@@ -144,12 +144,11 @@ export default {
         this.owner = owner;
       });
 
-      // TODO: update localhost:3000 with actual domain, or use env vars
-      fetch('http://localhost:3000/api/minters').then(async (mintersResponse) => {
+      fetch(`${API_BASE_URL}/api/minters`).then(async (mintersResponse) => {
         this.minters = await mintersResponse.json();
       });
       
-      fetch('http://localhost:3000/api/blacklister').then(async (blacklisterResponse) => {
+      fetch(`${API_BASE_URL}/api/blacklister`).then(async (blacklisterResponse) => {
         this.blacklister = await blacklisterResponse.json();
       });
     },

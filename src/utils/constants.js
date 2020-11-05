@@ -19,6 +19,9 @@ export const TRANSACTION_TOPIC =
 
 export const BLACKLISTER_ADDRESS =
   '0x5db0115f3b72d19cea34dd697cf412ff86dc7e1b';
+
+export const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
+
 export const NuxtLinkStub = {
   name: 'NuxtLinkStub',
   props: {

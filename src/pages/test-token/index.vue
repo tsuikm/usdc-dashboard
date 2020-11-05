@@ -28,9 +28,14 @@ export default {
     // console.log(contract.methods.updatePauser('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb').call().then(console.log));
     // console.log(contract.methods.updateMasterMinter('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb').call().then(console.log));
     // console.log(contract.methods.masterMinter().call().then(console.log));
-
-    this.addMinter('0xf7c343FBc40F6B34DaA8bC2a97607BA4cEDF98c3', 100).then(console.log());
-    this.isMinter('0xf7c343FBc40F6B34DaA8bC2a97607BA4cEDF98c3').then(console.log);
+    // this.unpause();
+    // this.paused();
+    // this.addMinter('0xdC1e071D120FD40fB1173BCcc86c74F47645F4E0', 200).then(console.log());
+    // this.isMinter('0xdC1e071D120FD40fB1173BCcc86c74F47645F4E0').then(console.log);
+    // this.mint('0xdC1e071D120FD40fB1173BCcc86c74F47645F4E0', 50).then(console.log);
+    this.balanceOf('0xdC1e071D120FD40fB1173BCcc86c74F47645F4E0').then(console.log);
+    // this.masterMinter().then(console.log);
+    // this.isMinter('0xf7c343FBc40F6B34DaA8bC2a97607BA4cEDF98c3').then(console.log);
     // console.log(contract.methods.balanceOf('0x5df6c542e318966CC5FB8862Faf25452574A6c5D').call().then(console.log));
     // console.log(contract.methods.minterAllowance('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb').call());
     // console.log(mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 10));
@@ -81,6 +86,16 @@ export default {
     },
 
     /**
+     * Returns address of master minter.
+     * 
+     */
+    async masterMinter() {
+      return await contract.methods.masterMinter().call();
+    },
+
+
+
+    /**
      * Returns address of pauser
      * 
      */
@@ -111,6 +126,37 @@ export default {
               },
             ],
           }).then(() => this.isMinter(address).then(bool => {
+            return bool;
+          }));
+      } catch (e) {
+        console.log(e);
+        //show error
+      }
+    },
+
+    /**
+     * Adds a minter to the test token contract
+     *
+     * @param {string} master_minter_address - as a hex string.
+     * @param {string} new_address - as a hex string.
+     * @return {bool} - returns if the address has been successfully added as a master minter.
+     * 
+     */
+    async updateMasterMinter(new_address) {
+      try {
+        // eslint-disable-next-line
+        const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: '0xdC1e071D120FD40fB1173BCcc86c74F47645F4E0',
+                to: TEST_TOKEN_CONTRACT_ADDRESS,
+                data: contract.methods.updateMasterMinter(new_address).encodeABI(),
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          }).then(() => this.isMinter(new_address).then(bool => {
             return bool;
           }));
       } catch (e) {
@@ -213,10 +259,10 @@ export default {
     //   return await contract.methods.unpause().call();
     // },
     /**
-     * Pauses the test token contract
+     * Unauses the test token contract
      * @return {bool} - returns if the contract is paused or not.
      */
-    async pause() {  
+    async unpause() {  
       try {
         // eslint-disable-next-line
         const txHash = await ethereum
@@ -226,7 +272,7 @@ export default {
               {
                 from: this.accounts[0],
                 to: TEST_TOKEN_CONTRACT_ADDRESS,
-                data: contract.methods.pause().encodeABI(),
+                data: contract.methods.unpause().encodeABI(),
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
@@ -249,9 +295,11 @@ export default {
     //     return bool;
     //   }));
     // },
+
+
     /**
      * Blacklists an address
-     *  WORK IN PROGRESS
+     * 
      * @param {string} address - as a hex string.
      * @return {bool} - Returns if address is blacklisted.
      */

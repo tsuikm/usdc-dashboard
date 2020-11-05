@@ -13,7 +13,7 @@ contract LocalERC20 is ERC20PresetMinterPauser {
    *
    * See https://docs.openzeppelin.com/contracts/3.x/api/token/erc20 for the full API docs.
    */
-  constructor() ERC20PresetMinterPauser('LocalERC20', 'ETH') public {
+  constructor() ERC20PresetMinterPauser('LocalERC20', 'TestToken') public {
 
     // Use 6 as the decimals.
     _setupDecimals(6);

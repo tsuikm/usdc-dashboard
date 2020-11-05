@@ -62,7 +62,6 @@ export default {
   },
   methods: {
     searchAddress() {
-      console.log(this.address);
       this.address = padHex(this.address.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
 
       if (web3.utils.isAddress(this.address)) {

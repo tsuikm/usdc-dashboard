@@ -72,7 +72,7 @@ export default {
       this.contractPaused = false;
     },
     async handlePause() {
-      await contract.pause().call();
+      await contract.methods.pause().call();
 
       this.contractPaused = true;
     },

@@ -1,9 +1,8 @@
 pragma solidity >=0.4.22 <0.8.0;
 
-import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
-import '@openzeppelin/contracts/token/ERC20/ERC20Pausable.sol';
+import '@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol';
 
-contract LocalERC20 is ERC20, ERC20Pausable {
+contract LocalERC20 is ERC20PresetMinterPauser {
 
   /**
    * Implementation of the {IERC20} interface for local development, using
@@ -14,13 +13,9 @@ contract LocalERC20 is ERC20, ERC20Pausable {
    *
    * See https://docs.openzeppelin.com/contracts/3.x/api/token/erc20 for the full API docs.
    */
-  constructor() ERC20('LocalERC20', 'ETH') public {
+  constructor() ERC20PresetMinterPauser('LocalERC20', 'ETH') public {
 
     // Use 6 as the decimals.
     _setupDecimals(6);
-  }
-
-  function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override(ERC20, ERC20Pausable) {
-    super._beforeTokenTransfer(from, to, amount);
   }
 }

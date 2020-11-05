@@ -3,11 +3,10 @@
 </template>
 
 <script>
-
 // modules
 import { abi } from '@/utils/testTokenABI.js';
 import Web3 from 'web3';
-import { TEST_TOKEN_CONTRACT_ADDRESS } from '@/utils/constants.js';
+import { TEST_TOKEN_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants.js';
 
 const web3 = new Web3(Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, TEST_TOKEN_CONTRACT_ADDRESS);
@@ -20,42 +19,31 @@ export default {
   },
   async mounted() {
     await this.connectMetamask();
-    this.pause().then(() => contract.methods.paused().call().then(console.log),
-    );
+
+    /** Pause/Unpause */
+    //this.pause().then(() => contract.methods.paused().call().then(console.log));
 
 
+    /** Mint/Burn */
     // console.log(contract.methods.updatePauser('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb').call().then(console.log));
     // console.log(contract.methods.updateMasterMinter('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb').call().then(console.log));
     // console.log(contract.methods.masterMinter().call().then(console.log));
 
-    // console.log(addMinter('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', 100));
-    // console.log(contract.methods.isMinter('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb').call().then(console.log));
+    this.addMinter('0xf7c343FBc40F6B34DaA8bC2a97607BA4cEDF98c3', 100).then(console.log());
+    this.isMinter('0xf7c343FBc40F6B34DaA8bC2a97607BA4cEDF98c3').then(console.log);
     // console.log(contract.methods.balanceOf('0x5df6c542e318966CC5FB8862Faf25452574A6c5D').call().then(console.log));
     // console.log(contract.methods.minterAllowance('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb').call());
     // console.log(mint('0x4A9F11E349d37d074A0D41f05CedeB24c1fA67Fb', TEST_TOKEN_MASTER_MINTER_ADDRESS, 10));
     // console.log(contract.methods.isPauser(TEST_TOKEN_PAUSER_ADDRESS).call());
     // console.log(addMinter(TEST_TOKEN_OWNER_ADDRESS, 100));
+
+    /** Blacklist/UnBlacklist */
   },
   methods: {
-
     async connectMetamask() {
       // eslint-disable-next-line
           this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     },
-
-    /**
-     * Adds a minter to the test token contract
-     *
-     * @param {string} address - as a hex string.
-     * @param {number} allowance - as a base-10 number.
-     * @return {bool} - returns if the address has been successfully added as a minter.
-     *  IN PROGRESS
-     */
-    async addMinter(address, allowance) {
-      await contract.methods.configureMinter(address, allowance).call();
-      return await contract.methods.isMinter(address);
-    },
-
 
     /**
      * Returns balance of an address
@@ -64,8 +52,7 @@ export default {
      * 
      */
     async balanceOf(address) {
-      let balance = await contract.methods.balanceOf(address).call();
-      return balance;
+      return await contract.methods.balanceOf(address).call();
     },
 
     /**
@@ -73,8 +60,7 @@ export default {
      * 
      */
     async decimals() {
-      let decimals = await contract.methods.decimals().call();
-      return decimals;
+      return await contract.methods.decimals().call();
     },
 
     /**
@@ -82,8 +68,7 @@ export default {
      * 
      */
     async totalSupply() {
-      let totalsupply = await contract.methods.totalSupply().call();
-      return totalsupply;
+      return await contract.methods.totalSupply().call();
     },
 
     /**
@@ -92,8 +77,7 @@ export default {
      * 
      */
     async isMinter(address) {
-      let isminter = await contract.methods.isMinter(address).call();
-      return isminter;
+      return await contract.methods.isMinter(address).call();
     },
 
     /**
@@ -101,8 +85,38 @@ export default {
      * 
      */
     async pauser() {
-      let pauser = await contract.methods.pauser().call();
-      return pauser;
+      return await contract.methods.pauser().call();
+    },
+
+    /**
+     * Adds a minter to the test token contract
+     *
+     * @param {string} address - as a hex string.
+     * @param {number} allowance - as a base-10 number.
+     * @return {bool} - returns if the address has been successfully added as a minter.
+     * 
+     */
+    async addMinter(address, allowance) {
+      try {
+        // eslint-disable-next-line
+        const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: this.accounts[0],
+                to: TEST_TOKEN_CONTRACT_ADDRESS,
+                data: contract.methods.configureMinter(address, allowance).encodeABI(),
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          }).then(() => this.isMinter(address).then(bool => {
+            return bool;
+          }));
+      } catch (e) {
+        console.log(e);
+        //show error
+      }
     },
 
     /**
@@ -110,21 +124,18 @@ export default {
      * DOESN'T WORK
      */
     // async isContract(address) {
-    //   let iscontract = await contract.methods.isContract(address).call();
-    //   return iscontract;
+    //   return await contract.methods.isContract(address).call();
     // }
 
     /**
      * Adds a minter to the test token contract
      *
-     * @param {string} minter_address - as a hex string.
      * @param {string} to_address - as a hex string.
      * @param {number} amount - as a base-10 number.
      *  WORK IN PROGRESS
      */
     async mint(to_address, amount) {
-      //await contract.methods.pause(address, allowance).call();
-      return contract.methods.mint(to_address, amount).call();
+      return await contract.methods.mint(to_address, amount).call();
     },
 
 
@@ -136,7 +147,7 @@ export default {
      *  WORK IN PROGRESS
      */
     async burn(minter_address, amount) {
-      return contract.methods.burn(minter_address, amount).call();
+      return await contract.methods.burn(minter_address, amount).call();
     },
 
     /**
@@ -144,8 +155,6 @@ export default {
      */
     async pause() {  
       try {
-        console.log(this.accounts[0]);
-        console.log(TEST_TOKEN_CONTRACT_ADDRESS);
         // eslint-disable-next-line
         const txHash = await ethereum
           .request({
@@ -155,10 +164,12 @@ export default {
                 from: this.accounts[0],
                 to: TEST_TOKEN_CONTRACT_ADDRESS,
                 data: contract.methods.pause().encodeABI(),
-                gasPrice: '0x09184e72a000',
+                gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          });
+          }).then(() => this.paused().then(bool => {
+            return bool;
+          }));
       } catch (e) {
         console.log(e);
         //show error
@@ -170,7 +181,7 @@ export default {
      * Checks if contract is paused
      */
     async paused() {
-      return contract.methods.paused().call();
+      return await contract.methods.paused().call();
     },
 
 
@@ -178,7 +189,7 @@ export default {
      * Unpauses the test token contract
      */
     async unpause() {
-      return contract.methods.unpause().call();
+      return await contract.methods.unpause().call();
     },
 
     /**
@@ -187,7 +198,9 @@ export default {
      * @param {string} address - as a hex string.
      */
     async blacklist(address) {
-      await contract.methods.blacklist(address).call();
+      contract.methods.blacklist(address).call().then(() => this.isBlacklisted(address).then(bool => {
+        return bool;
+      }));
     },
 
 
@@ -197,7 +210,7 @@ export default {
      * @param {string} address - as a hex string.
      */
     async isBlacklisted(address) {
-      return contract.methods.isBlacklisted(address).call();
+      return await contract.methods.isBlacklisted(address).call();
     },
 
     /**
@@ -206,7 +219,7 @@ export default {
      * @param {string} address - as a hex string.
      */
     async unblacklist(address) {
-      await contract.methods.unblacklist(address).call();
+      return await contract.methods.unblacklist(address).call();
     },
 
 
@@ -215,7 +228,7 @@ export default {
      * 
      */
     async owner() {
-      return contract.methods.owner().call();
+      return await contract.methods.owner().call();
     },
   },
 

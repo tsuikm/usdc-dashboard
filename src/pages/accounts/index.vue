@@ -23,7 +23,7 @@ import { toHex, removeLeadingZeros, roundToNearest, pushAll } from '@/utils/util
 import { getBalance, getTotalSupply } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
-const web3 = new Web3(Web3.givenProvider);
+const web3 = new Web3(constants.WEB3_PROVIDER || Web3.givenProvider);
 
 /**
  * Gets the transactions from one block to another block.

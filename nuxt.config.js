@@ -27,4 +27,7 @@ module.exports = {
       },
     ],
   },
+  env: {
+    // WEB3_PROVIDER: 'ws://some.local-or-remote.node:8546',
+  },
 };

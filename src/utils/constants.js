@@ -13,8 +13,6 @@ export const USDC_CONTRACT_ADDRESS = '0x07865c6E87B9F70255377e024ace6630C1Eaa37F
 //Test token Contract Address
 export const TEST_TOKEN_CONTRACT_ADDRESS = '0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31';
 
-export const DEFAULT_GAS_PRICE = '0x09184e72a000';
-
 // Locally hosted blockchain contract address.
 // See https://github.com/selinafeng/usdc-dashboard/wiki/Setting-up-a-locally-hosted-blockchain/
 // export const USDC_CONTRACT_ADDRESS = '{{LOCAL_SPECIFIC_CONTRACT}}'

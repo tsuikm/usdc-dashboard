@@ -14,18 +14,16 @@ global.ethereum = {
 
 describe('Transfers page', () => {
   test('Transfers card renders', async () => {
-    const { queryByTestId } = render(transfers);
-    expect(queryByTestId('transfers-card-test-id')).not.toBeNull();
-    expect(queryByTestId('transfers-card-to-input')).not.toBeNull();
-    expect(queryByTestId('transfers-card-from-input')).not.toBeNull();
-    expect(queryByTestId('transfers-card-amount-input')).not.toBeNull();
-    expect(queryByTestId('transfers-card-connect-button')).not.toBeNull();
-    expect(queryByTestId('transfers-card-send-button')).not.toBeNull();
+    const { queryByLabelText, queryByText } = render(transfers);
+    expect(queryByLabelText('To')).not.toBeNull();
+    expect(queryByLabelText('Transfer Amount')).not.toBeNull();
+    expect(queryByText('Connect to Metamask')).not.toBeNull();
+    expect(queryByText('Send')).not.toBeNull();
   });
   
   test('Connect Metamask button works', async () => {
-    const { queryByTestId } = render(transfers);
-    const button = queryByTestId('transfers-card-connect-button');
+    const { queryByText } = render(transfers);
+    const button = queryByText('Connect to Metamask');
     await fireEvent.click(button);
 
     // eslint-disable-next-line

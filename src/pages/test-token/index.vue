@@ -39,7 +39,7 @@ export default {
     },
 
     /**
-     * Returns 6 (cannot be changed); used in testing contract validity
+     * Returns the decimals (6; cannot be changed); used in testing contract validity
      */
     async decimals() {
       return await contract.methods.decimals().call();
@@ -88,7 +88,7 @@ export default {
 
     /**
      * Adds a minter to the test token contract
-     * User must be master minter
+     * Must be called by the master minter
      *
      * @param {string} address - hex string
      * @param {number} allowance - base-10 number
@@ -123,7 +123,7 @@ export default {
      * Only one master minter can exist at a time
      *
      * @param {string} new_address - hex string
-     * @return {string} - returns address of new master minter (should be same as new_address, change won't be reflected until after transaction completes)
+     * @return {string} - returns if the address is the new master minter (change won't be reflected until after transaction completes)
      * 
      */
     async updateMasterMinter(new_address) {
@@ -140,8 +140,8 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.masterMinter().then(bool => {
-            return bool;
+          }).then(() => this.masterMinter().then(masterMinter => {
+            return masterMinter == new_address;
           }));
       } catch (e) {
         console.log(e);
@@ -151,7 +151,7 @@ export default {
 
     /**
      * Mints money to an address
-     * User must be minter
+     * Caller must be minter
      *
      * @param {string} to_address - hex string
      * @param {number} amount - base-10 number
@@ -182,7 +182,9 @@ export default {
     },
 
     /**
-     * Reduces balance of user's address
+     * Reduces contract's ether by burning tokens
+     * Must be called by a minter
+     * 
      * @param {number} amount - base-10 number
      * @return {number} - returns the balance of user's address (burned amount will not be reflected until after transaction is processed)
      */
@@ -211,6 +213,7 @@ export default {
 
     /**
      * Changes the pauser
+     * Only one pauser can exist at a time
      * 
      * @param {string} address - hex string
      * @return {bool} - returns if address is the pauser (changes will not be reflected until after transaction completes)
@@ -240,6 +243,8 @@ export default {
 
     /**
      * Pauses the test token contract
+     * Must be called by the pauser
+     * 
      * @return {bool} - returns if the contract is paused or not (will not be updated until transaction completes)
      */
     async pause() {  
@@ -274,7 +279,9 @@ export default {
     },
 
     /**
-     * Unauses the test token contract
+     * Unpauses the test token contract
+     * Must be called by the pauser
+     * 
      * @return {bool} - returns if the contract is paused or not (will not be updated until transaction completes)
      */
     async unpause() {  
@@ -301,10 +308,9 @@ export default {
     },
 
     /**
-     * Allows address to blacklist
+     * Changed the address of the blacklister
      * 
      * @param {string} address - hex string
-     * @return {bool} - returns if address is blacklisted (changes will not be reflected until after transaction completes)
      */
     async updateBlacklister(address) {  
       try {
@@ -320,9 +326,7 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.blacklister().then(bool => {
-            return bool;
-          }));
+          });
       } catch (e) {
         console.log(e);
         //show error
@@ -331,10 +335,9 @@ export default {
 
     /**
      * Blacklists an address
-     * User must be blacklister
+     * Caller must be blacklister
      * 
      * @param {string} address - hex string
-     * @return {bool} - returns if address is blacklisted
      */
     async blacklist(address) {  
       try {
@@ -350,9 +353,7 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.isBlacklisted(address).then(bool => {
-            return bool;
-          }));
+          });
       } catch (e) {
         console.log(e);
         //show error
@@ -364,7 +365,6 @@ export default {
      * User must be blacklister
      * 
      * @param {string} address - hex string
-     * @return {bool} - returns if address is blacklisted
      */
     async unBlacklist(address) {  
       try {
@@ -380,9 +380,7 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.isBlacklisted(address).then(bool => {
-            return bool;
-          }));
+          });
       } catch (e) {
         console.log(e);
         //show error

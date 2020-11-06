@@ -18,6 +18,60 @@ export default {
   },
   async mounted() {
     await this.connectMetamask();
+
+    /**
+     * To test write operations on the test token uncomment the corresonding code block
+     * To test read operations, call the methods in below, i.e. await this.paused().then(console.log);
+     */
+
+    // //PAUSE
+    // //Enter your address where it says <your address here>
+    // await this.updatePauser(<your address here>);
+    // // wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
+    // // //then uncomment below and check the console
+    // //await this.pauser().then(pauser => {
+    // //console.log(pauser == <your address here>);
+    // //}
+    // // //call pause
+    // // await this.pause();
+    // // //wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
+    // // //then uncomment below and check the console
+    // // //this.paused().then(console.log))
+    // // //call unpause
+    // // await this.unpause();
+    // // //wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
+    // // //then uncomment below and check the console
+    // // //this.paused().then(console.log))
+
+
+    // //Mint/Burn
+    // //Enter your address where it says <your address here>
+    // await this.updateMasterMinter(<your address here>);
+    // // wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
+    // // //then uncomment below and check the console
+    // //await this.masterMinter().then(masterMinter => {
+    // //console.log(masterMinter == <your address here>);
+    // //}
+    // //Add minter
+    // // await this.addMinter(<minter address here>, <allowance>);
+    // // wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
+    // // //then uncomment below and check the console
+    // //await this.isMinter(<minter address here>).then(console.log);
+    // // //call mint
+    // // await this.mint(<to address>, <amount>);
+    // // //wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
+    // // //then uncomment below and check the console
+    // // //this.balanceOf(<to address>).then(console.log))
+    // // //call burn
+    // // await this.burn(<amount>);
+    // // //wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
+    // // //then uncomment below and check the console
+    // // //this.balanceOf(<minter address>).then(console.log))
+
+     
+  
+    
+
   },
 
   methods: {
@@ -92,7 +146,6 @@ export default {
      *
      * @param {string} address - hex string
      * @param {number} allowance - base-10 number
-     * @return {bool} - returns if the address has been successfully added as a minter
      * 
      */
     async addMinter(address, allowance) {
@@ -109,9 +162,7 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.isMinter(address).then(bool => {
-            return bool;
-          }));
+          });
       } catch (e) {
         console.log(e);
         //show error
@@ -123,7 +174,6 @@ export default {
      * Only one master minter can exist at a time
      *
      * @param {string} new_address - hex string
-     * @return {string} - returns if the address is the new master minter (change won't be reflected until after transaction completes)
      * 
      */
     async updateMasterMinter(new_address) {
@@ -140,9 +190,7 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.masterMinter().then(masterMinter => {
-            return masterMinter == new_address;
-          }));
+          });
       } catch (e) {
         console.log(e);
         //show error
@@ -155,7 +203,6 @@ export default {
      *
      * @param {string} to_address - hex string
      * @param {number} amount - base-10 number
-     * @return {number} - returns the balance of target address (changes won't be reflected until after transaction completes)
      * 
      */
     async mint(to_address, amount) {
@@ -172,9 +219,7 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.balanceOf(to_address).then(balance => {
-            return balance;
-          }));
+          });
       } catch (e) {
         console.log(e);
         //show error
@@ -186,7 +231,6 @@ export default {
      * Must be called by a minter
      * 
      * @param {number} amount - base-10 number
-     * @return {number} - returns the balance of user's address (burned amount will not be reflected until after transaction is processed)
      */
     async burn(amount) {
       try {
@@ -202,9 +246,7 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.balanceOf(this.accounts[0]).then(balance => {
-            return balance;
-          }));
+          });
       } catch (e) {
         console.log(e);
         //show error
@@ -216,7 +258,6 @@ export default {
      * Only one pauser can exist at a time
      * 
      * @param {string} address - hex string
-     * @return {bool} - returns if address is the pauser (changes will not be reflected until after transaction completes)
      */
     async updatePauser(address) {  
       try {
@@ -232,9 +273,7 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.pauser().then( pauser => {
-            return address == pauser;
-          }));
+          });
       } catch (e) {
         console.log(e);
         //show error
@@ -245,7 +284,6 @@ export default {
      * Pauses the test token contract
      * Must be called by the pauser
      * 
-     * @return {bool} - returns if the contract is paused or not (will not be updated until transaction completes)
      */
     async pause() {  
       try {
@@ -261,9 +299,7 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.paused().then(bool => {
-            return bool;
-          }));
+          });
       } catch (e) {
         console.log(e);
         //show error
@@ -282,7 +318,6 @@ export default {
      * Unpauses the test token contract
      * Must be called by the pauser
      * 
-     * @return {bool} - returns if the contract is paused or not (will not be updated until transaction completes)
      */
     async unpause() {  
       try {
@@ -298,9 +333,7 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.paused().then(bool => {
-            return bool;
-          }));
+          });
       } catch (e) {
         console.log(e);
         //show error

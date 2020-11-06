@@ -97,5 +97,31 @@ export const abi = [
     ],
     stateMutability: "nonpayable",
     type: "function"
-  }
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address"
+      }
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_newPauser",
+        type: "address"
+      }
+    ],
+    name: "updatePauser",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
 ];

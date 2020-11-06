@@ -76,22 +76,23 @@ export default {
   },
   methods: {
     async lookupBlacklisted() {
-      if (this.address === '') {
-        return;
-      }
-      this.blacklister = this.address === BLACKLISTER_ADDRESS;
+      // if (this.address === '') {
+      //   return;
+      // }
+      // this.blacklister = this.address === BLACKLISTER_ADDRESS;
     },
     async checkIsMinter() {
-      this.minter = await contract.methods.isMinter(this.address).call();
+      // this.minter = await contract.methods.isMinter(this.address).call();
     },
     async checkIsPauser() {
-      const pauserAddress = await contract.methods.pauser().call();
-      this.pauser = pauserAddress === this.address;
+      // const pauserAddress = await contract.methods.pauser().call();
+      // this.pauser = pauserAddress === this.address;
     },
     async checkIsOwner() {
       const owner = await contract.methods.owner().call();
       const ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
       this.owner = ownerAddress === this.address;
+      console.log(await contract.methods.owner().call())
     },
     checkRoles() {
       this.lookupBlacklisted();

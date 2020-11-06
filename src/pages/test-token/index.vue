@@ -6,7 +6,7 @@
 // modules
 import { abi } from '@/utils/testTokenABI.js';
 import Web3 from 'web3';
-import { TEST_TOKEN_CONTRACT_ADDRESS, TEST_TOKEN_OWNER_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants.js';
+import { TEST_TOKEN_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants.js';
 const web3 = new Web3(Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, TEST_TOKEN_CONTRACT_ADDRESS);
 
@@ -24,9 +24,9 @@ export default {
      * To test read operations, call the methods in below, i.e. await this.paused().then(console.log);
      */
 
-    // //PAUSE
+    // //PAUSE/UNPAUSE
     // //Enter your address where it says <your address here>
-    // await this.updatePauser(<your address here>);
+    // //Ask tetsu to add you as the pauser
     // // wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
     // // //then uncomment below and check the console
     // //await this.pauser().then(pauser => {
@@ -46,7 +46,7 @@ export default {
 
     // //Mint/Burn
     // //Enter your address where it says <your address here>
-    // await this.updateMasterMinter(<your address here>);
+    // //Ask tetsu to add you as the masterMinter
     // // wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
     // // //then uncomment below and check the console
     // //await this.masterMinter().then(masterMinter => {
@@ -58,7 +58,7 @@ export default {
     // // //then uncomment below and check the console
     // //await this.isMinter(<minter address here>).then(console.log);
     // // //call mint
-    // // await this.mint(<to address>, <amount>);
+    //await this.mint(TEST_TOKEN_OWNER_ADDRESS, 10);
     // // //wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
     // // //then uncomment below and check the console
     // // //this.balanceOf(<to address>).then(console.log))
@@ -68,9 +68,24 @@ export default {
     // // //then uncomment below and check the console
     // // //this.balanceOf(<minter address>).then(console.log))
 
-     
-  
-    
+    // //BLAACKLIST/UNBLACKLIST
+    // //Enter your address where it says <your address here>
+    // //Ask tetsu to add you as the blacklister
+    // // wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
+    // // //then uncomment below and check the console
+    // //await this.blacklister().then(blacklister => {
+    // //console.log(blacklister == <your address here>);
+    // //}
+    // // //call blacklist
+    // // await this.blacklist();
+    // // //wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
+    // // //then uncomment below and check the console
+    // // //this.blacklistd().then(console.log))
+    // // //call unblacklist
+    // // await this.unBlacklist();
+    // // //wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
+    // // //then uncomment below and check the console
+    // // //this.unBlacklist().then(console.log))
 
   },
 
@@ -184,7 +199,7 @@ export default {
             method: 'eth_sendTransaction',
             params: [
               {
-                from: TEST_TOKEN_OWNER_ADDRESS,
+                from: this.accounts[0],
                 to: TEST_TOKEN_CONTRACT_ADDRESS,
                 data: contract.methods.updateMasterMinter(new_address).encodeABI(),
                 gasPrice: DEFAULT_GAS_PRICE,
@@ -267,7 +282,7 @@ export default {
             method: 'eth_sendTransaction',
             params: [
               {
-                from: TEST_TOKEN_OWNER_ADDRESS,
+                from: this.accounts[0],
                 to: TEST_TOKEN_CONTRACT_ADDRESS,
                 data: contract.methods.updatePauser(address).encodeABI(),
                 gasPrice: DEFAULT_GAS_PRICE,
@@ -353,7 +368,7 @@ export default {
             method: 'eth_sendTransaction',
             params: [
               {
-                from: TEST_TOKEN_OWNER_ADDRESS,
+                from: this.accounts[0],
                 to: TEST_TOKEN_CONTRACT_ADDRESS,
                 data: contract.methods.updateBlacklister(address).encodeABI(),
                 gasPrice: DEFAULT_GAS_PRICE,

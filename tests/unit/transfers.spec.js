@@ -35,17 +35,15 @@ describe('Transfers page', () => {
   test('Send USDC button works', async () => {
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = '100';
-    const { queryByTestId } = render(transfers);
+    const { queryByLabelText, queryByText } = render(transfers);
 
-    const connectMetaMaskButton = queryByTestId('transfers-card-connect-button');
+    const connectMetaMaskButton = queryByText('Connect to Metamask');
     await fireEvent.click(connectMetaMaskButton);
 
-    const sendButton = queryByTestId('transfers-card-send-button');
-    const amountInput = queryByTestId('transfers-card-amount-input');
-    const toInput = queryByTestId('transfers-card-to-input');
-    const fromInput = queryByTestId('transfers-card-from-input');
+    const sendButton = queryByText('Send');
+    const amountInput = queryByLabelText('Transfer Amount');
+    const toInput = queryByLabelText('To');
 
-    await fireEvent.update(fromInput, MOCK_WALLET_ADDRESS);
     await fireEvent.update(toInput, TO_WALLET_ADDRESS);
     await fireEvent.update(amountInput, AMOUNT_TEXT);
     await fireEvent.click(sendButton);

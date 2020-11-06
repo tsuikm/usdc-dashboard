@@ -6,7 +6,7 @@
 // modules
 import { abi } from '@/utils/testTokenABI.js';
 import Web3 from 'web3';
-import { TEST_TOKEN_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants.js';
+import { TEST_TOKEN_CONTRACT_ADDRESS, TEST_TOKEN_OWNER_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants.js';
 const web3 = new Web3(Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, TEST_TOKEN_CONTRACT_ADDRESS);
 
@@ -21,9 +21,12 @@ export default {
   },
 
   methods: {
+    /**
+     * Connects to metamasks and obtains the user's address to use in calling methods
+     */
     async connectMetamask() {
       // eslint-disable-next-line
-          this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     },
 
     /**
@@ -32,16 +35,14 @@ export default {
      * @return {number} - base-10 number
      */
     async balanceOf(address) {
-      const balance = await contract.methods.balanceOf(address).call();
-      return balance;
+      return await contract.methods.balanceOf(address).call();
     },
 
     /**
      * Returns 6 (cannot be changed); used in testing contract validity
      */
     async decimals() {
-      const decimal = await contract.methods.decimals().call();
-      return decimal;
+      return await contract.methods.decimals().call();
     },
 
     /**
@@ -49,8 +50,7 @@ export default {
      * @return {number} - base-10 number
      */
     async totalSupply() {
-      const supply = await contract.methods.totalSupply().call();
-      return supply;
+      return await contract.methods.totalSupply().call();
     },
 
     /**
@@ -59,8 +59,7 @@ export default {
      * @return {bool} 
      */
     async isMinter(address) {
-      const minter = await contract.methods.isMinter(address).call();
-      return minter;
+      return await contract.methods.isMinter(address).call();
     },
 
     /**
@@ -68,8 +67,7 @@ export default {
      * @return {string} - hex string 
      */
     async masterMinter() {
-      const masterminter_address = await contract.methods.masterMinter().call();
-      return masterminter_address;
+      return await contract.methods.masterMinter().call();
     },
 
     /**
@@ -77,8 +75,7 @@ export default {
      * @return {string} - hex string
      */
     async pauser() {
-      const pauser_address = await contract.methods.pauser().call();
-      return pauser_address;
+      return await contract.methods.pauser().call();
     },
 
     /**
@@ -86,8 +83,7 @@ export default {
      * @return {string} - hex string
      */
     async blacklister() {
-      const pauser_address = await contract.methods.blacklister().call();
-      return pauser_address;
+      return await contract.methods.blacklister().call();
     },
 
     /**
@@ -138,13 +134,15 @@ export default {
             method: 'eth_sendTransaction',
             params: [
               {
-                from: '0xdC1e071D120FD40fB1173BCcc86c74F47645F4E0',
+                from: TEST_TOKEN_OWNER_ADDRESS,
                 to: TEST_TOKEN_CONTRACT_ADDRESS,
                 data: contract.methods.updateMasterMinter(new_address).encodeABI(),
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.masterMinter().then(console.log));
+          }).then(() => this.masterMinter().then(bool => {
+            return bool;
+          }));
       } catch (e) {
         console.log(e);
         //show error
@@ -174,14 +172,14 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.balanceOf(to_address).then(console.log,
-          ));
+          }).then(() => this.balanceOf(to_address).then(balance => {
+            return balance;
+          }));
       } catch (e) {
         console.log(e);
         //show error
       }
     },
-
 
     /**
      * Reduces balance of user's address
@@ -202,14 +200,43 @@ export default {
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
-          }).then(() => this.balanceOf(this.accounts[0]).then(console.log));
+          }).then(() => this.balanceOf(this.accounts[0]).then(balance => {
+            return balance;
+          }));
       } catch (e) {
         console.log(e);
         //show error
       }
     },
 
-
+    /**
+     * Changes the pauser
+     * 
+     * @param {string} address - hex string
+     * @return {bool} - returns if address is the pauser (changes will not be reflected until after transaction completes)
+     */
+    async updatePauser(address) {  
+      try {
+        // eslint-disable-next-line
+        const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: TEST_TOKEN_OWNER_ADDRESS,
+                to: TEST_TOKEN_CONTRACT_ADDRESS,
+                data: contract.methods.updatePauser(address).encodeABI(),
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          }).then(() => this.pauser().then( pauser => {
+            return address == pauser;
+          }));
+      } catch (e) {
+        console.log(e);
+        //show error
+      }
+    },
 
     /**
      * Pauses the test token contract
@@ -237,7 +264,6 @@ export default {
         //show error
       }
     },
-
 
     /**
      * Checks if contract is paused
@@ -288,7 +314,7 @@ export default {
             method: 'eth_sendTransaction',
             params: [
               {
-                from: this.accounts[0],
+                from: TEST_TOKEN_OWNER_ADDRESS,
                 to: TEST_TOKEN_CONTRACT_ADDRESS,
                 data: contract.methods.updateBlacklister(address).encodeABI(),
                 gasPrice: DEFAULT_GAS_PRICE,
@@ -363,15 +389,13 @@ export default {
       }
     },
 
-
     /**
      * Checks if address is blacklisted
      * @param {string} address - as a hex string.
      * @return {bool}
      */
     async isBlacklisted(address) {
-      const isblacklist = await contract.methods.isBlacklisted(address).call();
-      return isblacklist;
+      return await contract.methods.isBlacklisted(address).call();
     },
 
     /**
@@ -379,11 +403,8 @@ export default {
      * 
      */
     async owner() {
-      const owner_address = await contract.methods.owner().call();
-      return owner_address;
+      return await contract.methods.owner().call();
     },
   },
-
 };
-
 </script>

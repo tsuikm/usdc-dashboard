@@ -77,51 +77,77 @@ export const abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_to",
-        type: "address"
+        internalType: 'address',
+        name: '_to',
+        type: 'address'
       },
       {
-        internalType: "uint256",
-        name: "_amount",
-        type: "uint256"
+        internalType: 'uint256',
+        name: '_amount',
+        type: 'uint256'
       }
     ],
-    name: "mint",
+    name: 'mint',
     outputs: [
       {
-        internalType: "bool",
-        name: "",
-        type: "bool"
+        internalType: 'bool',
+        name: '',
+        type: 'bool'
       }
     ],
-    stateMutability: "nonpayable",
-    type: "function"
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "newOwner",
-        type: "address"
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address'
       }
     ],
-    name: "transferOwnership",
+    name: 'transferOwnership',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_newPauser",
-        type: "address"
+        internalType: 'address',
+        name: '_newPauser',
+        type: 'address'
       }
     ],
-    name: "updatePauser",
+    name: 'updatePauser',
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_newMasterMinter',
+        type: 'address'
+      }
+    ],
+    name: 'updateMasterMinter',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [
+    {
+        internalType: 'address',
+        name: '_newBlacklister',
+        type: 'address'
+    }
+  ],
+    name: 'updateBlacklister',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
   },
 ];

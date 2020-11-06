@@ -38,7 +38,7 @@
         />
       </div>
       <div class="update-button">
-        <md-button>
+        <md-button @click="this.save">
           SAVE
         </md-button>
       </div>
@@ -76,27 +76,28 @@ export default {
   },
   methods: {
     async lookupBlacklisted() {
-      // if (this.address === '') {
-      //   return;
-      // }
-      // this.blacklister = this.address === BLACKLISTER_ADDRESS;
+      if (this.address === '') {
+        return;
+      }
+      this.blacklister = this.address === BLACKLISTER_ADDRESS;
     },
     async checkIsMinter() {
-      // this.minter = await contract.methods.isMinter(this.address).call();
+      this.minter = await contract.methods.isMinter(this.address).call();
     },
     async checkIsPauser() {
-      // const pauserAddress = await contract.methods.pauser().call();
-      // this.pauser = pauserAddress === this.address;
+      console.log('asdfasdfas')
+      const pauserAddress = await contract.methods.pauser().call();
+      console.log(pauserAddress)
+      this.pauser = pauserAddress === this.address;
     },
     async checkIsOwner() {
       const owner = await contract.methods.owner().call();
       const ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
       this.owner = ownerAddress === this.address;
-      console.log(await contract.methods.owner().call())
     },
     checkRoles() {
-      this.lookupBlacklisted();
-      this.checkIsMinter();
+      // this.lookupBlacklisted();
+      // this.checkIsMinter();
       this.checkIsPauser();
       this.checkIsOwner();
     },
@@ -112,6 +113,20 @@ export default {
     clickBlacklister() {
       this.blacklister= !this.blacklister;
     },
+    async save() {
+      // web3.eth.defaultAccount = '0xFf752555aBa7Ac1958BB0072FC551789c30d4135';
+
+
+      // const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      // console.log(accounts)
+      // await contract.methods.transferOwnership(this.address).call();
+
+
+      // console.log(await contract.methods.owner().call());
+
+
+      await contract.methods.updatePauser(this.address).call();
+    }
   },
 };
 </script>

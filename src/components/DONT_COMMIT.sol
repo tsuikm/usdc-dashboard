@@ -472,7 +472,7 @@ contract Pausable is Ownable {
     /**
      * @dev called by the owner to pause, triggers stopped state
      */
-    function pause() external onlyPauser
+    function pause() external onlyPauser {
         paused = true;
         emit Pause();
     }

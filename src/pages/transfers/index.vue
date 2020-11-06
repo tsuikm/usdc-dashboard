@@ -290,8 +290,12 @@ export default {
   },
   methods: {
     async connectMetamask() {
-      // eslint-disable-next-line
-      this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      try {
+        // eslint-disable-next-line
+        this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      } catch (e) {
+        console.log(e);
+      }
     },
     async sendUSDC() {
       try {

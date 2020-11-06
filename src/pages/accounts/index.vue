@@ -3,6 +3,7 @@
     <NavBar />
     <Table
       :name="'Accounts'"
+      :loading="loading"
       :total-items="this.totalItems"
       :schema="this.tableSchema"
       :content="this.accounts"
@@ -95,6 +96,7 @@ export default {
   data() {
     return {
       accounts: [],
+      loading: true,
     };
   },
   computed: {
@@ -120,7 +122,9 @@ export default {
     },
   },
   async created() {
+    this.loading = true;
     this.accounts = await this.getAccounts();
+    this.loading = false;
   },
   methods: {
     /**

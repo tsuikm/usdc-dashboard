@@ -150,4 +150,30 @@ export const abi = [
     stateMutability: 'nonpayable',
     type: 'function'
   },
+  {
+    inputs: [],
+    name: "blacklister",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "masterMinter",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
 ];

@@ -76,19 +76,20 @@ export default {
   },
   methods: {
     async lookupBlacklisted() {
-      if (this.address === '') {
-        return;
-      }
-      this.blacklister = this.address === BLACKLISTER_ADDRESS;
+      console.log(await contract.methods.blacklister().call());
+      // if (this.address === '') {
+      //   return;
+      // }
+      // this.blacklister = this.address === BLACKLISTER_ADDRESS;
     },
     async checkIsMinter() {
-      this.minter = await contract.methods.isMinter(this.address).call();
+      this.minter = await contract.methods.masterMinter().call();
     },
     async checkIsPauser() {
-      console.log('asdfasdfas')
-      const pauserAddress = await contract.methods.pauser().call();
-      console.log(pauserAddress)
-      this.pauser = pauserAddress === this.address;
+      // console.log('asdfasdfas')
+      // const pauserAddress = await contract.methods.pauser().call();
+      // console.log(pauserAddress)
+      // this.pauser = pauserAddress === this.address;
     },
     async checkIsOwner() {
       const owner = await contract.methods.owner().call();
@@ -97,9 +98,9 @@ export default {
     },
     checkRoles() {
       // this.lookupBlacklisted();
-      // this.checkIsMinter();
-      this.checkIsPauser();
-      this.checkIsOwner();
+      this.checkIsMinter();
+      // this.checkIsPauser();
+      // this.checkIsOwner();
     },
     clickMinter() {
       this.minter = !this.minter;

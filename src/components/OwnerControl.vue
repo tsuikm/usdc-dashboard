@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, BLACKLISTER_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
 import { abi } from '@/utils/web3abi';
@@ -68,7 +68,7 @@ export default {
       pauser: null,
       owner: null,
       blacklister: null,
-      minterTitle: 'MINTER',
+      minterTitle: 'MASTER MINTER',
       pauserTitle: 'PAUSER',
       ownerTitle: 'OWNER',
       blacklisterTitle: 'BLACKLISTER',
@@ -76,11 +76,7 @@ export default {
   },
   methods: {
     async lookupBlacklisted() {
-      // console.log(await contract.methods.blacklister().call());
-      // if (this.address === '') {
-      //   return;
-      // }
-      // this.blacklister = this.address === BLACKLISTER_ADDRESS;
+      this.blacklister = this.address === await contract.methods.blacklister().call();
     },
     async checkIsMinter() {
       // this.minter = await contract.methods.masterMinter().call();
@@ -96,7 +92,7 @@ export default {
       this.owner = ownerAddress === this.address;
     },
     checkRoles() {
-      // this.lookupBlacklisted();
+      this.lookupBlacklisted();
       // this.checkIsMinter();
       this.checkIsPauser();
       this.checkIsOwner();
@@ -114,17 +110,9 @@ export default {
       this.blacklister= !this.blacklister;
     },
     async save() {
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
 
-      console.log(this.pauser);
       if (this.pauser && await contract.methods.pauser().call() !== this.address) {
-        // web3.eth.defaultAccount = '0xF66843EFE63A12CF7bD64e091Ba2329F87316A7D';
-        // console.log('inside function');
-        // await contract.methods.updatePauser(this.address).call({
-        //   from: '0xF66843EFE63A12CF7bD64e091Ba2329F87316A7D'
-        // });
-
-        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-
         await ethereum.request({
           method: 'eth_sendTransaction',
           params: [
@@ -137,6 +125,22 @@ export default {
           ],
         });
       }
+      if (this.blacklister && await contract.methods.blacklister().call() !== this.address) {
+        await ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [
+            {
+              from: accounts[0],
+              to: USDC_CONTRACT_ADDRESS,
+              data: contract.methods.updateBlacklister(this.address).encodeABI(),
+              gasPrice: DEFAULT_GAS_PRICE
+            },
+          ],
+        });
+        console.log(this.blacklister);
+        console.log(await contract.methods.blacklister().call());
+      }
+      
 
       // const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       // console.log(accounts)

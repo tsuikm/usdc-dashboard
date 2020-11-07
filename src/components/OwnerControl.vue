@@ -79,8 +79,7 @@ export default {
       this.blacklister = this.address === await contract.methods.blacklister().call();
     },
     async checkIsMinter() {
-      // this.minter = await contract.methods.masterMinter().call();
-      // console.log(contract)
+      this.minter = this.address === await contract.methods.masterMinter().call();
     },
     async checkIsPauser() {
       const pauserAddress = await contract.methods.pauser().call();
@@ -93,7 +92,7 @@ export default {
     },
     checkRoles() {
       this.lookupBlacklisted();
-      // this.checkIsMinter();
+      this.checkIsMinter();
       this.checkIsPauser();
       this.checkIsOwner();
     },
@@ -125,6 +124,19 @@ export default {
           ],
         });
       }
+      if (this.minter && await contract.methods.masterMinter().call() !== this.address) {
+        await ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [
+            {
+              from: accounts[0],
+              to: USDC_CONTRACT_ADDRESS,
+              data: contract.methods.updateMasterMinter(this.address).encodeABI(),
+              gasPrice: DEFAULT_GAS_PRICE
+            },
+          ],
+        });
+      }
       if (this.blacklister && await contract.methods.blacklister().call() !== this.address) {
         await ethereum.request({
           method: 'eth_sendTransaction',
@@ -137,10 +149,7 @@ export default {
             },
           ],
         });
-        console.log(this.blacklister);
-        console.log(await contract.methods.blacklister().call());
-      }
-      
+      }  
 
       // const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       // console.log(accounts)

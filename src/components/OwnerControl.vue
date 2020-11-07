@@ -15,6 +15,9 @@
       </md-field>
     </form>
     <div class="role-control">
+      <div v-if="!hasRoles && address !== ''">
+        Address has no roles.
+      </div>
       <div class="role-button-row">
         <RoleButton
           :title="this.minterTitle"
@@ -36,6 +39,9 @@
           :role-active="this.blacklister"
           :on-click="clickBlacklister"
         />
+      </div>
+      <div v-if="hasRenouncedRoles">
+        ⚠️ Warning: Cannot renounce roles. Please assign role to another address.
       </div>
       <div class="update-button">
         <md-button @click="this.save">
@@ -72,21 +78,47 @@ export default {
       pauserTitle: 'PAUSER',
       ownerTitle: 'OWNER',
       blacklisterTitle: 'BLACKLISTER',
+      hasRenouncedRoles: null,
+      
+
+      blacklisterAddress: null,
+      ownerAddress: null,
+      masterMinterAddress: null,
+      pauserAddress: null
     };
   },
+  computed: {
+    hasRoles() {
+      // const array = [
+      //   this.blacklisterAddress,
+      //   this.masterMinterAddress,
+      //   this.ownerAddress,
+      //   this.pauserAddress
+      // ].map(string => string.toLowerCase());
+      // console.log(array, this.address.toLowerCase())
+
+      // const hasRoles = array.includes(this.address.toLowerCase());
+      // console.log(hasRoles)
+      // return hasRoles;
+      return true;
+    }
+  },  
   methods: {
     async lookupBlacklisted() {
-      this.blacklister = this.address === await contract.methods.blacklister().call();
+      this.blacklisterAddress = await contract.methods.blacklister().call();
+      this.blacklister = this.address === this.blacklisterAddress;
     },
     async checkIsMinter() {
-      this.minter = this.address === await contract.methods.masterMinter().call();
+      this.minterAddress = await contract.methods.masterMinter().call()
+      this.minter = this.address === this.minterAddress;
     },
     async checkIsPauser() {
-      const pauserAddress = await contract.methods.pauser().call();
-      this.pauser = pauserAddress === this.address;
+      this.pauserAddress = await contract.methods.pauser().call();
+      this.pauser = this.pauserAddress === this.address;
     },
     async checkIsOwner() {
-      this.owner = await contract.methods.owner().call() === this.address;
+      this.ownerAddress = await contract.methods.owner().call();
+      this.owner = this.ownerAddress === this.address;
     },
     checkRoles() {
       this.lookupBlacklisted();
@@ -120,6 +152,7 @@ export default {
       });
     },
     async save() {
+      this.checkRoles();
       const accounts = (await ethereum.request({ method: 'eth_requestAccounts' })).map(string => string.toLowerCase());
       const ownerAccount = await contract.methods.owner().call();
 
@@ -127,6 +160,16 @@ export default {
         console.log('You are not the owner');
         return;
       }
+      
+      this.hasRenouncedRoles = (!this.pauser && await contract.methods.pauser().call() === this.address) ||
+        (!this.minter && await contract.methods.masterMinter().call() === this.address) ||
+        (!this.blacklister && await contract.methods.blacklister().call() === this.address) || 
+        (!this.owner && await contract.methods.owner().call() === this.address);
+
+      if (this.hasRenouncedRoles) {
+        return;
+      }
+
 
       if (this.pauser && await contract.methods.pauser().call() !== this.address) {
         await this.changeRole(ownerAccount, contract.methods.updatePauser);

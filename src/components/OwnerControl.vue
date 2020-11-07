@@ -76,14 +76,15 @@ export default {
   },
   methods: {
     async lookupBlacklisted() {
-      console.log(await contract.methods.blacklister().call());
+      // console.log(await contract.methods.blacklister().call());
       // if (this.address === '') {
       //   return;
       // }
       // this.blacklister = this.address === BLACKLISTER_ADDRESS;
     },
     async checkIsMinter() {
-      this.minter = await contract.methods.masterMinter().call();
+      // this.minter = await contract.methods.masterMinter().call();
+      // console.log(contract)
     },
     async checkIsPauser() {
       // console.log('asdfasdfas')
@@ -98,9 +99,9 @@ export default {
     },
     checkRoles() {
       // this.lookupBlacklisted();
-      this.checkIsMinter();
+      // this.checkIsMinter();
       // this.checkIsPauser();
-      // this.checkIsOwner();
+      this.checkIsOwner();
     },
     clickMinter() {
       this.minter = !this.minter;
@@ -115,18 +116,20 @@ export default {
       this.blacklister= !this.blacklister;
     },
     async save() {
-      // web3.eth.defaultAccount = '0xFf752555aBa7Ac1958BB0072FC551789c30d4135';
+      web3.eth.defaultAccount = '0x3D612BA047A1338ae860E657b5B91Dc77a1BFDf0';
 
 
       // const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       // console.log(accounts)
-      // await contract.methods.transferOwnership(this.address).call();
+      await contract.methods.transferOwnership('0x3365fA9b574cb79b36120B7fBce58164229333ac',
+        {from: '0x3D612BA047A1338ae860E657b5B91Dc77a1BFDf0'}
+      ).call();
 
 
-      // console.log(await contract.methods.owner().call());
+      console.log(await contract.methods.owner().call());
 
 
-      await contract.methods.updatePauser(this.address).call();
+      // await contract.methods.updatePauser(this.address).call();
     }
   },
 };

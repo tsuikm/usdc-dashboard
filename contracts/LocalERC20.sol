@@ -2103,7 +2103,7 @@ pragma solidity 0.6.12;
  * @title FiatToken V2
  * @notice ERC20 Token backed by fiat reserves, version 2
  */
-contract FiatTokenV2 is FiatTokenV1_1, GasAbstraction, Permit {
+contract LocalERC20 is FiatTokenV1_1, GasAbstraction, Permit {
     bool internal _initializedV2;
 
     /**

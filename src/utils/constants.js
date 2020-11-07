@@ -12,7 +12,7 @@ export const OPTIMAL_PROMISE_ALL_SIZE = 500;
 
 // Locally hosted blockchain contract address.
 // See https://github.com/selinafeng/usdc-dashboard/wiki/Setting-up-a-locally-hosted-blockchain/
-export const USDC_CONTRACT_ADDRESS = '0x30F0bB7eb32AC252f56c881ACE9afB4Dd9afFE9f'
+export const USDC_CONTRACT_ADDRESS = '0x066088e34513eA77EcE0E141E76e4D279333C6F3'
 
 export const TRANSACTION_TOPIC =
   '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';

@@ -86,9 +86,7 @@ export default {
       this.pauser = pauserAddress === this.address;
     },
     async checkIsOwner() {
-      const owner = await contract.methods.owner().call();
-      const ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
-      this.owner = ownerAddress === this.address;
+      this.owner = await contract.methods.owner().call() === this.address;
     },
     checkRoles() {
       this.lookupBlacklisted();
@@ -109,14 +107,20 @@ export default {
       this.blacklister= !this.blacklister;
     },
     async save() {
-      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      const accounts = (await ethereum.request({ method: 'eth_requestAccounts' })).map(string => string.toLowerCase());
+      const ownerAccount = await contract.methods.owner().call();
+
+      if (!accounts.includes(ownerAccount.toLowerCase())) {
+        console.log('You are not the owner');
+        return;
+      }
 
       if (this.pauser && await contract.methods.pauser().call() !== this.address) {
         await ethereum.request({
           method: 'eth_sendTransaction',
           params: [
             {
-              from: accounts[0],
+              from: ownerAccount,
               to: USDC_CONTRACT_ADDRESS,
               data: contract.methods.updatePauser(this.address).encodeABI(),
               gasPrice: DEFAULT_GAS_PRICE
@@ -129,7 +133,7 @@ export default {
           method: 'eth_sendTransaction',
           params: [
             {
-              from: accounts[0],
+              from: ownerAccount,
               to: USDC_CONTRACT_ADDRESS,
               data: contract.methods.updateMasterMinter(this.address).encodeABI(),
               gasPrice: DEFAULT_GAS_PRICE
@@ -142,7 +146,7 @@ export default {
           method: 'eth_sendTransaction',
           params: [
             {
-              from: accounts[0],
+              from: ownerAccount,
               to: USDC_CONTRACT_ADDRESS,
               data: contract.methods.updateBlacklister(this.address).encodeABI(),
               gasPrice: DEFAULT_GAS_PRICE
@@ -150,18 +154,20 @@ export default {
           ],
         });
       }  
-
-      // const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      // console.log(accounts)
-      // await contract.methods.transferOwnership('0x3365fA9b574cb79b36120B7fBce58164229333ac',
-      //   {from: '0x3D612BA047A1338ae860E657b5B91Dc77a1BFDf0'}
-      // ).call();
-
-
-      // console.log(await contract.methods.owner().call());
-
-
-      // await contract.methods.updatePauser(this.address).call();
+      if (this.owner && await contract.methods.owner().call() !== this.address) {
+        console.log('inside')
+        await ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [
+            {
+              from: ownerAccount,
+              to: USDC_CONTRACT_ADDRESS,
+              data: contract.methods.transferOwnership(this.address).encodeABI(),
+              gasPrice: DEFAULT_GAS_PRICE
+            },
+          ],
+        });
+      }  
     }
   },
 };

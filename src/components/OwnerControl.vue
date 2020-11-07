@@ -106,6 +106,19 @@ export default {
     clickBlacklister() {
       this.blacklister= !this.blacklister;
     },
+    async changeRole(ownerAccount, method) {
+      await ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [
+          {
+            from: ownerAccount,
+            to: USDC_CONTRACT_ADDRESS,
+            data: method(this.address).encodeABI(),
+            gasPrice: DEFAULT_GAS_PRICE
+          },
+        ],
+      });
+    },
     async save() {
       const accounts = (await ethereum.request({ method: 'eth_requestAccounts' })).map(string => string.toLowerCase());
       const ownerAccount = await contract.methods.owner().call();
@@ -116,58 +129,18 @@ export default {
       }
 
       if (this.pauser && await contract.methods.pauser().call() !== this.address) {
-        await ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [
-            {
-              from: ownerAccount,
-              to: USDC_CONTRACT_ADDRESS,
-              data: contract.methods.updatePauser(this.address).encodeABI(),
-              gasPrice: DEFAULT_GAS_PRICE
-            },
-          ],
-        });
+        await this.changeRole(ownerAccount, contract.methods.updatePauser);
       }
       if (this.minter && await contract.methods.masterMinter().call() !== this.address) {
-        await ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [
-            {
-              from: ownerAccount,
-              to: USDC_CONTRACT_ADDRESS,
-              data: contract.methods.updateMasterMinter(this.address).encodeABI(),
-              gasPrice: DEFAULT_GAS_PRICE
-            },
-          ],
-        });
+        await this.changeRole(ownerAccount, contract.methods.updateMasterMinter);
       }
       if (this.blacklister && await contract.methods.blacklister().call() !== this.address) {
-        await ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [
-            {
-              from: ownerAccount,
-              to: USDC_CONTRACT_ADDRESS,
-              data: contract.methods.updateBlacklister(this.address).encodeABI(),
-              gasPrice: DEFAULT_GAS_PRICE
-            },
-          ],
-        });
+        await this.changeRole(ownerAccount, contract.methods.updateBlacklister);
       }  
       if (this.owner && await contract.methods.owner().call() !== this.address) {
-        console.log('inside')
-        await ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [
-            {
-              from: ownerAccount,
-              to: USDC_CONTRACT_ADDRESS,
-              data: contract.methods.transferOwnership(this.address).encodeABI(),
-              gasPrice: DEFAULT_GAS_PRICE
-            },
-          ],
-        });
+        await this.changeRole(ownerAccount, contract.methods.transferOwnership);
       }  
+      
     }
   },
 };

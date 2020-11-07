@@ -3,6 +3,7 @@ export const WEB3_BALANCEOF_ADDRESS_LENGTH = 40;
 export const WEB3_RESULT_TOO_LARGE_ERROR_CODE = -32005;
 export const WEB3_MAX_TRANSACTIONS = 10000;
 export const OPTIMAL_PROMISE_ALL_SIZE = 500;
+export const DEFAULT_GAS_PRICE = '0x09184e72a000'; // Decimal value is 10,000,000,000,000
 
 // Ropsten USDC Address
 // export const USDC_CONTRACT_ADDRESS = '0x07865c6E87B9F70255377e024ace6630C1Eaa37F';
@@ -12,7 +13,7 @@ export const OPTIMAL_PROMISE_ALL_SIZE = 500;
 
 // Locally hosted blockchain contract address.
 // See https://github.com/selinafeng/usdc-dashboard/wiki/Setting-up-a-locally-hosted-blockchain/
-export const USDC_CONTRACT_ADDRESS = '0x066088e34513eA77EcE0E141E76e4D279333C6F3'
+export const USDC_CONTRACT_ADDRESS = '0x95bB2232DdFcbA0D180b7Eb2f311B44FD96aF00c'
 
 export const TRANSACTION_TOPIC =
   '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';

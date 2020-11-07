@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, BLACKLISTER_ADDRESS } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, BLACKLISTER_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
 import { abi } from '@/utils/web3abi';
@@ -87,10 +87,8 @@ export default {
       // console.log(contract)
     },
     async checkIsPauser() {
-      // console.log('asdfasdfas')
-      // const pauserAddress = await contract.methods.pauser().call();
-      // console.log(pauserAddress)
-      // this.pauser = pauserAddress === this.address;
+      const pauserAddress = await contract.methods.pauser().call();
+      this.pauser = pauserAddress === this.address;
     },
     async checkIsOwner() {
       const owner = await contract.methods.owner().call();
@@ -100,7 +98,7 @@ export default {
     checkRoles() {
       // this.lookupBlacklisted();
       // this.checkIsMinter();
-      // this.checkIsPauser();
+      this.checkIsPauser();
       this.checkIsOwner();
     },
     clickMinter() {
@@ -116,17 +114,38 @@ export default {
       this.blacklister= !this.blacklister;
     },
     async save() {
-      web3.eth.defaultAccount = '0x3D612BA047A1338ae860E657b5B91Dc77a1BFDf0';
 
+      console.log(this.pauser);
+      if (this.pauser && await contract.methods.pauser().call() !== this.address) {
+        // web3.eth.defaultAccount = '0xF66843EFE63A12CF7bD64e091Ba2329F87316A7D';
+        // console.log('inside function');
+        // await contract.methods.updatePauser(this.address).call({
+        //   from: '0xF66843EFE63A12CF7bD64e091Ba2329F87316A7D'
+        // });
+
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+
+        await ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [
+            {
+              from: accounts[0],
+              to: USDC_CONTRACT_ADDRESS,
+              data: contract.methods.updatePauser(this.address).encodeABI(),
+              gasPrice: DEFAULT_GAS_PRICE
+            },
+          ],
+        });
+      }
 
       // const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       // console.log(accounts)
-      await contract.methods.transferOwnership('0x3365fA9b574cb79b36120B7fBce58164229333ac',
-        {from: '0x3D612BA047A1338ae860E657b5B91Dc77a1BFDf0'}
-      ).call();
+      // await contract.methods.transferOwnership('0x3365fA9b574cb79b36120B7fBce58164229333ac',
+      //   {from: '0x3D612BA047A1338ae860E657b5B91Dc77a1BFDf0'}
+      // ).call();
 
 
-      console.log(await contract.methods.owner().call());
+      // console.log(await contract.methods.owner().call());
 
 
       // await contract.methods.updatePauser(this.address).call();

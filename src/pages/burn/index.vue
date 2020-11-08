@@ -5,9 +5,6 @@
       :title="'Burn USDC'"
       :schema=" [
         {
-          label: 'Wallet Address',
-        },
-        {
           label: 'Amount',
           defaultValue: 0
         }
@@ -22,31 +19,70 @@
 // modules
 import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
-//import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
-//import { padHex } from '@/utils/utils';
-// import Web3 from 'web3';
+import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, DEFAULT_GAS_PRICE } from '@/utils/constants';
+import { padHex, toHex } from '@/utils/utils';
+import Web3 from 'web3';
 
-// const web3 = new Web3(Web3.givenProvider);
-// const abi = [
-//   {
-//     inputs: [{ name:'_amount', type :'uint256' }],
-//     name: 'burn',
-//     outputs:[],
-//     stateMutability:'nonpayable',
-//     type:'function',
-//   },
-// ];
-//const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
+const web3 = new Web3(Web3.givenProvider);
+const abi = [
+  {
+    constant: true,
+    inputs: [{ name: 'account', type: 'address' }],
+    name: 'isMinter',
+    outputs: [{ name: '', type: 'bool' }],
+    type: 'function',
+  },
+  {
+    inputs: [{ name:'_amount', type :'uint256' }],
+    name: 'burn',
+    outputs:[],
+    stateMutability:'nonpayable',
+    type:'function',
+  },
+];
+const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
   components: {
     NavBar,
     Form,
   },
-
+  data() {
+    return {
+      accounts: [],
+    };
+  },
+  async mounted() {
+    // eslint-disable-next-line
+    this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+  },
   methods: {
-    async submit(walletAddress, amount) {
-      console.log(walletAddress, amount);
+    async submit(amount) {
+      console.log(amount);
+      if (!await contract.methods.isMinter(padHex(this.accounts[0], WEB3_BALANCEOF_ADDRESS_LENGTH)).call()) {
+        // not allowed to burn
+        console.err(`Wallet ${this.accounts[0]} is not allowed to burn`);
+        return;
+      }
+      
+      try {
+        // eslint-disable-next-line
+          const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: this.accounts[0],
+                to: USDC_CONTRACT_ADDRESS,
+                data: contract.methods.burn(toHex(Number(amount) * 1000000)).encodeABI(),
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          });
+      } catch (e) {
+        console.log(e);
+        // show error
+      }
     },
   },
 };

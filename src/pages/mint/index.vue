@@ -5,9 +5,6 @@
       :title="'Mint USDC'"
       :schema=" [
         {
-          label: 'Wallet Address',
-        },
-        {
           label: 'To Address',
         },
         {
@@ -25,45 +22,70 @@
 // modules
 import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
-//import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
-//import { padHex } from '@/utils/utils';
-//import Web3 from 'web3';
+import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, DEFAULT_GAS_PRICE } from '@/utils/constants';
+import { padHex, toHex } from '@/utils/utils';
+import Web3 from 'web3';
 
-//const web3 = new Web3(Web3.givenProvider);
-// const abi = [
-//   {
-//     constant: true,
-//     inputs: [{ name: 'account', type: 'address' }],
-//     name: 'isMinter',
-//     outputs: [{ name: '', type: 'bool' }],
-//     type: 'function',
-//   },
-//   {
-//     inputs: [{ name:'_to', type: 'address'}, {name:'_amount', type:'uint256'}],
-//     name: 'mint',
-//     outputs: [{ name:'', type: 'bool' }],
-//     stateMutability: 'nonpayable',
-//     type:'function',
-//   },
-// ];
-//const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
+const web3 = new Web3(Web3.givenProvider);
+const abi = [
+  {
+    constant: true,
+    inputs: [{ name: 'account', type: 'address' }],
+    name: 'isMinter',
+    outputs: [{ name: '', type: 'bool' }],
+    type: 'function',
+  },
+  {
+    inputs: [{ name:'_to', type: 'address'}, {name:'_amount', type:'uint256'}],
+    name: 'mint',
+    outputs: [{ name:'', type: 'bool' }],
+    stateMutability: 'nonpayable',
+    type:'function',
+  },
+];
+const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
   components: {
     NavBar,
     Form,
   },
-
+  data() {
+    return {
+      accounts: [],
+    };
+  },
+  async mounted() {
+    // eslint-disable-next-line
+    this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+  },
   methods: {
-    async submit(walletAddress, toAddress, amount) {
-      console.log(walletAddress, toAddress, amount);
-      // if (! await contract.methods.isMinter(padHex(this.walletAddress, WEB3_BALANCEOF_ADDRESS_LENGTH)).call()) {
-      //   //not allowed to mint
-      //   console.log("not allowed");
-      //   return;
-      // } else {
-      //   console.log(await contract.methods.mint(this.toAddress, this.amount).call());
-      // }
+    async submit(toAddress, amount) {
+      console.log(toAddress, amount);
+      if (!await contract.methods.isMinter(padHex(this.accounts[0], WEB3_BALANCEOF_ADDRESS_LENGTH)).call()) {
+        // not allowed to mint
+        console.err(`Wallet ${this.accounts[0]} is not allowed to mint`);
+        return;
+      }
+      
+      try {
+        // eslint-disable-next-line
+          const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: this.accounts[0],
+                to: USDC_CONTRACT_ADDRESS,
+                data: contract.methods.mint(toAddress, toHex(Number(amount) * 1000000)).encodeABI(),
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          });
+      } catch (e) {
+        console.log(e);
+        // show error
+      }
     },
   },
 };

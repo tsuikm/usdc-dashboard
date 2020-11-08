@@ -324,10 +324,10 @@ pragma solidity ^0.6.0;
 
 
 /**
- * @title LocalERC20Proxy
+ * @title FiatTokenProxy
  * @dev This contract proxies FiatToken calls and enables FiatToken upgrades
 */
-contract LocalERC20Proxy is AdminUpgradeabilityProxy {
+contract FiatTokenProxy is AdminUpgradeabilityProxy {
     constructor(address _implementation) public AdminUpgradeabilityProxy(_implementation) {
     }
 }

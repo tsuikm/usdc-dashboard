@@ -33,7 +33,6 @@ describe('PauserControl', () => {
   });
 
   it('Unpauses when pauser attempts to unpause', async () => {
-    // Simulates connecting to metamask as the owner.
     const { getByText } = render(PauserControl, {
       data: function() {
         return {
@@ -41,7 +40,6 @@ describe('PauserControl', () => {
         };
       },
     });
-    //not connect as pauser so should still be paused
     await fireEvent.click(getByText('PAUSED'));
     await finishPromises();
     expect(getByText('UNPAUSED')).not.toBeNull();
@@ -50,7 +48,6 @@ describe('PauserControl', () => {
   });
 
   it('Pauses when pauser attempts to pause', async () => {
-    // Simulates connecting to metamask as the owner.
     const { getByText } = render(PauserControl, {
       data: function() {
         return {

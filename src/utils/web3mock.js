@@ -104,14 +104,7 @@ export default class Web3 {
           this.unpauseEvent = 'unpause';
         }
         async once(event, callback) {
-          if (event === 'pause') {
-            Web3.PAUSED = true;
-            callback();
-          }
-          if (event == 'unpause') {
-            Web3.PAUSED = false;
-            callback();
-          }
+          callback();
         }
       },
       async getBlockNumber() {

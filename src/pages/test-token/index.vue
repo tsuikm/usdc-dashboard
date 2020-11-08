@@ -68,7 +68,7 @@ export default {
     // // //then uncomment below and check the console
     // // //this.balanceOf(<minter address>).then(console.log))
 
-    // //BLAACKLIST/UNBLACKLIST
+    // //BLACKLIST/UNBLACKLIST
     // //Enter your address where it says <your address here>
     // //Ask tetsu to add you as the blacklister
     // // wait for the transaction to complete, can check events on https://ropsten.etherscan.io/address/0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31?fbclid=IwAR2n5sYWXwL7vuTkORYsBI4j-d8FFFogbQEdj2pZ-Ivb8j-eGjZEhcOCFDg#events
@@ -156,14 +156,10 @@ export default {
     },
 
     /**
-     * Adds a minter to the test token contract
-     * Must be called by the master minter
-     *
-     * @param {string} address - hex string
-     * @param {number} allowance - base-10 number
-     * 
+     * General method to make ethereum requests
+     * @param {method} data
      */
-    async addMinter(address, allowance) {
+    async ethReq(data) {
       try {
         // eslint-disable-next-line
         const txHash = await ethereum
@@ -173,7 +169,7 @@ export default {
               {
                 from: this.accounts[0],
                 to: TEST_TOKEN_CONTRACT_ADDRESS,
-                data: contract.methods.configureMinter(address, allowance).encodeABI(),
+                data: data,
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
@@ -185,6 +181,18 @@ export default {
     },
 
     /**
+     * Adds a minter to the test token contract
+     * Must be called by the master minter
+     *
+     * @param {string} address - hex string
+     * @param {number} allowance - base-10 number
+     * 
+     */
+    async addMinter(address, allowance) {
+      await this.ethReq(contract.methods.configureMinter(address, allowance).encodeABI());
+    },
+
+    /**
      * Changes address of master minter
      * Only one master minter can exist at a time
      *
@@ -192,24 +200,7 @@ export default {
      * 
      */
     async updateMasterMinter(new_address) {
-      try {
-        // eslint-disable-next-line
-        const txHash = await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.accounts[0],
-                to: TEST_TOKEN_CONTRACT_ADDRESS,
-                data: contract.methods.updateMasterMinter(new_address).encodeABI(),
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.log(e);
-        //show error
-      }
+      await this.ethReq(contract.methods.updateMasterMinter(new_address).encodeABI());
     },
 
     /**
@@ -221,24 +212,7 @@ export default {
      * 
      */
     async mint(to_address, amount) {
-      try {
-        // eslint-disable-next-line
-        const txHash = await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.accounts[0],
-                to: TEST_TOKEN_CONTRACT_ADDRESS,
-                data: contract.methods.mint(to_address, amount).encodeABI(),
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.log(e);
-        //show error
-      }
+      await this.ethReq(contract.methods.mint(to_address, amount).encodeABI());
     },
 
     /**
@@ -248,24 +222,7 @@ export default {
      * @param {number} amount - base-10 number
      */
     async burn(amount) {
-      try {
-        // eslint-disable-next-line
-        const txHash = await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.accounts[0],
-                to: TEST_TOKEN_CONTRACT_ADDRESS,
-                data: contract.methods.burn(amount).encodeABI(),
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.log(e);
-        //show error
-      }
+      await this.ethReq(contract.methods.burn(amount).encodeABI());
     },
 
     /**
@@ -275,24 +232,7 @@ export default {
      * @param {string} address - hex string
      */
     async updatePauser(address) {  
-      try {
-        // eslint-disable-next-line
-        const txHash = await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.accounts[0],
-                to: TEST_TOKEN_CONTRACT_ADDRESS,
-                data: contract.methods.updatePauser(address).encodeABI(),
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.log(e);
-        //show error
-      }
+      await this.ethReq(contract.methods.updatePauser(address).encodeABI());
     },
 
     /**
@@ -301,24 +241,7 @@ export default {
      * 
      */
     async pause() {  
-      try {
-        // eslint-disable-next-line
-        const txHash = await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.accounts[0],
-                to: TEST_TOKEN_CONTRACT_ADDRESS,
-                data: contract.methods.pause().encodeABI(),
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.log(e);
-        //show error
-      }
+      await this.ethReq(contract.methods.pause().encodeABI());
     },
 
     /**
@@ -335,24 +258,7 @@ export default {
      * 
      */
     async unpause() {  
-      try {
-        // eslint-disable-next-line
-        const txHash = await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.accounts[0],
-                to: TEST_TOKEN_CONTRACT_ADDRESS,
-                data: contract.methods.unpause().encodeABI(),
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.log(e);
-        //show error
-      }
+      await this.ethReq(contract.methods.unpause().encodeABI());
     },
 
     /**
@@ -361,24 +267,7 @@ export default {
      * @param {string} address - hex string
      */
     async updateBlacklister(address) {  
-      try {
-        // eslint-disable-next-line
-        const txHash = await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.accounts[0],
-                to: TEST_TOKEN_CONTRACT_ADDRESS,
-                data: contract.methods.updateBlacklister(address).encodeABI(),
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.log(e);
-        //show error
-      }
+      await this.ethReq(contract.methods.updateBlacklister(address).encodeABI());
     },
 
     /**
@@ -388,24 +277,7 @@ export default {
      * @param {string} address - hex string
      */
     async blacklist(address) {  
-      try {
-        // eslint-disable-next-line
-        const txHash = await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.accounts[0],
-                to: TEST_TOKEN_CONTRACT_ADDRESS,
-                data: contract.methods.blacklist(address).encodeABI(),
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.log(e);
-        //show error
-      }
+      await this.ethReq(contract.methods.blacklist(address).encodeABI());
     },
 
     /**
@@ -414,25 +286,8 @@ export default {
      * 
      * @param {string} address - hex string
      */
-    async unBlacklist(address) {  
-      try {
-        // eslint-disable-next-line
-        const txHash = await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.accounts[0],
-                to: TEST_TOKEN_CONTRACT_ADDRESS,
-                data: contract.methods.unBlacklist(address).encodeABI(),
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.log(e);
-        //show error
-      }
+    async unBlacklist(address) { 
+      await this.ethReq(contract.methods.unBlacklist(address).encodeABI())
     },
 
     /**

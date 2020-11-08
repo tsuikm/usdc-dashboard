@@ -71,14 +71,23 @@ export default {
       // eslint-disable-next-line
       this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     },
+    async subscribeToEvent(event) {
+      let subscription = event().subscription;
+      subscription.on('data', async () => {
+        await this.lookupBlacklistStatus();
+        subscription.unsubscribe();
+      }).on('error', console.log);
+    },
     async handleBlacklist() {
-      console.log(this.address);
-
+      this.connectMetamask();
       await this.blacklist(this.address);
+      this.subscribeToEvent(contract.events.blacklist);
       this.isBlacklisted = true;
     },
     async handleUnblacklist() {
+      this.connectMetamask();
       await this.unBlacklist(this.address);
+      this.subscribeToEvent(contract.events.unBlacklist);
       this.isBlacklisted = false;
     },
     async lookupBlacklistStatus() {

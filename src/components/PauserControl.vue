@@ -62,12 +62,18 @@ export default {
   data() {
     return {
       contractPaused: null,
+      accounts: [],
     };
   },
   created: function() {
     this.lookupContractStatus();
+    this.connectMetamask();
   },
   methods: {
+    async connectMetamask() {
+      // eslint-disable-next-line
+      this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    },
     async handleUnpause() {
       await this.unpause();
       this.contractPaused = false;

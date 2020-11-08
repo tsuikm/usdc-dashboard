@@ -60,4 +60,18 @@ export const abi = [
     outputs: [{ name: '', type: 'bool'}],
     type: 'function',
   },
+  {
+    inputs: [],
+    name: 'pause',
+    outputs: [{ name:'', type: 'bool' }],
+    stateMutability: 'nonpayable',
+    type:'function',
+  },
+  {
+    inputs: [],
+    name: 'unpause',
+    outputs: [{ name:'', type: 'bool' }],
+    stateMutability: 'nonpayable',
+    type:'function',
+  },
 ];

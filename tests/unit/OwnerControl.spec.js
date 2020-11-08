@@ -22,21 +22,22 @@ function ethereumFactory(isConnectedToMetamask) {
     },
   };
 }
+const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
 const SCRATCH_ADDRESS = '0x0000000e'; // has no roles
 const OWNER_ERROR_MESSAGE = 'Error: You are not signed in as the owner of this contract and cannot reassign roles.';
 
-function createRoleAccounts() {
-  Web3.MOCK_ACCOUNTS = {
-    '0x0000000a': { pauser: true },
-    '0x0000000b': { owner: true },
-    '0x0000000c': { blacklister: true },
-    '0x0000000d': { masterMinter: true },
-    [SCRATCH_ADDRESS]: {},
-  };
-}
-
 describe('OwnerControl', () => {
+
+  beforeEach(() => {
+    Web3.MOCK_ACCOUNTS = {
+      '0x0000000a': { pauser: true },
+      '0x0000000b': { owner: true },
+      '0x0000000c': { blacklister: true },
+      '0x0000000d': { masterMinter: true },
+      [SCRATCH_ADDRESS]: {},
+    };
+  });
 
   it('Text components render properly', () => {
     const { getByText } = render(OwnerControl);
@@ -50,9 +51,7 @@ describe('OwnerControl', () => {
   it('Changes roles correctly', async () => {
     const { getByText, getByPlaceholderText } = render(OwnerControl);
 
-
     // Simulates connecting to metamask as the owner.
-    createRoleAccounts();
     global.ethereum = ethereumFactory(true);
 
     const input = getByPlaceholderText('Enter Wallet Address Here');
@@ -61,7 +60,6 @@ describe('OwnerControl', () => {
     const pauserButton = getByText('PAUSER');
     const ownerButton = getByText('OWNER');
     const saveButton = getByText('SAVE');
-    const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
     await fireEvent.update(input, SCRATCH_ADDRESS);
 
@@ -88,7 +86,7 @@ describe('OwnerControl', () => {
 
   it('Prevents reassigning roles when owner is not connected', async () => {
     const { getByText, getByPlaceholderText } = render(OwnerControl);
-    createRoleAccounts();
+
     global.ethereum = ethereumFactory(false);
 
     const input = getByPlaceholderText('Enter Wallet Address Here');
@@ -97,7 +95,6 @@ describe('OwnerControl', () => {
     const pauserButton = getByText('PAUSER');
     const ownerButton = getByText('OWNER');
     const saveButton = getByText('SAVE');
-    const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
     await fireEvent.update(input, SCRATCH_ADDRESS);
 

@@ -97,12 +97,12 @@ export default class Web3 {
             },
             masterMinter: () => {
               return {
-                call: async () => Web3._findAccount(account => account.masterMinter)
+                call: async () => Web3._findAccount(account => account.masterMinter),
               };
             },
             blacklister: () => {
               return {
-                call: async () => Web3._findAccount(account => account.blacklister)
+                call: async () => Web3._findAccount(account => account.blacklister),
               };
             },
             isBlacklisted: address => {

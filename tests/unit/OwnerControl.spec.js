@@ -23,15 +23,17 @@ function ethereumFactory(isConnectedToMetamask) {
   };
 }
 
+const SCRATCH_ADDRESS = '0x0000000e'; // has not roles
+
 function createRoleAccounts() {
   Web3.MOCK_ACCOUNTS = {
     '0x0000000a': { pauser: true },
     '0x0000000b': { owner: true },
     '0x0000000c': { blacklister: true },
-    '0x0000000d': { masterMinter: true }
-  }
+    '0x0000000d': { masterMinter: true },
+    [SCRATCH_ADDRESS]: {},
+  };
 }
-const SCRATCH_ADDRESS = '0x0000000e'; // has no roles.
 
 describe('OwnerControl', () => {
 
@@ -101,21 +103,25 @@ describe('OwnerControl', () => {
     await fireEvent.click(masterMinterButton);
     await fireEvent.click(saveButton);
     await finishPromises();
+    expect(getByText('Warning: You are not the owner of this contract.')).not.toBeNull();
     expect(await contract.methods.masterMinter().call()).not.toBe(SCRATCH_ADDRESS);
 
     await fireEvent.click(blacklisterButton);
     await fireEvent.click(saveButton);
     await finishPromises();
+    expect(getByText('Warning: You are not the owner of this contract.')).not.toBeNull();
     expect(await contract.methods.blacklister().call()).not.toBe(SCRATCH_ADDRESS);
 
     await fireEvent.click(pauserButton);
     await fireEvent.click(saveButton);
     await finishPromises();
+    expect(getByText('Warning: You are not the owner of this contract.')).not.toBeNull();
     expect(await contract.methods.pauser().call()).not.toBe(SCRATCH_ADDRESS);
 
     await fireEvent.click(ownerButton);
     await fireEvent.click(saveButton);
     await finishPromises();
+    expect(getByText('Warning: You are not the owner of this contract.')).not.toBeNull();
     expect(await contract.methods.owner().call()).not.toBe(SCRATCH_ADDRESS);
   });
 });

@@ -98,14 +98,7 @@ export default class Web3 {
         this.unBlacklistEvent = 'unblacklist';
         }
         async once(event, callback) {
-          if (event === 'blacklist') {
-            //Web3.PAUSED = true;
-            callback();
-          }
-          if (event == 'unBlacklist') {
-            //Web3.PAUSED = false;
-            callback();
-          }
+          callback();
         }
       },
       async getBlockNumber() {

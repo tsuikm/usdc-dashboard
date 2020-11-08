@@ -79,6 +79,20 @@ export default class Web3 {
                 encodeABI: () => address + ', ' + amount,
               };
             },
+            blacklist: address => {
+              const blacklist = async () => Web3.MOCK_ACCOUNTS[address].blacklisted = true;
+              return {
+                call: blacklist,
+                encodeABI: () => blacklist,
+              };
+            },
+            unBlacklist: address => {
+              const unBlacklist = async () => Web3.MOCK_ACCOUNTS[address].blacklisted = false;
+              return {
+                call: unBlacklist,
+                encodeABI: () => unBlacklist,
+              };
+            },
           };
         }
       },

@@ -83,6 +83,12 @@ export default class Web3 {
                 call: async () => Web3.TOTAL_SUPPLY.toString(),
               };
             },
+            transfer: (address, amount) => {
+              return {
+                call: async () => Web3.MOCK_ACCOUNTS[address].balance += amount,
+                encodeABI: () => address + ', ' + amount,
+              };
+            },
           };
         }
       },

@@ -71,10 +71,10 @@ const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
  *
  * @returns {String} - as a lowercase hex string.
  */
-async function getOwner() { return contract.methods.owner().call(); }
-async function getPauser() { return contract.methods.pauser().call(); }
-async function getBlacklister() { return contract.methods.blacklister().call(); }
-async function getMasterMinter() { return contract.methods.masterMinter().call(); }
+const getOwner = async () => (await contract.methods.owner().call()).toLowerCase();
+const getPauser = async () => (await contract.methods.pauser().call()).toLowerCase();
+const getBlacklister = async () => (await contract.methods.blacklister().call()).toLowerCase();
+const getMasterMinter = async () => (await contract.methods.masterMinter().call()).toLowerCase();
 
 /**
  * Changes the owner/pauser/blacklister/master minter.
@@ -116,11 +116,13 @@ export default {
     };
   },
   methods: {
-    checkRoles() {
-      this.blacklisterActive = this.address === await contract.methods.blacklister().call()
-      this.masterMinterActive = this.address === await contract.methods.masterMinter().call();
-      this.pauserActive = this.pauserAddress === await contract.methods.pauser().call();
-      this.ownerActive = this.ownerAddress === await contract.methods.owner().call();
+    async checkRoles() {
+      this.address = this.address.trim().toLowerCase();
+
+      this.blacklisterActive = this.address === await getBlacklister();
+      this.masterMinterActive = this.address === await getMasterMinter();
+      this.pauserActive = this.address === await getPauser();
+      this.ownerActive = this.address === await getOwner();
     },
     toggleMasterMinter() {
       this.masterMinterActive = !this.masterMinterActive;
@@ -134,52 +136,35 @@ export default {
     toggleBlacklister() {
       this.blacklisterActive = !this.blacklisterActive;
     },
-    async changeRole(ownerAccount, method) {
-      await ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [
-          {
-            from: ownerAccount,
-            to: USDC_CONTRACT_ADDRESS,
-            data: method(this.address).encodeABI(),
-            gasPrice: DEFAULT_GAS_PRICE
-          },
-        ],
-      });
-    },
     async save() {
+      this.address = this.address.trim().toLowerCase();
+
       const accounts = (await ethereum.request({ method: 'eth_requestAccounts' })).map(string => string.toLowerCase());
-      const ownerAccount = await contract.methods.owner().call();
+      const ownerAccount = await getOwner();
 
-      this.showOwnerWarning = !accounts.includes(ownerAccount.toLowerCase())
+      this.showOwnerWarning = !accounts.includes(ownerAccount);
 
-      if (this.showOwnerWarning) {
+      this.hasRenouncedRoles = (!this.pauserActive && await getPauser() === this.address) ||
+        (!this.masterMinterActive && await getMasterMinter() === this.address) ||
+        (!this.blacklisterActive && await getBlacklister() === this.address) ||
+        (!this.ownerActive && await getOwner() === this.address);
+
+      if (this.hasRenouncedRoles || this.showOwnerWarning) {
         return;
       }
 
-      this.hasRenouncedRoles = (!this.pauserActive && await contract.methods.pauser().call() === this.address) ||
-        (!this.masterMinterActive && await contract.methods.masterMinter().call() === this.address) ||
-        (!this.blacklisterActive && await contract.methods.blacklister().call() === this.address) ||
-        (!this.ownerActive && await contract.methods.owner().call() === this.address);
-
-      if (this.hasRenouncedRoles) {
-        return;
+      if (this.pauserActive && await getPauser() !== this.address) {
+        await changeRole(ownerAccount, contract.methods.updatePauser, this.address);
       }
-
-
-      if (this.pauserActive && await contract.methods.pauser().call() !== this.address) {
-        await this.changeRole(ownerAccount, contract.methods.updatePauser);
+      if (this.masterMinterActive && await getMasterMinter() !== this.address) {
+        await changeRole(ownerAccount, contract.methods.updateMasterMinter, this.address);
       }
-      if (this.masterMinterActive && await contract.methods.masterMinter().call() !== this.address) {
-        await this.changeRole(ownerAccount, contract.methods.updateMasterMinter);
+      if (this.blacklisterActive && await getBlacklister() !== this.address) {
+        await changeRole(ownerAccount, contract.methods.updateBlacklister, this.address);
       }
-      if (this.blacklisterActive && await contract.methods.blacklister().call() !== this.address) {
-        await this.changeRole(ownerAccount, contract.methods.updateBlacklister);
+      if (this.ownerActive && await getOwner() !== this.address) {
+        await changeRole(ownerAccount, contract.methods.transferOwnership, this.address);
       }
-      if (this.ownerActive && await contract.methods.owner().call() !== this.address) {
-        await this.changeRole(ownerAccount, contract.methods.transferOwnership);
-      }
-
     }
   },
 };
@@ -188,10 +173,9 @@ export default {
 <style scoped>
 .owner {
   padding: 30px;
-  margin: 40px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
   width: 60%;
+  margin: auto;
 }
 
 .header {

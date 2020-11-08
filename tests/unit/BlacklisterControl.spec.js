@@ -2,10 +2,30 @@ import BlacklisterControl from '@/components/BlacklisterControl.vue';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
-import { render } from '@testing-library/vue';
+import { render, fireEvent } from '@testing-library/vue';
 import { padHex } from '@/utils/utils';
+import Web3 from 'web3';
 
 Vue.use(VueMaterial);
+
+function ethereumFactory(isConnectedToMetamask) {
+  return {
+    request: async config => {
+      if (config.method === 'eth_sendTransaction') {
+        await config.params[0].data();
+      }
+
+      // Simulates connecting to metamask as the owner.
+      if (config.method === 'eth_requestAccounts') {
+        return isConnectedToMetamask ? [Web3.BLACKLISTER] : [];
+      }
+    },
+  };
+}
+Web3.BLACKLISTER = '0x00000001';
+global.ethereum = ethereumFactory(true);
+
+const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
 describe('BlacklisterControl', () => {
   it('Text components render properly', () => {
@@ -28,7 +48,6 @@ describe('BlacklisterControl', () => {
     expect(getByText('Click to unblacklist.')).not.toBeNull();
   });
 
-
   it('Displays BLACKLIST when unblacklisted address is looked up', async () => {
     const { getByText } = render(BlacklisterControl, {
       data: function() {
@@ -41,5 +60,42 @@ describe('BlacklisterControl', () => {
     expect(getByText('This address is not currently blacklisted.')).not.toBeNull();
     expect(getByText('Click to blacklist.')).not.toBeNull();
   });
+
+  it('BLACKLISTs an unblacklisted address', async () => {
+    const { getByText } = render(BlacklisterControl, {
+      data: function() {
+        return {
+          address: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH),
+          isBlacklisted: false,
+        };
+      },
+    });
+    expect(getByText('This address is not currently blacklisted.')).not.toBeNull();
+    expect(getByText('Click to blacklist.')).not.toBeNull();
+
+    await fireEvent.click(getByText('BLACKLIST'));
+    await finishPromises();
+    expect(getByText('This address is currently blacklisted.')).not.toBeNull();
+    expect(getByText('Click to unblacklist.')).not.toBeNull();
+  });
+
+  it('Displays UNBLACKLIST when blacklisted address is looked up', async () => {
+    const { getByText } = render(BlacklisterControl, {
+      data: function() {
+        return {
+          address: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH),
+          isBlacklisted: true,
+        };
+      },
+    });
+    expect(getByText('This address is currently blacklisted.')).not.toBeNull();
+    expect(getByText('Click to unblacklist.')).not.toBeNull();
+
+    await fireEvent.click(getByText('UNBLACKLIST'));
+    await finishPromises();
+    expect(getByText('This address is not currently blacklisted.')).not.toBeNull();
+    expect(getByText('Click to blacklist.')).not.toBeNull();
+  });
+
 
 });

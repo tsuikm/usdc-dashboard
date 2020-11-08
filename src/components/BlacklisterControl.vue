@@ -22,7 +22,7 @@
       </md-field>
     </form>
     <div
-      v-if="this.isBlacklisted === true"
+      v-if="this.isBlacklisted && this.lookupBlacklistStatus()"
       class="blacklist-clause"
     > 
       <div> This address is currently blacklisted. </div>
@@ -32,7 +32,7 @@
       <div> Click to unblacklist. </div>
     </div>
     <div
-      v-else-if="this.isBlacklisted === false"
+      v-else
       class="blacklist-clause"
     > 
       <div> This address is not currently blacklisted. </div>
@@ -62,13 +62,20 @@ export default {
     return {
       address: '',
       isBlacklisted: null,
+      accounts,
     };
   },
   methods: {
+    async connectMetamask() {
+      // eslint-disable-next-line
+      this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    },
     async handleBlacklist() {
+      await this.blacklist();
       this.isBlacklisted = true;
     },
     async handleUnblacklist() {
+      await this.unBlacklist();
       this.isBlacklisted = false;
     },
     async lookupBlacklistStatus() {
@@ -79,6 +86,34 @@ export default {
       this.isBlacklisted = await contract.methods
         .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
         .call();
+      return this.isBlacklisted;
+    },
+    async ethReq(data) {
+      try {
+        // eslint-disable-next-line
+        const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: this.accounts[0],
+                to: TEST_TOKEN_CONTRACT_ADDRESS,
+                data: data,
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          });
+      } catch (e) {
+        console.log(e);
+        //show error
+      }
+    },
+    async blacklist(address) {  
+      await this.ethReq(contract.methods.blacklist(address).encodeABI());
+    },
+
+    async unBlacklist(address) { 
+      await this.ethReq(contract.methods.unBlacklist(address).encodeABI())
     },
   },
 };

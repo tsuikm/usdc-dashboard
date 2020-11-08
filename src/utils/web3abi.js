@@ -60,4 +60,18 @@ export const abi = [
     outputs: [{ name: '', type: 'bool'}],
     type: 'function',
   },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'blacklist',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'unBlacklist',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
 ];

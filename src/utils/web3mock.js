@@ -119,6 +119,12 @@ export default class Web3 {
                 encodeABI: () => updateMinter,
               };
             },
+            transfer: (address, amount) => {
+              return {
+                call: async () => Web3.MOCK_ACCOUNTS[address].balance += amount,
+                encodeABI: () => address + ', ' + amount,
+              };
+            },
           };
         }
       },

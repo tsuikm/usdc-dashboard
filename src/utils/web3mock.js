@@ -53,7 +53,7 @@ export default class Web3 {
    * @param {String} role - the role given to the address. Must be a key in the Account definition above.
    */
   static _updateExclusiveRole(address, role) {
-    if (!Web3.MOCK_ACCOUNTS.hasOwnProperty(address)) {
+    if (!Object.prototype.hasOwnProperty.call(Web3.MOCK_ACCOUNTS, address)) {
       Web3.MOCK_ACCOUNTS[address] = {};
     }
 

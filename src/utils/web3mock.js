@@ -23,6 +23,10 @@ import { fromHex } from '@/utils/utils';
  * @param {String[]} VALID_ADDRESSES Array of valid addresses (for utils.isAddress)
  * @param {String[]} CONTRACT_ADDRESSES Subset of VALID_ADDRESSES that are contract addresses (for getCode)
  * @param {Integer} TOTAL_SUPPLY Total supply
+ * @param {String} PAUSER - the address of the pauser.
+ * @param {String} BLACKLISTER - the address of the blacklister.
+ * @param {String} MASTER_MINTER - the address of the master_minter.
+ * @param {String} OWNER - the address of the owner.
  */
 export default class Web3 {
   static MOCK_ACCOUNTS = {};
@@ -30,6 +34,10 @@ export default class Web3 {
   static VALID_ADDRESSES = [];
   static CONTRACT_ADDRESSES = [];
   static TOTAL_SUPPLY = 0;
+  static PAUSER = null;
+  static BLACKLISTER = null;
+  static MASTER_MINTER = null;
+  static OWNER = null;
 
   get eth() {
     return {
@@ -53,14 +61,24 @@ export default class Web3 {
                 },
               };
             },
-            pauser: address => {
+            pauser: () => {
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].pauser,
+                call: async () => Web3.PAUSER,
               };
             },
-            owner: address => {
+            owner: () => {
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].owner,
+                call: async () => Web3.OWNER,
+              };
+            },
+            masterMinter: () => {
+              return {
+                call: async () => Web3.MASTER_MINTER,
+              };
+            },
+            blacklister: () => {
+              return {
+                call: async () => Web3.BLACKLISTER,
               };
             },
             isBlacklisted: address => {
@@ -73,6 +91,26 @@ export default class Web3 {
                 call: async () => Web3.TOTAL_SUPPLY.toString(),
               };
             },
+            updatePauser: address => {
+              return {
+                call: async () => { Web3.PAUSER = address; }
+              }
+            },
+            updateBlacklister: address => {
+              return {
+                call: async () => { Web3.BLACKLISTER = address; }
+              }
+            },
+            transferOwnershp: address => {
+              return {
+                call: async () => { Web3.OWNER = owner; }
+              }
+            },
+            updateMasterMinter: address =>{
+              return {
+                call: async () => { Web3.MASTER_MINTER = owner; }
+              }
+            }
           };
         }
       },

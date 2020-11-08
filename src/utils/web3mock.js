@@ -30,11 +30,28 @@ export default class Web3 {
   static VALID_ADDRESSES = [];
   static CONTRACT_ADDRESSES = [];
   static TOTAL_SUPPLY = 0;
+  static PAUSED = false;
 
   get eth() {
     return {
       Contract: class {
         constructor() {
+          this.once = {
+            async once(event, callback) {
+              if (event == 'pause') {
+                Web3.paused = true;
+                return {
+                  data: [],
+                };
+              }
+              if (event == 'unpause') {
+                Web3.paused = false;
+                return {
+                  data: [],
+                };
+              }
+            },
+          }
           this.methods = {
             balanceOf: address => {
               return {
@@ -51,6 +68,11 @@ export default class Web3 {
                 call: async () => {
                   return Web3.MOCK_ACCOUNTS[address].minter;
                 },
+              };
+            },
+            paused: () => {
+              return {
+                call: async () => Web3.PAUSED,
               };
             },
             pauser: address => {
@@ -77,6 +99,20 @@ export default class Web3 {
               return {
                 call: async () => Web3.MOCK_ACCOUNTS[address].balance += amount,
                 encodeABI: () => address + ', ' + amount,
+              };
+            },
+            pause: () => {
+              const pause = async () => { Web3.PAUSED = true; };
+              return {
+                call: pause,
+                encodeABI: () => pause,
+                };
+              },
+            unpause: () => {
+              const unpause = async () => { Web3.PAUSED = false; };
+              return {
+                call: unpause,
+                encodeABI: () => unpause,
               };
             },
           };

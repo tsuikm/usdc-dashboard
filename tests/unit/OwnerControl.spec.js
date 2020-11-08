@@ -21,12 +21,13 @@ function ethereumFactory(isConnectedToMetamask) {
   };
 }
 
+const SCRATCH_ADDRESS = '0x0000000e'; // has no roles.
+
 function createRoleAccounts() {
   Web3.PAUSER = '0x0000000a';
   Web3.OWNER = '0x0000000b';
   Web3.BLACKLISTER = '0x0000000c';
   Web3.MASTER_MINTER = '0x0000000d';
-  global.SCRATCH_ADDRESS = '0x0000000e'; // has no roles.
 }
 
 describe('OwnerControl', () => {

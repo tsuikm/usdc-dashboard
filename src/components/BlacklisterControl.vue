@@ -22,7 +22,7 @@
       </md-field>
     </form>
     <div
-      v-if="this.isBlacklisted && this.lookupBlacklistStatus()"
+      v-if="this.isBlacklisted"
       class="blacklist-clause"
     > 
       <div> This address is currently blacklisted. </div>
@@ -32,7 +32,7 @@
       <div> Click to unblacklist. </div>
     </div>
     <div
-      v-else-if="this.isBlacklisted === false && this.lookupBlacklistStatus()"
+      v-else-if="this.isBlacklisted === false"
       class="blacklist-clause"
     > 
       <div> This address is not currently blacklisted. </div>
@@ -85,10 +85,11 @@ export default {
           this.isBlacklisted = await contract.methods
             .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
             .call();
-          return this.isBlacklisted;
+          return;
         } catch (e) {
           console.log(e);
-          return false;
+          this.isBlacklisted = null;
+          return;
         }
       } );
 
@@ -97,12 +98,10 @@ export default {
     async handleBlacklist() {
       await this.blacklist(this.address);
       this.subscribeToEvent(contract.blacklistEvent);
-      this.isBlacklisted = true;
     },
     async handleUnblacklist() {
       await this.unBlacklist(this.address);
       this.subscribeToEvent(contract.unBlacklistEvent);
-      this.isBlacklisted = false;
     },
     async lookupBlacklistStatus() {
       if (this.address === '') {
@@ -113,7 +112,6 @@ export default {
         this.isBlacklisted = await contract.methods
           .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
           .call();
-        return this.isBlacklisted;
       } catch (e) {
         console.log(e);
         return null;

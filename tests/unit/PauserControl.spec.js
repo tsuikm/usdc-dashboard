@@ -20,6 +20,8 @@ function ethereumFactory(isConnectedToMetamask) {
     },
   };
 }
+global.ethereum = ethereumFactory(true);
+
 
 function createPauser() {
   Web3.PAUSER = '0x00000001';
@@ -68,8 +70,6 @@ describe('PauserControl', () => {
   it('Unpauses when pauser attempts to unpause', async () => {
     // Simulates connecting to metamask as the owner.
     createPauser();
-    global.ethereum = ethereumFactory(true);
-
     const { getByText } = render(PauserControl, {
       data: function() {
         return {
@@ -88,8 +88,6 @@ describe('PauserControl', () => {
   it('Pauses when pauser attempts to pause', async () => {
     // Simulates connecting to metamask as the owner.
     createPauser();
-    global.ethereum = ethereumFactory(true);
-
     const { getByText } = render(PauserControl, {
       data: function() {
         return {

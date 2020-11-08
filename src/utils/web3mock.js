@@ -36,22 +36,6 @@ export default class Web3 {
     return {
       Contract: class {
         constructor() {
-          this.once = {
-            async once(event, callback) {
-              if (event == 'pause') {
-                Web3.paused = true;
-                return {
-                  data: [],
-                };
-              }
-              if (event == 'unpause') {
-                Web3.paused = false;
-                return {
-                  data: [],
-                };
-              }
-            },
-          }
           this.methods = {
             balanceOf: address => {
               return {
@@ -116,6 +100,20 @@ export default class Web3 {
               };
             },
           };
+        }
+        async once(event, callback) {
+          if (event == 'pause') {
+            Web3.paused = true;
+            return {
+              data: [],
+            };
+          }
+          if (event == 'unpause') {
+            Web3.paused = false;
+            return {
+              data: [],
+            };
+          }
         }
       },
       async getBlockNumber() {

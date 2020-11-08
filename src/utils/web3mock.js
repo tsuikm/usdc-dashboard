@@ -36,7 +36,7 @@ export default class Web3 {
    * Finds the account address that matches the predicate when the account object is passed in.
    * @private
    *
-   * @param {function(Object: Object):boolean} predicate.
+   * @param {function(address: Object):boolean} predicate.
    * @return {String} - the account address.
    */
   static _findAccount(predicate) {

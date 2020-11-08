@@ -1,74 +1,118 @@
 import OwnerControl from '@/components/OwnerControl.vue';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
-import { render } from '@testing-library/vue';
+import { render, fireEvent } from '@testing-library/vue';
+import Web3 from 'web3';
 
 Vue.use(VueMaterial);
 
+function ethereumFactory(isConnectedToMetamask) {
+  return {
+    request: async config => {
+      if (config.method === 'eth_sendTransaction') {
+        await config.params[0].data();
+      }
+
+      // Simulates connecting to metamask as the owner.
+      if (config.method === 'eth_requestAccounts') {
+        return isConnectedToMetamask ? [Web3.OWNER] : [];
+      }
+    }
+  };
+}
+
+function createRoleAccounts() {
+  Web3.PAUSER = '0x0000000a';
+  Web3.OWNER = '0x0000000b';
+  Web3.BLACKLISTER = '0x0000000c';
+  Web3.MASTER_MINTER = '0x0000000d';
+  global.SCRATCH_ADDRESS = '0x0000000e'; // has no roles.
+}
+
 describe('OwnerControl', () => {
+
   it('Text components render properly', () => {
-    const { findByText } = render(OwnerControl);
-    const header = 'Check and Assign Roles';
-    expect(findByText(header)).not.toBeNull();
-  });
-
-
-  it('Displays minter tag if address is a minter', async () => {
-    const { getByText } = render(OwnerControl, {
-      data: function () {
-        return {
-          address: '0x24bdd8771b08c2ea6fe0e898126e65bd49021be3',
-          minter: true,
-          pauser: false,
-          owner: false,
-          blacklister: false,
-          newMinter: true,
-          newPauser: false,
-          newOwner: false,
-          newBlacklister: false,
-        };
-      },
-    });
-    expect(getByText('MINTER')).not.toBeNull();
-  });
-
-  it('Displays owner and pauser tags if address is an owner and a pauser', async () => {
-    const { getByText } = render(OwnerControl, {
-      data: function () {
-        return {
-          address: '0x24bdd8771b08c2ea6fe0e898126e65bd49021be3',
-          minter: false,
-          pauser: true,
-          owner: true,
-          blacklister: false,
-          newMinter: false,
-          newPauser: true,
-          newOwner: true,
-          newBlacklister: false,
-        };
-      },
-    });
+    const { getByText } = render(OwnerControl);
+    expect(getByText('Check and Assign Roles')).not.toBeNull();
+    expect(getByText('MASTER MINTER')).not.toBeNull();
+    expect(getByText('BLACKLISTER')).not.toBeNull();
     expect(getByText('OWNER')).not.toBeNull();
     expect(getByText('PAUSER')).not.toBeNull();
   });
 
-  it('Displays blacklister tag if address is a blacklister', async () => {
-    const { getByText } = render(OwnerControl, {
-      data: function () {
-        return {
-          address: '0x24bdd8771b08c2ea6fe0e898126e65bd49021be3',
-          minter: false,
-          pauser: false,
-          owner: false,
-          blacklister: true,
-          newMinter: false,
-          newPauser: false,
-          newOwner: false,
-          newBlacklister: true,
-        };
-      },
-    });
-    expect(getByText('BLACKLISTER')).not.toBeNull();
+  it('Changes roles correctly', async () => {
+    const { getByText, getByPlaceholderText } = render(OwnerControl);
+
+
+    // Simulates connecting to metamask as the owner.
+    createRoleAccounts();
+    global.ethereum = ethereumFactory(true);
+
+    const input = getByPlaceholderText('Enter Wallet Address Here');
+    const masterMinterButton = getByText('MASTER MINTER')
+    const blacklisterButton = getByText('BLACKLISTER');
+    const pauserButton = getByText('PAUSER');
+    const ownerButton = getByText('OWNER')
+    const saveButton = getByText('SAVE');
+    const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
+
+    await fireEvent.update(input, SCRATCH_ADDRESS);
+
+    await fireEvent.click(masterMinterButton);
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(Web3.MASTER_MINTER).toBe(SCRATCH_ADDRESS);
+
+    await fireEvent.click(blacklisterButton);
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(Web3.BLACKLISTER).toBe(SCRATCH_ADDRESS);
+
+    await fireEvent.click(pauserButton);
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(Web3.PAUSER).toBe(SCRATCH_ADDRESS);
+
+    await fireEvent.click(ownerButton);
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(Web3.OWNER).toBe(SCRATCH_ADDRESS);
+  });
+
+  it('Prevents reassigning roles when owner is not connected', async () => {
+    const { getByText, getByPlaceholderText } = render(OwnerControl);
+    createRoleAccounts();
+    global.ethereum = ethereumFactory(false);
+
+    const input = getByPlaceholderText('Enter Wallet Address Here');
+    const masterMinterButton = getByText('MASTER MINTER')
+    const blacklisterButton = getByText('BLACKLISTER');
+    const pauserButton = getByText('PAUSER');
+    const ownerButton = getByText('OWNER')
+    const saveButton = getByText('SAVE');
+    const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
+
+    await fireEvent.update(input, SCRATCH_ADDRESS);
+
+    await fireEvent.click(masterMinterButton);
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(Web3.MASTER_MINTER).not.toBe(SCRATCH_ADDRESS);
+
+    await fireEvent.click(blacklisterButton);
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(Web3.BLACKLISTER).not.toBe(SCRATCH_ADDRESS);
+
+    await fireEvent.click(pauserButton);
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(Web3.PAUSER).not.toBe(SCRATCH_ADDRESS);
+
+    await fireEvent.click(ownerButton);
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(Web3.OWNER).not.toBe(SCRATCH_ADDRESS);
   });
 
 });

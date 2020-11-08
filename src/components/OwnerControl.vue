@@ -189,7 +189,6 @@ export default {
       });
     },
     async save() {
-      this.checkRoles();
       const accounts = (await ethereum.request({ method: 'eth_requestAccounts' })).map(string => string.toLowerCase());
       const ownerAccount = await contract.methods.owner().call();
 

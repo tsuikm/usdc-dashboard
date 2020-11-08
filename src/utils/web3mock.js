@@ -91,29 +91,29 @@ export default class Web3 {
                 call: async () => Web3.TOTAL_SUPPLY.toString(),
               };
             },
-            updatePauser: address => {
+            updatePauser: pauser => {
               const updatePauser = async () => { Web3.PAUSER = pauser; }
               return {
                 call: updatePauser,
                 encodeABI: () => updatePauser
               }
             },
-            updateBlacklister: address => {
+            updateBlacklister: blacklister => {
               const updateBlacklister = async () => { Web3.BLACKLISTER = blacklister; }
               return {
                 call: updateBlacklister,
                 encodeABI: () => updateBlacklister
               }
             },
-            transferOwnership: address => {
+            transferOwnership: owner => {
               const updateOwner = async () => { Web3.OWNER = owner; }
               return {
                 call: updateOwner,
                 encodeABI: () => updateOwner
               }
             },
-            updateMasterMinter: address => {
-              const updateMinter = async () => { Web3.MASTER_MINTER = owner; }
+            updateMasterMinter: masterMinter => {
+              const updateMinter = async () => { Web3.MASTER_MINTER = masterMinter; }
               return {
                 call: updateMinter,
                 encodeABI: () => updateMinter

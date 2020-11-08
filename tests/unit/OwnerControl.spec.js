@@ -17,7 +17,7 @@ function ethereumFactory(isConnectedToMetamask) {
       if (config.method === 'eth_requestAccounts') {
         return isConnectedToMetamask ? [Web3.OWNER] : [];
       }
-    }
+    },
   };
 }
 
@@ -49,10 +49,10 @@ describe('OwnerControl', () => {
     global.ethereum = ethereumFactory(true);
 
     const input = getByPlaceholderText('Enter Wallet Address Here');
-    const masterMinterButton = getByText('MASTER MINTER')
+    const masterMinterButton = getByText('MASTER MINTER');
     const blacklisterButton = getByText('BLACKLISTER');
     const pauserButton = getByText('PAUSER');
-    const ownerButton = getByText('OWNER')
+    const ownerButton = getByText('OWNER');
     const saveButton = getByText('SAVE');
     const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
@@ -85,10 +85,10 @@ describe('OwnerControl', () => {
     global.ethereum = ethereumFactory(false);
 
     const input = getByPlaceholderText('Enter Wallet Address Here');
-    const masterMinterButton = getByText('MASTER MINTER')
+    const masterMinterButton = getByText('MASTER MINTER');
     const blacklisterButton = getByText('BLACKLISTER');
     const pauserButton = getByText('PAUSER');
-    const ownerButton = getByText('OWNER')
+    const ownerButton = getByText('OWNER');
     const saveButton = getByText('SAVE');
     const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 

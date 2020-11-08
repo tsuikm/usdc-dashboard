@@ -92,33 +92,33 @@ export default class Web3 {
               };
             },
             updatePauser: pauser => {
-              const updatePauser = async () => { Web3.PAUSER = pauser; }
+              const updatePauser = async () => { Web3.PAUSER = pauser; };
               return {
                 call: updatePauser,
-                encodeABI: () => updatePauser
-              }
+                encodeABI: () => updatePauser,
+              };
             },
             updateBlacklister: blacklister => {
-              const updateBlacklister = async () => { Web3.BLACKLISTER = blacklister; }
+              const updateBlacklister = async () => { Web3.BLACKLISTER = blacklister; };
               return {
                 call: updateBlacklister,
-                encodeABI: () => updateBlacklister
-              }
+                encodeABI: () => updateBlacklister,
+              };
             },
             transferOwnership: owner => {
-              const updateOwner = async () => { Web3.OWNER = owner; }
+              const updateOwner = async () => { Web3.OWNER = owner; };
               return {
                 call: updateOwner,
-                encodeABI: () => updateOwner
-              }
+                encodeABI: () => updateOwner,
+              };
             },
             updateMasterMinter: masterMinter => {
-              const updateMinter = async () => { Web3.MASTER_MINTER = masterMinter; }
+              const updateMinter = async () => { Web3.MASTER_MINTER = masterMinter; };
               return {
                 call: updateMinter,
-                encodeABI: () => updateMinter
-              }
-            }
+                encodeABI: () => updateMinter,
+              };
+            },
           };
         }
       },

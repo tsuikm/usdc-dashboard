@@ -13,7 +13,7 @@ export const DEFAULT_GAS_PRICE = '0x09184e72a000'; // Decimal value is 10,000,00
 
 // Locally hosted blockchain contract address.
 // See https://github.com/selinafeng/usdc-dashboard/wiki/Setting-up-a-locally-hosted-blockchain/
-export const USDC_CONTRACT_ADDRESS = '0x0A47ea47750d4473Cc082d3E2b360382F61Eca67'
+export const USDC_CONTRACT_ADDRESS = '0x0A47ea47750d4473Cc082d3E2b360382F61Eca67';
 
 export const TRANSACTION_TOPIC =
   '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';

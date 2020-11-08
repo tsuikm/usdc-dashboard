@@ -91,7 +91,7 @@ async function changeRole(ownerAccount, contractMethod, address) {
         from: ownerAccount,
         to: USDC_CONTRACT_ADDRESS,
         data: contractMethod(address).encodeABI(),
-        gasPrice: DEFAULT_GAS_PRICE
+        gasPrice: DEFAULT_GAS_PRICE,
       },
     ],
   });
@@ -165,7 +165,7 @@ export default {
       if (this.ownerActive && await getOwner() !== this.address) {
         await changeRole(ownerAccount, contract.methods.transferOwnership, this.address);
       }
-    }
+    },
   },
 };
 </script>

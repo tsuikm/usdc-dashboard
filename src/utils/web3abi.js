@@ -65,77 +65,77 @@ export const abi = [
       {
         internalType: 'address',
         name: 'newOwner',
-        type: 'address'
-      }
+        type: 'address',
+      },
     ],
     name: 'transferOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function'
+    type: 'function',
   },
   {
     inputs: [
       {
         internalType: 'address',
         name: '_newPauser',
-        type: 'address'
-      }
+        type: 'address',
+      },
     ],
     name: 'updatePauser',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function'
+    type: 'function',
   },
   {
     inputs: [
       {
         internalType: 'address',
         name: '_newMasterMinter',
-        type: 'address'
-      }
+        type: 'address',
+      },
     ],
     name: 'updateMasterMinter',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function'
+    type: 'function',
   },
   {
     inputs: [
-    {
+      {
         internalType: 'address',
         name: '_newBlacklister',
-        type: 'address'
-    }
-  ],
+        type: 'address',
+      },
+    ],
     name: 'updateBlacklister',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function'
+    type: 'function',
   },
   {
     inputs: [],
-    name: "blacklister",
+    name: 'blacklister',
     outputs: [
       {
-        internalType: "address",
-        name: "",
-        type: "address"
-      }
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
     ],
-    stateMutability: "view",
-    type: "function"
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
-    name: "masterMinter",
+    name: 'masterMinter',
     outputs: [
       {
-        internalType: "address",
-        name: "",
-        type: "address"
-      }
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
     ],
-    stateMutability: "view",
-    type: "function"
+    stateMutability: 'view',
+    type: 'function',
   },
 ];

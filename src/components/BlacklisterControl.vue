@@ -32,7 +32,7 @@
       <div> Click to unblacklist. </div>
     </div>
     <div
-      v-else
+      v-else-if="this.isBlacklisted === false && this.lookupBlacklistStatus()"
       class="blacklist-clause"
     > 
       <div> This address is not currently blacklisted. </div>
@@ -116,7 +116,7 @@ export default {
         return this.isBlacklisted;
       } catch (e) {
         console.log(e);
-        return false;
+        return null;
       }
     },
     async ethReq(data) {

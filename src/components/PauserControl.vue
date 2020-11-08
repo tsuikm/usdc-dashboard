@@ -8,7 +8,7 @@
         USDC Contract is currently
       </div>
       <div
-        v-if="this.contractPaused"
+        v-if="this.contractPaused && this.lookupContractStatus()" 
         class="content"
       >
         <md-button
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import Web3 from 'web3';
 import { abi } from '@/utils/web3abi';
 
@@ -69,13 +69,42 @@ export default {
   },
   methods: {
     async handleUnpause() {
+      await this.unpause();
       this.contractPaused = false;
     },
     async handlePause() {
+      await this.pause();
       this.contractPaused = true;
     },
     async lookupContractStatus() {
       this.contractPaused = await contract.methods.paused().call();
+      return this.contractPaused;
+    },
+    async ethReq(data) {
+      try {
+        // eslint-disable-next-line
+        const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: this.accounts[0],
+                to: USDC_CONTRACT_ADDRESS,
+                data: data,
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          });
+      } catch (e) {
+        console.log(e);
+        //show error
+      }
+    },
+    async pause() {  
+      await this.ethReq(contract.methods.pause().encodeABI());
+    },
+    async unpause() {  
+      await this.ethReq(contract.methods.unpause().encodeABI());
     },
   },
 };

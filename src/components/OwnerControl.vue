@@ -38,10 +38,10 @@
         />
       </div>
       <span v-if="hasRenouncedRoles">
-        <md-icon>warning</md-icon>Warning: Cannot renounce roles. Please assign role to another address.
+        <md-icon>error</md-icon> Error: Cannot renounce roles. Please assign role to another address.
       </span>
       <span v-if="showOwnerWarning">
-        <md-icon>warning</md-icon> Warning: You are not the owner of this contract.
+        <md-icon>error</md-icon> Error: You are not signed in as the owner of this contract and cannot reassign roles.
       </span>
       <div class="update-button">
         <md-button @click="this.save">

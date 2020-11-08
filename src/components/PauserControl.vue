@@ -78,7 +78,7 @@ export default {
       // eslint-disable-next-line
       contract.once(event, async (error, success) => {
         this.contractPaused = await contract.methods.paused().call();
-      } );
+      });
     },
     async handleUnpause() {
       await this.unpause();

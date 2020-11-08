@@ -15,17 +15,13 @@ function ethereumFactory(isConnectedToMetamask) {
 
       // Simulates connecting to metamask as the owner.
       if (config.method === 'eth_requestAccounts') {
-        return isConnectedToMetamask ? [Web3.PAUSER] : [];
+        return isConnectedToMetamask ? [Web3.DUMMY_ACCOUNT] : [];
       }
     },
   };
 }
+Web3.DUMMY_ACCOUNT = '0x0000002'
 global.ethereum = ethereumFactory(true);
-
-
-function createPauser() {
-  Web3.PAUSER = '0x00000001';
-}
 
 const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
@@ -67,9 +63,25 @@ describe('PauserControl', () => {
     expect(getByText('All transfers, minting, and burning are ACTIVE.')).not.toBeNull();
   });
 
+  function ethereumFactory(isConnectedToMetamask) {
+    return {
+      request: async config => {
+        if (config.method === 'eth_sendTransaction') {
+          await config.params[0].data();
+        }
+  
+        // Simulates connecting to metamask as the owner.
+        if (config.method === 'eth_requestAccounts') {
+          return isConnectedToMetamask ? [Web3.PAUSER] : [];
+        }
+      },
+    };
+  }
+  Web3.PAUSER = '0x00000001';
+  global.ethereum = ethereumFactory(true);
+
   it('Unpauses when pauser attempts to unpause', async () => {
     // Simulates connecting to metamask as the owner.
-    createPauser();
     const { getByText } = render(PauserControl, {
       data: function() {
         return {
@@ -87,7 +99,6 @@ describe('PauserControl', () => {
 
   it('Pauses when pauser attempts to pause', async () => {
     // Simulates connecting to metamask as the owner.
-    createPauser();
     const { getByText } = render(PauserControl, {
       data: function() {
         return {

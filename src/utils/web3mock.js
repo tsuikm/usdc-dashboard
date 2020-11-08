@@ -100,19 +100,17 @@ export default class Web3 {
               };
             },
           };
+          this.pauseEvent = 'pause';
+          this.unpauseEvent = 'unpause';
         }
         async once(event, callback) {
-          if (event == 'pause') {
-            Web3.paused = true;
-            return {
-              data: [],
-            };
+          if (event === 'pause') {
+            Web3.PAUSED = true;
+            callback();
           }
           if (event == 'unpause') {
-            Web3.paused = false;
-            return {
-              data: [],
-            };
+            Web3.PAUSED = false;
+            callback();
           }
         }
       },

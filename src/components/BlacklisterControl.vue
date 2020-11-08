@@ -48,6 +48,7 @@
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
+  DEFAULT_GAS_PRICE, 
 } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
@@ -62,7 +63,7 @@ export default {
     return {
       address: '',
       isBlacklisted: null,
-      accounts,
+      accounts: [],
     };
   },
   methods: {
@@ -71,11 +72,13 @@ export default {
       this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     },
     async handleBlacklist() {
-      await this.blacklist();
+      console.log(this.address);
+
+      await this.blacklist(this.address);
       this.isBlacklisted = true;
     },
     async handleUnblacklist() {
-      await this.unBlacklist();
+      await this.unBlacklist(this.address);
       this.isBlacklisted = false;
     },
     async lookupBlacklistStatus() {
@@ -97,7 +100,7 @@ export default {
             params: [
               {
                 from: this.accounts[0],
-                to: TEST_TOKEN_CONTRACT_ADDRESS,
+                to: USDC_CONTRACT_ADDRESS,
                 data: data,
                 gasPrice: DEFAULT_GAS_PRICE,
               },
@@ -113,7 +116,7 @@ export default {
     },
 
     async unBlacklist(address) { 
-      await this.ethReq(contract.methods.unBlacklist(address).encodeABI())
+      await this.ethReq(contract.methods.unBlacklist(address).encodeABI());
     },
   },
 };

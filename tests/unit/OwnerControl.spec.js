@@ -6,6 +6,8 @@ import Web3 from 'web3';
 
 Vue.use(VueMaterial);
 
+const contract = new (new Web3()).eth.Contract();
+
 function ethereumFactory(isConnectedToMetamask) {
   return {
     request: async config => {
@@ -15,20 +17,21 @@ function ethereumFactory(isConnectedToMetamask) {
 
       // Simulates connecting to metamask as the owner.
       if (config.method === 'eth_requestAccounts') {
-        return isConnectedToMetamask ? [Web3.OWNER] : [];
+        return isConnectedToMetamask ? [await contract.methods.owner().call()] : [];
       }
     },
   };
 }
 
-const SCRATCH_ADDRESS = '0x0000000e'; // has no roles.
-
 function createRoleAccounts() {
-  Web3.PAUSER = '0x0000000a';
-  Web3.OWNER = '0x0000000b';
-  Web3.BLACKLISTER = '0x0000000c';
-  Web3.MASTER_MINTER = '0x0000000d';
+  Web3.MOCK_ACCOUNTS = {
+    '0x0000000a': { pauser: true },
+    '0x0000000b': { owner: true },
+    '0x0000000c': { blacklister: true },
+    '0x0000000d': { masterMinter: true }
+  }
 }
+const SCRATCH_ADDRESS = '0x0000000e'; // has no roles.
 
 describe('OwnerControl', () => {
 
@@ -62,22 +65,22 @@ describe('OwnerControl', () => {
     await fireEvent.click(masterMinterButton);
     await fireEvent.click(saveButton);
     await finishPromises();
-    expect(Web3.MASTER_MINTER).toBe(SCRATCH_ADDRESS);
+    expect(await contract.methods.masterMinter().call()).toBe(SCRATCH_ADDRESS);
 
     await fireEvent.click(blacklisterButton);
     await fireEvent.click(saveButton);
     await finishPromises();
-    expect(Web3.BLACKLISTER).toBe(SCRATCH_ADDRESS);
+    expect(await contract.methods.blacklister().call()).toBe(SCRATCH_ADDRESS);
 
     await fireEvent.click(pauserButton);
     await fireEvent.click(saveButton);
     await finishPromises();
-    expect(Web3.PAUSER).toBe(SCRATCH_ADDRESS);
+    expect(await contract.methods.pauser().call()).toBe(SCRATCH_ADDRESS);
 
     await fireEvent.click(ownerButton);
     await fireEvent.click(saveButton);
     await finishPromises();
-    expect(Web3.OWNER).toBe(SCRATCH_ADDRESS);
+    expect(await contract.methods.owner().call()).toBe(SCRATCH_ADDRESS);
   });
 
   it('Prevents reassigning roles when owner is not connected', async () => {
@@ -98,22 +101,21 @@ describe('OwnerControl', () => {
     await fireEvent.click(masterMinterButton);
     await fireEvent.click(saveButton);
     await finishPromises();
-    expect(Web3.MASTER_MINTER).not.toBe(SCRATCH_ADDRESS);
+    expect(await contract.methods.masterMinter().call()).not.toBe(SCRATCH_ADDRESS);
 
     await fireEvent.click(blacklisterButton);
     await fireEvent.click(saveButton);
     await finishPromises();
-    expect(Web3.BLACKLISTER).not.toBe(SCRATCH_ADDRESS);
+    expect(await contract.methods.blacklister().call()).not.toBe(SCRATCH_ADDRESS);
 
     await fireEvent.click(pauserButton);
     await fireEvent.click(saveButton);
     await finishPromises();
-    expect(Web3.PAUSER).not.toBe(SCRATCH_ADDRESS);
+    expect(await contract.methods.pauser().call()).not.toBe(SCRATCH_ADDRESS);
 
     await fireEvent.click(ownerButton);
     await fireEvent.click(saveButton);
     await finishPromises();
-    expect(Web3.OWNER).not.toBe(SCRATCH_ADDRESS);
+    expect(await contract.methods.owner().call()).not.toBe(SCRATCH_ADDRESS);
   });
-
 });

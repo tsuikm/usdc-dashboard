@@ -15,7 +15,8 @@ import { fromHex } from '@/utils/utils';
  *    minter: Boolean,
  *    pauser: Boolean,
  *    owner: Boolean,
- *    blacklisted: Boolean
+ *    blacklisted: Boolean,
+ *    masterMinter: boolean
  * }
  *
  * @param {Object<key: String, value: Account>} MOCK_ACCOUNTS Map of wallet addresses to accounts
@@ -23,10 +24,6 @@ import { fromHex } from '@/utils/utils';
  * @param {String[]} VALID_ADDRESSES Array of valid addresses (for utils.isAddress)
  * @param {String[]} CONTRACT_ADDRESSES Subset of VALID_ADDRESSES that are contract addresses (for getCode)
  * @param {Integer} TOTAL_SUPPLY Total supply
- * @param {String} PAUSER - the address of the pauser.
- * @param {String} BLACKLISTER - the address of the blacklister.
- * @param {String} MASTER_MINTER - the address of the master_minter.
- * @param {String} OWNER - the address of the owner.
  */
 export default class Web3 {
   static MOCK_ACCOUNTS = {};
@@ -34,10 +31,37 @@ export default class Web3 {
   static VALID_ADDRESSES = [];
   static CONTRACT_ADDRESSES = [];
   static TOTAL_SUPPLY = 0;
-  static PAUSER = null;
-  static BLACKLISTER = null;
-  static MASTER_MINTER = null;
-  static OWNER = null;
+
+  /**
+   * Finds the account address that matches the predicate when the account object is passed in.
+   * @private
+   *
+   * @param {function(Object: Object):boolean} predicate.
+   * @return {String} - the account address.
+   */
+  static _findAccount(predicate) {
+    return Object.keys(Web3.MOCK_ACCOUNTS).find(address => predicate(Web3.MOCK_ACCOUNTS[address]));
+  }
+
+  /**
+   * Updates the address of an exclusive role. Pausers/Owners/MasterMinters/Blacklisters are exclusive (ie. there can
+   * only be one of less of each).
+   * So, for instance, _updateExclusiveRole('0x001', 'pauser') sets the '0x001' account to be the only pauser.
+   * @private
+   *
+   * @param {String} address - the address of the exclusive role.
+   * @param {String} role - the role given to the address. Must be a key in the Account definition above.
+   */
+  static _updateExclusiveRole(address, role) {
+    if (!Web3.MOCK_ACCOUNTS.hasOwnProperty(address)) {
+      Web3.MOCK_ACCOUNTS[address] = {};
+    }
+
+    // Only give the role to the passed-in address.
+    for (const [accountAddress, account] of Object.entries(Web3.MOCK_ACCOUNTS)) {
+      account[role] = (accountAddress === address);
+    }
+  }
 
   get eth() {
     return {
@@ -63,22 +87,22 @@ export default class Web3 {
             },
             pauser: () => {
               return {
-                call: async () => Web3.PAUSER,
+                call: async () => Web3._findAccount(account => account.pauser),
               };
             },
             owner: () => {
               return {
-                call: async () => Web3.OWNER,
+                call: async () => Web3._findAccount(account => account.owner),
               };
             },
             masterMinter: () => {
               return {
-                call: async () => Web3.MASTER_MINTER,
+                call: async () => Web3._findAccount(account => account.masterMinter)
               };
             },
             blacklister: () => {
               return {
-                call: async () => Web3.BLACKLISTER,
+                call: async () => Web3._findAccount(account => account.blacklister)
               };
             },
             isBlacklisted: address => {
@@ -92,31 +116,31 @@ export default class Web3 {
               };
             },
             updatePauser: pauser => {
-              const updatePauser = async () => { Web3.PAUSER = pauser; };
+              const updatePauser = async () => Web3._updateExclusiveRole(pauser, 'pauser');
               return {
                 call: updatePauser,
                 encodeABI: () => updatePauser,
               };
             },
             updateBlacklister: blacklister => {
-              const updateBlacklister = async () => { Web3.BLACKLISTER = blacklister; };
+              const updateBlacklister = async () => Web3._updateExclusiveRole(blacklister, 'blacklister');
               return {
                 call: updateBlacklister,
                 encodeABI: () => updateBlacklister,
               };
             },
             transferOwnership: owner => {
-              const updateOwner = async () => { Web3.OWNER = owner; };
+              const updateOwner = async () => Web3._updateExclusiveRole(owner, 'owner');
               return {
                 call: updateOwner,
                 encodeABI: () => updateOwner,
               };
             },
             updateMasterMinter: masterMinter => {
-              const updateMinter = async () => { Web3.MASTER_MINTER = masterMinter; };
+              const updateMasterMinter = async () => Web3._updateExclusiveRole(masterMinter, 'masterMinter');
               return {
-                call: updateMinter,
-                encodeABI: () => updateMinter,
+                call: updateMasterMinter,
+                encodeABI: () => updateMasterMinter,
               };
             },
             transfer: (address, amount) => {

@@ -8,7 +8,7 @@
         USDC Contract is currently
       </div>
       <div
-        v-if="this.contractPaused && this.lookupContractStatus()" 
+        v-if="this.contractPaused" 
         class="content"
       >
         <md-button
@@ -74,17 +74,22 @@ export default {
       // eslint-disable-next-line
       this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     },
+    async subscribeToEvent(event) {
+      // eslint-disable-next-line
+      contract.once(event, async (error, success) => {
+        this.contractPaused = await contract.methods.paused().call();
+      } );
+    },
     async handleUnpause() {
       await this.unpause();
-      this.contractPaused = false;
+      this.subscribeToEvent(contract.unpauseEvent);
     },
     async handlePause() {
       await this.pause();
-      this.contractPaused = true;
+      this.subscribeToEvent(contract.pauseEvent);
     },
     async lookupContractStatus() {
       this.contractPaused = await contract.methods.paused().call();
-      return this.contractPaused;
     },
     async ethReq(data) {
       try {

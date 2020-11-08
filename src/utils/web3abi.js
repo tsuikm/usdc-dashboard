@@ -74,4 +74,16 @@ export const abi = [
     stateMutability: 'nonpayable',
     type:'function',
   },
+  {
+    inputs: [],
+    name: 'pauseEvent',
+    anonymous: false,
+    type: 'event',
+  },
+  {
+    inputs: [],
+    name: 'unpauseEvent',
+    anonymous: false,
+    type: 'event',
+  },
 ];

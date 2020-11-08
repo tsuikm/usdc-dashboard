@@ -287,7 +287,7 @@ export default {
      * @param {string} address - hex string
      */
     async unBlacklist(address) { 
-      await this.ethReq(contract.methods.unBlacklist(address).encodeABI())
+      await this.ethReq(contract.methods.unBlacklist(address).encodeABI());
     },
 
     /**

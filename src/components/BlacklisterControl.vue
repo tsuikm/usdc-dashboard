@@ -75,7 +75,22 @@ export default {
       this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     },
     async subscribeToEvent(event) {
-      contract.once(event, function (error, success) {console.log(success);} );
+      // eslint-disable-next-line
+      contract.once(event, async (error, success) => {
+        if (this.address === '') {
+          this.isBlacklisted = null;
+          return;
+        }
+        try {
+          this.isBlacklisted = await contract.methods
+            .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+            .call();
+          return this.isBlacklisted;
+        } catch (e) {
+          console.log(e);
+          return false;
+        }
+      } );
 
 
     },

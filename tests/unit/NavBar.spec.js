@@ -23,17 +23,24 @@ function setWindowUrl(url) {
 
 describe('NavBar', () => {
   it('Search Bar Displayed Correctly', () => {
-    const { getByText, getByLabelText } = render(NavBar);
+    const { getByPlaceholderText } = render(NavBar, {
+      stubs: {
+        NuxtLink: true,
+      },
+    });
 
-    expect(getByLabelText('Wallet Address')).not.toBeNull();
-    expect(getByText('search')).not.toBeNull();
+    expect(getByPlaceholderText('Wallet Address or Txn Hash')).not.toBeNull();
   });
 
   it('Search Bar Valid Address Functionality', async () => {
-    const { getByLabelText } = render(NavBar);
+    const { getByPlaceholderText } = render(NavBar, {
+      stubs: {
+        NuxtLink: true,
+      },
+    });
     global.window = Object.create(window);
 
-    const input = getByLabelText('Wallet Address');
+    const input = getByPlaceholderText('Wallet Address or Txn Hash');
     await fireEvent.input(input, '0x36f80a0bde5020ab0880ab54');
 
     const url = '/address/0x36f80a0bde5020ab0880ab54';
@@ -43,12 +50,16 @@ describe('NavBar', () => {
   });
 
   it('Search Bar Invalid Address Functionality', async () => {
-    const { getByLabelText } = render(NavBar);
+    const { getByPlaceholderText } = render(NavBar, {
+      stubs: {
+        NuxtLink: true,
+      },
+    });
 
     delete global.window.location;
     global.window = Object.create(window);
 
-    const input = getByLabelText('Wallet Address');
+    const input = getByPlaceholderText('Wallet Address or Txn Hash');
     await fireEvent.input(input, 'invalid-address');
 
     const url = '/404';

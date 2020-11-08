@@ -66,28 +66,27 @@ export default {
       accounts: [],
     };
   },
+  created: function() {
+    this.connectMetamask();
+  },
   methods: {
     async connectMetamask() {
       // eslint-disable-next-line
       this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     },
     async subscribeToEvent(event) {
-      let subscription = event().subscription;
-      subscription.on('data', async () => {
-        await this.lookupBlacklistStatus();
-        subscription.unsubscribe();
-      }).on('error', console.log);
+      contract.once(event, function (error, success) {console.log(success);} );
+
+
     },
     async handleBlacklist() {
-      this.connectMetamask();
       await this.blacklist(this.address);
-      this.subscribeToEvent(contract.events.blacklist);
+      this.subscribeToEvent(contract.blacklistEvent);
       this.isBlacklisted = true;
     },
     async handleUnblacklist() {
-      this.connectMetamask();
       await this.unBlacklist(this.address);
-      this.subscribeToEvent(contract.events.unBlacklist);
+      this.subscribeToEvent(contract.unBlacklistEvent);
       this.isBlacklisted = false;
     },
     async lookupBlacklistStatus() {
@@ -95,10 +94,15 @@ export default {
         this.isBlacklisted = null;
         return;
       }
-      this.isBlacklisted = await contract.methods
-        .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
-        .call();
-      return this.isBlacklisted;
+      try {
+        this.isBlacklisted = await contract.methods
+          .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+          .call();
+        return this.isBlacklisted;
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
     },
     async ethReq(data) {
       try {

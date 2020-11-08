@@ -74,4 +74,16 @@ export const abi = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'blacklistEvent',
+    anonymous: false,
+    type: 'event',
+  },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'unBlacklistEvent',
+    anonymous: false,
+    type: 'event',
+  },
 ];

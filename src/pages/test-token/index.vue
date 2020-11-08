@@ -18,6 +18,7 @@ export default {
   },
   async mounted() {
     await this.connectMetamask();
+    contract.methods.minterAllowance('0x4ca277e9D70f4681A66f6dB2d537683Ca4e0C5B2').call().then(console.log);
 
     /**
      * To test write operations on the test token uncomment the corresonding code block
@@ -287,7 +288,7 @@ export default {
      * @param {string} address - hex string
      */
     async unBlacklist(address) { 
-      await this.ethReq(contract.methods.unBlacklist(address).encodeABI())
+      await this.ethReq(contract.methods.unBlacklist(address).encodeABI());
     },
 
     /**

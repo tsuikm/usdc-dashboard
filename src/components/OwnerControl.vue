@@ -62,6 +62,43 @@ import RoleButton from '@/components/RoleButton';
 const web3 = new Web3(Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
+/*----------------------------------------------------------------------------*
+ * Helpers
+ *----------------------------------------------------------------------------*/
+
+/**
+ * Getters for the addresses of each role (ie. master minter, pauser, owner, blacklister).
+ *
+ * @returns {String} - as a lowercase hex string.
+ */
+async function getOwner() { return contract.methods.owner().call(); }
+async function getPauser() { return contract.methods.pauser().call(); }
+async function getBlacklister() { return contract.methods.blacklister().call(); }
+async function getMasterMinter() { return contract.methods.masterMinter().call(); }
+
+/**
+ * [changeRole description]
+ * @param {[type]} ownerAccount [description]
+ * @param {[type]} contractMethod [description]
+ * @param {[type]} address [description]
+ * @returns {[type]} [description]
+ */
+async function changeRole(ownerAccount, contractMethod, address) {
+  await ethereum.request({
+    method: 'eth_sendTransaction',
+    params: [
+      {
+        from: ownerAccount,
+        to: USDC_CONTRACT_ADDRESS,
+        data: contractMethod(address).encodeABI(),
+        gasPrice: DEFAULT_GAS_PRICE
+      },
+    ],
+  });
+}
+
+//----------------------------------------------------------------------------------------
+
 export default {
   name: 'Owner',
   components: {
@@ -79,7 +116,7 @@ export default {
       ownerTitle: 'OWNER',
       blacklisterTitle: 'BLACKLISTER',
       hasRenouncedRoles: null,
-      
+
 
       blacklisterAddress: null,
       ownerAddress: null,
@@ -102,7 +139,7 @@ export default {
       // return hasRoles;
       return true;
     }
-  },  
+  },
   methods: {
     async lookupBlacklisted() {
       this.blacklisterAddress = await contract.methods.blacklister().call();
@@ -160,10 +197,10 @@ export default {
         console.log('You are not the owner');
         return;
       }
-      
+
       this.hasRenouncedRoles = (!this.pauser && await contract.methods.pauser().call() === this.address) ||
         (!this.minter && await contract.methods.masterMinter().call() === this.address) ||
-        (!this.blacklister && await contract.methods.blacklister().call() === this.address) || 
+        (!this.blacklister && await contract.methods.blacklister().call() === this.address) ||
         (!this.owner && await contract.methods.owner().call() === this.address);
 
       if (this.hasRenouncedRoles) {
@@ -179,11 +216,11 @@ export default {
       }
       if (this.blacklister && await contract.methods.blacklister().call() !== this.address) {
         await this.changeRole(ownerAccount, contract.methods.updateBlacklister);
-      }  
+      }
       if (this.owner && await contract.methods.owner().call() !== this.address) {
         await this.changeRole(ownerAccount, contract.methods.transferOwnership);
-      }  
-      
+      }
+
     }
   },
 };

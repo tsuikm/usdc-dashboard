@@ -35,6 +35,7 @@ export default {
   border-radius: 25px;
   border: none;
   cursor: pointer;
+  font-family: Proxima Nova;
 }
 
 .button:hover {

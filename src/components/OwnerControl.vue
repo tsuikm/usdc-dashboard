@@ -53,9 +53,8 @@
 </template>
 
 <script>
-import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, DEFAULT_GAS_PRICE } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import Web3 from 'web3';
-import { padHex } from '@/utils/utils';
 import { abi } from '@/utils/web3abi';
 import RoleButton from '@/components/RoleButton';
 
@@ -84,6 +83,7 @@ const getMasterMinter = async () => (await contract.methods.masterMinter().call(
  * @param {String} address - the address to assign the role to.
  */
 async function changeRole(ownerAccount, contractMethod, address) {
+  // eslint-disable-next-line no-undef
   await ethereum.request({
     method: 'eth_sendTransaction',
     params: [
@@ -139,6 +139,7 @@ export default {
     async save() {
       this.address = this.address.trim().toLowerCase();
 
+      // eslint-disable-next-line no-undef
       const accounts = (await ethereum.request({ method: 'eth_requestAccounts' })).map(string => string.toLowerCase());
       const ownerAccount = await getOwner();
 
@@ -182,10 +183,12 @@ export default {
   font-size: 20px;
   font-weight: 900;
   padding-bottom: 3%;
+  font-family: Proxima Nova;
 }
 
 .input-form {
   align-items: center;
+  font-family: Proxima Nova;
 }
 
 .role-control {

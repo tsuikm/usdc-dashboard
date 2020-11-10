@@ -17,12 +17,18 @@ function ethereumFactory(isConnectedToMetamask) {
 
       // Simulates connecting to metamask as the owner.
       if (config.method === 'eth_requestAccounts') {
-        return isConnectedToMetamask ? [Web3.BLACKLISTER] : [];
+        return isConnectedToMetamask ? [BLACKLISTER] : [];
       }
     },
   };
 }
-Web3.BLACKLISTER = '0x00000001';
+const BLACKLISTER = padHex('0x00000001', WEB3_BALANCEOF_ADDRESS_LENGTH);
+Web3.MOCK_ACCOUNTS = {
+  [BLACKLISTER]: {
+    blacklisted: true
+  },
+  [padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH)]: {}
+}
 global.ethereum = ethereumFactory(true);
 
 const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
@@ -83,7 +89,7 @@ describe('BlacklisterControl', () => {
     const { getByText } = render(BlacklisterControl, {
       data: function() {
         return {
-          address: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH),
+          address: BLACKLISTER,
           isBlacklisted: true,
         };
       },

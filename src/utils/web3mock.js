@@ -80,15 +80,17 @@ export default class Web3 {
               };
             },
             blacklist: (address) => {
+              const blacklist = async () => Web3.MOCK_ACCOUNTS[address].blacklisted = true;
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].blacklisted = true,
-                encodeABI: () => address,
+                call: blacklist,
+                encodeABI: () => blacklist,
               };
             },
             unBlacklist: (address) => {
+             const unblacklist = async () => Web3.MOCK_ACCOUNTS[address].blacklisted = false;
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].blacklisted = false,
-                encodeABI: () => address,
+                call: unblacklist,
+                encodeABI: () => unblacklist,
               };
             },
           };

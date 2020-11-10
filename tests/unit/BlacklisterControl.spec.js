@@ -83,7 +83,7 @@ describe('BlacklisterControl', () => {
     expect(getByText('Click to unblacklist.')).not.toBeNull();
   });
 
-  it('Displays UNBLACKLIST when blacklisted address is looked up', async () => {
+  it('UNBLACKLISTs a blacklisted address', async () => {
     const { getByText } = render(BlacklisterControl, {
       data: function() {
         return {

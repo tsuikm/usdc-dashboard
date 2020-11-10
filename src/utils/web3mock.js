@@ -85,6 +85,12 @@ export default class Web3 {
                 encodeABI: () => address + ', ' + amount,
               };
             },
+            burn: (amount) => {
+              return {
+                call: async () => amount,
+                encodeABI: () => amount,
+              };
+            },
           };
         }
       },

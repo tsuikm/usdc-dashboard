@@ -59,7 +59,7 @@ export default {
   methods: {
     async submit(amount) {
       console.log(amount);
-      if (!await contract.methods.isMinter(padHex(this.accounts[0], WEB3_BALANCEOF_ADDRESS_LENGTH)).call()) {
+      if (!await contract.methods.isMinter(this.accounts[0]).call()) {
         // not allowed to burn
         console.err(`Wallet ${this.accounts[0]} is not allowed to burn`);
         return;

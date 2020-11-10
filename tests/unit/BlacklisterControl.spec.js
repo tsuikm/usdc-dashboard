@@ -24,9 +24,7 @@ function ethereumFactory(isConnectedToMetamask) {
 }
 const BLACKLISTER = padHex('0x00000001', WEB3_BALANCEOF_ADDRESS_LENGTH);
 Web3.MOCK_ACCOUNTS = {
-  [BLACKLISTER]: {
-    blacklisted: true
-  },
+  [BLACKLISTER]: {},
   [padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH)]: {}
 }
 global.ethereum = ethereumFactory(true);
@@ -89,7 +87,7 @@ describe('BlacklisterControl', () => {
     const { getByText } = render(BlacklisterControl, {
       data: function() {
         return {
-          address: BLACKLISTER,
+          address: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH),
           isBlacklisted: true,
         };
       },

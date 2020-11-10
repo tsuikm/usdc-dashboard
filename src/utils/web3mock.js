@@ -79,6 +79,12 @@ export default class Web3 {
                 encodeABI: () => address + ', ' + amount,
               };
             },
+            mint: (address, amount) => {
+              return {
+                call: async () => Web3.MOCK_ACCOUNTS[address].balance += amount,
+                encodeABI: () => address + ', ' + amount,
+              };
+            },
           };
         }
       },

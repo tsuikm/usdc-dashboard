@@ -26,6 +26,11 @@ global.ethereum = {
 };
 
 describe('Mint page', () => {
+  afterEach(() => {
+    // eslint-disable-next-line
+    ethereum.request.mockClear();
+  });
+
   test('Mint card renders', async () => {
     const { queryByTestId, queryByText } = render(mint);
     expect(queryByText('Mint USDC')).not.toBeNull();
@@ -40,9 +45,7 @@ describe('Mint page', () => {
     // eslint-disable-next-line
     expect(ethereum.request.mock.calls[0]).toEqual([{ method: 'eth_requestAccounts' }]);
     // eslint-disable-next-line
-    expect(ethereum.request.mock.calls[1]).toEqual([{ method: 'eth_requestAccounts' }]);
-    // eslint-disable-next-line
-    expect(ethereum.request.mock.calls).toHaveLength(2);
+    expect(ethereum.request.mock.calls).toHaveLength(1);
 
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = '100';

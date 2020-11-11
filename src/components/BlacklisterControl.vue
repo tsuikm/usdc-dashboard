@@ -85,11 +85,9 @@ export default {
           this.isBlacklisted = await contract.methods
             .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
             .call();
-          return;
         } catch (e) {
-          console.log(e);
+          console.error(e);
           this.isBlacklisted = null;
-          return;
         }
       } );
 
@@ -113,8 +111,8 @@ export default {
           .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
           .call();
       } catch (e) {
-        console.log(e);
-        return null;
+        console.error(e);
+        this.isBlacklisted = null;
       }
     },
     async ethReq(data) {
@@ -133,7 +131,7 @@ export default {
             ],
           });
       } catch (e) {
-        console.log(e);
+        console.error(e);
         //show error
       }
     },

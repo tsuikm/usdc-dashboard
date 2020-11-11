@@ -63,7 +63,7 @@ export default {
     async submit(toAddress, amount) {
       if (!await contract.methods.isMinter(this.accounts[0]).call()) {
         // not allowed to mint
-        console.err(`Wallet ${this.accounts[0]} is not allowed to mint`);
+        console.error(`Wallet ${this.accounts[0]} is not allowed to mint`);
         return;
       }
       
@@ -82,7 +82,7 @@ export default {
             ],
           });
       } catch (e) {
-        console.log(e);
+        console.error(e);
         // show error
       }
     },

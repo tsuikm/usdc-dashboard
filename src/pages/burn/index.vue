@@ -61,7 +61,7 @@ export default {
       console.log(amount);
       if (!await contract.methods.isMinter(this.accounts[0]).call()) {
         // not allowed to burn
-        console.err(`Wallet ${this.accounts[0]} is not allowed to burn`);
+        console.error(`Wallet ${this.accounts[0]} is not allowed to burn`);
         return;
       }
       
@@ -80,7 +80,7 @@ export default {
             ],
           });
       } catch (e) {
-        console.log(e);
+        console.error(e);
         // show error
       }
     },

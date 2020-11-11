@@ -11,12 +11,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "@google-cloud/bigquery": "^5.2.0",
     "@openzeppelin/contracts": "^3.2.0",
     "@testing-library/vue": "^5.1.0",
     "@vue/cli-plugin-unit-jest": "^4.5.8",
     "@vue/test-utils": "^1.1.0",
     "axios": "^0.20.0",
-    "core-js": "^3.6.5",
+    "dotenv": "^8.2.0",
+    "fs": "0.0.1-security",
     "moment": "^2.29.1",
     "nuxt": "^2.14.7",
     "sass": "^1.28.0",

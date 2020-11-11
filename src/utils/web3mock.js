@@ -31,6 +31,7 @@ export default class Web3 {
   static VALID_ADDRESSES = [];
   static CONTRACT_ADDRESSES = [];
   static TOTAL_SUPPLY = 0;
+  static PAUSED = false;
 
   /**
    * Finds the account address that matches the predicate when the account object is passed in.
@@ -83,6 +84,11 @@ export default class Web3 {
                 call: async () => {
                   return Web3.MOCK_ACCOUNTS[address].minter;
                 },
+              };
+            },
+            paused: () => {
+              return {
+                call: async () => Web3.PAUSED,
               };
             },
             pauser: () => {
@@ -149,6 +155,20 @@ export default class Web3 {
                 encodeABI: () => address + ', ' + amount,
               };
             },
+            pause: () => {
+              const pause = async () => { Web3.PAUSED = true; };
+              return {
+                call: pause,
+                encodeABI: () => pause,
+              };
+            },
+            unpause: () => {
+              const unpause = async () => { Web3.PAUSED = false; };
+              return {
+                call: unpause,
+                encodeABI: () => unpause,
+              };
+            },
             blacklist: (address) => {
               const blacklist = async () => Web3.MOCK_ACCOUNTS[address].blacklisted = true;
               return {
@@ -157,15 +177,17 @@ export default class Web3 {
               };
             },
             unBlacklist: (address) => {
-             const unblacklist = async () => Web3.MOCK_ACCOUNTS[address].blacklisted = false;
+              const unblacklist = async () => Web3.MOCK_ACCOUNTS[address].blacklisted = false;
               return {
                 call: unblacklist,
                 encodeABI: () => unblacklist,
               };
             },
           };
-        this.blacklistEvent = 'blacklist';
-        this.unBlacklistEvent = 'unblacklist';
+          this.pauseEvent = 'pause';
+          this.unpauseEvent = 'unpause';
+          this.blacklistEvent = 'blacklist';
+          this.unBlacklistEvent = 'unblacklist';
         }
         async once(event, callback) {
           callback();

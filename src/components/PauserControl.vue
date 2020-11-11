@@ -8,7 +8,7 @@
         USDC Contract is currently
       </div>
       <div
-        v-if="this.contractPaused"
+        v-if="this.contractPaused" 
         class="content"
       >
         <md-button
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import Web3 from 'web3';
 import { abi } from '@/utils/web3abi';
 
@@ -62,20 +62,60 @@ export default {
   data() {
     return {
       contractPaused: null,
+      accounts: [],
     };
   },
   created: function() {
     this.lookupContractStatus();
+    this.connectMetamask();
   },
   methods: {
+    async connectMetamask() {
+      // eslint-disable-next-line
+      this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    },
+    async subscribeToEvent(event) {
+      // eslint-disable-next-line
+      contract.once(event, async (error, success) => {
+        this.contractPaused = await contract.methods.paused().call();
+      });
+    },
     async handleUnpause() {
-      this.contractPaused = false;
+      await this.unpause();
+      this.subscribeToEvent(contract.unpauseEvent);
     },
     async handlePause() {
-      this.contractPaused = true;
+      await this.pause();
+      this.subscribeToEvent(contract.pauseEvent);
     },
     async lookupContractStatus() {
       this.contractPaused = await contract.methods.paused().call();
+    },
+    async ethReq(data) {
+      try {
+        // eslint-disable-next-line
+        const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: this.accounts[0],
+                to: USDC_CONTRACT_ADDRESS,
+                data: data,
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          });
+      } catch (e) {
+        console.error(e);
+        //show error
+      }
+    },
+    async pause() {  
+      await this.ethReq(contract.methods.pause().encodeABI());
+    },
+    async unpause() {  
+      await this.ethReq(contract.methods.unpause().encodeABI());
     },
   },
 };

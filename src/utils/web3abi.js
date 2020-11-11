@@ -61,6 +61,32 @@ export const abi = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'pause',
+    outputs: [{ name:'', type: 'bool' }],
+    stateMutability: 'nonpayable',
+    type:'function',
+  },
+  {
+    inputs: [],
+    name: 'unpause',
+    outputs: [{ name:'', type: 'bool' }],
+    stateMutability: 'nonpayable',
+    type:'function',
+  },
+  {
+    inputs: [],
+    name: 'pauseEvent',
+    anonymous: false,
+    type: 'event',
+  },
+  {
+    inputs: [],
+    name: 'unpauseEvent',
+    anonymous: false,
+    type: 'event',
+  },
+  {
     inputs: [
       {
         internalType: 'address',

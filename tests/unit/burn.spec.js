@@ -15,6 +15,13 @@ const MOCK_ACCOUNTS = {
     owner: false,
     blacklisted: false,
   },
+  '0x1': {
+    balance: 10000,
+    minter: false,
+    pauser: false,
+    owner: false,
+    blacklisted: false,
+  },
 };
 const MOCK_WALLET_ADDRESS = '0x12345';
 
@@ -64,5 +71,24 @@ describe('Burn page', () => {
         },
       ],
     }]);
+  });
+
+  test('Error renders', async () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const MOCK_WALLET_ADDRESS_ERROR = '0x1';
+    Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
+    Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS_ERROR;
+    global.ethereum = {
+      request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
+    };
+
+    const { queryByTestId, queryByText } = render(burn);
+    const AMOUNT_TEXT = '100';
+    const sendButton = queryByText('Send');
+    const amountInput = queryByTestId('Amount');
+
+    await fireEvent.update(amountInput, AMOUNT_TEXT);
+    await fireEvent.click(sendButton);
+    expect(consoleSpy).toHaveBeenCalled();
   });
 }); 

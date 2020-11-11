@@ -2,7 +2,7 @@ import PauserControl from '@/components/PauserControl.vue';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import { render, fireEvent } from '@testing-library/vue';
-import Web3 from 'web3'
+import Web3 from 'web3';
 
 Vue.use(VueMaterial);
 

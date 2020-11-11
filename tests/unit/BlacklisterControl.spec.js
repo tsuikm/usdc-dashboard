@@ -25,8 +25,8 @@ function ethereumFactory(isConnectedToMetamask) {
 const BLACKLISTER = padHex('0x00000001', WEB3_BALANCEOF_ADDRESS_LENGTH);
 Web3.MOCK_ACCOUNTS = {
   [BLACKLISTER]: {},
-  [padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH)]: {}
-}
+  [padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH)]: {},
+};
 global.ethereum = ethereumFactory(true);
 
 const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));

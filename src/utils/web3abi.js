@@ -95,6 +95,7 @@ export const abi = [
       },
     ],
     name: 'transferOwnership',
+
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -111,6 +112,32 @@ export const abi = [
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
+  },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'blacklist',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'unBlacklist',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'blacklistEvent',
+    anonymous: false,
+    type: 'event',
+  },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'unBlacklistEvent',
+    anonymous: false,
+    type: 'event',
   },
   {
     inputs: [

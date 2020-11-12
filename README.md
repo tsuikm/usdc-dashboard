@@ -1,9 +1,18 @@
 # usdc-dashboard
 
 ## Project setup
+
+### Prerequisites
+- Node.js
+- NPM
+- Browser with Metamask extension
+
+### Install dependencies
 ```
 npm install
 ```
+
+Ask someone on the team for a `.env` and `google-credentials.json` files. These are necessary for the app to function.
 
 ### Compiles and hot-reloads for development
 ```

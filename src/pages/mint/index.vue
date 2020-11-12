@@ -22,11 +22,11 @@
 // modules
 import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
-import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, DEFAULT_GAS_PRICE } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH, DEFAULT_GAS_PRICE, WEB3_PROVIDER } from '@/utils/constants';
 import { padHex, toHex } from '@/utils/utils';
 import Web3 from 'web3';
 
-const web3 = new Web3(Web3.givenProvider);
+const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 const abi = [
   {
     constant: true,

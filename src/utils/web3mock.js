@@ -15,7 +15,8 @@ import { fromHex } from '@/utils/utils';
  *    minter: Boolean,
  *    pauser: Boolean,
  *    owner: Boolean,
- *    blacklisted: Boolean
+ *    blacklisted: Boolean,
+ *    masterMinter: boolean
  * }
  *
  * @param {Object<key: String, value: Account>} MOCK_ACCOUNTS Map of wallet addresses to accounts
@@ -30,6 +31,38 @@ export default class Web3 {
   static VALID_ADDRESSES = [];
   static CONTRACT_ADDRESSES = [];
   static TOTAL_SUPPLY = 0;
+  static PAUSED = false;
+
+  /**
+   * Finds the account address that matches the predicate when the account object is passed in.
+   * @private
+   *
+   * @param {function(account: Object):boolean} predicate.
+   * @return {String} - the account address.
+   */
+  static _findAccount(predicate) {
+    return Object.keys(Web3.MOCK_ACCOUNTS).find(address => predicate(Web3.MOCK_ACCOUNTS[address]));
+  }
+
+  /**
+   * Updates the address of an exclusive role. Pausers/Owners/MasterMinters/Blacklisters are exclusive (ie. there can
+   * only be one of less of each).
+   * So, for instance, _updateExclusiveRole('0x001', 'pauser') sets the '0x001' account to be the only pauser.
+   * @private
+   *
+   * @param {String} address - the address of the exclusive role.
+   * @param {String} role - the role given to the address. Must be a key in the Account definition above.
+   */
+  static _updateExclusiveRole(address, role) {
+    if (!Object.prototype.hasOwnProperty.call(Web3.MOCK_ACCOUNTS, address)) {
+      Web3.MOCK_ACCOUNTS[address] = {};
+    }
+
+    // Only give the role to the passed-in address.
+    for (const [accountAddress, account] of Object.entries(Web3.MOCK_ACCOUNTS)) {
+      account[role] = (accountAddress === address);
+    }
+  }
 
   get eth() {
     return {
@@ -53,14 +86,29 @@ export default class Web3 {
                 },
               };
             },
-            pauser: address => {
+            paused: () => {
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].pauser,
+                call: async () => Web3.PAUSED,
               };
             },
-            owner: address => {
+            pauser: () => {
               return {
-                call: async () => Web3.MOCK_ACCOUNTS[address].owner,
+                call: async () => Web3._findAccount(account => account.pauser),
+              };
+            },
+            owner: () => {
+              return {
+                call: async () => Web3._findAccount(account => account.owner),
+              };
+            },
+            masterMinter: () => {
+              return {
+                call: async () => Web3._findAccount(account => account.masterMinter),
+              };
+            },
+            blacklister: () => {
+              return {
+                call: async () => Web3._findAccount(account => account.blacklister),
               };
             },
             isBlacklisted: address => {
@@ -71,6 +119,34 @@ export default class Web3 {
             totalSupply: () => {
               return {
                 call: async () => Web3.TOTAL_SUPPLY.toString(),
+              };
+            },
+            updatePauser: pauser => {
+              const updatePauser = async () => Web3._updateExclusiveRole(pauser, 'pauser');
+              return {
+                call: updatePauser,
+                encodeABI: () => updatePauser,
+              };
+            },
+            updateBlacklister: blacklister => {
+              const updateBlacklister = async () => Web3._updateExclusiveRole(blacklister, 'blacklister');
+              return {
+                call: updateBlacklister,
+                encodeABI: () => updateBlacklister,
+              };
+            },
+            transferOwnership: owner => {
+              const updateOwner = async () => Web3._updateExclusiveRole(owner, 'owner');
+              return {
+                call: updateOwner,
+                encodeABI: () => updateOwner,
+              };
+            },
+            updateMasterMinter: masterMinter => {
+              const updateMasterMinter = async () => Web3._updateExclusiveRole(masterMinter, 'masterMinter');
+              return {
+                call: updateMasterMinter,
+                encodeABI: () => updateMasterMinter,
               };
             },
             transfer: (address, amount) => {
@@ -91,7 +167,42 @@ export default class Web3 {
                 encodeABI: () => amount,
               };
             },
+            pause: () => {
+              const pause = async () => { Web3.PAUSED = true; };
+              return {
+                call: pause,
+                encodeABI: () => pause,
+              };
+            },
+            unpause: () => {
+              const unpause = async () => { Web3.PAUSED = false; };
+              return {
+                call: unpause,
+                encodeABI: () => unpause,
+              };
+            },
+            blacklist: (address) => {
+              const blacklist = async () => Web3.MOCK_ACCOUNTS[address].blacklisted = true;
+              return {
+                call: blacklist,
+                encodeABI: () => blacklist,
+              };
+            },
+            unBlacklist: (address) => {
+              const unblacklist = async () => Web3.MOCK_ACCOUNTS[address].blacklisted = false;
+              return {
+                call: unblacklist,
+                encodeABI: () => unblacklist,
+              };
+            },
           };
+          this.pauseEvent = 'pause';
+          this.unpauseEvent = 'unpause';
+          this.blacklistEvent = 'blacklist';
+          this.unBlacklistEvent = 'unblacklist';
+        }
+        async once(event, callback) {
+          callback();
         }
       },
       async getBlockNumber() {

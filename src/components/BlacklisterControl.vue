@@ -22,7 +22,7 @@
       </md-field>
     </form>
     <div
-      v-if="this.isBlacklisted === true"
+      v-if="this.isBlacklisted"
       class="blacklist-clause"
     > 
       <div> This address is currently blacklisted. </div>
@@ -48,12 +48,14 @@
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
+  WEB3_PROVIDER,
+  DEFAULT_GAS_PRICE, 
 } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
 import { abi } from '@/utils/web3abi';
 
-const web3 = new Web3(Web3.givenProvider);
+const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
@@ -62,23 +64,84 @@ export default {
     return {
       address: '',
       isBlacklisted: null,
+      accounts: [],
     };
   },
+  created: function() {
+    this.connectMetamask();
+  },
   methods: {
+    async connectMetamask() {
+      // eslint-disable-next-line
+      this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    },
+    async subscribeToEvent(event) {
+      // eslint-disable-next-line
+      contract.once(event, async (error, success) => {
+        if (this.address === '') {
+          this.isBlacklisted = null;
+          return;
+        }
+        try {
+          this.isBlacklisted = await contract.methods
+            .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+            .call();
+        } catch (e) {
+          console.error(e);
+          this.isBlacklisted = null;
+        }
+      } );
+
+
+    },
     async handleBlacklist() {
-      this.isBlacklisted = true;
+      await this.blacklist(this.address);
+      this.subscribeToEvent(contract.blacklistEvent);
     },
     async handleUnblacklist() {
-      this.isBlacklisted = false;
+      await this.unBlacklist(this.address);
+      this.subscribeToEvent(contract.unBlacklistEvent);
     },
     async lookupBlacklistStatus() {
       if (this.address === '') {
         this.isBlacklisted = null;
         return;
       }
-      this.isBlacklisted = await contract.methods
-        .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
-        .call();
+      try {
+        this.isBlacklisted = await contract.methods
+          .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+          .call();
+      } catch (e) {
+        console.error(e);
+        this.isBlacklisted = null;
+      }
+    },
+    async ethReq(data) {
+      try {
+        // eslint-disable-next-line
+        const txHash = await ethereum
+          .request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: this.accounts[0],
+                to: USDC_CONTRACT_ADDRESS,
+                data: data,
+                gasPrice: DEFAULT_GAS_PRICE,
+              },
+            ],
+          });
+      } catch (e) {
+        console.error(e);
+        //show error
+      }
+    },
+    async blacklist(address) {  
+      await this.ethReq(contract.methods.blacklist(address).encodeABI());
+    },
+
+    async unBlacklist(address) { 
+      await this.ethReq(contract.methods.unBlacklist(address).encodeABI());
     },
   },
 };

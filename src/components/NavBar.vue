@@ -1,79 +1,80 @@
 <template>
-  <md-toolbar>
-    <div class="md-toolbar-row">
-      <div class="md-toolbar-section-start">
-        <img
-          id="logo"
-          src="@/assets/usdc-logo.png"
-        >
-      </div>
-      <div class="md-toolbar-section-end">
-        <form @submit.prevent="submitAddress">
-          <md-field>
-            <label>Wallet Address</label>
-            <md-input
-              v-model="walletAddress"
-              type="text"
-              class="input"
-            />
-            <button @click="submitAddress">
-              <md-icon>search</md-icon>
-            </button>
-          </md-field>
-        </form>
-      </div>
+  <div
+    id="navbar"
+  >
+    <img src="@/assets/logo.svg">
+    <div
+      id="menu-items"
+      :class="menuOpen ? 'open' : ''"
+    >
+      <nuxt-link
+        to="/accounts"
+        class="link"
+      >
+        Accounts
+      </nuxt-link>
+      <nuxt-link
+        to="/accounts"
+        class="link"
+      >
+        Transfer
+      </nuxt-link>
+      <input
+        v-model="address"
+        placeholder="Wallet Address or Txn Hash"
+        class="search"
+        @keydown.enter.prevent="searchAddress"
+      >
     </div>
-  </md-toolbar>
+    <i
+      v-if="menuOpen"
+      id="hamburger"
+      class="md-icon md-icon-font md-theme-default"
+      @click="toggleMenu"
+    >
+      close
+    </i>
+    <i
+      v-else
+      id="hamburger"
+      class="md-icon md-icon-font md-theme-default"
+      @click="toggleMenu"
+    >
+      menu
+    </i>
+  </div>
 </template>
 
 <script>
-import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { WEB3_BALANCEOF_ADDRESS_LENGTH, WEB3_PROVIDER } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
 
-const web3 = new Web3(Web3.givenProvider);
+const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 
+console.log(WEB3_PROVIDER);
 export default {
   name: 'NavBar',
   data() {
     return {
-      walletAddress: '',
+      address: '',
+      menuOpen: false,
     };
   },
   methods: {
-    submitAddress() {
-      this.walletAddress = padHex(this.walletAddress.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
+    searchAddress() {
+      this.address = padHex(this.address.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
 
-      if (web3.utils.isAddress(this.walletAddress)) {
-        window.location.href = `/address/${this.walletAddress}`;
+      if (web3.utils.isAddress(this.address)) {
+        window.location.href = `/address/${this.address}`;
       }
       else {
         window.location.href = '/404';
       }
     },
+    toggleMenu() {
+      this.menuOpen = !this.menuOpen;
+    },
   },
 };
 </script>
-
-<style scoped>
-.md-toolbar {
-  padding-top: 8px;
-}
-#logo {
-  height: 40px;
-}
-
-button {
-  background-color: transparent;
-  border: none;
-}
-button:hover {
-  cursor: pointer;
-  opacity: 0.7;
-}
-
-.input {
-  width: 400px;
-}
-
-</style>

@@ -35,12 +35,12 @@ Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 
 describe('accounts', () => {
   it('accounts displays a table titled Accounts with columns for Address, Balance and Percentage', () => {
-    const { getByText } = render(accounts, {
+    const { getByText, getAllByText } = render(accounts, {
       stubs: {
         NuxtLink: true,
       },
     });
-    expect(getByText('Accounts')).not.toBeNull();
+    expect(getAllByText('Accounts')).toHaveLength(2);
     expect(getByText('Address')).not.toBeNull();
     expect(getByText('Balance')).not.toBeNull();
     expect(getByText('Percentage')).not.toBeNull();

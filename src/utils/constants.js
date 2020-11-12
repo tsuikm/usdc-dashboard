@@ -16,7 +16,7 @@ export const DEFAULT_GAS_PRICE = '0x09184e72a000'; // Decimal value is 10,000,00
 
 export const BLACKLISTER_ADDRESS =
   '0x5db0115f3b72d19cea34dd697cf412ff86dc7e1b';
-
+  
 export const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
 
 export const NuxtLinkStub = {
@@ -44,3 +44,5 @@ export const NuxtLinkStub = {
     return h(this.tag, undefined, this.$slots.default);
   },
 };
+
+export const WEB3_PROVIDER = process.env.WEB3_PROVIDER;

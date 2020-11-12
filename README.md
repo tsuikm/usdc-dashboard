@@ -1,6 +1,13 @@
 # usdc-dashboard
 
 ## Project setup
+
+### Prerequisites
+- Node.js
+- NPM
+- Browser with Metamask extension
+
+### Install dependencies
 ```
 npm install
 ```

@@ -26,7 +26,7 @@ import NavBar from '@/components/NavBar';
 //import { padHex } from '@/utils/utils';
 // import Web3 from 'web3';
 
-// const web3 = new Web3(Web3.givenProvider);
+// const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 // const abi = [
 //   {
 //     inputs: [{ name:'_amount', type :'uint256' }],

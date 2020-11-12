@@ -31,12 +31,13 @@ import {
 
 import { getAllTransactions } from '@/pages/accounts';
 import { getDecimals } from '@/components/Overview';
+import { WEB3_PROVIDER } from '@/utils/constants';
 
 import Table from './Table';
 import Web3 from 'web3';
 import moment from 'moment';
 
-const web3 = new Web3(Web3.givenProvider);
+const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 
 /**
  * Gets transaction logs for a wallet starting from fromBlock until latest.

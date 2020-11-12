@@ -14,6 +14,7 @@
           <md-input
             v-model="bindings[index]"
             class="input"
+            :data-testid="object.label"
           />
         </md-field>
       </div>

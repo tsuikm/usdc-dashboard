@@ -46,7 +46,7 @@ module.exports = {
     },
   },
   env: {
-    // WEB3_PROVIDER: 'ws://some.local-or-remote.node:8546',
+    WEB3_PROVIDER: process.env.WEB3_PROVIDER,
   },
   serverMiddleware: [
     // Will register file from project api directory to handle /api/* requires

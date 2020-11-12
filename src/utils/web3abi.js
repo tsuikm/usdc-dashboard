@@ -61,6 +61,32 @@ export const abi = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'pause',
+    outputs: [{ name:'', type: 'bool' }],
+    stateMutability: 'nonpayable',
+    type:'function',
+  },
+  {
+    inputs: [],
+    name: 'unpause',
+    outputs: [{ name:'', type: 'bool' }],
+    stateMutability: 'nonpayable',
+    type:'function',
+  },
+  {
+    inputs: [],
+    name: 'pauseEvent',
+    anonymous: false,
+    type: 'event',
+  },
+  {
+    inputs: [],
+    name: 'unpauseEvent',
+    anonymous: false,
+    type: 'event',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -69,6 +95,7 @@ export const abi = [
       },
     ],
     name: 'transferOwnership',
+
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -85,6 +112,32 @@ export const abi = [
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
+  },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'blacklist',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'unBlacklist',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'blacklistEvent',
+    anonymous: false,
+    type: 'event',
+  },
+  {
+    inputs: [{ name: '_account', type: 'address' }],
+    name: 'unBlacklistEvent',
+    anonymous: false,
+    type: 'event',
   },
   {
     inputs: [

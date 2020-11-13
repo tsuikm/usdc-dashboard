@@ -48,13 +48,14 @@
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
+  WEB3_PROVIDER,
   DEFAULT_GAS_PRICE, 
 } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
 import { abi } from '@/utils/web3abi';
 
-const web3 = new Web3(Web3.givenProvider);
+const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {

@@ -45,6 +45,11 @@ module.exports = {
       };
     },
   },
+  env: {
+    WEB3_PROVIDER: process.env.WEB3_PROVIDER,
+    USDC_CONTRACT_ADDRESS: process.env.USDC_CONTRACT_ADDRESS,
+    API_BASE_URL: process.env.API_BASE_URL,
+  },
   serverMiddleware: [
     // Will register file from project api directory to handle /api/* requires
     { path: '/api', handler: '@/api/rest.js' },

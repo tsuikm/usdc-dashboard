@@ -47,12 +47,13 @@
 
 // modules
 import Web3 from 'web3';
+import { WEB3_PROVIDER } from '@/utils/constants';
 import { padHex } from '@/utils/utils';
 
 // constants
 const TRANSACTION_HASH_LENGTH = 64;
 
-const web3 = new Web3(Web3.givenProvider);
+const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 
 export default {
   name: 'TransactionDetails',

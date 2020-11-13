@@ -46,12 +46,13 @@
 </template>
 
 <script>
-import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { WEB3_BALANCEOF_ADDRESS_LENGTH, WEB3_PROVIDER } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
 
-const web3 = new Web3(Web3.givenProvider);
+const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 
+console.log(WEB3_PROVIDER);
 export default {
   name: 'NavBar',
   data() {

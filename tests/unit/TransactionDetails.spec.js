@@ -41,10 +41,7 @@ describe('Transaction Details', () => {
   });
 
   it('Redirects to 404 with incorrect hash', async () => {
-    delete global.window.location;
-    global.window = Object.create(window);
-    window.location = {};
-
+    const router = [];
     render(TransactionDetails, {
       props: {
         hash: 'invalid',
@@ -52,9 +49,12 @@ describe('Transaction Details', () => {
       stubs: {
         NuxtLink: true,
       },
+      mocks: {
+        $router: router,
+      },
     });
 
     await new Promise((resolve) => setTimeout(resolve, 0));
-    expect(window.location.href).toEqual('/404');
+    expect(router[0].path).toEqual('/404');
   });
 });

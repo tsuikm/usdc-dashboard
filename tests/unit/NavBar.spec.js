@@ -2,6 +2,8 @@ import { fireEvent, render } from '@testing-library/vue';
 import NavBar from '@/components/NavBar.vue';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
+import { padHex } from '@/utils/utils';
+import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import Web3 from 'web3';
 
 Vue.use(VueMaterial);
@@ -11,15 +13,9 @@ Web3.VALID_ADDRESSES = [
   '0xfa2ec023f531cf6fa04c3536',
   '0x0bd4dcdf07629fee5d4363c7',
   '0xe7e31d0ef8c598b13e0992e2',
-];
+].map(address => padHex(address, WEB3_BALANCEOF_ADDRESS_LENGTH));
 
-function setWindowUrl(url) {
-  Object.defineProperty(window, 'location', {
-    value: {
-      href: url,
-    },
-  });
-}
+const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
 describe('NavBar', () => {
   it('Search Bar Displayed Correctly', () => {
@@ -33,37 +29,43 @@ describe('NavBar', () => {
   });
 
   it('Search Bar Valid Address Functionality', async () => {
+    const router = [];
     const { getByPlaceholderText } = render(NavBar, {
       stubs: {
         NuxtLink: true,
       },
+      mocks: {
+        $router: router,
+      },
     });
-    global.window = Object.create(window);
-
     const input = getByPlaceholderText('Wallet Address or Txn Hash');
-    await fireEvent.input(input, '0x36f80a0bde5020ab0880ab54');
+    await fireEvent.input(input,  Web3.VALID_ADDRESSES[0]);
+    await fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+    await finishPromises();
 
-    const url = '/address/0x36f80a0bde5020ab0880ab54';
-    setWindowUrl(url);
-    expect(window.location.href).toEqual(url);
-
+    const url = '/address/' + Web3.VALID_ADDRESSES[0];
+    expect(router.length).toBe(1);
+    expect(router[0].path).toEqual(url);
   });
 
   it('Search Bar Invalid Address Functionality', async () => {
+    const router = [];
     const { getByPlaceholderText } = render(NavBar, {
       stubs: {
         NuxtLink: true,
       },
+      mocks: {
+        $router: router,
+      },
     });
-
-    delete global.window.location;
-    global.window = Object.create(window);
 
     const input = getByPlaceholderText('Wallet Address or Txn Hash');
     await fireEvent.input(input, 'invalid-address');
+    await fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+    await finishPromises();
 
     const url = '/404';
-    setWindowUrl(url);
-    expect(window.location.href).toEqual(url);
+    expect(router.length).toBe(1);
+    expect(router[0].path).toEqual(url);
   });
 });

@@ -39,7 +39,8 @@ describe('NavBar', () => {
       },
     });
     const input = getByPlaceholderText('Wallet Address or Txn Hash');
-    await fireEvent.input(input,  Web3.VALID_ADDRESSES[0]);
+    await fireEvent.update(input,  Web3.VALID_ADDRESSES[0]);
+    await finishPromises();
     await fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
     await finishPromises();
 
@@ -60,7 +61,8 @@ describe('NavBar', () => {
     });
 
     const input = getByPlaceholderText('Wallet Address or Txn Hash');
-    await fireEvent.input(input, 'invalid-address');
+    await fireEvent.update(input, 'invalid-address');
+    await finishPromises();
     await fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
     await finishPromises();
 

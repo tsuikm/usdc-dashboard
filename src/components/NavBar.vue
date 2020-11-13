@@ -65,10 +65,10 @@ export default {
       this.address = padHex(this.address.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
 
       if (web3.utils.isAddress(this.address)) {
-        window.location.href = `/address/${this.address}`;
+        this.$router && this.$router.push({path: `/address/${this.address}` });
       }
       else {
-        window.location.href = '/404';
+        this.$router && this.$router.push({path: '/404' });
       }
     },
     toggleMenu() {

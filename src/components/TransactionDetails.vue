@@ -77,7 +77,7 @@ export default {
       this.blockNumber = transaction.blockNumber;
     }
     catch (error) {
-      window.location.href = '/404';
+      this.$router && this.$router.push({path: '/404' });
     }
   },
 };

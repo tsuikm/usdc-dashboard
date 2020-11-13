@@ -51,7 +51,7 @@ describe('Transaction Details', () => {
       },
       mocks: {
         $router: router,
-      }
+      },
     });
 
     await new Promise((resolve) => setTimeout(resolve, 0));

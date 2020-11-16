@@ -14,7 +14,7 @@
         Accounts
       </nuxt-link>
       <nuxt-link
-        to="/accounts"
+        to="/transfers"
         class="link"
       >
         Transfer

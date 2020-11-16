@@ -70,4 +70,20 @@ describe('NavBar', () => {
     expect(router.length).toBe(1);
     expect(router[0].path).toEqual(url);
   });
+  
+  describe('Other links', () => {
+    it('Displays other links correctly', () => {
+      const router = [];
+      const { getByText } = render(NavBar, {
+        stubs: {
+          NuxtLink: true,
+        },
+        mocks: {
+          $router: router,
+        },
+      });
+      expect(getByText('Accounts')).not.toBeNull();
+      expect(getByText('Transfer')).not.toBeNull();
+    });
+  });
 });

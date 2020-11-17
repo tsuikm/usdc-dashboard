@@ -1,4 +1,4 @@
-import BlacklisterControl from '@/components/BlacklisterControl.vue';
+import BlacklisterControl from '@/pages/roles/blacklister/index';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';

@@ -1,4 +1,4 @@
-import PauserControl from '@/components/PauserControl.vue';
+import pauser from '@/pages/roles/pauser/index';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import { render, fireEvent } from '@testing-library/vue';
@@ -25,15 +25,15 @@ global.ethereum = ethereumFactory(true);
 
 const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
-describe('PauserControl', () => {
+describe('pauser', () => {
   it('Text components render properly', () => {
-    const { getByText } = render(PauserControl);
+    const { getByText } = render(pauser);
     const header = 'Pause and Unpause Contract';
     expect(getByText(header)).not.toBeNull();
   });
 
   it('Unpauses when pauser attempts to unpause', async () => {
-    const { getByText } = render(PauserControl, {
+    const { getByText } = render(pauser, {
       data: function() {
         return {
           contractPaused: true,
@@ -48,7 +48,7 @@ describe('PauserControl', () => {
   });
 
   it('Pauses when pauser attempts to pause', async () => {
-    const { getByText } = render(PauserControl, {
+    const { getByText } = render(pauser, {
       data: function() {
         return {
           contractPaused: false,

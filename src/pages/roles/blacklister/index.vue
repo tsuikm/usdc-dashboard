@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import NavBar from '@/components/NavBar';
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
@@ -63,6 +64,9 @@ const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
   name: 'Blacklister',
+  components: {
+    NavBar,
+  },
   data() {
     return {
       address: '',

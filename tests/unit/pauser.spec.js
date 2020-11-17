@@ -25,7 +25,7 @@ global.ethereum = ethereumFactory(true);
 
 const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
-describe('pauser', () => {
+describe('PauserControl', () => {
   it('Text components render properly', () => {
     const { getByText } = render(PauserControl);
     const header = 'Pause and Unpause Contract';

@@ -27,7 +27,7 @@ const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0)
 const SCRATCH_ADDRESS = '0x0000000e'; // has no roles
 const OWNER_ERROR_MESSAGE = 'Error: You are not signed in as the owner of this contract and cannot reassign roles.';
 
-describe('owner', () => {
+describe('OwnerControl', () => {
 
   beforeEach(() => {
     Web3.MOCK_ACCOUNTS = {

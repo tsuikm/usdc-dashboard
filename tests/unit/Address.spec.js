@@ -1,6 +1,5 @@
 import Address from '@/components/Address.vue';
 import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
-import Vue from 'vue';
 import { render } from '@testing-library/vue';
 
 describe('Address', () => {

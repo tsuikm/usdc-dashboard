@@ -1,5 +1,4 @@
 import BalanceCard from '@/components/BalanceCard.vue';
-import Vue from 'vue';
 import { render } from '@testing-library/vue';
 
 describe('BalanceCard', () => {

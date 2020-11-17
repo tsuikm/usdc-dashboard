@@ -1,5 +1,4 @@
 import SummaryPage from '@/pages/index';
-import Vue from 'vue';
 import { render } from '@testing-library/vue';
 import { padHex, toHex } from '@/utils/utils';
 import Web3 from 'web3';
@@ -89,21 +88,13 @@ global.fetch = async (url) => {
 
 describe('SummaryPage', () => {
   it('Header renders properly', () => {
-    const { getByText } = render(SummaryPage, {
-      stubs: {
-        NuxtLink: true,
-      },
-    });
+    const { getByText } = render(SummaryPage);
     const header = 'USDC Dashboard';
     expect(getByText(header)).not.toBeNull();
   });
 
   it('Renders recent transactions', async () => {
-    const { getByText } = render(SummaryPage, {
-      stubs: {
-        NuxtLink: true,
-      },
-    });
+    const { getByText } = render(SummaryPage);
     expect(getByText('Recent Transactions')).not.toBeNull();
     expect(getByText('See all transactions')).not.toBeNull();
 
@@ -117,11 +108,7 @@ describe('SummaryPage', () => {
   });
 
   it('Renders latest blocks', async () => {
-    const { getByText } = render(SummaryPage, {
-      stubs: {
-        NuxtLink: true,
-      },
-    });
+    const { getByText } = render(SummaryPage);
     expect(getByText('Latest Blocks')).not.toBeNull();
     expect(getByText('See all blocks')).not.toBeNull();
 
@@ -135,11 +122,7 @@ describe('SummaryPage', () => {
   });
 
   it('Renders privileged roles', async () => {
-    const { getByText } = render(SummaryPage, {
-      stubs: {
-        NuxtLink: true,
-      },
-    });
+    const { getByText } = render(SummaryPage);
     expect(getByText('Owner')).not.toBeNull();
     expect(getByText('Pausers')).not.toBeNull();
     expect(getByText('Blacklister')).not.toBeNull();

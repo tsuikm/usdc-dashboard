@@ -1,6 +1,5 @@
 import { render, fireEvent } from '@testing-library/vue';
 import mint from '@/pages/mint/index';
-import Vue from 'vue';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
 import Web3 from 'web3';

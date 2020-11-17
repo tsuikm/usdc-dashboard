@@ -1,5 +1,4 @@
 import RoleButton from '@/components/RoleButton';
-import Vue from 'vue';
 import { render, createEvent, fireEvent } from '@testing-library/vue';
 
 describe('RoleButton', () => {

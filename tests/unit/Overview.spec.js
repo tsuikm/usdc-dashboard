@@ -1,9 +1,9 @@
 import Overview from '@/components/Overview.vue';
-import Vue from 'vue';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
 import { render } from '@testing-library/vue';
+import Vue from 'vue';
 
 const MOCK_ACCOUNTS = {
   [padHex('0x11111111', WEB3_BALANCEOF_ADDRESS_LENGTH)]: {
@@ -24,9 +24,6 @@ describe('Overview', () => {
       props: {
         walletAddress: padHex('0x11111111', WEB3_BALANCEOF_ADDRESS_LENGTH),
       },
-      stubs: {
-        NuxtLink: true,
-      },
     });
 
     await Vue.nextTick();
@@ -38,9 +35,7 @@ describe('Overview', () => {
       props: {
         walletAddress: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH),
       },
-      stubs: {
-        NuxtLink: true,
-      },
+
     });
 
     expect(queryByText('block')).toBeNull();

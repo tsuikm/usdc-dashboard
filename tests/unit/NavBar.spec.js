@@ -1,9 +1,7 @@
 import { fireEvent, render } from '@testing-library/vue';
 import NavBar from '@/components/NavBar.vue';
-import Vue from 'vue';
 import { padHex } from '@/utils/utils';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
-import NuxtLink from '@/utils/nuxt-link-stub';
 import Web3 from 'web3';
 
 Web3.VALID_ADDRESSES = [
@@ -17,11 +15,7 @@ const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0)
 
 describe('NavBar', () => {
   it('Search Bar Displayed Correctly', () => {
-    const { getByPlaceholderText } = render(NavBar, {
-      stubs: {
-        NuxtLink: true,
-      },
-    });
+    const { getByPlaceholderText } = render(NavBar);
 
     expect(getByPlaceholderText('Wallet Address or Txn Hash')).not.toBeNull();
   });
@@ -29,9 +23,6 @@ describe('NavBar', () => {
   it('Search Bar Valid Address Functionality', async () => {
     const router = [];
     const { getByPlaceholderText } = render(NavBar, {
-      stubs: {
-        NuxtLink: true,
-      },
       mocks: {
         $router: router,
       },
@@ -50,9 +41,6 @@ describe('NavBar', () => {
   it('Search Bar Invalid Address Functionality', async () => {
     const router = [];
     const { getByPlaceholderText } = render(NavBar, {
-      stubs: {
-        NuxtLink: true,
-      },
       mocks: {
         $router: router,
       },
@@ -73,9 +61,6 @@ describe('NavBar', () => {
     it('Displays other links correctly', async () => {
       const router = [];
       const { getByText } = render(NavBar, {
-        stubs: {
-          'nuxt-link': NuxtLink,
-        },
         mocks: {
           $router: router,
         },

@@ -12,9 +12,13 @@ export default {
       required: true,
     },
   },
+  created() {
+    // Some of our tests use getAttribute() and test for the tagName.
+    this.$attrs.to = this.to;
+  },
   methods: {
     _click() {
-      this.$router.push({path: this.to });
+      this.$router.push({ path: this.to });
     },
   },
 };

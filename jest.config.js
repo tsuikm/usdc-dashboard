@@ -4,5 +4,5 @@ module.exports = {
   moduleNameMapper: {
     '^web3$': '<rootDir>/src/utils/web3mock',
   },
-  setupFilesAfterEnv: ['./tests/jest.setup.js']
+  setupFilesAfterEnv: ['./tests/jest.setup.js'],
 };

@@ -1,6 +1,5 @@
 import { render, fireEvent } from '@testing-library/vue';
 import transfers from '@/pages/transfers/index';
-import Vue from 'vue';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
 

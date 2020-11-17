@@ -1,5 +1,4 @@
 import TotalSupply from '@/components/TotalSupply.vue';
-import Vue from 'vue';
 import { render } from '@testing-library/vue';
 
 describe('TotalSupply', () => {

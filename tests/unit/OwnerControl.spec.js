@@ -1,4 +1,5 @@
-import OwnerControl from '@/components/OwnerControl.vue';
+// import OwnerControl from '@/components/OwnerControl.vue';
+import owner from '@/pages/roles/owner/index';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import { render, fireEvent } from '@testing-library/vue';
@@ -27,7 +28,7 @@ const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0)
 const SCRATCH_ADDRESS = '0x0000000e'; // has no roles
 const OWNER_ERROR_MESSAGE = 'Error: You are not signed in as the owner of this contract and cannot reassign roles.';
 
-describe('OwnerControl', () => {
+describe('owner', () => {
 
   beforeEach(() => {
     Web3.MOCK_ACCOUNTS = {
@@ -40,7 +41,7 @@ describe('OwnerControl', () => {
   });
 
   it('Text components render properly', () => {
-    const { getByText } = render(OwnerControl);
+    const { getByText } = render(owner);
     expect(getByText('Check and Assign Roles')).not.toBeNull();
     expect(getByText('MASTER MINTER')).not.toBeNull();
     expect(getByText('BLACKLISTER')).not.toBeNull();
@@ -49,7 +50,7 @@ describe('OwnerControl', () => {
   });
 
   it('Changes roles correctly', async () => {
-    const { getByText, getByPlaceholderText } = render(OwnerControl);
+    const { getByText, getByPlaceholderText } = render(owner);
 
     // Simulates connecting to metamask as the owner.
     global.ethereum = ethereumFactory(true);
@@ -85,7 +86,7 @@ describe('OwnerControl', () => {
   });
 
   it('Prevents reassigning roles when owner is not connected', async () => {
-    const { getByText, getByPlaceholderText } = render(OwnerControl);
+    const { getByText, getByPlaceholderText } = render(owner);
 
     global.ethereum = ethereumFactory(false);
 

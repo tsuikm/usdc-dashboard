@@ -1,10 +1,7 @@
 import Address from '@/components/Address.vue';
 import { USDC_CONTRACT_ADDRESS } from '@/utils/constants';
 import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import { render } from '@testing-library/vue';
-
-Vue.use(VueMaterial);
 
 describe('Address', () => {
   it('Wallet address displays correctly', () => {
@@ -14,7 +11,7 @@ describe('Address', () => {
         walletAddress: testAddress,
       },
     });
-    
+
     expect(getByText(testAddress)).not.toBeNull();
   });
 
@@ -24,7 +21,7 @@ describe('Address', () => {
         walletAddress: USDC_CONTRACT_ADDRESS,
       },
     });
-    
+
     expect(getByText(USDC_CONTRACT_ADDRESS)).not.toBeNull();
   });
 

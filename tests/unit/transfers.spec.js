@@ -1,10 +1,8 @@
 import { render, fireEvent } from '@testing-library/vue';
 import transfers from '@/pages/transfers/index';
 import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
-Vue.use(VueMaterial);
 
 const MOCK_WALLET_ADDRESS = '0xdC1e071D120FD40fB1173BCcc86c74F47645F4E0';
 
@@ -20,7 +18,7 @@ describe('Transfers page', () => {
     expect(queryByText('Connect to Metamask')).not.toBeNull();
     expect(queryByText('Send')).not.toBeNull();
   });
-  
+
   test('Connect Metamask button works', async () => {
     const { queryByText } = render(transfers);
     const button = queryByText('Connect to Metamask');

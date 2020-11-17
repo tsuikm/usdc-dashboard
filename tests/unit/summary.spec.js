@@ -1,11 +1,8 @@
 import SummaryPage from '@/pages/index';
 import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import { render } from '@testing-library/vue';
 import { padHex, toHex } from '@/utils/utils';
 import Web3 from 'web3';
-
-Vue.use(VueMaterial);
 
 const MOCK_ACCOUNTS = {
   '0x1': {
@@ -112,7 +109,7 @@ describe('SummaryPage', () => {
 
     // Finish all promises
     await new Promise((resolve) => setTimeout(resolve, 0));
-    
+
     expect(getByText(MOCK_TRANSACTIONS[0].transactionHash)).not.toBeNull();
     expect(getByText(MOCK_TRANSACTIONS[1].transactionHash)).not.toBeNull();
     expect(getByText(MOCK_TRANSACTIONS[2].transactionHash)).not.toBeNull();

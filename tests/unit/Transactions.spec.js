@@ -2,10 +2,7 @@ import Address, { getLogs } from '@/components/Transactions';
 import { fireEvent, render } from '@testing-library/vue';
 import { padHex, removeLeadingZeros } from '@/utils/utils';
 import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import Web3 from 'web3';
-
-Vue.use(VueMaterial);
 
 const MOCK_WALLET_ADDRESS = padHex('0x123456789abcdef', 64);
 const MOCK_TRANSACTIONS = [

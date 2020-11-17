@@ -1,12 +1,9 @@
 import { render, fireEvent } from '@testing-library/vue';
 import { fromHex, padHex, toHex, removeLeadingZeros } from '@/utils/utils';
 import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import Web3 from 'web3';
 import accounts from '@/pages/accounts';
-
-Vue.use(VueMaterial);
 
 const MOCK_TRANSACTIONS = [];
 for (let i = 0; i < 101; i++) {

@@ -1,10 +1,7 @@
 import TransactionDetails from '@/components/TransactionDetails';
 import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import { render } from '@testing-library/vue';
 import Web3 from 'web3';
-
-Vue.use(VueMaterial);
 
 Web3.MOCK_TRANSACTIONS = [{
   transactionHash: '0x123456',

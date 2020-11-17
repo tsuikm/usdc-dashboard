@@ -1,13 +1,10 @@
 import { fireEvent, render } from '@testing-library/vue';
 import NavBar from '@/components/NavBar.vue';
 import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import { padHex } from '@/utils/utils';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import NuxtLink from '@/utils/nuxt-link-stub';
 import Web3 from 'web3';
-
-Vue.use(VueMaterial);
 
 Web3.VALID_ADDRESSES = [
   '0x36f80a0bde5020ab0880ab54',

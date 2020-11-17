@@ -4,9 +4,6 @@ import {
 } from '@testing-library/vue';
 import Table from '@/components/Table.vue';
 import Vue from 'vue';
-import VueMaterial from 'vue-material';
-
-Vue.use(VueMaterial);
 
 const testProps = {
   name: 'Test Name',

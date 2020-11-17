@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar';
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,

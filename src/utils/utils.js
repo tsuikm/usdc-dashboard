@@ -37,3 +37,13 @@ export function pushAll(dst, src) {
   }
   return dst;
 }
+
+export function basePathFromPath(path) {
+  if (path.includes('/solana')) {
+    return '/solana';
+  } else if (path.includes('/algorand')) {
+    return '/algorand';
+  }
+
+  return '';
+}

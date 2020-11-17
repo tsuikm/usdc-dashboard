@@ -8,13 +8,13 @@
       :class="menuOpen ? 'open' : ''"
     >
       <nuxt-link
-        to="/accounts"
+        :to="accountsLink"
         class="link"
       >
         Accounts
       </nuxt-link>
       <nuxt-link
-        to="/transfers"
+        :to="transfersLink"
         class="link"
       >
         Transfer
@@ -46,13 +46,9 @@
 </template>
 
 <script>
-import { WEB3_BALANCEOF_ADDRESS_LENGTH, WEB3_PROVIDER } from '@/utils/constants';
-import Web3 from 'web3';
-import { padHex } from '@/utils/utils';
+import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { padHex, basePathFromPath } from '@/utils/utils';
 
-const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
-
-console.log(WEB3_PROVIDER);
 export default {
   name: 'NavBar',
   data() {
@@ -61,15 +57,27 @@ export default {
       menuOpen: false,
     };
   },
+  computed: {
+    basePath() {
+      if (this.$route) {
+        return basePathFromPath(this.$route.path);
+      }
+      
+      return '';
+    },
+    accountsLink() {
+      return `${this.basePath}/accounts`;
+    },
+    transfersLink() {
+      return `${this.basePath}/transfers`;
+    },
+  },
   methods: {
     searchAddress() {
       this.address = padHex(this.address.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
 
-      if (web3.utils.isAddress(this.address)) {
-        this.$router && this.$router.push({path: `/address/${this.address}` });
-      }
-      else {
-        this.$router && this.$router.push({path: '/404' });
+      if (this.$router) {
+        this.$router.push({path: `${this.basePath}/address/${this.address}` });
       }
     },
     toggleMenu() {

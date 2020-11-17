@@ -20,11 +20,14 @@ describe('NavBar', () => {
     expect(getByPlaceholderText('Wallet Address or Txn Hash')).not.toBeNull();
   });
 
-  it('Search Bar Valid Address Functionality', async () => {
+  it('Search Bar Valid Address Functionality Ethereum', async () => {
     const router = [];
     const { getByPlaceholderText } = render(NavBar, {
       mocks: {
         $router: router,
+        $route: {
+          path: '',
+        },
       },
     });
     const input = getByPlaceholderText('Wallet Address or Txn Hash');
@@ -38,45 +41,117 @@ describe('NavBar', () => {
     expect(router[0].path).toEqual(url);
   });
 
-  it('Search Bar Invalid Address Functionality', async () => {
+  it('Search Bar Valid Address Functionality Solana', async () => {
     const router = [];
     const { getByPlaceholderText } = render(NavBar, {
       mocks: {
         $router: router,
+        $route: {
+          path: '/solana',
+        },
       },
     });
-
     const input = getByPlaceholderText('Wallet Address or Txn Hash');
-    await fireEvent.update(input, 'invalid-address');
+    await fireEvent.update(input,  Web3.VALID_ADDRESSES[0]);
     await finishPromises();
     await fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
     await finishPromises();
 
-    const url = '/404';
+    const url = '/solana/address/' + Web3.VALID_ADDRESSES[0];
     expect(router.length).toBe(1);
     expect(router[0].path).toEqual(url);
   });
 
-  describe('Other links', () => {
-    it('Displays other links correctly', async () => {
-      const router = [];
-      const { getByText } = render(NavBar, {
-        mocks: {
-          $router: router,
+  it('Search Bar Valid Address Functionality Algorand', async () => {
+    const router = [];
+    const { getByPlaceholderText } = render(NavBar, {
+      mocks: {
+        $router: router,
+        $route: {
+          path: '/algorand',
         },
-      });
-      expect(getByText('Accounts')).not.toBeNull();
-      expect(getByText('Transfer')).not.toBeNull();
-
-      await fireEvent.click(getByText('Accounts'));
-
-      expect(router.length).toBe(1);
-      expect(router[0].path).toEqual('/accounts');
-
-      await fireEvent.click(getByText('Transfer'));
-
-      expect(router.length).toBe(2);
-      expect(router[1].path).toEqual('/transfers');
+      },
     });
+    const input = getByPlaceholderText('Wallet Address or Txn Hash');
+    await fireEvent.update(input,  Web3.VALID_ADDRESSES[0]);
+    await finishPromises();
+    await fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+    await finishPromises();
+
+    const url = '/algorand/address/' + Web3.VALID_ADDRESSES[0];
+    expect(router.length).toBe(1);
+    expect(router[0].path).toEqual(url);
+  });
+
+  it('Displays page links correctly Ethereum', async () => {
+    const router = [];
+    const { getByText } = render(NavBar, {
+      mocks: {
+        $router: router,
+        $route: {
+          path: '',
+        },
+      },
+    });
+    expect(getByText('Accounts')).not.toBeNull();
+    expect(getByText('Transfer')).not.toBeNull();
+
+    await fireEvent.click(getByText('Accounts'));
+
+    expect(router.length).toBe(1);
+    expect(router[0].path).toEqual('/accounts');
+
+    await fireEvent.click(getByText('Transfer'));
+
+    expect(router.length).toBe(2);
+    expect(router[1].path).toEqual('/transfers');
+  });
+
+  it('Displays page links correctly Solana', async () => {
+    const router = [];
+    const { getByText } = render(NavBar, {
+      mocks: {
+        $router: router,
+        $route: {
+          path: '/solana',
+        },
+      },
+    });
+    expect(getByText('Accounts')).not.toBeNull();
+    expect(getByText('Transfer')).not.toBeNull();
+
+    await fireEvent.click(getByText('Accounts'));
+
+    expect(router.length).toBe(1);
+    expect(router[0].path).toEqual('/solana/accounts');
+
+    await fireEvent.click(getByText('Transfer'));
+
+    expect(router.length).toBe(2);
+    expect(router[1].path).toEqual('/solana/transfers');
+  });
+
+  it('Displays page links correctly Algorand', async () => {
+    const router = [];
+    const { getByText } = render(NavBar, {
+      mocks: {
+        $router: router,
+        $route: {
+          path: '/algorand',
+        },
+      },
+    });
+    expect(getByText('Accounts')).not.toBeNull();
+    expect(getByText('Transfer')).not.toBeNull();
+
+    await fireEvent.click(getByText('Accounts'));
+
+    expect(router.length).toBe(1);
+    expect(router[0].path).toEqual('/algorand/accounts');
+
+    await fireEvent.click(getByText('Transfer'));
+
+    expect(router.length).toBe(2);
+    expect(router[1].path).toEqual('/algorand/transfers');
   });
 });

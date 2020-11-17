@@ -1,4 +1,3 @@
-// import OwnerControl from '@/components/OwnerControl.vue';
 import owner from '@/pages/roles/owner/index';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';

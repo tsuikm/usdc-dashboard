@@ -58,7 +58,6 @@
 
 <script>
 import Web3 from 'web3';
-import Owner from '@/components/OwnerControl';
 import NavBar from '@/components/NavBar';
 import RoleButton from '@/components/RoleButton';
 import { abi } from '@/utils/web3abi';
@@ -107,7 +106,6 @@ async function changeRole(ownerAccount, contractMethod, address) {
 
 export default {
   components: {
-    Owner,
     NavBar,
     RoleButton,
   },

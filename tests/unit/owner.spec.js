@@ -1,4 +1,4 @@
-import owner from '@/pages/roles/owner/index';
+import OwnerControl from '@/pages/roles/owner/index';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import { render, fireEvent } from '@testing-library/vue';
@@ -40,7 +40,7 @@ describe('owner', () => {
   });
 
   it('Text components render properly', () => {
-    const { getByText } = render(owner);
+    const { getByText } = render(OwnerControl);
     expect(getByText('Check and Assign Roles')).not.toBeNull();
     expect(getByText('MASTER MINTER')).not.toBeNull();
     expect(getByText('BLACKLISTER')).not.toBeNull();
@@ -49,7 +49,7 @@ describe('owner', () => {
   });
 
   it('Changes roles correctly', async () => {
-    const { getByText, getByPlaceholderText } = render(owner);
+    const { getByText, getByPlaceholderText } = render(OwnerControl);
 
     // Simulates connecting to metamask as the owner.
     global.ethereum = ethereumFactory(true);
@@ -85,7 +85,7 @@ describe('owner', () => {
   });
 
   it('Prevents reassigning roles when owner is not connected', async () => {
-    const { getByText, getByPlaceholderText } = render(owner);
+    const { getByText, getByPlaceholderText } = render(OwnerControl);
 
     global.ethereum = ethereumFactory(false);
 

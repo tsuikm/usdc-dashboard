@@ -1,4 +1,4 @@
-import pauser from '@/pages/roles/pauser/index';
+import PauserControl from '@/pages/roles/pauser/index';
 import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import { render, fireEvent } from '@testing-library/vue';
@@ -27,13 +27,13 @@ const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0)
 
 describe('pauser', () => {
   it('Text components render properly', () => {
-    const { getByText } = render(pauser);
+    const { getByText } = render(PauserControl);
     const header = 'Pause and Unpause Contract';
     expect(getByText(header)).not.toBeNull();
   });
 
   it('Unpauses when pauser attempts to unpause', async () => {
-    const { getByText } = render(pauser, {
+    const { getByText } = render(PauserControl, {
       data: function() {
         return {
           contractPaused: true,
@@ -48,7 +48,7 @@ describe('pauser', () => {
   });
 
   it('Pauses when pauser attempts to pause', async () => {
-    const { getByText } = render(pauser, {
+    const { getByText } = render(PauserControl, {
       data: function() {
         return {
           contractPaused: false,

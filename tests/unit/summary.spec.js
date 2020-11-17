@@ -1,11 +1,7 @@
 import SummaryPage from '@/pages/index';
-import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import { render } from '@testing-library/vue';
 import { padHex, toHex } from '@/utils/utils';
 import Web3 from 'web3';
-
-Vue.use(VueMaterial);
 
 const MOCK_ACCOUNTS = {
   '0x1': {
@@ -92,27 +88,19 @@ global.fetch = async (url) => {
 
 describe('SummaryPage', () => {
   it('Header renders properly', () => {
-    const { getByText } = render(SummaryPage, {
-      stubs: {
-        NuxtLink: true,
-      },
-    });
+    const { getByText } = render(SummaryPage);
     const header = 'USDC Dashboard';
     expect(getByText(header)).not.toBeNull();
   });
 
   it('Renders recent transactions', async () => {
-    const { getByText } = render(SummaryPage, {
-      stubs: {
-        NuxtLink: true,
-      },
-    });
+    const { getByText } = render(SummaryPage);
     expect(getByText('Recent Transactions')).not.toBeNull();
     expect(getByText('See all transactions')).not.toBeNull();
 
     // Finish all promises
     await new Promise((resolve) => setTimeout(resolve, 0));
-    
+
     expect(getByText(MOCK_TRANSACTIONS[0].transactionHash)).not.toBeNull();
     expect(getByText(MOCK_TRANSACTIONS[1].transactionHash)).not.toBeNull();
     expect(getByText(MOCK_TRANSACTIONS[2].transactionHash)).not.toBeNull();
@@ -120,11 +108,7 @@ describe('SummaryPage', () => {
   });
 
   it('Renders latest blocks', async () => {
-    const { getByText } = render(SummaryPage, {
-      stubs: {
-        NuxtLink: true,
-      },
-    });
+    const { getByText } = render(SummaryPage);
     expect(getByText('Latest Blocks')).not.toBeNull();
     expect(getByText('See all blocks')).not.toBeNull();
 
@@ -138,11 +122,7 @@ describe('SummaryPage', () => {
   });
 
   it('Renders privileged roles', async () => {
-    const { getByText } = render(SummaryPage, {
-      stubs: {
-        NuxtLink: true,
-      },
-    });
+    const { getByText } = render(SummaryPage);
     expect(getByText('Owner')).not.toBeNull();
     expect(getByText('Pausers')).not.toBeNull();
     expect(getByText('Blacklister')).not.toBeNull();

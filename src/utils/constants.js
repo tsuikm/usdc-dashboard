@@ -16,33 +16,7 @@ export const DEFAULT_GAS_PRICE = '0x09184e72a00'; // Decimal value is 625,000,00
 
 export const BLACKLISTER_ADDRESS =
   '0x5db0115f3b72d19cea34dd697cf412ff86dc7e1b';
-  
-export const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
 
-export const NuxtLinkStub = {
-  name: 'NuxtLinkStub',
-  props: {
-    to: {
-      type: [String, Object],
-      required: true,
-    },
-    tag: {
-      type: String,
-      default: 'a',
-    },
-    exact: Boolean,
-    append: Boolean,
-    replace: Boolean,
-    activeClass: String,
-    exactActiveClass: String,
-    event: {
-      type: [String, Array],
-      default: 'click',
-    },
-  },
-  render: function render(h) {
-    return h(this.tag, undefined, this.$slots.default);
-  },
-};
+export const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
 
 export const WEB3_PROVIDER = process.env.WEB3_PROVIDER;

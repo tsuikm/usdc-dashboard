@@ -4,6 +4,7 @@ import Vue from 'vue';
 import VueMaterial from 'vue-material';
 import { padHex } from '@/utils/utils';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import NuxtLink from '@/utils/nuxt-link-stub';
 import Web3 from 'web3';
 
 Vue.use(VueMaterial);
@@ -70,13 +71,13 @@ describe('NavBar', () => {
     expect(router.length).toBe(1);
     expect(router[0].path).toEqual(url);
   });
-  
+
   describe('Other links', () => {
-    it('Displays other links correctly', () => {
+    it('Displays other links correctly', async () => {
       const router = [];
       const { getByText } = render(NavBar, {
         stubs: {
-          NuxtLink: true,
+          'nuxt-link': NuxtLink,
         },
         mocks: {
           $router: router,
@@ -84,6 +85,16 @@ describe('NavBar', () => {
       });
       expect(getByText('Accounts')).not.toBeNull();
       expect(getByText('Transfer')).not.toBeNull();
+
+      await fireEvent.click(getByText('Accounts'));
+
+      expect(router.length).toBe(1);
+      expect(router[0].path).toEqual('/accounts');
+
+      await fireEvent.click(getByText('Transfer'));
+
+      expect(router.length).toBe(2);
+      expect(router[1].path).toEqual('/transfers');
     });
   });
 });

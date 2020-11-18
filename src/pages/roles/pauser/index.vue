@@ -78,12 +78,10 @@ export default {
   },
   methods: {
     async connectMetamask() {
-      // eslint-disable-next-line
       this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     },
     async subscribeToEvent(event) {
-      // eslint-disable-next-line
-      contract.once(event, async (error, success) => {
+      contract.once(event, async () => {
         this.contractPaused = await contract.methods.paused().call();
       });
     },

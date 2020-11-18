@@ -52,7 +52,6 @@
         </div>
       </div>
     </div>
-    <!-- <Owner /> -->
   </div>
 </template>
 
@@ -88,7 +87,6 @@ const getMasterMinter = async () => (await contract.methods.masterMinter().call(
  * @param {String} address - the address to assign the role to.
  */
 async function changeRole(ownerAccount, contractMethod, address) {
-  // eslint-disable-next-line no-undef
   await ethereum.request({
     method: 'eth_sendTransaction',
     params: [
@@ -144,7 +142,6 @@ export default {
     async save() {
       this.address = this.address.trim().toLowerCase();
 
-      // eslint-disable-next-line no-undef
       const accounts = (await ethereum.request({ method: 'eth_requestAccounts' })).map(string => string.toLowerCase());
       const ownerAccount = await getOwner();
 

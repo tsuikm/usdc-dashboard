@@ -20,7 +20,7 @@
       <md-table-row>
         <md-table-cell> Sender: </md-table-cell>
         <md-table-cell>
-          <nuxt-link :to="'/address/' + sender">
+          <nuxt-link :to="senderLink">
             {{ sender }}
           </nuxt-link>
         </md-table-cell>
@@ -29,7 +29,7 @@
       <md-table-row>
         <md-table-cell> Receiver: </md-table-cell>
         <md-table-cell>
-          <nuxt-link :to="'/address/' + receiver">
+          <nuxt-link :to="receiverLink">
             {{ receiver }}
           </nuxt-link>
         </md-table-cell>
@@ -44,6 +44,8 @@
 </template>
 
 <script>
+import { basePathFromPath } from '@/utils/utils';
+
 /**
  * Props: {
  *    hash: { label: String, value: String }, // known as "signature" in Solana, etc.
@@ -73,6 +75,21 @@ export default {
     gas: {
       type: Object,
       validator: labelValueValidator,
+    },
+  },
+  computed: {
+    basePath() {
+      if (this.$route) {
+        return basePathFromPath(this.$route.path);
+      }
+      
+      return '';
+    },
+    senderLink() {
+      return `${this.basePath}/address/${this.sender}`;
+    },
+    receiverLink() {
+      return `${this.basePath}/address/${this.receiver}`;
     },
   },
 };

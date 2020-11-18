@@ -1,5 +1,9 @@
 import TransactionDetails from '@/components/TransactionDetails';
-import { render } from '@testing-library/vue';
+import { fireEvent, render } from '@testing-library/vue';
+
+const BLOCKCHAIN_PATHS = ['', '/solana', '/algorand'];
+
+const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
 const TRANSACTION_HASH = '0x123456';
 const TRANSACTION_HASH_LABEL = 'Transaction Hash';
@@ -41,11 +45,57 @@ describe('Transaction Details', () => {
     expect(getByText(`${GAS_LABEL}:`)).not.toBeNull();
 
     // Finish all promises
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await finishPromises();
     expect(getByText(TRANSACTION_HASH)).not.toBeNull();
     expect(getByText(SENDER_ADDRESS)).not.toBeNull();
     expect(getByText(RECEIVER_ADDRESS)).not.toBeNull();
     expect(getByText(BLOCK_NUMBER)).not.toBeNull();
     expect(getByText(GAS.toString())).not.toBeNull();
+  });
+
+  it('Links to sender and receiver with blockchain awareness', async () => {
+    const router = [];
+    const route = { path: `/transaction/${TRANSACTION_HASH}`};
+
+    const { getByText } = render(TransactionDetails, {
+      props: {
+        hash: {
+          label: TRANSACTION_HASH_LABEL,
+          value: TRANSACTION_HASH,
+        },
+        sender: SENDER_ADDRESS,
+        receiver: RECEIVER_ADDRESS,
+        blockNumber: {
+          label: BLOCK_NUMBER_LABEL,
+          value: BLOCK_NUMBER,
+        },
+        gas: {
+          label: GAS_LABEL,
+          value: GAS,
+        },
+      },
+      mocks: {
+        $router: router,
+        $route: route,
+      },
+    });
+
+    // Finish all promises
+    await finishPromises();
+
+    const senderLink = getByText(SENDER_ADDRESS);
+    const receiverLink = getByText(RECEIVER_ADDRESS);
+
+    for (const path of BLOCKCHAIN_PATHS) {
+      route.path = path;
+      await finishPromises();
+
+      await fireEvent.click(senderLink);
+      expect(router[router.length - 1].path).toEqual(`${path}/address/${SENDER_ADDRESS}`);
+      await fireEvent.click(receiverLink);
+      expect(router[router.length - 1].path).toEqual(`${path}/address/${RECEIVER_ADDRESS}`);
+    }
+    
+    expect(router.length).toBe(6);
   });
 });

@@ -12,7 +12,7 @@ describe('NavBar', () => {
   it('Search Bar Displayed Correctly', () => {
     const { getByPlaceholderText } = render(NavBar);
 
-    expect(getByPlaceholderText('Wallet Address or Txn Hash')).not.toBeNull();
+    expect(getByPlaceholderText('Search Address...')).not.toBeNull();
   });
 
   it('Search Bar Valid Address Functionality', async () => {
@@ -25,7 +25,7 @@ describe('NavBar', () => {
       },
     });
 
-    const input = getByPlaceholderText('Wallet Address or Txn Hash');
+    const input = getByPlaceholderText('Search Address...');
 
     for (const path of BLOCKCHAIN_PATHS) {
       route.path = path;

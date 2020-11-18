@@ -21,7 +21,7 @@
       </nuxt-link>
       <input
         v-model="address"
-        placeholder="Wallet Address or Txn Hash"
+        placeholder="Search Address..."
         class="search"
         @keydown.enter.prevent="searchAddress"
       >

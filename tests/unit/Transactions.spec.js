@@ -1,11 +1,8 @@
 import Address, { getLogs } from '@/components/Transactions';
 import { fireEvent, render } from '@testing-library/vue';
 import { padHex, removeLeadingZeros } from '@/utils/utils';
-import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import Web3 from 'web3';
-
-Vue.use(VueMaterial);
+import Vue from 'vue';
 
 const MOCK_WALLET_ADDRESS = padHex('0x123456789abcdef', 64);
 const MOCK_TRANSACTIONS = [
@@ -84,9 +81,7 @@ describe('_address.vue', () => {
       propsData: {
         address: MOCK_WALLET_ADDRESS,
       },
-      stubs: {
-        NuxtLink: true,
-      },
+
     });
 
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -107,11 +102,7 @@ describe('_address.vue', () => {
   });
 
   it('renders all transactions correctly', async () => {
-    const { getByTestId, getByText } = render(Address, {
-      stubs: {
-        NuxtLink: true,
-      },
-    });
+    const { getByTestId, getByText } = render(Address);
 
     // Finish all promises
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -144,9 +135,7 @@ describe('_address.vue', () => {
       propsData: {
         address: MOCK_WALLET_ADDRESS,
       },
-      stubs: {
-        NuxtLink: true,
-      },
+
     });
 
     // Finish all promises

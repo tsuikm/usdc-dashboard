@@ -1,10 +1,6 @@
 import TransactionDetails from '@/components/TransactionDetails';
-import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import { render } from '@testing-library/vue';
 import Web3 from 'web3';
-
-Vue.use(VueMaterial);
 
 Web3.MOCK_TRANSACTIONS = [{
   transactionHash: '0x123456',
@@ -19,9 +15,6 @@ describe('Transaction Details', () => {
     const { getByText } = render(TransactionDetails, {
       props: {
         hash: Web3.MOCK_TRANSACTIONS[0].transactionHash,
-      },
-      stubs: {
-        NuxtLink: true,
       },
     });
 
@@ -45,9 +38,6 @@ describe('Transaction Details', () => {
     render(TransactionDetails, {
       props: {
         hash: 'invalid',
-      },
-      stubs: {
-        NuxtLink: true,
       },
       mocks: {
         $router: router,

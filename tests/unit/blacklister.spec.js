@@ -1,12 +1,8 @@
 import BlacklisterControl from '@/pages/roles/blacklister/index';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
-import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import { render, fireEvent } from '@testing-library/vue';
 import { padHex } from '@/utils/utils';
 import Web3 from 'web3';
-
-Vue.use(VueMaterial);
 
 function ethereumFactory(isConnectedToMetamask) {
   return {

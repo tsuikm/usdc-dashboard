@@ -1,11 +1,8 @@
 import { render, fireEvent } from '@testing-library/vue';
 import burn from '@/pages/burn/index';
-import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
 import Web3 from 'web3';
-Vue.use(VueMaterial);
 
 const MOCK_ACCOUNTS = {
   '0x12345': {
@@ -91,4 +88,4 @@ describe('Burn page', () => {
     await fireEvent.click(sendButton);
     expect(consoleSpy).toHaveBeenCalled();
   });
-}); 
+});

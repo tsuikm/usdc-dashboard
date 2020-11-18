@@ -1,12 +1,8 @@
 import { render, fireEvent } from '@testing-library/vue';
 import { fromHex, padHex, toHex, removeLeadingZeros } from '@/utils/utils';
-import Vue from 'vue';
-import VueMaterial from 'vue-material';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import Web3 from 'web3';
 import accounts from '@/pages/accounts';
-
-Vue.use(VueMaterial);
 
 const MOCK_TRANSACTIONS = [];
 for (let i = 0; i < 101; i++) {
@@ -35,11 +31,7 @@ Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 
 describe('accounts', () => {
   it('accounts displays a table titled Accounts with columns for Address, Balance and Percentage', () => {
-    const { getByText, getAllByText } = render(accounts, {
-      stubs: {
-        NuxtLink: true,
-      },
-    });
+    const { getByText, getAllByText } = render(accounts);
     expect(getAllByText('Accounts')).toHaveLength(2);
     expect(getByText('Address')).not.toBeNull();
     expect(getByText('Balance')).not.toBeNull();
@@ -47,11 +39,7 @@ describe('accounts', () => {
   });
 
   it('orders accounts by balance', async () => {
-    const { getByText } = render(accounts, {
-      stubs: {
-        NuxtLink: true,
-      },
-    });
+    const { getByText } = render(accounts);
     const decimals = await (new (new Web3()).eth.Contract()).methods.decimals().call();
 
     let addresses = [...Object.keys(MOCK_ACCOUNTS)].sort((a, b) => {

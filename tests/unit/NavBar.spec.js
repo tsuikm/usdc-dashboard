@@ -2,16 +2,10 @@ import { fireEvent, render } from '@testing-library/vue';
 import NavBar from '@/components/NavBar.vue';
 import { padHex } from '@/utils/utils';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
-import Web3 from 'web3';
-
-Web3.VALID_ADDRESSES = [
-  '0x36f80a0bde5020ab0880ab54',
-  '0xfa2ec023f531cf6fa04c3536',
-  '0x0bd4dcdf07629fee5d4363c7',
-  '0xe7e31d0ef8c598b13e0992e2',
-].map(address => padHex(address, WEB3_BALANCEOF_ADDRESS_LENGTH));
 
 const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
+
+const SAMPLE_ADDRESS = padHex('0x36f80a0bde5020ab0880ab54', WEB3_BALANCEOF_ADDRESS_LENGTH);
 
 describe('NavBar', () => {
   it('Search Bar Displayed Correctly', () => {
@@ -31,12 +25,12 @@ describe('NavBar', () => {
       },
     });
     const input = getByPlaceholderText('Wallet Address or Txn Hash');
-    await fireEvent.update(input,  Web3.VALID_ADDRESSES[0]);
+    await fireEvent.update(input,  SAMPLE_ADDRESS);
     await finishPromises();
     await fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
     await finishPromises();
 
-    const url = '/address/' + Web3.VALID_ADDRESSES[0];
+    const url = '/address/' + SAMPLE_ADDRESS;
     expect(router.length).toBe(1);
     expect(router[0].path).toEqual(url);
   });
@@ -52,12 +46,12 @@ describe('NavBar', () => {
       },
     });
     const input = getByPlaceholderText('Wallet Address or Txn Hash');
-    await fireEvent.update(input,  Web3.VALID_ADDRESSES[0]);
+    await fireEvent.update(input,  SAMPLE_ADDRESS);
     await finishPromises();
     await fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
     await finishPromises();
 
-    const url = '/solana/address/' + Web3.VALID_ADDRESSES[0];
+    const url = '/solana/address/' + SAMPLE_ADDRESS;
     expect(router.length).toBe(1);
     expect(router[0].path).toEqual(url);
   });
@@ -73,12 +67,12 @@ describe('NavBar', () => {
       },
     });
     const input = getByPlaceholderText('Wallet Address or Txn Hash');
-    await fireEvent.update(input,  Web3.VALID_ADDRESSES[0]);
+    await fireEvent.update(input,  SAMPLE_ADDRESS);
     await finishPromises();
     await fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
     await finishPromises();
 
-    const url = '/algorand/address/' + Web3.VALID_ADDRESSES[0];
+    const url = '/algorand/address/' + SAMPLE_ADDRESS;
     expect(router.length).toBe(1);
     expect(router[0].path).toEqual(url);
   });

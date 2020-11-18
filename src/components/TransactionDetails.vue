@@ -8,13 +8,13 @@
       </md-table-toolbar>
 
       <md-table-row>
-        <md-table-cell> Hash: </md-table-cell>
-        <md-table-cell> {{ hash }} </md-table-cell>
+        <md-table-cell> {{ hash.label }}: </md-table-cell>
+        <md-table-cell> {{ hash.value }} </md-table-cell>
       </md-table-row>
 
       <md-table-row>
-        <md-table-cell> Block: </md-table-cell>
-        <md-table-cell> {{ blockNumber }} </md-table-cell>
+        <md-table-cell> {{ blockNumber.label }}: </md-table-cell>
+        <md-table-cell> {{ blockNumber.value }} </md-table-cell>
       </md-table-row>
 
       <md-table-row>
@@ -36,50 +36,44 @@
       </md-table-row>
 
       <md-table-row>
-        <md-table-cell> Gas: </md-table-cell>
-        <md-table-cell> {{ gas }} </md-table-cell>
+        <md-table-cell> {{ gas.label }}: </md-table-cell>
+        <md-table-cell> {{ gas.value }} </md-table-cell>
       </md-table-row>
     </md-table>
   </div>
 </template>
 
 <script>
-
-// modules
-import Web3 from 'web3';
-import { WEB3_PROVIDER } from '@/utils/constants';
-import { padHex } from '@/utils/utils';
-
-// constants
-const TRANSACTION_HASH_LENGTH = 64;
-
-const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
+/**
+ * Props: {
+ *    hash: { label: String, value: String }, // known as "signature" in Solana, etc.
+ *    sender: String,
+ *    receiver: String,
+ *    blockNumber: { label: String, value: String }, // known as "slot" in Solana, etc.
+ *    gas: { label: String, value: String } // known as "fee" in Solana, etc.
+ * }
+ */
+const labelValueValidator = prop => {
+  return prop.label !== undefined && prop.value !== undefined;
+};
 
 export default {
   name: 'TransactionDetails',
   props: {
-    hash: String,
-  },
-  data() {
-    return {
-      gas: null,
-      sender: null,
-      receiver: null,
-      blockNumber: null,
-    };
-  },
-  async created() {
-    try {
-      const transaction = await web3.eth.getTransaction(padHex(this.hash, TRANSACTION_HASH_LENGTH));
-
-      this.sender = transaction.from;
-      this.receiver = transaction.to;
-      this.gas = transaction.gas;
-      this.blockNumber = transaction.blockNumber;
-    }
-    catch (error) {
-      this.$router && this.$router.push({path: '/404' });
-    }
+    hash: {
+      type: Object,
+      validator: labelValueValidator,
+    },
+    sender: String,
+    receiver: String,
+    blockNumber: {
+      type: Object,
+      validator: labelValueValidator,
+    },
+    gas: {
+      type: Object,
+      validator: labelValueValidator,
+    },
   },
 };
 </script>

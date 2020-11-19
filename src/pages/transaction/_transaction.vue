@@ -36,7 +36,7 @@ export default {
       blockNumber: null,
     };
   },
-  async created() {
+  async mounted() {
     this.hash = this.$route.params.transaction;
     try {
       const transaction = await web3.eth.getTransaction(padHex(this.hash, WEB3_TXN_HASH_LENGTH));

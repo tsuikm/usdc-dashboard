@@ -1,8 +1,59 @@
 <template>
+  <div>
+    <h1> USDC Dashboard </h1>
+    <div>
 
+      <!-- roles -->
+      <div id="roles">
+        <div v-for="(role, index) in roles" :key="index">
+          <h2> role.name </h2>
+          <div>
+            <nuxt-link
+              v-for="(address, index) in role.addresses"
+              :key="index"
+              :to="`${this.basePath}/address/${address}`"
+            >
+              {{ address }}
+            </nuxt-link>
+          </div>
+        </div>
+      </div>
+
+      <!-- blocks -->
+      <div>
+        <h2> Latest Blocks </h2>
+        <nuxt-link :to="`${this.basePath}/blocks`"> See all blocks </nuxt-link>
+        <div>
+          <nuxt-link
+            v-for="(block, index) in blocks"
+            :key="block.index"
+            :to="`${this.basePath}/block/${block}`"
+          >
+            {{ block }} / {{ toHex(block) }}
+          </nuxt-link>
+        </div>
+      </div>
+
+      <!-- transactions -->
+      <div>
+        <h2> Recent Transactions </h2>
+        <nuxt-link :to="`${this.basePath}/transactions`"> See all transactions </nuxt-link>
+        <div>
+          <nuxt-link
+            v-for="(transaction, index) in transactions"
+            :key="index"
+            :to="`${this.basePath}/transaction/${transaction.transactionHash}`"
+          >
+            {{ transaction.transactionHash }}
+          </nuxt-link>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import { toHex } from '@/utils/utils';
 
 export default {
   name: 'Summary',
@@ -39,7 +90,6 @@ export default {
       type: Array,
       validator: blocks => Array.isArray(blokcs) && blocks.every(block => typeof block === 'number')
     },
-
   },
 };
 </script>

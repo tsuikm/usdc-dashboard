@@ -1,12 +1,11 @@
 import { fireEvent, render } from '@testing-library/vue';
 import NavBar from '@/components/NavBar.vue';
-import { padHex } from '@/utils/utils';
-import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { padHex, finishPromises } from '@/utils/utils';
+import { WEB3_BALANCEOF_ADDRESS_LENGTH, BLOCKCHAIN_PATHS } from '@/utils/constants';
 
-const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
+
 
 const SAMPLE_ADDRESS = padHex('0x36f80a0bde5020ab0880ab54', WEB3_BALANCEOF_ADDRESS_LENGTH);
-const BLOCKCHAIN_PATHS = ['', '/solana', '/algorand'];
 
 describe('NavBar', () => {
   it('Search Bar Displayed Correctly', () => {

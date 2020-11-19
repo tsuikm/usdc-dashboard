@@ -33,10 +33,12 @@ const abi = [
   },
 ];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
+
 export default {
   name: 'SummaryPage',
   components: {
     NavBar,
+    Summary
   },
   data() {
     return {
@@ -45,7 +47,7 @@ export default {
       transactions: [],
     };
   },
-  created: function () {
+  created() {
     this.lookupRoles();
     this.lookupBlocks();
     this.lookupTransactions();
@@ -58,16 +60,12 @@ export default {
     async lookupRoles() {
       this.roles.push({
         name: 'Pauser',
-        addresses: [
-          await contract.methods.pauser().call()
-        ]
+        addresses: [await contract.methods.pauser().call()]
       });
 
       this.roles.push({
         name: 'Owner',
-        addresses: [
-          await contract.methods.owner().call()
-        ]
+        addresses: [await contract.methods.owner().call()]
       });
 
       this.roles.push({
@@ -77,7 +75,7 @@ export default {
 
       this.roles.push({
         name: 'Blacklister',
-        addresses: await this.fetch(`${API_BASE_URL}/api/blacklister`)
+        addresses: [await this.fetch(`${API_BASE_URL}/api/blacklister`)]
       });
     },
     async lookupBlocks() {
@@ -95,7 +93,7 @@ export default {
         topics: [TRANSACTION_TOPIC, null, null],
       });
 
-      this.transactions = txns.slice(0, 20);
+      this.transactions = txns.slice(0, 20).map(transaction => transaction.transactionHash);
     },
   },
 };

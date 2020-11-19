@@ -123,8 +123,7 @@ export default {
     },
     async ethReq(data) {
       try {
-        // eslint-disable-next-line
-        const txHash = await ethereum
+        await ethereum
           .request({
             method: 'eth_sendTransaction',
             params: [

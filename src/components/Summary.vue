@@ -5,7 +5,6 @@
 
       <!-- roles -->
       <div id="content-roles" class="card">
-        <h2> Roles </h2>
         <div v-for="(role, index) in roles" :key="index">
           <h2> {{ role.name }} </h2>
           <div class="list">

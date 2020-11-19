@@ -107,10 +107,10 @@ h2 {
       opacity: 0;
       transition: display 0s, ease opacity 0.3s;
     }
-    
+
     #menu-items.open {
       opacity: 1;
-      
+
       display: flex;
       position: fixed;
       top: 0;
@@ -144,8 +144,6 @@ h2 {
 
 .card {
   padding: 1.5rem;
-
-  box-shadow: $shadow;
   border-radius: 16px;
 }
 

@@ -29,6 +29,7 @@ describe('Renders Everything Correctly', () => {
   it('Renders labels correctly', () => {
     const { getByText } = render(Summary, { props: MOCK_PROPS });
 
+    expect(getByText('USDC Dashboard')).not.toBeNull();
     expect(getByText('Latest Blocks')).not.toBeNull();
     expect(getByText('Recent Transactions')).not.toBeNull();
     expect(getByText('See all blocks')).not.toBeNull();

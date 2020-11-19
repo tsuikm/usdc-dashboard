@@ -1,4 +1,4 @@
-import PauserControl from '@/components/PauserControl.vue';
+import PauserControl from '@/pages/roles/pauser/index';
 import { render, fireEvent } from '@testing-library/vue';
 import Web3 from 'web3';
 

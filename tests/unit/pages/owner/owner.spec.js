@@ -1,4 +1,4 @@
-import OwnerControl from '@/components/OwnerControl.vue';
+import OwnerControl from '@/pages/roles/owner/index';
 import { render, fireEvent } from '@testing-library/vue';
 import Web3 from 'web3';
 

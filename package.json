@@ -85,6 +85,9 @@
       "jest/no-commented-out-tests": [
         "off"
       ]
+    },
+    "globals": {
+      "ethereum": "readonly"
     }
   },
   "browserslist": [

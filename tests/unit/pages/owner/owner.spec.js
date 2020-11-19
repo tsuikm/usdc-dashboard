@@ -1,5 +1,6 @@
 import OwnerControl from '@/pages/roles/owner/index';
 import { render, fireEvent } from '@testing-library/vue';
+import { finishPromises } from '@/utils/utils';
 import Web3 from 'web3';
 
 const contract = new (new Web3()).eth.Contract();
@@ -18,7 +19,6 @@ function ethereumFactory(isConnectedToMetamask) {
     },
   };
 }
-const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
 const SCRATCH_ADDRESS = '0x0000000e'; // has no roles
 const OWNER_ERROR_MESSAGE = 'Error: You are not signed in as the owner of this contract and cannot reassign roles.';

@@ -1,5 +1,6 @@
 import PauserControl from '@/pages/roles/pauser/index';
 import { render, fireEvent } from '@testing-library/vue';
+import { finishPromises } from '@/utils/utils';
 import Web3 from 'web3';
 
 function ethereumFactory(isConnectedToMetamask) {
@@ -18,8 +19,6 @@ function ethereumFactory(isConnectedToMetamask) {
 }
 Web3.PAUSER = '0x00000001';
 global.ethereum = ethereumFactory(true);
-
-const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
 describe('PauserControl', () => {
   it('Text components render properly', () => {

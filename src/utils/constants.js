@@ -21,3 +21,5 @@ export const BLACKLISTER_ADDRESS =
 export const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
 
 export const WEB3_PROVIDER = process.env.WEB3_PROVIDER;
+
+export const BLOCKCHAIN_PATHS = ['', '/solana', '/algorand'];

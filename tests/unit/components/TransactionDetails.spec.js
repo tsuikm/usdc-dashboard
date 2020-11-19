@@ -1,9 +1,7 @@
 import TransactionDetails from '@/components/TransactionDetails';
 import { fireEvent, render } from '@testing-library/vue';
-
-const BLOCKCHAIN_PATHS = ['', '/solana', '/algorand'];
-
-const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
+import { finishPromises } from '@/utils/utils';
+import { BLOCKCHAIN_PATHS } from '@/utils/constants';
 
 const TRANSACTION_HASH = '0x123456';
 const TRANSACTION_HASH_LABEL = 'Transaction Hash';

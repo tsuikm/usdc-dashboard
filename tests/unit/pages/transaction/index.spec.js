@@ -1,9 +1,7 @@
 import TransactionDetailsPage from '@/pages/transaction/_transaction.vue';
 import { render } from '@testing-library/vue';
-import { padHex } from '@/utils/utils';
+import { padHex, finishPromises } from '@/utils/utils';
 import Web3 from 'web3';
-
-const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
 const TRANSACTION_DATA = '0x100000';
 const TRANSACTION_HASH = '0x13579';

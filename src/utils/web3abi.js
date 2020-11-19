@@ -217,4 +217,10 @@ export const abi = [
     stateMutability: 'nonpayable',
     type:'function',
   },
+  {
+    inputs: [{ name:'_minter', type: 'address'}],
+    name: 'minterAllowance',
+    outputs: [{ name:'allowance', type: 'uint256' }],
+    type:'function',
+  },
 ];

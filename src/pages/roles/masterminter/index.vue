@@ -92,6 +92,7 @@ export default {
   },
   data() {
     return {
+      address: '',
       allowance: 0,
       isMinter: null,
       accounts: [],
@@ -123,11 +124,11 @@ export default {
 
     },
     async removeMinter() {
-      await this.removeMinter(this.address);
+      await this.ethReq(contract.methods.removeMinter(this.address).encodeABI());
       this.subscribeToEvent(contract.removeMinterEvent);
     },
     async configureMinter() {
-        await this.configureMinter(this.address, this.allowance);
+        await this.ethReq(contract.methods.configureMinter(this.address, this.allowance).encodeABI());
         this.subscribeToEvent(contract.configureMinterEvent);
     },
     async lookupMinterStatus() {
@@ -162,13 +163,6 @@ export default {
         console.error(e);
         //show error
       }
-    },
-    async configureMinter(address, allowance) {  
-      await this.ethReq(contract.methods.configureMinter(address, allowance).encodeABI());
-    },
-
-    async removeMinter(address) { 
-      await this.ethReq(contract.methods.removeMinter(address).encodeABI());
     },
   },
 };

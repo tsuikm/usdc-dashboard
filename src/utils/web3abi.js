@@ -87,6 +87,18 @@ export const abi = [
     type: 'event',
   },
   {
+    inputs: [],
+    name: 'removeMinterEvent',
+    anonymous: false,
+    type: 'event',
+  },
+  {
+    inputs: [],
+    name: 'configureMinterEvent',
+    anonymous: false,
+    type: 'event',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -190,5 +202,19 @@ export const abi = [
     ],
     stateMutability: 'view',
     type: 'function',
+  },
+  {
+    inputs: [{ name:'_minter', type: 'address'}, {name:'_amount', type:'uint256'}],
+    name: 'configureMinter',
+    outputs: [{ name:'', type: 'bool' }],
+    stateMutability: 'nonpayable',
+    type:'function',
+  },
+  {
+    inputs: [{ name:'_minter', type: 'address'}],
+    name: 'removeMinter',
+    outputs: [{ name:'', type: 'bool' }],
+    stateMutability: 'nonpayable',
+    type:'function',
   },
 ];

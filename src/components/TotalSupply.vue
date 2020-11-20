@@ -38,7 +38,7 @@ export default {
   name: 'TotalSupply',
   props: {
     usdcBalance: Number,
-    totalSupply: String,
+    totalSupply: Number,
   },
   data() {
     return {

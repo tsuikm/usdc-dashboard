@@ -17,3 +17,13 @@ config.stubs['nuxt-link'] = NuxtLinkStub;
 process.on('unhandledRejection', reason => {
   fail(reason);
 });
+
+// Strictly handle `console.error` warnings.
+//
+// Jest, by default, logs console.error messages but doesn't treat it as an error.
+//
+// For now, listen to these warnings and treat these as errors.
+// Solution derived from https://github.com/facebook/jest/issues/6121
+console.error = message => {
+  throw (message instanceof Error ? message : new Error(message));
+}

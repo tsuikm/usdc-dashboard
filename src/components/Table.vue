@@ -5,7 +5,7 @@
       data-testid="progress-bar-test-id"
       md-mode="indeterminate"
     />
-    <md-table-toolbar>
+    <md-toolbar md-elevation="0" class="md-transparent">
       <h1 class="md-title">
         {{ name }}
       </h1>
@@ -14,7 +14,7 @@
         :total-pages="Math.ceil(this.totalItems / pageLength)"
         @page:change="this.pageChange"
       />
-    </md-table-toolbar>
+    </md-toolbar>
     <md-table
       md-card
       data-testid="md-table"
@@ -158,4 +158,11 @@ span {
   display: inline-block;
 }
 
+.md-toolbar {
+  padding-left: 24px;
+
+  .md-title {
+    flex: 1;
+  }
+}
 </style>

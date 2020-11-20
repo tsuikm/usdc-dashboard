@@ -118,8 +118,8 @@ export default {
             .call();
           if (this.isMinter) {
             this.minterAllowance = await contract.methods
-          .minterAllowance(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
-          .call();
+              .minterAllowance(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+              .call();
           }
         } catch (e) {
           console.error(e);
@@ -134,8 +134,8 @@ export default {
       this.subscribeToEvent(contract.removeMinterEvent);
     },
     async configureMinter() {
-        await this.ethReq(contract.methods.configureMinter(this.address, this.allowance).encodeABI());
-        this.subscribeToEvent(contract.configureMinterEvent);
+      await this.ethReq(contract.methods.configureMinter(this.address, this.allowance).encodeABI());
+      this.subscribeToEvent(contract.configureMinterEvent);
     },
     async lookupMinterStatus() {
       if (this.address === '') {
@@ -147,9 +147,9 @@ export default {
           .isMinter(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
           .call();
         if (this.isMinter) {
-            this.minterAllowance = await contract.methods
-          .minterAllowance(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
-          .call();
+          this.minterAllowance = await contract.methods
+            .minterAllowance(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+            .call();
         }
       } catch (e) {
         console.error(e);

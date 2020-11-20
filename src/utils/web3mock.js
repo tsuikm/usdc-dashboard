@@ -205,7 +205,7 @@ export default class Web3 {
               const configureMinter = async () => { 
                 Web3.MOCK_ACCOUNTS[address].minter = true;
                 Web3.MOCK_ACCOUNTS[address].minterAllowance = allowance;
-              }
+              };
               return {
                 call: configureMinter,
                 encodeABI: () => configureMinter,
@@ -215,7 +215,7 @@ export default class Web3 {
               const removeMinter = async () => { 
                 Web3.MOCK_ACCOUNTS[address].minter = false;
                 Web3.MOCK_ACCOUNTS[address].minterAllowance = 0;
-              }
+              };
               return {
                 call: removeMinter,
                 encodeABI: () => removeMinter,

@@ -96,6 +96,7 @@ describe('Links Route Correctly', () => {
 
       expect(router[0].path).toEqual(`${path}${expectedPath}`);
     }
+    return true;
   }
 
   //----------------------------------------------------------------------------------------

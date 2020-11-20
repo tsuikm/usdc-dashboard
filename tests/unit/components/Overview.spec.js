@@ -15,8 +15,8 @@ const MOCK_ACCOUNTS = {
     blacklisted: false,
   },
   '0x000000A': {
-    owner: true
-  }
+    owner: true,
+  },
 };
 
 Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;

@@ -5,7 +5,10 @@
       data-testid="progress-bar-test-id"
       md-mode="indeterminate"
     />
-    <md-toolbar md-elevation="0" class="md-transparent">
+    <md-toolbar
+      md-elevation="0"
+      class="md-transparent"
+    >
       <h1 class="md-title">
         {{ name }}
       </h1>

@@ -15,7 +15,7 @@ config.stubs['nuxt-link'] = NuxtLinkStub;
 // For now, listen to these warnings and treat these as errors.
 // Solution derived from https://stackoverflow.com/questions/51105622/how-to-ensure-jest-fails-on-unhandledrejection
 process.on('unhandledRejection', reason => {
-  fail(reason);
+  throw reason;
 });
 
 // Strictly handle `console.error` warnings.
@@ -26,4 +26,4 @@ process.on('unhandledRejection', reason => {
 // Solution derived from https://github.com/facebook/jest/issues/6121
 console.error = message => {
   throw (message instanceof Error ? message : new Error(message));
-}
+};

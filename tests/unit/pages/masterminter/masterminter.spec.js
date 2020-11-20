@@ -120,7 +120,6 @@ describe('MasterminterControl', () => {
     await finishPromises();
     expect(getByText('This address is currently a minter with allowance 675.')).not.toBeNull();
     expect(getByText('Click to increase the allowance or remove the minter.')).not.toBeNull();
-    //check allowance increased
   });
 
 

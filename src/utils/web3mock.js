@@ -16,7 +16,8 @@ import { fromHex } from '@/utils/utils';
  *    pauser: Boolean,
  *    owner: Boolean,
  *    blacklisted: Boolean,
- *    masterMinter: boolean
+ *    masterMinter: boolean,
+ *    minterAllowance: int,
  * }
  *
  * @param {Object<key: String, value: Account>} MOCK_ACCOUNTS Map of wallet addresses to accounts

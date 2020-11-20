@@ -116,6 +116,11 @@ export default {
           this.isMinter = await contract.methods
             .isMinter(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
             .call();
+          if (this.isMinter) {
+            this.minterAllowance = await contract.methods
+          .minterAllowance(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+          .call();
+          }
         } catch (e) {
           console.error(e);
           this.isMinter = null;
@@ -145,7 +150,6 @@ export default {
             this.minterAllowance = await contract.methods
           .minterAllowance(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
           .call();
-          console.log(this.minterAllowance);
         }
       } catch (e) {
         console.error(e);

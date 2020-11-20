@@ -100,29 +100,29 @@ describe('Links Route Correctly', () => {
 
   //----------------------------------------------------------------------------------------
 
-  it('Labels links', () => {
-    expect(testLink('See all blocks', '/blocks')).resolves.toBe(true);
-    expect(testLink('See all transactions', '/transactions')).resolves.toBe(true);
+  it('Labels links', async () => {
+    expect(await testLink('See all blocks', '/blocks')).toBe(true);
+    expect(await testLink('See all transactions', '/transactions')).toBe(true);
   });
 
 
-  it('Block links', () => {
+  it('Block links', async () => {
     for (const block of MOCK_PROPS.blocks) {
-      expect(testLink(`${block} / ${toHex(block)}`, `/block/${block}`)).resolves.toBe(true);
+      expect(await testLink(`${block} / ${toHex(block)}`, `/block/${block}`)).toBe(true);
     }
   });
 
-  it('Transaction links', () => {
+  it('Transaction links', async () => {
     for (const transaction of MOCK_PROPS.transactions) {
-      expect(testLink(transaction, `/transaction/${transaction}`)).resolves.toBe(true);
+      expect(await testLink(transaction, `/transaction/${transaction}`)).toBe(true);
     }
   });
 
-  it('Roles links', () => {
+  it('Roles links', async () => {
     for (const role of MOCK_PROPS.roles) {
 
       for (const address of role.addresses) {
-        expect(testLink(address, `/address/${address}`)).resolves.toBe(true);
+        expect(await testLink(address, `/address/${address}`)).toBe(true);
       }
     }
   });

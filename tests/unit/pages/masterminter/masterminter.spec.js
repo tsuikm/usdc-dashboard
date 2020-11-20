@@ -70,7 +70,8 @@ describe('MasterminterControl', () => {
         return {
           address: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH),
           isMinter: false,
-          minterAllowance: 50,
+          minterAllowance: 0,
+          allowance: 50,
         };
       },
     });

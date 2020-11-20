@@ -1,7 +1,7 @@
-import BlacklisterControl from '@/components/BlacklisterControl.vue';
+import BlacklisterControl from '@/pages/roles/blacklister/index';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import { render, fireEvent } from '@testing-library/vue';
-import { padHex } from '@/utils/utils';
+import { padHex, finishPromises } from '@/utils/utils';
 import Web3 from 'web3';
 
 function ethereumFactory(isConnectedToMetamask) {
@@ -24,8 +24,6 @@ Web3.MOCK_ACCOUNTS = {
   [padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH)]: {},
 };
 global.ethereum = ethereumFactory(true);
-
-const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
 describe('BlacklisterControl', () => {
   it('Text components render properly', () => {

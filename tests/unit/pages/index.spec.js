@@ -1,6 +1,6 @@
 import SummaryPage from '@/pages/index';
 import { render } from '@testing-library/vue';
-import { padHex, toHex } from '@/utils/utils';
+import { toHex } from '@/utils/utils';
 import Web3 from 'web3';
 
 const MOCK_ACCOUNTS = {
@@ -12,7 +12,7 @@ const MOCK_ACCOUNTS = {
   },
   '0x3': {
     blacklister: true,
-  }
+  },
 };
 const MOCK_TRANSACTIONS = [
   {

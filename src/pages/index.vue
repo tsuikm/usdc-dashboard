@@ -23,7 +23,7 @@ export default {
   name: 'SummaryPage',
   components: {
     NavBar,
-    Summary
+    Summary,
   },
   data() {
     return {
@@ -45,22 +45,22 @@ export default {
     async lookupRoles() {
       this.roles.push({
         name: 'Pauser',
-        addresses: [await contract.methods.pauser().call()]
+        addresses: [await contract.methods.pauser().call()],
       });
 
       this.roles.push({
         name: 'Owner',
-        addresses: [await contract.methods.owner().call()]
+        addresses: [await contract.methods.owner().call()],
       });
 
       this.roles.push({
         name: 'Minters',
-        addresses: await this.fetch(`${API_BASE_URL}/api/minters`)
+        addresses: await this.fetch(`${API_BASE_URL}/api/minters`),
       });
 
       this.roles.push({
         name: 'Blacklister',
-        addresses: [await contract.methods.blacklister().call()]
+        addresses: [await contract.methods.blacklister().call()],
       });
     },
     async lookupBlocks() {

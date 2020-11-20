@@ -16,10 +16,10 @@ const MOCK_PROPS = {
     {
       name: 'role-3',
       addresses: [ '0x0003', '0x0004', '0x0005' ],
-    }
+    },
   ],
   transactions: [ '0x0006', '0x0007', '0x0008' ],
-  blocks: [ 100, 99, 98, 97, 96, 95 ]
+  blocks: [ 100, 99, 98, 97, 96, 95 ],
 };
 
 //----------------------------------------------------------------------------------------
@@ -77,6 +77,7 @@ describe('Links Route Correctly', () => {
    *
    * @param {String} label - label displayed for the link (eg. 'See all blocks')
    * @param {String} expectedPath - the expected path when the link is pressed.
+   * @return {boolean} - whether or not the test passed. Needed for eslint `expect-expect` rule.
    */
   async function testLink(label, expectedPath) {
     for (const path of BLOCKCHAIN_PATHS) {
@@ -88,7 +89,7 @@ describe('Links Route Correctly', () => {
           $router: router,
           $route: { path: path },
         },
-        props: MOCK_PROPS
+        props: MOCK_PROPS,
       });
 
       await fireEvent.click(getByText(label));
@@ -99,29 +100,29 @@ describe('Links Route Correctly', () => {
 
   //----------------------------------------------------------------------------------------
 
-  it('Labels links', async () => {
-    await testLink('See all blocks', '/blocks');
-    await testLink('See all transactions', '/transactions');
+  it('Labels links', () => {
+    expect(testLink('See all blocks', '/blocks')).resolves.toBe(true);
+    expect(testLink('See all transactions', '/transactions')).resolves.toBe(true);
   });
 
 
-  it('Block links', async () => {
+  it('Block links', () => {
     for (const block of MOCK_PROPS.blocks) {
-      await testLink(`${block} / ${toHex(block)}`, `/block/${block}`);
+      expect(testLink(`${block} / ${toHex(block)}`, `/block/${block}`)).resolves.toBe(true);
     }
   });
 
-  it('Transaction links', async () => {
+  it('Transaction links', () => {
     for (const transaction of MOCK_PROPS.transactions) {
-      await testLink(transaction, `/transaction/${transaction}`);
+      expect(testLink(transaction, `/transaction/${transaction}`)).resolves.toBe(true);
     }
   });
 
-  it('Roles links', async () => {
+  it('Roles links', () => {
     for (const role of MOCK_PROPS.roles) {
 
       for (const address of role.addresses) {
-        await testLink(address, `/address/${address}`);
+        expect(testLink(address, `/address/${address}`)).resolves.toBe(true);
       }
     }
   });

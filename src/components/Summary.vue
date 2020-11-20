@@ -2,15 +2,20 @@
   <div>
     <h1> USDC Dashboard </h1>
     <div id="content">
-
       <!-- roles -->
-      <div id="content-roles" class="card">
-        <div v-for="(role, index) in roles" :key="index">
+      <div
+        id="content-roles"
+        class="card"
+      >
+        <div
+          v-for="(role, roleIndex) in roles"
+          :key="roleIndex"
+        >
           <h2> {{ role.name }} </h2>
           <div class="list">
             <nuxt-link
-              v-for="(address, index) in role.addresses"
-              :key="index"
+              v-for="(address, addressIndex) in role.addresses"
+              :key="addressIndex"
               :to="`${basePath}/address/${address}`"
               class="mono"
             >
@@ -21,13 +26,18 @@
       </div>
 
       <!-- blocks -->
-      <div id="content-blocks" class="card">
+      <div
+        id="content-blocks"
+        class="card"
+      >
         <h2> Latest Blocks </h2>
-        <nuxt-link :to="`${basePath}/blocks`"> See all blocks </nuxt-link>
+        <nuxt-link :to="`${basePath}/blocks`">
+          See all blocks
+        </nuxt-link>
         <div class="list">
           <nuxt-link
             v-for="(block, index) in blocks"
-            :key="block.index"
+            :key="index"
             :to="`${basePath}/block/${block}`"
             class="mono"
           >
@@ -37,9 +47,14 @@
       </div>
 
       <!-- transactions -->
-      <div id="content-transactions" class="card">
+      <div
+        id="content-transactions"
+        class="card"
+      >
         <h2> Recent Transactions </h2>
-        <nuxt-link :to="`${basePath}/transactions`"> See all transactions </nuxt-link>
+        <nuxt-link :to="`${basePath}/transactions`">
+          See all transactions
+        </nuxt-link>
         <div class="list">
           <nuxt-link
             v-for="(transaction, index) in transactions"
@@ -75,7 +90,7 @@ export default {
                           roles.every(role => role instanceof Object &&
                                               typeof role.name === 'string' &&
                                               Array.isArray(role.addresses) &&
-                                              role.addresses.every(address => typeof address === 'string' && address.length))
+                                              role.addresses.every(address => typeof address === 'string' && address.length)),
     },
 
     /**
@@ -84,7 +99,7 @@ export default {
     transactions: {
       type: Array,
       validator: transactions => Array.isArray(transactions) &&
-                                 transactions.every(hash => typeof hash === 'string' && hash.length)
+                                 transactions.every(hash => typeof hash === 'string' && hash.length),
     },
 
     /**
@@ -92,7 +107,7 @@ export default {
      */
     blocks: {
       type: Array,
-      validator: blocks => Array.isArray(blocks) && blocks.every(block => typeof block === 'number')
+      validator: blocks => Array.isArray(blocks) && blocks.every(block => typeof block === 'number'),
     },
   },
   computed: {
@@ -101,8 +116,8 @@ export default {
     },
   },
   methods: {
-    toHex
-  }
+    toHex,
+  },
 };
 </script>
 

@@ -24,10 +24,10 @@
         </md-field>
       </form>
       <div
-        v-if="this.isMinter && this.currentAllowance !== null"
-        class="blacklist-clause"
+        v-if="this.isMinter && this.minterAllowance !== null"
+        class="minter-clause"
       > 
-        <div> This address is currently a minter with allowance {{ this.currentAllowance }}. </div>
+        <div> This address is currently a minter with allowance {{ this.minterAllowance }}. </div>
         <md-field class="input-form">
           <md-input
             v-model="allowance"
@@ -95,7 +95,7 @@ export default {
       address: '',
       allowance: 0,
       isMinter: null,
-      currentAllowance: null,
+      minterAllowance: null,
       accounts: [],
     };
   },
@@ -109,7 +109,7 @@ export default {
     async subscribeToEvent(event) {
       contract.once(event, async () => {
         if (this.address === '') {
-          this.isBlacklisted = null;
+          this.isMinter = null;
           return;
         }
         try {
@@ -142,10 +142,10 @@ export default {
           .isMinter(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
           .call();
         if (this.isMinter) {
-            this.currentAllowance = await contract.methods
+            this.minterAllowance = await contract.methods
           .minterAllowance(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
           .call();
-          console.log(this.currentAllowance);
+          console.log(this.minterAllowance);
         }
       } catch (e) {
         console.error(e);

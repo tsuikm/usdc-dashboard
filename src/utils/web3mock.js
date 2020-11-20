@@ -195,11 +195,38 @@ export default class Web3 {
                 encodeABI: () => unblacklist,
               };
             },
+            minterAllowance: address => {
+              return {
+                call: async () => Web3.MOCK_ACCOUNTS[address].minterAllowance,
+              };
+            },
+            configureMinter: (address, allowance) => {
+              const configureMinter = async () => { 
+                Web3.MOCK_ACCOUNTS[address].minter = true;
+                Web3.MOCK_ACCOUNTS[address].minterAllowance = allowance;
+              }
+              return {
+                call: configureMinter,
+                encodeABI: () => configureMinter,
+              };
+            },
+            removeMinter: (address) => {
+              const removeMinter = async () => { 
+                Web3.MOCK_ACCOUNTS[address].minter = false;
+                Web3.MOCK_ACCOUNTS[address].minterAllowance = 0;
+              }
+              return {
+                call: removeMinter,
+                encodeABI: () => removeMinter,
+              };
+            },
           };
           this.pauseEvent = 'pause';
           this.unpauseEvent = 'unpause';
           this.blacklistEvent = 'blacklist';
           this.unBlacklistEvent = 'unblacklist';
+          this.configureMinterEvent = 'configureMinter';
+          this.removeMinterEvent = 'removeMinter';
         }
         async once(event, callback) {
           callback();

@@ -58,13 +58,12 @@ export default {
   },
   methods: {
     async submit(amount) {
-      console.log(amount);
       if (!await contract.methods.isMinter(this.accounts[0]).call()) {
         // not allowed to burn
         console.error(`Wallet ${this.accounts[0]} is not allowed to burn`);
         return;
       }
-      
+
       try {
         // eslint-disable-next-line
           const txHash = await ethereum

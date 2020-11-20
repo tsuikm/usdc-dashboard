@@ -14,13 +14,12 @@
 <script>
 
 // modules
-import Web3 from 'web3';
+import { web3 } from '@/utils/web3utils';
 import { padHex } from '@/utils/utils';
-import { WEB3_PROVIDER, WEB3_TXN_HASH_LENGTH } from '@/utils/constants';
+import { WEB3_TXN_HASH_LENGTH } from '@/utils/constants';
 import NavBar from '@/components/NavBar';
 import TransactionDetails from '@/components/TransactionDetails';
 
-const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 
 export default {
   components: {

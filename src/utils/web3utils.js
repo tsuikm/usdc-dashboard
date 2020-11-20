@@ -1,3 +1,7 @@
+import { WEB3_PROVIDER, USDC_CONTRACT_ADDRESS, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { padHex } from '@/utils/utils';
+import Web3 from 'web3';
+
 export const abi = [
   {
     constant: true,
@@ -192,3 +196,20 @@ export const abi = [
     type: 'function',
   },
 ];
+
+export const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
+export const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
+
+export const getBalance = async (address) => {
+  const balance = await contract.methods
+    .balanceOf(padHex(address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+    .call();
+  const decimals = await contract.methods.decimals().call();
+
+  return balance / (10 ** decimals);
+};
+
+export const getTotalSupply = async () => {
+  const decimals = await contract.methods.decimals().call();
+  return await contract.methods.totalSupply().call() / (10 ** decimals);
+};

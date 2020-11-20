@@ -17,13 +17,11 @@
 // modules
 import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
-import Web3 from 'web3';
 import * as constants from '@/utils/constants';
+import { web3, getBalance, getTotalSupply } from '@/utils/web3utils';
 import { toHex, removeLeadingZeros, roundToNearest, pushAll } from '@/utils/utils';
-import { getBalance, getTotalSupply } from '@/components/Overview';
 
 const PERCENTAGE_DECIMAL_PLACES = 8;
-const web3 = new Web3(constants.WEB3_PROVIDER || Web3.givenProvider);
 
 /**
  * Gets the transactions from one block to another block.

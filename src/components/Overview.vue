@@ -23,38 +23,12 @@
 </template>
 
 <script>
-import {
-  USDC_CONTRACT_ADDRESS,
-  WEB3_BALANCEOF_ADDRESS_LENGTH,
-  WEB3_PROVIDER,
-} from '@/utils/constants';
-import Address from './Address';
-import BalanceCard from './BalanceCard';
+import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import Address from '@/components/Address';
+import BalanceCard from '@/components/BalanceCard';
 import TotalSupply from '@/components/TotalSupply';
-import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
-import { abi } from '@/utils/web3abi';
-
-const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
-const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
-
-export async function getDecimals() {
-  return await contract.methods.decimals().call();
-}
-
-export async function getBalance(address) {
-  const balance = await contract.methods
-    .balanceOf(padHex(address, WEB3_BALANCEOF_ADDRESS_LENGTH))
-    .call();
-  const decimals = await getDecimals();
-
-  return balance / (10 ** decimals);
-}
-
-export async function getTotalSupply() {
-  const decimals = await contract.methods.decimals().call();
-  return await contract.methods.totalSupply().call() / (10 ** decimals);
-}
+import { contract, web3, getBalance, getTotalSupply } from '@/utils/web3utils';
 
 export default {
   components: {

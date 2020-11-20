@@ -92,28 +92,10 @@
 
 <script>
 import NavBar from '@/components/NavBar';
-import Web3 from 'web3';
 import { USDC_CONTRACT_ADDRESS, TRANSACTION_TOPIC, API_BASE_URL } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
+import { web3, contract } from '@/utils/web3utils';
 
-const web3 = new Web3(Web3.givenProvider);
-const abi = [
-  {
-    constant: true,
-    inputs: [],
-    name: 'pauser',
-    outputs: [{ name: '', type: 'address' }],
-    type: 'function',
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'owner',
-    outputs: [{ name: '', type: 'address' }],
-    type: 'function',
-  },
-];
-const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 export default {
   name: 'SummaryPage',
   components: {

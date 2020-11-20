@@ -13,7 +13,7 @@ config.stubs['nuxt-link'] = NuxtLinkStub;
 // have passed).
 //
 // For now, listen to these warnings and treat these as errors.
-// Solution derived from https://github.com/facebook/jest/issues/3251#issuecomment-298831246
+// Solution derived from https://stackoverflow.com/questions/51105622/how-to-ensure-jest-fails-on-unhandledrejection
 process.on('unhandledRejection', reason => {
-  throw reason;
+  fail(reason);
 });

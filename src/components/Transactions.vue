@@ -29,8 +29,7 @@ import {
   removeLeadingZeros,
 } from '@/utils/utils';
 
-import { getAllTransactions } from '@/pages/accounts';
-import { web3, contract } from '@/utils/web3utils';
+import { web3, contract, getAllTransactions } from '@/utils/web3utils';
 import Table from './Table';
 import moment from 'moment';
 

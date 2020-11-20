@@ -56,14 +56,10 @@
 </template>
 
 <script>
-import Web3 from 'web3';
 import NavBar from '@/components/NavBar';
 import RoleButton from '@/components/RoleButton';
-import { abi } from '@/utils/web3abi';
-import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_PROVIDER } from '@/utils/constants';
-
-const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
-const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
+import { contract } from '@/utils/web3utils';
+import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 
 /*----------------------------------------------------------------------------*
  * Helpers

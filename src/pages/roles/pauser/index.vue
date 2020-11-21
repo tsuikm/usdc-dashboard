@@ -9,16 +9,20 @@
         <div class="content-header">
           Pause Contract
         </div>
-        <md-switch v-model="boolean" class="md-primary"></md-switch>
+        <md-switch v-model="contractPaused" class="md-primary"></md-switch>
       </div>
-      <div class="content-subtext">
-        Paused contract prevents transfers, minting, and burning.
+      <div v-if="this.contractPaused">
+        <div class="content-subtext">
+          Contract is currently paused.
+        </div>
+      </div>
+      <div v-else>
+        <div class="content-subtext">
+          Contract is currently unpaused.
+        </div>
       </div>
     </div>
     <div class="pauser">
-      <div class="content-header">
-        Pause Contract
-      </div>
       <div
         v-if="this.contractPaused" 
         class="content"
@@ -68,7 +72,6 @@ export default {
     return {
       contractPaused: null,
       accounts: [],
-      boolean: false,
     };
   },
   created: function() {
@@ -163,12 +166,12 @@ export default {
 .content-header {
   font-weight: 800;
   font-size: 24px;
-  margin-right: 10px;
+  margin-right: 30px;
 }
 
 .content-subtext {
   font-size: 12px;
-  margin-bottom: 20px;
+  margin-top: 10px;
   text-align: center;
 }
 </style>

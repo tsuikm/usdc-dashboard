@@ -4,7 +4,6 @@
       ref="table"
       :loading="loading"
       :name="this.tableName"
-      :total-items="this.totalItems"
       :schema="this.tableSchema"
       :content="this.transactions"
       :key-field="'Transaction Hash'"
@@ -116,9 +115,6 @@ export default {
     };
   },
   computed: {
-    totalItems() {
-      return this.transactions.length;
-    },
     tableName() {
       if (!this.address) return 'All Transactions';
       return `Transactions for Wallet ${this.address}`;
@@ -223,7 +219,7 @@ export default {
     },
     async fetchAgesOfDisplayedTransactions(page) {
       const pageLength = this.$refs.table.pageLength;
-      const upperBound = Math.min((page + 1) * pageLength, this.totalItems);
+      const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);
       const promises = [];
 
       for (let i = page * pageLength; i < upperBound; i++) {

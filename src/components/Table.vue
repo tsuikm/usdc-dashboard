@@ -14,7 +14,7 @@
       </h1>
       <Pagination
         ref="pagination"
-        :total-pages="Math.ceil(this.totalItems / pageLength)"
+        :total-pages="Math.ceil(this.content.length / pageLength)"
         @page:change="this.pageChange"
       />
     </md-toolbar>
@@ -80,9 +80,6 @@ export default {
   props: {
     name: String,
     loading: Boolean,
-
-    // This number can change. Passed directly to Pagination.
-    totalItems: Number,
 
     // List of field objects, in the order in which they should be displayed in the table, e.g.
     // Each object must contain `name` and `getter`. `link` is optional.

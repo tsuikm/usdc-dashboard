@@ -9,16 +9,16 @@
         <div class="content-header">
           Pause Contract
         </div>
-        <md-switch v-model="contractPaused" class="md-primary"></md-switch>
+        <md-switch v-model="contractPaused" class="md-primary" @click="handleUnpause"></md-switch>
       </div>
       <div v-if="this.contractPaused">
         <div class="content-subtext">
-          Contract is currently paused.
+          All transfers, minting, and burning are PAUSED.
         </div>
       </div>
       <div v-else>
         <div class="content-subtext">
-          Contract is currently unpaused.
+         All transfers, minting, and burning are ACTIVE.
         </div>
       </div>
     </div>
@@ -127,7 +127,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/styles/variables/_colors.scss";
+
 .pauser {
   padding: 30px;
   margin: auto;
@@ -138,7 +140,7 @@ export default {
 .container {
   padding: 30px;
   margin: auto;
-  width: 50%;
+  width: 35%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -171,8 +173,10 @@ export default {
 
 .content-subtext {
   font-size: 12px;
+  font-weight: 800;
   margin-top: 10px;
   text-align: center;
+  color: $circle-dark-grey;
 }
 </style>
 

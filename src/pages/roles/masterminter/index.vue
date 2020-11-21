@@ -80,7 +80,7 @@ import {
 } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
-import { abi } from '@/utils/web3abi';
+import { abi } from '@/utils/web3utils';
 
 const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);

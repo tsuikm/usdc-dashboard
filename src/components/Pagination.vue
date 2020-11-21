@@ -1,16 +1,16 @@
 <template>
   <div class="page">
-    <md-button @click="changePage(0)">
+    <md-button class="button" @click="changePage(0)">
       First
     </md-button>
-    <md-button @click="changePage(page - 1)">
+    <md-button class="button" @click="changePage(page - 1)">
       <md-icon>navigate_before</md-icon>
     </md-button>
     <p>Page {{ page + 1 }} of {{ totalPages }}</p>
-    <md-button @click="changePage(page + 1)">
+    <md-button class="button" @click="changePage(page + 1)">
       <md-icon>navigate_next</md-icon>
     </md-button>
-    <md-button @click="changePage(totalPages - 1)">
+    <md-button class="button" @click="changePage(totalPages - 1)">
       Last
     </md-button>
   </div>
@@ -41,5 +41,12 @@ export default {
 .page {
   display: flex;
   flex-direction: row;
+  font-size: 13px;
+  align-items: center;
+}
+
+.button {
+  font-size: 13px;
+  text-transform: none;
 }
 </style>

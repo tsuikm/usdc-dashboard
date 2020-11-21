@@ -1,5 +1,8 @@
 <template>
   <div id="table-and-loading-container">
+    <h1 class="md-title">
+        {{ name }}
+      </h1>
     <md-progress-bar
       v-if="loading"
       data-testid="progress-bar-test-id"
@@ -9,10 +12,11 @@
       md-elevation="0"
       class="md-transparent"
     >
-      <h1 class="md-title">
-        {{ name }}
-      </h1>
+      <div class="subtitle">
+        Showing {{ page * pageLength + 1 }}-{{ Math.min((page + 1) * pageLength, this.content.length)}} of {{ this.content.length }} results
+      </div>
       <Pagination
+        class="pagination"
         ref="pagination"
         :total-pages="Math.ceil(this.content.length / pageLength)"
         @page:change="this.pageChange"
@@ -161,8 +165,15 @@ span {
 .md-toolbar {
   padding-left: 24px;
 
-  .md-title {
+  .subtitle {
     flex: 1;
   }
+}
+
+.md-title {
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 44px;
+  letter-spacing: 0.03em;
 }
 </style>

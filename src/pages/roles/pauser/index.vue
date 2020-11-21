@@ -1,50 +1,53 @@
 <template>
   <div>
     <NavBar />
-    <div class="pauser">
-      <div class="header">
-        Pause and Unpause Contract
-      </div>
-      <div class="container">
+    <div class="header">
+        Pauser Controls
+    </div>
+    <div class="container">
+      <div class="container-main">
         <div class="content-header">
-          USDC Contract is currently
+          Pause Contract
         </div>
-        <div
-          v-if="this.contractPaused" 
-          class="content"
+        <md-switch v-model="boolean" class="md-primary"></md-switch>
+      </div>
+      <div class="content-subtext">
+        Paused contract prevents transfers, minting, and burning.
+      </div>
+    </div>
+    <div class="pauser">
+      <div class="content-header">
+        Pause Contract
+      </div>
+      <div
+        v-if="this.contractPaused" 
+        class="content"
+      >
+        <md-button
+          class="status"
+          @click="handleUnpause"
         >
-          <md-button
-            class="status"
-            @click="handleUnpause"
-          >
-            PAUSED
-          </md-button>
-          <div class="content">
-            <div class="content-text">
-              Click to unpause contract.
-            </div>
-            <div class="content-subtext">
-              All transfers, minting, and burning are PAUSED.
-            </div>
+          PAUSED
+        </md-button>
+        <div class="content">
+          <div class="content-subtext">
+            All transfers, minting, and burning are PAUSED.
           </div>
         </div>
-        <div
-          v-else
-          class="content"
+      </div>
+      <div
+        v-else
+        class="content"
+      >
+        <md-button
+          class="status"
+          @click="handlePause"
         >
-          <md-button
-            class="status"
-            @click="handlePause"
-          >
-            UNPAUSED
-          </md-button>
-          <div class="content">
-            <div class="content-text">
-              Click to pause contract.
-            </div>
-            <div class="content-subtext">
-              All transfers, minting, and burning are ACTIVE.
-            </div>
+          UNPAUSED
+        </md-button>
+        <div class="content">
+          <div class="content-subtext">
+            All transfers, minting, and burning are ACTIVE.
           </div>
         </div>
       </div>
@@ -65,6 +68,7 @@ export default {
     return {
       contractPaused: null,
       accounts: [],
+      boolean: false,
     };
   },
   created: function() {
@@ -122,23 +126,32 @@ export default {
 
 <style scoped>
 .pauser {
- padding: 30px;
-  margin: 40px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
+  padding: 30px;
+  margin: auto;
   width: 40%;
-}
-
-.header {
-  font-size: 20px;
-  font-weight: 900;
-  padding-bottom: 3%;
+  display: flex;
 }
 
 .container {
+  padding: 30px;
+  margin: auto;
+  width: 50%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+}
+
+.container-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header {
+  font-size: 30px;
+  font-weight: 900;
+  padding-bottom: 3%;
 }
 
 .content {
@@ -148,21 +161,15 @@ export default {
 }
 
 .content-header {
-  font-weight: 500;
-  font-size: 16px;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-.content-text {
-  font-weight: 500;
-  font-size: 12px;
-  margin-top: 10px;
+  font-weight: 800;
+  font-size: 24px;
+  margin-right: 10px;
 }
 
 .content-subtext {
   font-size: 12px;
   margin-bottom: 20px;
+  text-align: center;
 }
 </style>
 

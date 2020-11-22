@@ -2,7 +2,7 @@
   <div>
     <NavBar />
     <div class="header">
-      Pauser Controls
+      Pause and Unpause Contract
     </div>
     <div class="container">
       <div class="container-main">
@@ -111,13 +111,6 @@ export default {
 <style scoped lang="scss">
 @import "@/assets/styles/variables/_colors.scss";
 
-.pauser {
-  padding: 30px;
-  margin: auto;
-  width: 40%;
-  display: flex;
-}
-
 .container {
   padding: 30px;
   margin: auto;
@@ -159,18 +152,6 @@ export default {
   margin-bottom: 20px;
   text-align: center;
   color: $circle-dark-grey;
-}
-
-.button {
-  height: 50px;
-  padding-left: 40px;
-  padding-right: 40px;
-  border-radius: 5px;
-  background-color: #1ED67D;
-  border: none;
-  color: #ffffff;
-  font-weight: 900;
-  cursor: pointer;
 }
 
 </style>

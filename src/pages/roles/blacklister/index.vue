@@ -221,23 +221,6 @@ export default {
   margin-top: 30px;
 }
 
-.input {
-  width: 400px;
-  height: 50px;
-  border-color: #1AA3FF;
-  border-style: solid;
-  border-radius: 5px;
-  border-width: 1px;
-  padding: 5px;
-  color: #6B6580;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.input-form {
-  align-items: center;
-}
-
 .blacklist-clause {
   display: flex;
   flex-direction: column;

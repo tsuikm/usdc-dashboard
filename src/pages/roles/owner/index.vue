@@ -1,10 +1,10 @@
 <template>
   <div>
     <NavBar />
+    <div class="header">
+      Check and Assign Roles
+    </div>
     <div class="owner">
-      <div class="header">
-        Check and Assign Roles
-      </div>
       <form
         class="input-form"
         @submit.prevent="checkRoles"
@@ -185,7 +185,7 @@ export default {
 }
 
 .header {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 900;
   padding-bottom: 3%;
   font-family: Proxima Nova;

@@ -23,7 +23,7 @@ global.ethereum = ethereumFactory(true);
 describe('PauserControl', () => {
   it('Text components render properly', () => {
     const { getByText } = render(PauserControl);
-    const header = 'Pauser Controls';
+    const header = 'Pause and Unpause Contract';
     expect(getByText(header)).not.toBeNull();
     expect(getByText('Pausing prevents transfers, minting, and burning.')).not.toBeNull();
   });

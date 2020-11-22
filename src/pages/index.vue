@@ -13,7 +13,6 @@
 import NavBar from '@/components/NavBar';
 import Summary from '@/components/Summary';
 import { USDC_CONTRACT_ADDRESS, TRANSACTION_TOPIC, API_BASE_URL } from '@/utils/constants';
-import { toHex } from '@/utils/utils';
 import { web3, contract } from '@/utils/web3utils';
 
 export default {

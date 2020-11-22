@@ -92,7 +92,6 @@ export default {
 
       const ages = await Promise.all(promises);
 
-      console.log(ages);
       for (let i = page * pageLength; i < upperBound; i++) {
         this.transactions[i].age = ages[i - page * pageLength];
       }

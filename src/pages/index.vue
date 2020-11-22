@@ -23,7 +23,28 @@ export default {
   },
   data() {
     return {
-      roles: [],
+      roles: [
+        {
+          name: 'Owner',
+          addresses: [],
+          icon: 'owner-icon.svg',
+        },
+        {
+          name: 'Pauser',
+          addresses: [],
+          icon: 'pauser-icon.svg',
+        },
+        {
+          name: 'Minters',
+          addresses: [],
+          icon: 'minter-icon.svg',
+        },
+        {
+          name: 'Blacklister',
+          addresses: [],
+          icon: 'blacklister-icon.svg',
+        },
+      ],
       blocks: [],
       transactions: [],
     };
@@ -38,31 +59,18 @@ export default {
       const response = await fetch(request);
       return await response.json();
     },
+    setAddresses(roleName, addresses) {
+      const role = this.roles.find(role => role.name === roleName);
+
+      for (const address of addresses) {
+        role.addresses.push(address);
+      }
+    },
     async lookupRoles() {
-
-      this.roles.push({
-        name: 'Owner',
-        addresses: [await contract.methods.owner().call()],
-        icon: 'owner-icon.svg',
-      });
-
-      this.roles.push({
-        name: 'Pauser',
-        addresses: [await contract.methods.pauser().call()],
-        icon: 'pauser-icon.svg',
-      });
-
-      this.roles.push({
-        name: 'Minters',
-        addresses: await this.fetch(`${API_BASE_URL}/api/minters`),
-        icon: 'minter-icon.svg',
-      });
-
-      this.roles.push({
-        name: 'Blacklister',
-        addresses: [await contract.methods.blacklister().call()],
-        icon: 'blacklister-icon.svg',
-      });
+      this.setAddresses('Owner', [await contract.methods.owner().call()]);
+      this.setAddresses('Pauser', [await contract.methods.pauser().call()]);
+      this.setAddresses('Minters', await this.fetch(`${API_BASE_URL}/api/minters`));
+      this.setAddresses('Blacklister', [await contract.methods.blacklister().call()]);
     },
     async lookupBlocks() {
       const currentBlock = await web3.eth.getBlockNumber();

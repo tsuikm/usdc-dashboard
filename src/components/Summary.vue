@@ -148,7 +148,6 @@ h1 {
 
 .role {
   grid-row: 2;
-  min-width: 0;
 
   @media only screen and (max-width: $mobile-threshold) {
     grid-row: auto;
@@ -179,4 +178,7 @@ h1 {
   }
 }
 
+img {
+  margin-bottom: 0.5rem;
+}
 </style>

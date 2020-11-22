@@ -1,4 +1,4 @@
-<template>
+<template :key="this.updateComponent">
   <div>
     <md-button
       class='connectButton'
@@ -7,8 +7,8 @@
     >
       Connect to Metamask
     </md-button>
-    <div v-if="this.connected"> Connected to MetaMask </div>
-    <div v-else> Not Connected to MetaMask </div>
+    <div v-if="this.connected"> {{'test=' + this.connected}} Connected to MetaMask </div>
+    <div v-else> {{'test=' + this.connected}} Not Connected to MetaMask </div>
   </div>
 </template>
 
@@ -28,9 +28,10 @@ export default {
   data() {
     return {
       connected: null,
+      updateComponent: null,
     }
   },
-  updated: function() {
+  created: function() {
     this.checkConnected();
   },
   methods: {
@@ -38,18 +39,31 @@ export default {
       try {
         // eslint-disable-next-line
         this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        this.checkConnected();
       } catch (e) {
         console.log(e);
       }
     },
-    checkConnected() {
-      web3.eth.getAccounts(function(err, accounts){
+    async checkConnected() {
+      console.log('inside check connected function');
+      const check = await web3.eth.getAccounts(function(err, accounts){
+        console.log('accounts', accounts);
         if (err != null) {
           console.error("An error occurred: "+err);
         } else if (accounts.length == 0) {
           this.connected = false;
+          console.log('should be false', this.connected);
+
+          console.log('not yet', this.updateComponent)
+          this.updateComponent = this.connected;
+          console.log('now', this.updateComponent)
         } else {
           this.connected = true;
+          console.log('should be true', this.connected);
+          
+          console.log('not yet', this.updateComponent);
+          this.updateComponent = this.connected;
+          console.log('now', this.updateComponent);
         }
       });
     },
@@ -57,8 +71,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/styles/variables/_colors.scss";
+
 .connectButton {
-  color: #1ED67D;
+  color: $circle-green;
 }
 </style>

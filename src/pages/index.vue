@@ -39,16 +39,17 @@ export default {
       return await response.json();
     },
     async lookupRoles() {
-      this.roles.push({
-        name: 'Pauser',
-        addresses: [await contract.methods.pauser().call()],
-        icon: 'pauser-icon.svg',
-      });
 
       this.roles.push({
         name: 'Owner',
         addresses: [await contract.methods.owner().call()],
         icon: 'owner-icon.svg',
+      });
+
+      this.roles.push({
+        name: 'Pauser',
+        addresses: [await contract.methods.pauser().call()],
+        icon: 'pauser-icon.svg',
       });
 
       this.roles.push({

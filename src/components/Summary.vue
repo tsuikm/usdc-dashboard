@@ -3,7 +3,11 @@
     <h1> USDC Dashboard </h1>
 
     <!-- roles -->
-    <div class="role" v-for="(role, roleIndex) in roles" :key="roleIndex">
+    <div
+      v-for="(role, roleIndex) in roles"
+      :key="roleIndex"
+      class="role"
+    >
       <img :src="require(`@/assets/${role.icon}`)">
       <h2> {{ role.name }} </h2>
       <div>
@@ -35,7 +39,7 @@
       </div>
     </div>
 
-      <!-- transactions -->
+    <!-- transactions -->
     <div id="transactions">
       <h2> Recent Transactions </h2>
       <nuxt-link :to="`${basePath}/transactions`">
@@ -51,7 +55,6 @@
         </nuxt-link>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -110,7 +113,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/styles/variables/_colors.scss";
-@import "@/assets/styles/variables/_constants.scss";
 
 .content {
   padding-left: 1rem;

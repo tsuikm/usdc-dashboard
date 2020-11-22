@@ -83,7 +83,7 @@ export default {
     },
     async fetchAges(page) {
       const pageLength = this.$refs.table.pageLength;
-      const upperBound = Math.min((page + 1) * pageLength, this.totalItems);
+      const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);
       const promises = [];
 
       for (let i = page * pageLength; i < upperBound; i++) {
@@ -92,6 +92,7 @@ export default {
 
       const ages = await Promise.all(promises);
 
+      console.log(ages);
       for (let i = page * pageLength; i < upperBound; i++) {
         this.transactions[i].age = ages[i - page * pageLength];
       }

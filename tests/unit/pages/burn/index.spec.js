@@ -50,11 +50,11 @@ describe('Burn page', () => {
     // eslint-disable-next-line
     expect(ethereum.request.mock.calls).toHaveLength(1);
     const AMOUNT_TEXT = '100';
-    const sendButton = queryByText('Submit');
+    const submitButton = queryByText('Submit');
     const amountInput = queryByTestId('Amount');
 
     await fireEvent.update(amountInput, AMOUNT_TEXT);
-    await fireEvent.click(sendButton);
+    await fireEvent.click(submitButton);
 
     // eslint-disable-next-line
     expect(ethereum.request.mock.calls[1]).toEqual([{
@@ -81,11 +81,11 @@ describe('Burn page', () => {
 
     const { queryByTestId, queryByText } = render(burn);
     const AMOUNT_TEXT = '100';
-    const sendButton = queryByText('Submit');
+    const submitButton = queryByText('Submit');
     const amountInput = queryByTestId('Amount');
 
     await fireEvent.update(amountInput, AMOUNT_TEXT);
-    await fireEvent.click(sendButton);
+    await fireEvent.click(submitButton);
     expect(consoleSpy).toHaveBeenCalled();
   });
 });

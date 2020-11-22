@@ -7,7 +7,7 @@
     <div class="blacklister">
       <form class="blacklist-form" @submit.prevent="lookupBlacklistStatus">
         <input class="input" v-model="address" placeholder="Enter address here">
-        <button class="button" @click="lookupBlacklistStatus">CHECK STATUS</button>
+        <ActionButton :label="'CHECK STATUS'" :onClick="lookupBlacklistStatus"/>
       </form>
       <div
         v-if="this.statusChecked"
@@ -24,7 +24,7 @@
           <md-switch v-model="isBlacklisted" class="md-primary"></md-switch>
         </div>
         <div class="container-save">
-          <button class="button" @click="save">SAVE</button>
+          <ActionButton :label="'SAVE'" :onClick="save"/>
         </div>
       </div> 
     </div>
@@ -33,6 +33,7 @@
 
 <script>
 import NavBar from '@/components/NavBar';
+import ActionButton from '@/components/ActionButton';
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
@@ -45,6 +46,7 @@ export default {
   name: 'Blacklister',
   components: {
     NavBar,
+    ActionButton
   },
   data() {
     return {
@@ -201,18 +203,6 @@ export default {
   color: #6B6580;
   margin-left: 10px;
   margin-right: 10px;
-}
-
-.button {
-  height: 50px;
-  padding-left: 40px;
-  padding-right: 40px;
-  border-radius: 5px;
-  background-color: #1ED67D;
-  border: none;
-  color: #ffffff;
-  font-weight: 900;
-  cursor: pointer;
 }
 
 .input-form {

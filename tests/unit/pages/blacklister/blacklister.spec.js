@@ -73,8 +73,10 @@ describe('BlacklisterControl', () => {
       },
     });
     expect(getByText('Address is currently blacklisted.')).not.toBeNull();
+    const saveButton = getByText('SAVE');
 
     await fireEvent.click(getByTestId('toggle'));
+    await fireEvent.click(saveButton);
     await finishPromises();
     expect(getByText('Address is currently blacklisted.')).not.toBeNull();
   });
@@ -91,8 +93,10 @@ describe('BlacklisterControl', () => {
       },
     });
     expect(getByText('Address is not currently blacklisted.')).not.toBeNull();
+    const saveButton = getByText('SAVE');
 
     await fireEvent.click(getByTestId('toggle'));
+    await fireEvent.click(saveButton);
     await finishPromises();
     expect(getByText('Address is not currently blacklisted.')).not.toBeNull();
   });

@@ -21,25 +21,10 @@ import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_PROVIDER } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
+import { abi } from '@/utils/web3abi';
 import Web3 from 'web3';
 
 const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
-const abi = [
-  {
-    constant: true,
-    inputs: [{ name: 'account', type: 'address' }],
-    name: 'isMinter',
-    outputs: [{ name: '', type: 'bool' }],
-    type: 'function',
-  },
-  {
-    inputs: [{ name:'_amount', type :'uint256' }],
-    name: 'burn',
-    outputs:[],
-    stateMutability:'nonpayable',
-    type:'function',
-  },
-];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {

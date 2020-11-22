@@ -3,8 +3,8 @@
     <div class="title">
       {{ title }}
     </div>
-    <md-card class="card">
-      <div
+    <div class="input-container">
+      <div class="label"
         v-for="(object, index) in schema"
         :key="object.label"
       >
@@ -18,17 +18,14 @@
           />
         </md-field>
       </div>
-
-      <md-card-actions>
-        <span class="center-span">
-          <md-button
-            class="button"
-            md-alignment="center"
-            @click="this.submit"
-          >Send</md-button>
-        </span>
-      </md-card-actions>
-    </md-card>
+      <span class="center-span">
+        <md-button
+          class="button"
+          md-alignment="center"
+          @click="this.submit"
+        >Submit</md-button>
+      </span>
+    </div>
   </div>
 </template>
 
@@ -97,7 +94,7 @@ export default {
 }
 
 .title {
-  padding: 8% 0 0 8%;
+  padding: 0% 0 6% 0;
   width: fit-content;
   font-family: Proxima Nova;
   font-style: normal;
@@ -125,15 +122,6 @@ export default {
   width: 25%;
 }
 
-.card {
-  background-color: #FFF;
-  border-radius: 16px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  padding: 24px;
-  margin: auto;
-  width: 60%;
-}
-
 label {
   color: $circle-black;
   display: block;
@@ -144,6 +132,7 @@ label {
   letter-spacing: 1px;
   line-height: 13px;
   text-transform: uppercase;
+  margin-left: 0;
 }
 
 .md-field.md-theme-default::after {
@@ -170,11 +159,18 @@ label {
   height: 50px;
   letter-spacing: 1.05px;
   line-height: 17px;
-  padding: 17px 24px;
   text-transform: uppercase;
+  width:50%;
 }
 
 .center-span {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.input-container {
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
   text-align: center;

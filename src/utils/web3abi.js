@@ -378,5 +378,18 @@ export const abi = [
     stateMutability: 'nonpayable',
     type:'function',
   },
-
+  {
+    constant: true,
+    inputs: [{ name: 'account', type: 'address' }],
+    name: 'isMinter',
+    outputs: [{ name: '', type: 'bool' }],
+    type: 'function',
+  },
+  {
+    inputs: [{ name:'_amount', type :'uint256' }],
+    name: 'burn',
+    outputs:[],
+    stateMutability:'nonpayable',
+    type:'function',
+  },
 ];

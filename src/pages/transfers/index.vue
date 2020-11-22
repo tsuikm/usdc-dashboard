@@ -1,6 +1,19 @@
 <template>
   <div>
     <NavBar />
+    <Form
+      :title="'Transfer USDC'"
+      :schema=" [
+        {
+          label: 'To Address',
+        },
+        {
+          label: 'Amount',
+          defaultValue: 0
+        }
+      ]"
+      @submit="this.submit"
+    />
     <md-card
       class="transferCard"
       data-testid="transfers-card-test-id"
@@ -49,236 +62,19 @@
 </template>
 
 <script>
+import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
 import Web3 from 'web3';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
+import { abi } from '@/utils/web3abi';
+
 const web3 = new Web3(Web3.givenProvider);
-var abi = [
-  {
-    'constant': true,
-    'inputs': [],
-    'name': 'name',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'string',
-      },
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function',
-  },
-  {
-    'constant': false,
-    'inputs': [
-      {
-        'name': '_spender',
-        'type': 'address',
-      },
-      {
-        'name': '_value',
-        'type': 'uint256',
-      },
-    ],
-    'name': 'approve',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'bool',
-      },
-    ],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function',
-  },
-  {
-    'constant': true,
-    'inputs': [],
-    'name': 'totalSupply',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'uint256',
-      },
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function',
-  },
-  {
-    'constant': false,
-    'inputs': [
-      {
-        'name': '_from',
-        'type': 'address',
-      },
-      {
-        'name': '_to',
-        'type': 'address',
-      },
-      {
-        'name': '_value',
-        'type': 'uint256',
-      },
-    ],
-    'name': 'transferFrom',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'bool',
-      },
-    ],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function',
-  },
-  {
-    'constant': true,
-    'inputs': [],
-    'name': 'decimals',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'uint8',
-      },
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function',
-  },
-  {
-    'constant': true,
-    'inputs': [
-      {
-        'name': '_owner',
-        'type': 'address',
-      },
-    ],
-    'name': 'balanceOf',
-    'outputs': [
-      {
-        'name': 'balance',
-        'type': 'uint256',
-      },
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function',
-  },
-  {
-    'constant': true,
-    'inputs': [],
-    'name': 'symbol',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'string',
-      },
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function',
-  },
-  {
-    'constant': false,
-    'inputs': [
-      {
-        'name': '_to',
-        'type': 'address',
-      },
-      {
-        'name': '_value',
-        'type': 'uint256',
-      },
-    ],
-    'name': 'transfer',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'bool',
-      },
-    ],
-    'payable': false,
-    'stateMutability': 'nonpayable',
-    'type': 'function',
-  },
-  {
-    'constant': true,
-    'inputs': [
-      {
-        'name': '_owner',
-        'type': 'address',
-      },
-      {
-        'name': '_spender',
-        'type': 'address',
-      },
-    ],
-    'name': 'allowance',
-    'outputs': [
-      {
-        'name': '',
-        'type': 'uint256',
-      },
-    ],
-    'payable': false,
-    'stateMutability': 'view',
-    'type': 'function',
-  },
-  {
-    'payable': true,
-    'stateMutability': 'payable',
-    'type': 'fallback',
-  },
-  {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': true,
-        'name': 'owner',
-        'type': 'address',
-      },
-      {
-        'indexed': true,
-        'name': 'spender',
-        'type': 'address',
-      },
-      {
-        'indexed': false,
-        'name': 'value',
-        'type': 'uint256',
-      },
-    ],
-    'name': 'Approval',
-    'type': 'event',
-  },
-  {
-    'anonymous': false,
-    'inputs': [
-      {
-        'indexed': true,
-        'name': 'from',
-        'type': 'address',
-      },
-      {
-        'indexed': true,
-        'name': 'to',
-        'type': 'address',
-      },
-      {
-        'indexed': false,
-        'name': 'value',
-        'type': 'uint256',
-      },
-    ],
-    'name': 'Transfer',
-    'type': 'event',
-  },
-];
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
+
 export default {
   components: {
+    Form,
     NavBar,
   },
   data() {

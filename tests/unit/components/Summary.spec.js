@@ -8,14 +8,17 @@ const MOCK_PROPS = {
     {
       name: 'role-1',
       addresses: [ '0x0001' ],
+      icon: 'owner-icon.svg'
     },
     {
       name: 'role-2',
       addresses: [ '0x0002' ],
+      icon: 'pauser-icon.svg'
     },
     {
       name: 'role-3',
       addresses: [ '0x0003', '0x0004', '0x0005' ],
+      icon: 'minter-icon.svg'
     },
   ],
   transactions: [ '0x0006', '0x0007', '0x0008' ],

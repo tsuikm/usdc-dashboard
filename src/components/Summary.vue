@@ -113,6 +113,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/styles/variables/_colors.scss";
+@import "@/assets/styles/variables/constants.scss";
 
 .content {
   padding-left: 1rem;

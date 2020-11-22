@@ -4,11 +4,6 @@
     <div>
       <div class="summaryCards">
         <div class="leftSummary">
-          <!-- <Address
-            :wallet-address="this.walletAddress"
-            :is-contract="this.isContract"
-            :is-blacklisted="isBlacklisted"
-          /> -->
           <div>
             <md-card class="addressContainer">
               <div class="addressCardHeader">
@@ -124,7 +119,7 @@
         </div>
       </div>
     </div>
-    <Transactions :address="this.$route.params.address" />
+    <Transactions :address="this.walletAddress" />
   </div>
 </template>
 
@@ -155,6 +150,12 @@ export default {
       usdcPercent: null,
     };
   },
+  // computed: {
+  //   setAddress() {
+  //     this.walletAddress = this.$route.params.address;
+  //     return this.walletAddress;
+  //   },
+  // },
   created: function () {
     this.setAddress();
     this.lookupBalance();

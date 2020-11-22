@@ -223,7 +223,7 @@ export const getTotalSupply = async () => {
 
 export const processTransactions = async (transactions) => {
   const decimals = await contract.methods.decimals().call();
-  transactions = removeDuplicates(transactions, t => t.transactionHash).sort((a, b) => a.blockNumber - b.blockNumber);
+  transactions = removeDuplicates(transactions, t => t.transactionHash).sort((a, b) => a.blockNumber - b.blockNumber).reverse();
 
   for (let transaction of transactions) {
     transaction.from = transaction.topics[1] ? removeLeadingZeros(transaction.topics[1]) : '';

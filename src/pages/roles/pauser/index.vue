@@ -87,10 +87,10 @@ export default {
       const currentStatus = await contract.methods.paused().call();
       const localStatus = this.contractPaused;
 
-      if (localStatus && currentStatus !== localStatus) { // pause
+      if (localStatus && currentStatus !== localStatus) {
         await this.handlePause();
       }
-      if (!localStatus && currentStatus !== localStatus) { // unpause
+      if (!localStatus && currentStatus !== localStatus) {
         await this.handleUnpause();
       }
     },

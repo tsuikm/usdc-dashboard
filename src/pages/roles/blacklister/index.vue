@@ -99,6 +99,7 @@ export default {
       this.subscribeToEvent(contract.unBlacklistEvent);
     },
     async lookupBlacklistStatus() {
+      console.log('here')
       if (this.address === '') {
         this.isBlacklisted = null;
         return;

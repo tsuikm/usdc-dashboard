@@ -1,72 +1,56 @@
 <template>
-  <div>
+  <div class="content">
     <h1> USDC Dashboard </h1>
-    <div id="content">
-      <!-- roles -->
-      <div
-        id="content-roles"
-        class="card"
-      >
-        <div
-          v-for="(role, roleIndex) in roles"
-          :key="roleIndex"
+
+    <!-- roles -->
+    <div class="role" v-for="(role, roleIndex) in roles" :key="roleIndex">
+      <h2> {{ role.name }} </h2>
+      <div>
+        <nuxt-link
+          v-for="(address, addressIndex) in role.addresses"
+          :key="addressIndex"
+          :to="`${basePath}/address/${address}`"
         >
-          <h2> {{ role.name }} </h2>
-          <div class="list">
-            <nuxt-link
-              v-for="(address, addressIndex) in role.addresses"
-              :key="addressIndex"
-              :to="`${basePath}/address/${address}`"
-              class="mono"
-            >
-              {{ address }}
-            </nuxt-link>
-          </div>
-        </div>
-      </div>
-
-      <!-- blocks -->
-      <div
-        id="content-blocks"
-        class="card"
-      >
-        <h2> Latest Blocks </h2>
-        <nuxt-link :to="`${basePath}/blocks`">
-          See all blocks
+          {{ address }}
         </nuxt-link>
-        <div class="list">
-          <nuxt-link
-            v-for="(block, index) in blocks"
-            :key="index"
-            :to="`${basePath}/block/${block}`"
-            class="mono"
-          >
-            {{ block }} / {{ toHex(block) }}
-          </nuxt-link>
-        </div>
-      </div>
-
-      <!-- transactions -->
-      <div
-        id="content-transactions"
-        class="card"
-      >
-        <h2> Recent Transactions </h2>
-        <nuxt-link :to="`${basePath}/transactions`">
-          See all transactions
-        </nuxt-link>
-        <div class="list">
-          <nuxt-link
-            v-for="(transaction, index) in transactions"
-            :key="index"
-            :to="`${basePath}/transaction/${transaction}`"
-            class="mono"
-          >
-            {{ transaction }}
-          </nuxt-link>
-        </div>
       </div>
     </div>
+
+
+    <!-- blocks -->
+    <div id="blocks">
+      <h2> Latest Blocks </h2>
+      <nuxt-link :to="`${basePath}/blocks`">
+        See all blocks
+      </nuxt-link>
+      <div>
+        <nuxt-link
+          v-for="(block, index) in blocks"
+          :key="index"
+          :to="`${basePath}/block/${block}`"
+        >
+          {{ block }} / {{ toHex(block) }}
+        </nuxt-link>
+      </div>
+    </div>
+
+      <!-- transactions -->
+    <div id="transactions">
+      <h2> Recent Transactions </h2>
+      <nuxt-link :to="`${basePath}/transactions`">
+        See all transactions
+      </nuxt-link>
+      <div>
+        <nuxt-link
+          v-for="(transaction, index) in transactions"
+          :key="index"
+          :to="`${basePath}/transaction/${transaction}`"
+        >
+          {{ transaction }}
+        </nuxt-link>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -122,64 +106,57 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#content {
-  display: flex;
-  height: calc(100% - 10.25rem);
-  padding: 10px;
-  overflow-y: scroll;
+@import "@/assets/styles/variables/_colors.scss";
+@import "@/assets/styles/variables/_constants.scss";
 
-  @media only screen and (max-width: 800px) {
-    height: calc(100% - 126px);
-  }
+.content {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: grid;
+  grid-column-gap: 2%;
+  grid-row-gap: 2rem;
+}
 
-  .card {
-    margin-left: 1rem;
-    margin-right: 1rem;
-    min-width: 240px;
-    flex: 1;
-
-    h2 {
-      margin-bottom: 1rem;
-      &:not(:first-of-type) {
-        margin-top: 2rem;
-      }
-    }
-
-    a {
-      display: inline-block;
-      width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .mono {
-      margin-bottom: 0.25rem;
-    }
-
-    .list {
-      @media screen and (min-width: 800px) {
-        height: calc(100% - 4rem);
-        overflow-y: scroll;
-      }
-    }
-  }
-
-  #content-blocks {
-    flex: 0;
-  }
-
-  #content-roles {
-    .list {
-      height: 100%;
-    }
-  }
-
-  @media only screen and (max-width: 800px) {
-    flex-direction: column;
-
-    .card {
-      margin: 1rem 0;
-    }
+.content > * {
+  min-width: 0;
+  a {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: $circle-blue;
+    width: 100%;
   }
 }
+
+h1, h2 {
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+h1 {
+  grid-row: 1;
+}
+
+.role {
+  grid-row: 2;
+  min-width: 0;
+}
+
+#transactions, #blocks {
+  grid-row: 3;
+  background-color: #F8F8FA;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+#transactions {
+  min-width: none;
+  grid-column-start: 2;
+  grid-column-end: 5;
+}
+
+
 </style>

@@ -9,7 +9,12 @@
         <div class="content-header">
           Pause Contract
         </div>
-        <md-switch v-model="contractPaused" class="md-primary"></md-switch>
+        <md-switch 
+          v-model="contractPaused"
+          class="md-primary"
+          data-testid="toggle"
+          >
+        </md-switch>
       </div>
       <div class="content-subtext">
         Pausing prevents transfers, minting, and burning.

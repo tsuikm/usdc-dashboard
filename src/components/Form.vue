@@ -9,7 +9,7 @@
         :key="object.label"
       >
         <CustomInput
-          :placeholder="object.defaultValue"
+          :placeholder="object.placeholder"
           v-model="bindings[index]"
           :data-testid="object.label"
         />
@@ -40,7 +40,7 @@ export default {
     /** 
      * List of objects, in the order in which they should be displayed.
      * Each object must contain `label` field. May contain an
-     * optional `defaultValue` field (defaults to '').
+     * optional `placeholder` field (defaults to '').
      * For instance,
      * [
      *  {
@@ -48,7 +48,7 @@ export default {
      *  },
      *  {
      *    label: 'Amount:',
-     *    defaultValue: 0
+     *    placeholder: 0
      *  }
      * ]
      */ 
@@ -74,7 +74,7 @@ export default {
        * their values when the form is submitted.
        */
 
-      bindings: this.schema.map(obj => obj.defaultValue !== undefined ? obj.defaultValue : ''),
+      bindings: this.schema.map(obj => obj.placeholder !== undefined ? obj.placeholder : ''),
     };
   },
   methods: {

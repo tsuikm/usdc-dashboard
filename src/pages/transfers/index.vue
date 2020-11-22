@@ -6,11 +6,11 @@
       :schema=" [
         {
           label: 'To Address',
-          defaultValue: 'Enter Wallet Address Here'
+          placeholder: 'Enter Wallet Address Here'
         },
         {
           label: 'Amount',
-          defaultValue: 'Amount: i.e. 0'
+          placeholder: 'Amount: i.e. 0'
         }
       ]"
       @submit="this.submit"

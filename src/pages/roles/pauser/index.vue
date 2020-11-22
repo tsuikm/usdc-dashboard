@@ -16,40 +16,6 @@
       </div>
       <button class="button" @click="save">SAVE</button>
     </div>
-    <div class="pauser">
-      <div
-        v-if="this.contractPaused" 
-        class="content"
-      >
-        <md-button
-          class="status"
-          @click="handleUnpause"
-        >
-          PAUSED
-        </md-button>
-        <div class="content">
-          <div class="content-subtext">
-            All transfers, minting, and burning are PAUSED.
-          </div>
-        </div>
-      </div>
-      <div
-        v-else
-        class="content"
-      >
-        <md-button
-          class="status"
-          @click="handlePause"
-        >
-          UNPAUSED
-        </md-button>
-        <div class="content">
-          <div class="content-subtext">
-            All transfers, minting, and burning are ACTIVE.
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 

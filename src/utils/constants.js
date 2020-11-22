@@ -59,15 +59,16 @@ export const TRANSACTION_SCHEMA = [
     },
   },
   {
-    name: 'Age',
-    getter(t) {
-      return t.age;
-    },
-  },
-  {
     name: 'Block Number',
     getter(t) {
       return t.blockNumber;
     },
   },
 ];
+
+export const TRANSACTION_SCHEMA_AGES = TRANSACTION_SCHEMA.concat([{
+  name: 'Age',
+  getter(t) {
+    return t.age;
+  },
+}]);

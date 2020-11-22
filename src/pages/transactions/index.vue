@@ -18,7 +18,7 @@
 import moment from 'moment';
 import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
-import { TRANSACTION_SCHEMA } from '@/utils/constants';
+import { TRANSACTION_SCHEMA_AGES } from '@/utils/constants';
 import { web3, getAllTransactions } from '@/utils/web3utils';
 
 export default {
@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     tableSchema() {
-      return TRANSACTION_SCHEMA;
+      return TRANSACTION_SCHEMA_AGES;
     },
   },
   async mounted() {

@@ -15,6 +15,7 @@ import { fromHex } from '@/utils/utils';
  *    minter: Boolean,
  *    pauser: Boolean,
  *    owner: Boolean,
+ *    blacklister: Boolean,
  *    blacklisted: Boolean,
  *    masterMinter: boolean
  * }

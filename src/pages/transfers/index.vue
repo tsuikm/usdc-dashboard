@@ -29,13 +29,9 @@
 <script>
 import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
-import Web3 from 'web3';
+import { contract } from '@/utils/web3utils';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
-import { abi } from '@/utils/web3abi';
-
-const web3 = new Web3(Web3.givenProvider);
-const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
   components: {

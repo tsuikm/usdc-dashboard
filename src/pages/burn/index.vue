@@ -19,13 +19,9 @@
 // modules
 import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
-import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_PROVIDER } from '@/utils/constants';
+import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
-import { abi } from '@/utils/web3abi';
-import Web3 from 'web3';
-
-const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
-const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
+import { contract } from '@/utils/web3utils';
 
 export default {
   components: {
@@ -43,13 +39,12 @@ export default {
   },
   methods: {
     async submit(amount) {
-      console.log(amount);
       if (!await contract.methods.isMinter(this.accounts[0]).call()) {
         // not allowed to burn
         console.error(`Wallet ${this.accounts[0]} is not allowed to burn`);
         return;
       }
-      
+
       try {
         // eslint-disable-next-line
           const txHash = await ethereum

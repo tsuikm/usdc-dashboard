@@ -4,7 +4,6 @@
       ref="table"
       :loading="loading"
       :name="this.tableName"
-      :total-items="this.totalItems"
       :schema="this.tableSchema"
       :content="this.transactions"
       :key-field="'Transaction Hash'"
@@ -29,15 +28,9 @@ import {
   removeLeadingZeros,
 } from '@/utils/utils';
 
-import { getAllTransactions } from '@/pages/accounts';
-import { getDecimals } from '@/components/Overview';
-import { WEB3_PROVIDER } from '@/utils/constants';
-
+import { web3, contract, getAllTransactions } from '@/utils/web3utils';
 import Table from './Table';
-import Web3 from 'web3';
 import moment from 'moment';
-
-const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 
 /**
  * Gets transaction logs for a wallet starting from fromBlock until latest.
@@ -53,7 +46,7 @@ export const getLogs = async (address, fromBlock) => {
       topics: [TRANSACTION_TOPIC, null, address],
     });
 
-    const decimals = await getDecimals();
+    const decimals = await contract.methods.decimals().call();
 
     receiverTxns.forEach((t) => {
       t.from = removeLeadingZeros(t.topics[1]);
@@ -122,9 +115,6 @@ export default {
     };
   },
   computed: {
-    totalItems() {
-      return this.transactions.length;
-    },
     tableName() {
       if (!this.address) return 'All Transactions';
       return `Transactions for Wallet ${this.address}`;
@@ -229,7 +219,7 @@ export default {
     },
     async fetchAgesOfDisplayedTransactions(page) {
       const pageLength = this.$refs.table.pageLength;
-      const upperBound = Math.min((page + 1) * pageLength, this.totalItems);
+      const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);
       const promises = [];
 
       for (let i = page * pageLength; i < upperBound; i++) {
@@ -245,7 +235,7 @@ export default {
     async getAllTransactions() {
       let transactions = await getAllTransactions();
       transactions = removeDuplicates(transactions, (t) => t.transactionHash);
-      const decimals = await getDecimals();
+      const decimals = await contract.methods.decimals().call();
 
       // sort by age
       this.transactions = transactions.sort((a, b) => b.blockNumber - a.blockNumber);

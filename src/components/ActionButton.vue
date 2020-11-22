@@ -22,7 +22,7 @@ export default {
   padding-left: 40px;
   padding-right: 40px;
   border-radius: 5px;
-  background-color: #1ED67D;
+  background-color: $circle-green;
   border: none;
   color: #ffffff;
   font-weight: 900;

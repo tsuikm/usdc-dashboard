@@ -149,6 +149,11 @@ h1 {
 .role {
   grid-row: 2;
   min-width: 0;
+
+  @media only screen and (max-width: $mobile-threshold) {
+    grid-row: auto;
+    grid-column: 1
+  }
 }
 
 #transactions, #blocks {
@@ -156,12 +161,22 @@ h1 {
   background-color: #F8F8FA;
   padding: 1rem;
   border-radius: 10px;
+
+  @media only screen and (max-width: $mobile-threshold) {
+    grid-row: auto;
+    grid-column: 1
+  }
 }
 
 #transactions {
   min-width: none;
   grid-column-start: 2;
   grid-column-end: 5;
+
+  @media only screen and (max-width: $mobile-threshold) {
+    grid-column-start: 1;
+    grid-column-end: 1;
+  }
 }
 
 </style>

@@ -92,9 +92,9 @@
 
 <script>
 import NavBar from '@/components/NavBar';
-import { USDC_CONTRACT_ADDRESS, TRANSACTION_TOPIC, API_BASE_URL } from '@/utils/constants';
+import { API_BASE_URL } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
-import { web3, contract } from '@/utils/web3utils';
+import { web3, contract, getTransactions } from '@/utils/web3utils';
 
 export default {
   name: 'SummaryPage',
@@ -144,14 +144,7 @@ export default {
     },
     async lookupTransactions() {
       const currentBlock = await web3.eth.getBlockNumber();
-      const txns = await web3.eth.getPastLogs({
-        fromBlock: currentBlock - 10,
-        toBlock: 'latest',
-        address: USDC_CONTRACT_ADDRESS,
-        topics: [TRANSACTION_TOPIC, null, null],
-      });
-
-      this.transactions = txns.slice(0, 20);
+      this.transactions = (await getTransactions(toHex(currentBlock - 10000))).slice(0, 20);
     },
   },
 };

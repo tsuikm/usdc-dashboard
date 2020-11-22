@@ -46,7 +46,7 @@ export default {
   name: 'Blacklister',
   components: {
     NavBar,
-    ActionButton
+    ActionButton,
   },
   data() {
     return {

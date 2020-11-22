@@ -12,12 +12,9 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Summary from '@/components/Summary';
-import Web3 from 'web3';
-import { abi } from '@/utils/web3abi';
 import { USDC_CONTRACT_ADDRESS, TRANSACTION_TOPIC, API_BASE_URL } from '@/utils/constants';
-
-const web3 = new Web3(Web3.givenProvider);
-const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
+import { toHex } from '@/utils/utils';
+import { web3, contract } from '@/utils/web3utils';
 
 export default {
   name: 'SummaryPage',

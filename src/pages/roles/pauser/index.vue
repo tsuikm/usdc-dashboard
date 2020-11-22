@@ -14,19 +14,21 @@
       <div class="content-subtext">
         Pausing prevents transfers, minting, and burning.
       </div>
-      <button class="button" @click="save">SAVE</button>
+      <ActionButton :label="'SAVE'" :onClick="save"/>
     </div>
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar';
+import ActionButton from '@/components/ActionButton';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { contract } from '@/utils/web3utils';
 
 export default {
   components: {
     NavBar,
+    ActionButton
   },
   data() {
     return {

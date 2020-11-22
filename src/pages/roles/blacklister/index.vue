@@ -21,7 +21,11 @@
         </div>
         <div class="container-main">
           <div class="content-header">Blacklist Address</div>
-          <md-switch v-model="isBlacklisted" class="md-primary"></md-switch>
+          <md-switch 
+            v-model="isBlacklisted"
+            class="md-primary"
+            data-testid="toggle">
+          </md-switch>
         </div>
         <div class="container-save">
           <ActionButton :label="'SAVE'" :onClick="save"/>

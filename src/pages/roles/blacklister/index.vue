@@ -13,6 +13,12 @@
         v-if="this.statusChecked"
         class="blacklist-clause"
       > 
+        <div v-if="this.originalStatus" class="blacklist-message">
+          Address is currently blacklisted.
+        </div>
+        <div v-else class="blacklist-message">
+          Address is not currently blacklisted.
+        </div>
         <div class="container-main">
           <div class="content-header">Blacklist Address</div>
           <md-switch v-model="isBlacklisted" class="md-primary"></md-switch>
@@ -46,6 +52,7 @@ export default {
       isBlacklisted: null,
       accounts: [],
       statusChecked: false,
+      originalStatus: false,
     };
   },
   created: function() {
@@ -91,6 +98,7 @@ export default {
           .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
           .call();
         this.statusChecked = true;
+        this.originalStatus = this.isBlacklisted;
       } catch (e) {
         console.error(e);
         this.isBlacklisted = null;
@@ -158,10 +166,14 @@ export default {
   align-items: center;
 }
 
+.blacklist-message {
+  margin-top: 20px;
+}
+
 .content-header {
   font-weight: 800;
   font-size: 20px;
-  margin-right: 30px;
+  margin-right: 50px;
 }
 
 .container-main {
@@ -187,6 +199,8 @@ export default {
   border-width: 1px;
   padding: 5px;
   color: #6B6580;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .button {

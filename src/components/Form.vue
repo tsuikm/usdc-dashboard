@@ -4,35 +4,36 @@
       {{ title }}
     </div>
     <div class="input-container">
-      <div class="label"
+      <div class="input"
         v-for="(object, index) in schema"
         :key="object.label"
       >
         <label>{{ object.label }}</label>
-
-        <md-field class="field">
-          <md-input
-            v-model="bindings[index]"
-            class="input"
-            :data-testid="object.label"
-          />
-        </md-field>
+        <CustomInput
+          :placeholder="object.defaultValue"
+          v-model="bindings[index]"
+          :data-testid="object.label"
+        />
       </div>
-      <span class="center-span">
-        <md-button
-          class="button"
-          md-alignment="center"
-          @click="this.submit"
-        >Submit</md-button>
-      </span>
+      <div class="center-span">
+        <ActionButton
+          :label="'SUBMIT'"
+          :on-click="this.submit"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-
+import ActionButton from '@/components/ActionButton';
+import CustomInput from '@/components/CustomInput';
 export default {
   name: 'Form',
+  components: {
+    ActionButton,
+    CustomInput,
+  },
   props: {
     title: String,
 
@@ -105,23 +106,6 @@ export default {
   color: $circle-black;
 }
 
-.input {
-  border-radius: 5px;
-  box-sizing: border-box;
-  color: $circle-blue;
-  display: block;
-  font-family: Proxima Nova;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: bold;
-  left: 37.5%;
-  letter-spacing: 0.03em;
-  line-height: 18px;
-  margin-bottom: 14px;
-  text-align: left;
-  width: 25%;
-}
-
 label {
   color: $circle-black;
   display: block;
@@ -135,38 +119,15 @@ label {
   text-align: left;
 }
 
-.md-field.md-theme-default::after {
-  background-color: rgba(0, 0, 0, 0);
-  min-height: 0px;
-}
-
-
-.field {
-  border-radius: 5px;
-  border: 1px solid #DBDCDC;
-  box-sizing: border-box;
-  padding-left: 16px;
-}
-
-.button {
-  background: $circle-green;
-  border-radius: 5px;
-  color: #FFFFFF;
-  font-family: Proxima Nova;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: bold;
-  height: 50px;
-  letter-spacing: 1.05px;
-  line-height: 17px;
-  text-transform: uppercase;
-  width:50%;
-}
-
 .center-span {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+  padding: 10px;
+}
+
+.input {
+  padding-bottom: 10px;
 }
 
 .input-container {

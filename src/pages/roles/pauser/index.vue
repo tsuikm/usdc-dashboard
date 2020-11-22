@@ -9,7 +9,7 @@
         <div class="content-header">
           Pause Contract
         </div>
-        <md-switch v-model="contractPaused" class="md-primary" @click="handleUnpause"></md-switch>
+        <md-switch v-model="contractPaused" class="md-primary"></md-switch>
       </div>
       <div class="content-subtext">
         Pausing prevents transfers, minting, and burning.
@@ -49,6 +49,7 @@ export default {
     },
     async handleUnpause() {
       await this.unpause();
+      console.log('unpauses');
       this.subscribeToEvent(contract.unpauseEvent);
     },
     async handlePause() {

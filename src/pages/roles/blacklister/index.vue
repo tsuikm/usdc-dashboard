@@ -1,44 +1,26 @@
 <template>
   <div>
     <NavBar />
-    <div
-        class="header"
-        data-testid="header"
-      >
-        Check and Blacklist Addresses
+    <div class="header" data-testid="header">
+      Check and Blacklist Addresses
     </div>
     <div class="blacklister">
       <form class="blacklist-form" @submit.prevent="lookupBlacklistStatus">
         <input class="input" v-model="address" placeholder="Enter address here">
         <button class="button" @click="lookupBlacklistStatus">CHECK STATUS</button>
       </form>
-      <div class="container-main">
-        <div class="content-header">Blacklisted</div>
-        <md-switch v-model="isBlacklisted" class="md-primary" @click="handleUnpause"></md-switch>
-      </div>
       <div
-        v-if="this.isBlacklisted"
+        v-if="this.statusChecked"
         class="blacklist-clause"
       > 
-        <div> This address is currently blacklisted. </div>
-        <md-button @click="handleUnblacklist">
-          UNBLACKLIST
-        </md-button>
-        <div> Click to unblacklist. </div>
-      </div>
-      <div
-        v-else-if="this.isBlacklisted === false"
-        class="blacklist-clause"
-      > 
-        <div> This address is not currently blacklisted. </div>
-        <md-button @click="handleBlacklist">
-          BLACKLIST
-        </md-button>
-        <div> Click to blacklist. </div>
-      </div>
-      <div class="container-save">
-        <button class="button">SAVE</button>
-      </div>
+        <div class="container-main">
+          <div class="content-header">Blacklist Address</div>
+          <md-switch v-model="isBlacklisted" class="md-primary"></md-switch>
+        </div>
+        <div class="container-save">
+          <button class="button" @click="save">SAVE</button>
+        </div>
+      </div> 
     </div>
   </div>
 </template>
@@ -63,6 +45,7 @@ export default {
       address: '',
       isBlacklisted: null,
       accounts: [],
+      statusChecked: false,
     };
   },
   created: function() {
@@ -99,7 +82,6 @@ export default {
       this.subscribeToEvent(contract.unBlacklistEvent);
     },
     async lookupBlacklistStatus() {
-      console.log('here')
       if (this.address === '') {
         this.isBlacklisted = null;
         return;
@@ -108,6 +90,7 @@ export default {
         this.isBlacklisted = await contract.methods
           .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
           .call();
+        this.statusChecked = true;
       } catch (e) {
         console.error(e);
         this.isBlacklisted = null;
@@ -139,6 +122,19 @@ export default {
     async unBlacklist(address) { 
       await this.ethReq(contract.methods.unBlacklist(address).encodeABI());
     },
+    async save() {
+      const currentStatus = await contract.methods
+        .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+        .call();
+      const localStatus = this.isBlacklisted;
+
+      if (localStatus && currentStatus !== localStatus) { 
+        await this.handleBlacklist();
+      }
+      if (!localStatus && currentStatus !== localStatus) {
+        await this.handleUnblacklist();
+      }
+    },
   },
 };
 </script>
@@ -164,7 +160,7 @@ export default {
 
 .content-header {
   font-weight: 800;
-  font-size: 24px;
+  font-size: 20px;
   margin-right: 30px;
 }
 

@@ -38,11 +38,11 @@ describe('Transaction Details Page', () => {
 
     expect(getByText('Transaction Details')).not.toBeNull();
 
-    expect(getByText('Transaction Hash:')).not.toBeNull();
-    expect(getByText('Sender:')).not.toBeNull();
-    expect(getByText('Receiver:')).not.toBeNull();
-    expect(getByText('Block Number:')).not.toBeNull();
-    expect(getByText('Gas:')).not.toBeNull();
+    expect(getByText('Transaction Hash')).not.toBeNull();
+    expect(getByText('Sender')).not.toBeNull();
+    expect(getByText('Receiver')).not.toBeNull();
+    expect(getByText('Block Number')).not.toBeNull();
+    expect(getByText('Gas')).not.toBeNull();
 
     await finishPromises();
 

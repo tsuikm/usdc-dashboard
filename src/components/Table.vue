@@ -3,11 +3,6 @@
     <h1 class="md-title">
         {{ name }}
       </h1>
-    <md-progress-bar
-      v-if="loading"
-      data-testid="progress-bar-test-id"
-      md-mode="indeterminate"
-    />
     <md-toolbar
       md-elevation="0"
       class="md-transparent"
@@ -23,6 +18,11 @@
         :disabled="loading"
       />
     </md-toolbar>
+    <md-progress-bar
+      v-if="loading"
+      data-testid="progress-bar-test-id"
+      md-mode="indeterminate"
+    />
     <md-table
       data-testid="md-table"
     >
@@ -160,6 +160,7 @@ span {
 
   .subtitle {
     flex: 1;
+    color: $circle-grey;
   }
 }
 
@@ -180,5 +181,9 @@ tbody .md-table-row td {
 .headers {
   border-bottom: 1px solid $circle-grey;
   color: $circle-grey;
+}
+
+.md-theme-default a:not(.md-button) {
+   color: $circle-blue;
 }
 </style>

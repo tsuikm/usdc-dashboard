@@ -243,6 +243,7 @@ export const getTransactions = async (fromBlock, address=null) => {
         address: USDC_CONTRACT_ADDRESS,
         topics: [TRANSACTION_TOPIC, null, null],
       });
+
       return await processTransactions(transactions);
     } else {
       const senderTxns = await web3.eth.getPastLogs({

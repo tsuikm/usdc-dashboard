@@ -11,16 +11,10 @@
         </div>
         <md-switch v-model="contractPaused" class="md-primary" @click="handleUnpause"></md-switch>
       </div>
-      <div v-if="this.contractPaused">
-        <div class="content-subtext">
-          All transfers, minting, and burning are PAUSED.
-        </div>
+      <div class="content-subtext">
+        Pausing prevents transfers, minting, and burning.
       </div>
-      <div v-else>
-        <div class="content-subtext">
-         All transfers, minting, and burning are ACTIVE.
-        </div>
-      </div>
+      <button class="button" @click="save">SAVE</button>
     </div>
     <div class="pauser">
       <div
@@ -123,6 +117,17 @@ export default {
     async unpause() {  
       await this.ethReq(contract.methods.unpause().encodeABI());
     },
+    async save() {
+      const currentStatus = await contract.methods.paused().call();
+      const localStatus = this.contractPaused;
+
+      if (localStatus && currentStatus !== localStatus) { // pause
+        await this.handlePause();
+      }
+      if (!localStatus && currentStatus !== localStatus) { // unpause
+        await this.handleUnpause();
+      }
+    },
   },
 };
 </script>
@@ -175,8 +180,22 @@ export default {
   font-size: 12px;
   font-weight: 800;
   margin-top: 10px;
+  margin-bottom: 20px;
   text-align: center;
   color: $circle-dark-grey;
 }
+
+.button {
+  height: 50px;
+  padding-left: 40px;
+  padding-right: 40px;
+  border-radius: 5px;
+  background-color: #1ED67D;
+  border: none;
+  color: #ffffff;
+  font-weight: 900;
+  cursor: pointer;
+}
+
 </style>
 

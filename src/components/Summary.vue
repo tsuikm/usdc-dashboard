@@ -4,6 +4,7 @@
 
     <!-- roles -->
     <div class="role" v-for="(role, roleIndex) in roles" :key="roleIndex">
+      <img :src="require(`@/assets/${role.icon}`)">
       <h2> {{ role.name }} </h2>
       <div>
         <nuxt-link
@@ -66,6 +67,7 @@ export default {
      * @typedef {Role} {
      *   name: {String} - the name of the Role (eg. 'Pauser').
      *   addresses: {String[]} - the addresses that have this particular role.
+     *   icon: {String} - the file of the icon displayed for the role, relative to the @/assets directory.
      * }
      */
     roles: {
@@ -73,6 +75,7 @@ export default {
       validator: roles => Array.isArray(roles) &&
                           roles.every(role => role instanceof Object &&
                                               typeof role.name === 'string' &&
+                                              typeof role.icon === 'string' &&
                                               Array.isArray(role.addresses) &&
                                               role.addresses.every(address => typeof address === 'string' && address.length)),
     },
@@ -157,6 +160,5 @@ h1 {
   grid-column-start: 2;
   grid-column-end: 5;
 }
-
 
 </style>

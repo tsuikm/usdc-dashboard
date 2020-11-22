@@ -46,21 +46,25 @@ export default {
       this.roles.push({
         name: 'Pauser',
         addresses: [await contract.methods.pauser().call()],
+        icon: 'pauser-icon.svg'
       });
 
       this.roles.push({
         name: 'Owner',
         addresses: [await contract.methods.owner().call()],
+        icon: 'owner-icon.svg'
       });
 
       this.roles.push({
         name: 'Minters',
         addresses: await this.fetch(`${API_BASE_URL}/api/minters`),
+        icon: 'minter-icon.svg'
       });
 
       this.roles.push({
         name: 'Blacklister',
         addresses: [await contract.methods.blacklister().call()],
+        icon: 'blacklister-icon.svg'
       });
     },
     async lookupBlocks() {

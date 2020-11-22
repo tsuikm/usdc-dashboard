@@ -14,7 +14,7 @@ import NavBar from '@/components/NavBar';
 import AddressPage from '@/components/AddressPage';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import { padHex } from '@/utils/utils';
-import { contract, web3, getBalance, getTotalSupply } from '@/utils/web3utils';
+import { contract, getBalance } from '@/utils/web3utils';
 
 export default {
   components: {

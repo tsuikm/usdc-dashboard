@@ -3,8 +3,6 @@ import NavBar from '@/components/NavBar.vue';
 import { padHex, finishPromises } from '@/utils/utils';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH, BLOCKCHAIN_PATHS } from '@/utils/constants';
 
-
-
 const SAMPLE_ADDRESS = padHex('0x36f80a0bde5020ab0880ab54', WEB3_BALANCEOF_ADDRESS_LENGTH);
 
 describe('NavBar', () => {

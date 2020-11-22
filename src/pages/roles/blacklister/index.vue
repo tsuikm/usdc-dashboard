@@ -6,7 +6,7 @@
     </div>
     <div class="blacklister">
       <form class="blacklist-form" @submit.prevent="lookupBlacklistStatus">
-        <input class="input" v-model="address" placeholder="Enter address here">
+        <CustomInput :placeholder="'Enter address here'" v-model="address"/>
         <ActionButton :label="'CHECK STATUS'" :onClick="lookupBlacklistStatus"/>
       </form>
       <div
@@ -34,6 +34,7 @@
 <script>
 import NavBar from '@/components/NavBar';
 import ActionButton from '@/components/ActionButton';
+import CustomInput from '@/components/CustomInput';
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
@@ -47,6 +48,7 @@ export default {
   components: {
     NavBar,
     ActionButton,
+    CustomInput,
   },
   data() {
     return {

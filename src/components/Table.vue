@@ -173,6 +173,7 @@ span {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 5px;
+  padding-left: 24px;
 }
 tbody .md-table-row td {
   border-top: 0;

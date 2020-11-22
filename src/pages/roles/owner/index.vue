@@ -5,14 +5,9 @@
       <div class="header">
         Check and Assign Roles
       </div>
-      <form @submit.prevent="checkRoles">
-        <md-field class="input-form">
-          <md-input
-            v-model="address"
-            placeholder="Enter Wallet Address Here"
-          />
-          <ActionButton :label="'CHECK ROLES'" :onClick="checkRoles"/>
-        </md-field>
+      <form class="input-form" @submit.prevent="checkRoles">
+        <CustomInput :placeholder="'Enter Wallet Address Here'" v-model="address"/>
+        <ActionButton :label="'CHECK ROLES'" :onClick="checkRoles"/>
       </form>
       <div class="role-control">
         <div class="role-button-row">
@@ -55,6 +50,7 @@
 import NavBar from '@/components/NavBar';
 import RoleButton from '@/components/RoleButton';
 import ActionButton from '@/components/ActionButton';
+import CustomInput from '@/components/CustomInput';
 import { contract } from '@/utils/web3utils';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 
@@ -100,6 +96,7 @@ export default {
     NavBar,
     RoleButton,
     ActionButton,
+    CustomInput
   },
   data() {
     return {
@@ -183,8 +180,12 @@ export default {
 }
 
 .input-form {
-  align-items: center;
   font-family: Proxima Nova;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .role-control {

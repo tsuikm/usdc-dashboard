@@ -40,7 +40,7 @@ describe('Mint page', () => {
     expect(queryByText('Mint USDC')).not.toBeNull();
     expect(queryByTestId('To Address')).not.toBeNull();
     expect(queryByTestId('Amount')).not.toBeNull();
-    expect(queryByText('Send')).not.toBeNull();
+    expect(queryByText('Submit')).not.toBeNull();
   });
 
   test('Mint button works', async () => {
@@ -54,7 +54,7 @@ describe('Mint page', () => {
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = '100';
 
-    const sendButton = queryByText('Send');
+    const sendButton = queryByText('Submit');
     const amountInput = queryByTestId('Amount');
     const toInput = queryByTestId('To Address');
 
@@ -88,7 +88,7 @@ describe('Mint page', () => {
     const { queryByTestId, queryByText } = render(mint);
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = '100';
-    const sendButton = queryByText('Send');
+    const sendButton = queryByText('Submit');
     const amountInput = queryByTestId('Amount');
     const toInput = queryByTestId('To Address');
 

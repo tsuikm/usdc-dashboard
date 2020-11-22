@@ -12,10 +12,10 @@ global.ethereum = {
 describe('Transfers page', () => {
   test('Transfers card renders', async () => {
     const { queryByLabelText, queryByText } = render(transfers);
-    expect(queryByLabelText('To')).not.toBeNull();
-    expect(queryByLabelText('Transfer Amount')).not.toBeNull();
+    expect(queryByLabelText('To Address')).not.toBeNull();
+    expect(queryByLabelText('Amount')).not.toBeNull();
     expect(queryByText('Connect to Metamask')).not.toBeNull();
-    expect(queryByText('Send')).not.toBeNull();
+    expect(queryByText('Submit')).not.toBeNull();
   });
 
   test('Connect Metamask button works', async () => {
@@ -29,7 +29,7 @@ describe('Transfers page', () => {
     expect(ethereum.request.mock.calls).toHaveLength(1);
   });
 
-  test('Send USDC button works', async () => {
+  test('Submit button works', async () => {
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = '100';
     const { queryByLabelText, queryByText } = render(transfers);
@@ -37,9 +37,9 @@ describe('Transfers page', () => {
     const connectMetaMaskButton = queryByText('Connect to Metamask');
     await fireEvent.click(connectMetaMaskButton);
 
-    const sendButton = queryByText('Send');
-    const amountInput = queryByLabelText('Transfer Amount');
-    const toInput = queryByLabelText('To');
+    const sendButton = queryByText('Submit');
+    const amountInput = queryByLabelText('Amount');
+    const toInput = queryByLabelText('To Address');
 
     await fireEvent.update(toInput, TO_WALLET_ADDRESS);
     await fireEvent.update(amountInput, AMOUNT_TEXT);

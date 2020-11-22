@@ -85,6 +85,7 @@ export default {
   margin-left:auto;
   margin-right:auto;
   text-align:center;
+  margin-top: 2%;
 }
 
 .button {

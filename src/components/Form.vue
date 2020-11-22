@@ -108,7 +108,7 @@ export default {
 .input {
   border-radius: 5px;
   box-sizing: border-box;
-  color: $circle-grey;
+  color: $circle-blue;
   display: block;
   font-family: Proxima Nova;
   font-size: 14px;
@@ -132,7 +132,7 @@ label {
   letter-spacing: 1px;
   line-height: 13px;
   text-transform: uppercase;
-  margin-left: 0;
+  text-align: left;
 }
 
 .md-field.md-theme-default::after {

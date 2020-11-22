@@ -1,6 +1,7 @@
 <template>
-  <div class='connectButton'>
+  <div>
     <md-button
+      class='connectButton'
       data-testid="transfers-card-connect-button"
       @click="connectMetamask"
     >

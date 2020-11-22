@@ -31,12 +31,13 @@
         />
       </md-field>
       <md-card-actions>
-        <md-button
+        <!-- <md-button
           data-testid="transfers-card-connect-button"
           @click="connectMetamask"
         >
           Connect to Metamask
-        </md-button>
+        </md-button> -->
+        <ConnectToMetamask />
         <md-button
           data-testid="transfers-card-send-button"
           @click="sendUSDC"
@@ -50,6 +51,7 @@
 
 <script>
 import NavBar from '@/components/NavBar';
+import ConnectToMetamask from '@/components/ConnectToMetamask';
 import Web3 from 'web3';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
@@ -280,6 +282,7 @@ const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 export default {
   components: {
     NavBar,
+    ConnectToMetamask,
   },
   data() {
     return {
@@ -318,7 +321,7 @@ export default {
       }
     },
   },
-};
+}
 
 
 </script>

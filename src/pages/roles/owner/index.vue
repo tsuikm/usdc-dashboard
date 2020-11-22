@@ -11,9 +11,7 @@
             v-model="address"
             placeholder="Enter Wallet Address Here"
           />
-          <md-button @click="checkRoles">
-            CHECK ROLES
-          </md-button>
+          <ActionButton :label="'CHECK ROLES'" :onClick="checkRoles"/>
         </md-field>
       </form>
       <div class="role-control">
@@ -46,9 +44,7 @@
           <md-icon>error</md-icon> Error: You are not signed in as the owner of this contract and cannot reassign roles.
         </span>
         <div class="update-button">
-          <md-button @click="this.save">
-            SAVE
-          </md-button>
+          <ActionButton :label="'SAVE'" :onClick="this.save"/>
         </div>
       </div>
     </div>
@@ -58,6 +54,7 @@
 <script>
 import NavBar from '@/components/NavBar';
 import RoleButton from '@/components/RoleButton';
+import ActionButton from '@/components/ActionButton';
 import { contract } from '@/utils/web3utils';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 
@@ -102,6 +99,7 @@ export default {
   components: {
     NavBar,
     RoleButton,
+    ActionButton,
   },
   data() {
     return {
@@ -202,4 +200,9 @@ export default {
 .role-container {
   display: flex;
 }
+
+.update-button {
+  margin-top: 20px;
+}
+
 </style>

@@ -4,7 +4,6 @@
     <Table
       :name="'Accounts'"
       :loading="loading"
-      :total-items="this.totalItems"
       :schema="this.tableSchema"
       :content="this.accounts"
       :key-field="'address'"
@@ -35,9 +34,6 @@ export default {
     };
   },
   computed: {
-    totalItems() {
-      return this.accounts.length;
-    },
     tableSchema() {
       return [
         {

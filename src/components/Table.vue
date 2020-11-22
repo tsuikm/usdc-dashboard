@@ -23,9 +23,7 @@
       />
     </md-toolbar>
     <md-table
-      md-card
       data-testid="md-table"
-      class="table"
     >
       <md-table-row>
         <md-table-head
@@ -37,6 +35,7 @@
       </md-table-row>
 
       <md-table-row
+      class="data-row"
         v-for="item in content.slice(
           page * pageLength,
           (page + 1) * pageLength
@@ -148,12 +147,6 @@ export default {
   margin: auto;
 }
 
-.table {
-  background: #FFFFFF;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 16px;
-}
-
 span {
   white-space: nowrap;
   overflow: hidden;
@@ -175,5 +168,13 @@ span {
   font-size: 36px;
   line-height: 44px;
   letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 5px;
+}
+
+.data-row {
+  border-color: none;
 }
 </style>

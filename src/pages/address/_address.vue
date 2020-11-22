@@ -49,6 +49,7 @@ export default {
     async fetchTransactions() {
       this.transactions = await getWalletTransactions(padHex(this.$route.params.address, WEB3_GET_LOGS_ADDRESS_LENGTH));
     },
+    pageChange() {},
   },
 };
 </script>

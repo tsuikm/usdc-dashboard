@@ -1,21 +1,21 @@
 <template>
   <div id="table-and-loading-container">
     <h1 class="md-title">
-        {{ name }}
-      </h1>
+      {{ name }}
+    </h1>
     <md-toolbar
       md-elevation="0"
       class="md-transparent"
     >
       <div class="subtitle">
-        Showing {{ page * pageLength + 1 }}-{{ Math.min((page + 1) * pageLength, this.content.length)}} of {{ this.content.length }} results
+        Showing {{ page * pageLength + 1 }}-{{ Math.min((page + 1) * pageLength, this.content.length) }} of {{ this.content.length }} results
       </div>
       <Pagination
-        class="pagination"
         ref="pagination"
+        class="pagination"
         :total-pages="Math.ceil(this.content.length / pageLength)"
-        @page:change="this.pageChange"
         :disabled="loading"
+        @page:change="this.pageChange"
       />
     </md-toolbar>
     <md-progress-bar

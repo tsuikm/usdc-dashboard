@@ -36,15 +36,15 @@ describe('Mint page', () => {
   });
 
   test('Mint card renders', async () => {
-    const { queryByTestId, queryByText } = render(mint);
+    const { getByPlaceholderText, queryByText } = render(mint);
     expect(queryByText('Mint USDC')).not.toBeNull();
-    expect(queryByTestId('To Address')).not.toBeNull();
-    expect(queryByTestId('Amount')).not.toBeNull();
+    expect(getByPlaceholderText('Enter Wallet Address Here')).not.toBeNull();
+    expect(getByPlaceholderText('Amount: i.e. 0')).not.toBeNull();
     expect(queryByText('SUBMIT')).not.toBeNull();
   });
 
   test('Mint button works', async () => {
-    const { queryByTestId, queryByText } = render(mint);
+    const { getByPlaceholderText, queryByText } = render(mint);
 
     // eslint-disable-next-line
     expect(ethereum.request.mock.calls[0]).toEqual([{ method: 'eth_requestAccounts' }]);
@@ -55,8 +55,8 @@ describe('Mint page', () => {
     const AMOUNT_TEXT = '100';
 
     const submitButton = queryByText('SUBMIT');
-    const amountInput = queryByTestId('Amount');
-    const toInput = queryByTestId('To Address');
+    const amountInput = getByPlaceholderText('Amount: i.e. 0');
+    const toInput = getByPlaceholderText('Enter Wallet Address Here');
 
     await fireEvent.update(toInput, TO_WALLET_ADDRESS);
     await finishPromises();
@@ -88,12 +88,12 @@ describe('Mint page', () => {
       request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
     };
 
-    const { queryByTestId, queryByText } = render(mint);
+    const { getByPlaceholderText, queryByText } = render(mint);
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = '100';
     const submitButton = queryByText('SUBMIT');
-    const amountInput = queryByTestId('Amount');
-    const toInput = queryByTestId('To Address');
+    const amountInput = getByPlaceholderText('Amount: i.e. 0');
+    const toInput = getByPlaceholderText('Enter Wallet Address Here');
 
     await fireEvent.update(toInput, TO_WALLET_ADDRESS);
     await fireEvent.update(amountInput, AMOUNT_TEXT);

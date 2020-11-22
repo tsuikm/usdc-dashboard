@@ -15,11 +15,10 @@
 </template>
 
 <script>
-import moment from 'moment';
 import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 import { TRANSACTION_SCHEMA } from '@/utils/constants';
-import { web3, getAllTransactions } from '@/utils/web3utils';
+import { fetchAge, getAllTransactions } from '@/utils/web3utils';
 
 export default {
   components: {
@@ -30,8 +29,6 @@ export default {
     return {
       transactions: [],
       loading: true,
-      blockAge: new Map(),
-      now: moment(),
     };
   },
   computed: {
@@ -45,39 +42,6 @@ export default {
     this.loading = false;
   },
   methods: {
-    async fetchAge(transaction) {
-      if (!this.blockAge.has(transaction.blockNumber)) {
-        const block = await web3.eth.getBlock(transaction.blockNumber);
-        const blockTime = moment.unix(block.timestamp);
-        const age = moment.duration(this.now.diff(blockTime));
-
-        const seconds = age.seconds();
-        const minutes = age.minutes();
-        const hours = age.hours();
-        const days = age.days();
-
-        if (days == 0 && hours == 0 && minutes == 0) {
-          this.blockAge.set(transaction.blockNumber, `${seconds} s ago`);
-        } else if (days == 0 && hours == 0) {
-          this.blockAge.set(
-            transaction.blockNumber,
-            `${minutes} mins ${seconds} s ago`,
-          );
-        } else if (days == 0) {
-          this.blockAge.set(
-            transaction.blockNumber,
-            `${hours} hrs ${minutes} mins ago`,
-          );
-        } else {
-          this.blockAge.set(
-            transaction.blockNumber,
-            `${days} days ${hours} hrs ago`,
-          );
-        }
-      }
-
-      return this.blockAge.get(transaction.blockNumber);
-    },
     async fetchTransactions() {
       this.transactions = await getAllTransactions();
     },
@@ -87,7 +51,7 @@ export default {
       const promises = [];
 
       for (let i = page * pageLength; i < upperBound; i++) {
-        promises.push(this.fetchAge(this.transactions[i]));
+        promises.push(fetchAge(this.transactions[i]));
       }
 
       const ages = await Promise.all(promises);

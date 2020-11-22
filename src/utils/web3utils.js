@@ -6,8 +6,9 @@ import {
   WEB3_MAX_TRANSACTIONS,
 } from '@/utils/constants';
 import { padHex, toHex, removeDuplicates, removeLeadingZeros, fromHex } from '@/utils/utils';
-import Web3 from 'web3';
 import { TRANSACTION_TOPIC } from './constants';
+import moment from 'moment';
+import Web3 from 'web3';
 
 export const abi = [
   {
@@ -329,4 +330,32 @@ export const getWalletTransactions = async (address) => {
     transactions = await getTransactions(toHex(midpoint), address);
   }
   return transactions.slice(0, WEB3_MAX_TRANSACTIONS);
+};
+
+const blockTimes = new Map();
+
+export const fetchAge = async (transaction) => {
+  if (!blockTimes.has(transaction.blockNumber)) {
+    const block = await web3.eth.getBlock(transaction.blockNumber);
+    const blockTime = moment.unix(block.timestamp);
+    blockTimes.set(transaction.blockNumber, blockTime);
+  }
+
+  const blockTime =  blockTimes.get(transaction.blockNumber);
+  const age = moment.duration(moment().diff(blockTime));
+
+  const seconds = age.seconds();
+  const minutes = age.minutes();
+  const hours = age.hours();
+  const days = age.days();
+
+  if (days == 0 && hours == 0 && minutes == 0) {
+    return `${seconds} s ago`;
+  } else if (days == 0 && hours == 0) {
+    return `${minutes} mins ${seconds} s ago`;
+  } else if (days == 0) {
+    return `${hours} hrs ${minutes} mins ago`;
+  } else {
+    return `${days} days ${hours} hrs ago`;
+  }
 };

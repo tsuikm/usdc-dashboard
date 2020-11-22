@@ -39,7 +39,7 @@ describe('Burn page', () => {
     const { queryByTestId, queryByText } = render(burn);
     expect(queryByText('Burn USDC')).not.toBeNull();
     expect(queryByTestId('Amount')).not.toBeNull();
-    expect(queryByText('Submit')).not.toBeNull();
+    expect(queryByText('SUBMIT')).not.toBeNull();
   });
 
   test('Burn button works', async () => {
@@ -50,7 +50,7 @@ describe('Burn page', () => {
     // eslint-disable-next-line
     expect(ethereum.request.mock.calls).toHaveLength(1);
     const AMOUNT_TEXT = '100';
-    const submitButton = queryByText('Submit');
+    const submitButton = queryByText('SUBMIT');
     const amountInput = queryByTestId('Amount');
 
     await fireEvent.update(amountInput, AMOUNT_TEXT);
@@ -81,7 +81,7 @@ describe('Burn page', () => {
 
     const { queryByTestId, queryByText } = render(burn);
     const AMOUNT_TEXT = '100';
-    const submitButton = queryByText('Submit');
+    const submitButton = queryByText('SUBMIT');
     const amountInput = queryByTestId('Amount');
 
     await fireEvent.update(amountInput, AMOUNT_TEXT);

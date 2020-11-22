@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/vue';
 import mint from '@/pages/mint/index';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
-import { toHex } from '@/utils/utils';
+import { toHex, finishPromises } from '@/utils/utils';
 import Web3 from 'web3';
 
 const MOCK_ACCOUNTS = {
@@ -40,7 +40,7 @@ describe('Mint page', () => {
     expect(queryByText('Mint USDC')).not.toBeNull();
     expect(queryByTestId('To Address')).not.toBeNull();
     expect(queryByTestId('Amount')).not.toBeNull();
-    expect(queryByText('Submit')).not.toBeNull();
+    expect(queryByText('SUBMIT')).not.toBeNull();
   });
 
   test('Mint button works', async () => {
@@ -54,13 +54,16 @@ describe('Mint page', () => {
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = '100';
 
-    const submitButton = queryByText('Submit');
+    const submitButton = queryByText('SUBMIT');
     const amountInput = queryByTestId('Amount');
     const toInput = queryByTestId('To Address');
 
     await fireEvent.update(toInput, TO_WALLET_ADDRESS);
+    await finishPromises();
     await fireEvent.update(amountInput, AMOUNT_TEXT);
+    await finishPromises();
     await fireEvent.click(submitButton);
+    await finishPromises();
 
     // eslint-disable-next-line
     expect(ethereum.request.mock.calls[1]).toEqual([{
@@ -88,7 +91,7 @@ describe('Mint page', () => {
     const { queryByTestId, queryByText } = render(mint);
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = '100';
-    const submitButton = queryByText('Submit');
+    const submitButton = queryByText('SUBMIT');
     const amountInput = queryByTestId('Amount');
     const toInput = queryByTestId('To Address');
 

@@ -28,7 +28,7 @@ global.ethereum = ethereumFactory(true);
 describe('BlacklisterControl', () => {
   it('Text components render properly', () => {
     const { findByText } = render(BlacklisterControl);
-    const header = 'Check and Blacklist Roles';
+    const header = 'Check and Blacklist Addresses';
     expect(findByText(header)).not.toBeNull();
   });
 

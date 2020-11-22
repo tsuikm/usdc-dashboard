@@ -15,7 +15,7 @@ describe('Transfers page', () => {
     expect(queryByText('Transfer USDC')).not.toBeNull();
     expect(queryByTestId('To Address')).not.toBeNull();
     expect(queryByTestId('Amount')).not.toBeNull();
-    expect(queryByText('Submit')).not.toBeNull();
+    expect(queryByText('SUBMIT')).not.toBeNull();
     expect(queryByText('Connect to Metamask')).not.toBeNull();
   });
 
@@ -38,7 +38,7 @@ describe('Transfers page', () => {
     const connectMetaMaskButton = queryByText('Connect to Metamask');
     await fireEvent.click(connectMetaMaskButton);
 
-    const submitButton = queryByText('Submit');
+    const submitButton = queryByText('SUBMIT');
     const amountInput = queryByTestId('Amount');
     const toInput = queryByTestId('To Address');
 

@@ -8,15 +8,15 @@
         v-for="(object, index) in schema"
         :key="object.label"
       >
-        <label>{{ object.label }}</label>
         <CustomInput
           :placeholder="object.defaultValue"
           v-model="bindings[index]"
           :data-testid="object.label"
         />
       </div>
-      <div class="center-span">
+      <div class="button-container">
         <ActionButton
+          class="button"
           :label="'SUBMIT'"
           :on-click="this.submit"
         />
@@ -119,21 +119,22 @@ label {
   text-align: left;
 }
 
-.center-span {
+.button-container {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  padding: 10px;
+  width: 30%;
 }
 
 .input {
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 }
 
 .input-container {
-  width: 50%;
+  width: 70%;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+  padding-bottom: 10px;
 }
 </style>

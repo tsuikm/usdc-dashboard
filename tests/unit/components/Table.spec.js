@@ -6,7 +6,6 @@ import Table from '@/components/Table.vue';
 
 const testProps = {
   name: 'Test Name',
-  totalItems: 300,
   schema: [{
     name: 'A',
     getter: (i) => i.a,
@@ -30,7 +29,6 @@ const testProps = {
 
 const testPropsLinks = {
   name: 'Test Name',
-  totalItems: 30,
   schema: [{
     name: 'A',
     getter: (i) => i.a,
@@ -55,7 +53,6 @@ const testPropsLinks = {
 
 const testPropsLarge = {
   name: 'Test Name',
-  totalItems: 30,
   schema: [{
     name: 'A',
     getter: (i) => i.a,

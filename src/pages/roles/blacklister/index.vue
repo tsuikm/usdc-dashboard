@@ -1,28 +1,21 @@
 <template>
   <div>
     <NavBar />
-    <div class="blacklister">
-      <div
+    <div
         class="header"
         data-testid="header"
       >
         Check and Blacklist Addresses
-      </div>
-      <form @submit.prevent="lookupBlacklistStatus">
-        <md-field class="input-form">
-          <md-input
-            v-model="address"
-            class="input"
-            placeholder="Enter address here"
-          />
-          <md-button
-            class="button"
-            @click="lookupBlacklistStatus"
-          >
-            CHECK STATUS
-          </md-button>
-        </md-field>
+    </div>
+    <div class="blacklister">
+      <form class="blacklist-form" @submit.prevent="lookupBlacklistStatus">
+        <input class="input" v-model="address" placeholder="Enter address here">
+        <button class="button" @click="lookupBlacklistStatus">CHECK STATUS</button>
       </form>
+      <div class="container-main">
+        <div class="content-header">Blacklisted</div>
+        <md-switch v-model="isBlacklisted" class="md-primary" @click="handleUnpause"></md-switch>
+      </div>
       <div
         v-if="this.isBlacklisted"
         class="blacklist-clause"
@@ -42,6 +35,9 @@
           BLACKLIST
         </md-button>
         <div> Click to blacklist. </div>
+      </div>
+      <div class="container-save">
+        <button class="button">SAVE</button>
       </div>
     </div>
   </div>
@@ -149,20 +145,63 @@ export default {
 <style scoped>
 .blacklister {
   padding: 30px;
-  margin: 40px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  width: 50%;
+  width: 60%;
+  margin: auto;
 }
 
 .header {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 900;
   padding-bottom: 3%;
 }
 
+.blacklist-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-header {
+  font-weight: 800;
+  font-size: 24px;
+  margin-right: 30px;
+}
+
+.container-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.container-save {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.input {
+  width: 400px;
+  height: 50px;
+  border-color: #1AA3FF;
+  border-style: solid;
+  border-radius: 5px;
+  border-width: 1px;
+  padding: 5px;
+  color: #6B6580;
+}
+
 .button {
-  margin-bottom: 5px;
+  height: 50px;
+  padding-left: 40px;
+  padding-right: 40px;
+  border-radius: 5px;
+  background-color: #1ED67D;
+  border: none;
+  color: #ffffff;
+  font-weight: 900;
+  cursor: pointer;
 }
 
 .input-form {

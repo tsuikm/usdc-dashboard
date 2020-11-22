@@ -1,4 +1,4 @@
-import MasterminterControl from '@/pages/roles/masterminter/index';
+import MasterMinterControl from '@/pages/roles/master-minter';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import { render, fireEvent } from '@testing-library/vue';
 import { padHex } from '@/utils/utils';
@@ -29,16 +29,16 @@ global.ethereum = ethereumFactory(true);
 
 const finishPromises = async () => new Promise(resolve => setTimeout(resolve, 0));
 
-describe('MasterminterControl', () => {
+describe('MasterMinterControl', () => {
   it('Text components render properly', () => {
-    const { findByText } = render(MasterminterControl);
+    const { findByText } = render(MasterMinterControl);
     const header = 'Check and Configure Minters';
     expect(findByText(header)).not.toBeNull();
   });
 
 
   it('Displays correctly when minter is looked up', async () => {
-    const { getByText } = render(MasterminterControl, {
+    const { getByText } = render(MasterMinterControl, {
       data: function() {
         return {
           address: MINTER,
@@ -52,7 +52,7 @@ describe('MasterminterControl', () => {
   });
 
   it('Displays correctly when non minter address is looked up', async () => {
-    const { getByText } = render(MasterminterControl, {
+    const { getByText } = render(MasterMinterControl, {
       data: function() {
         return {
           address: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH),
@@ -65,7 +65,7 @@ describe('MasterminterControl', () => {
   });
 
   it('Configures a new minter correctly', async () => {
-    const { getByText } = render(MasterminterControl, {
+    const { getByText } = render(MasterMinterControl, {
       data: function() {
         return {
           address: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH),
@@ -85,7 +85,7 @@ describe('MasterminterControl', () => {
   });
 
   it('Removes a minter correctly', async () => {
-    const { getByText } = render(MasterminterControl, {
+    const { getByText } = render(MasterMinterControl, {
       data: function() {
         return {
           address: MINTER,
@@ -104,7 +104,7 @@ describe('MasterminterControl', () => {
   });
 
   it('Updates allowance of a minter correctly', async () => {
-    const { getByText } = render(MasterminterControl, {
+    const { getByText } = render(MasterMinterControl, {
       data: function() {
         return {
           address: MINTER,

@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavBar />
-    <div class="masterminter">
+    <div class="master-minter">
       <div
         class="header"
         data-testid="header"
@@ -86,7 +86,7 @@ const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
-  name: 'Masterminter',
+  name: 'MasterMinterControl',
   components: {
     NavBar,
   },
@@ -180,7 +180,7 @@ export default {
 </script>
 
 <style scoped>
-.masterminter {
+.master-minter {
   padding: 30px;
   margin: 40px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);

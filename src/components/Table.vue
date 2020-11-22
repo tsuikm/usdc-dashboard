@@ -20,6 +20,7 @@
         ref="pagination"
         :total-pages="Math.ceil(this.content.length / pageLength)"
         @page:change="this.pageChange"
+        :disabled="loading"
       />
     </md-toolbar>
     <md-table

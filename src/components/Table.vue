@@ -26,7 +26,7 @@
     <md-table
       data-testid="md-table"
     >
-      <md-table-row>
+      <md-table-row class="headers">
         <md-table-head
           v-for="field in schema"
           :key="field.name"
@@ -36,7 +36,6 @@
       </md-table-row>
 
       <md-table-row
-      class="data-row"
         v-for="item in content.slice(
           page * pageLength,
           (page + 1) * pageLength
@@ -174,8 +173,12 @@ span {
   text-overflow: ellipsis;
   margin-bottom: 5px;
 }
+tbody .md-table-row td {
+  border-top: 0;
+}
 
-.data-row {
-  border-color: none;
+.headers {
+  border-bottom: 1px solid $circle-grey;
+  color: $circle-grey;
 }
 </style>

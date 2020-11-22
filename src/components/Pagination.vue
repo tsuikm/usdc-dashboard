@@ -38,17 +38,20 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/styles/variables/_colors.scss";
 .page {
   display: flex;
   flex-direction: row;
   font-size: 13px;
   align-items: center;
+  color: $circle-grey;
 }
 
 .button {
   font-size: 13px;
   text-transform: none;
   align-items: center;
+  color: $circle-grey;
 }
 </style>

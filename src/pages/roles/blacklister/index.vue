@@ -49,7 +49,6 @@
 
 <script>
 import NavBar from '@/components/NavBar';
-import ActionButton from '@/components/ActionButton';
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
@@ -62,7 +61,6 @@ export default {
   name: 'Blacklister',
   components: {
     NavBar,
-    ActionButton,
   },
   data() {
     return {

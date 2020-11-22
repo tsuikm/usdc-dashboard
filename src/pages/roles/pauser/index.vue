@@ -2,7 +2,7 @@
   <div>
     <NavBar />
     <div class="header">
-        Pauser Controls
+      Pauser Controls
     </div>
     <div class="container">
       <div class="container-main">
@@ -13,13 +13,15 @@
           v-model="contractPaused"
           class="md-primary"
           data-testid="toggle"
-          >
-        </md-switch>
+        />
       </div>
       <div class="content-subtext">
         Pausing prevents transfers, minting, and burning.
       </div>
-      <ActionButton :label="'SAVE'" :onClick="save"/>
+      <ActionButton
+        :label="'SAVE'"
+        :on-click="save"
+      />
     </div>
   </div>
 </template>
@@ -33,7 +35,7 @@ import { contract } from '@/utils/web3utils';
 export default {
   components: {
     NavBar,
-    ActionButton
+    ActionButton,
   },
   data() {
     return {

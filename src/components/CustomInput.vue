@@ -4,7 +4,8 @@
       class="input" 
       :placeholder="placeholder" 
       :value="input"
-      @input="updateInput($event.target.value)">
+      @input="updateInput($event.target.value)"
+    >
   </div>
 </template>
 
@@ -19,8 +20,8 @@ export default {
   methods: {
     updateInput(input) {
       this.$emit('input', input);
-    }
-  }
+    },
+  },
 };
 </script>
 

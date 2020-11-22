@@ -1,34 +1,57 @@
 <template>
   <div>
     <NavBar />
-    <div class="header" data-testid="header">
+    <div
+      class="header"
+      data-testid="header"
+    >
       Check and Blacklist Addresses
     </div>
     <div class="blacklister">
-      <form class="blacklist-form" @submit.prevent="lookupBlacklistStatus">
-        <CustomInput :placeholder="'Enter address here'" v-model="address"/>
-        <ActionButton :label="'CHECK STATUS'" :onClick="lookupBlacklistStatus"/>
+      <form
+        class="blacklist-form"
+        @submit.prevent="lookupBlacklistStatus"
+      >
+        <CustomInput
+          v-model="address"
+          :placeholder="'Enter address here'"
+        />
+        <ActionButton
+          :label="'CHECK STATUS'"
+          :on-click="lookupBlacklistStatus"
+        />
       </form>
       <div
         v-if="this.statusChecked"
         class="blacklist-clause"
       > 
-        <div v-if="this.originalStatus" class="blacklist-message">
+        <div
+          v-if="this.originalStatus"
+          class="blacklist-message"
+        >
           Address is currently blacklisted.
         </div>
-        <div v-else class="blacklist-message">
+        <div
+          v-else
+          class="blacklist-message"
+        >
           Address is not currently blacklisted.
         </div>
         <div class="container-main">
-          <div class="content-header">Blacklist Address</div>
+          <div class="content-header">
+            Blacklist Address
+          </div>
           <md-switch 
             v-model="isBlacklisted"
             class="md-primary"
-            data-testid="toggle">
-          </md-switch>
+            data-testid="toggle"
+          />
         </div>
         <div class="container-save">
-          <ActionButton :label="'SAVE'" :onClick="save"/>
+          <ActionButton
+            :label="'SAVE'"
+            :on-click="save"
+          />
         </div>
       </div> 
     </div>

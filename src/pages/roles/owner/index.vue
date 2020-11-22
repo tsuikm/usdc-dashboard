@@ -5,9 +5,18 @@
       <div class="header">
         Check and Assign Roles
       </div>
-      <form class="input-form" @submit.prevent="checkRoles">
-        <CustomInput :placeholder="'Enter Wallet Address Here'" v-model="address"/>
-        <ActionButton :label="'CHECK ROLES'" :onClick="checkRoles"/>
+      <form
+        class="input-form"
+        @submit.prevent="checkRoles"
+      >
+        <CustomInput
+          v-model="address"
+          :placeholder="'Enter Wallet Address Here'"
+        />
+        <ActionButton
+          :label="'CHECK ROLES'"
+          :on-click="checkRoles"
+        />
       </form>
       <div class="role-control">
         <div class="role-button-row">
@@ -39,7 +48,10 @@
           <md-icon>error</md-icon> Error: You are not signed in as the owner of this contract and cannot reassign roles.
         </span>
         <div class="update-button">
-          <ActionButton :label="'SAVE'" :onClick="this.save"/>
+          <ActionButton
+            :label="'SAVE'"
+            :on-click="this.save"
+          />
         </div>
       </div>
     </div>
@@ -96,7 +108,7 @@ export default {
     NavBar,
     RoleButton,
     ActionButton,
-    CustomInput
+    CustomInput,
   },
   data() {
     return {

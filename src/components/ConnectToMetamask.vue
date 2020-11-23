@@ -1,34 +1,33 @@
 <template :key="this.connected">
   <div>
     <md-button
-      class='connectButton'
+      class="connectButton"
       data-testid="transfers-card-connect-button"
       @click="connectMetamask"
     >
       Connect to Metamask
     </md-button>
-    <div v-if="this.connected"> Connected to MetaMask </div>
-    <div v-else>Not Connected to MetaMask </div>
+    <div v-if="this.connected">
+      Connected to MetaMask
+    </div>
+    <div v-else>
+      Not Connected to MetaMask
+    </div>
   </div>
 </template>
 
 <script>
 import Web3 from 'web3';
-import {
-  USDC_CONTRACT_ADDRESS,
-  WEB3_PROVIDER,
-} from '@/utils/constants';
-import { abi } from '@/utils/web3abi';
+import { WEB3_PROVIDER } from '@/utils/constants';
 
 const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
-const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
   name: 'ConnectToMetamask',
   data() {
     return {
       connected: null,
-    }
+    };
   },
   created: function() {
     this.checkConnected();
@@ -44,9 +43,9 @@ export default {
       }
     },
     async checkConnected() {
-      const check = await web3.eth.getAccounts((err, accounts) => {
+      await web3.eth.getAccounts((err, accounts) => {
         if (err != null) {
-          console.error("An error occurred: "+ err);
+          console.error('An error occurred: '+ err);
         } else if (accounts.length == 0) {
           this.connected = false;
         } else {

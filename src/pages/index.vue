@@ -16,6 +16,13 @@ import { API_BASE_URL } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
 import { web3, contract, getTransactions } from '@/utils/web3utils';
 
+// Number of blocks to lookback when searching for the 20 latest transactions
+// No need to search entire history, 10k blocks should (almost) always have 20 transactions
+const RECENT_TXNS_LOOKBACK = 10000;
+
+// Number of recent txns/blocks to display
+const RECENT_COUNT = 20;
+
 export default {
   name: 'SummaryPage',
   components: {
@@ -75,13 +82,15 @@ export default {
     },
     async lookupBlocks() {
       const currentBlock = await web3.eth.getBlockNumber();
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < RECENT_COUNT; i++) {
         this.blocks.push(currentBlock - i);
       }
     },
     async lookupTransactions() {
       const currentBlock = await web3.eth.getBlockNumber();
-      this.transactions = (await getTransactions(toHex(currentBlock - 10000))).slice(0, 20).map(transaction => transaction.transactionHash);
+
+      // Gets recent txns in latest 10K blocks, gets the 20 latest txns, and maps to the hash
+      this.transactions = (await getTransactions(toHex(currentBlock - RECENT_TXNS_LOOKBACK))).slice(0, RECENT_COUNT).map(transaction => transaction.transactionHash);
     },
   },
 };

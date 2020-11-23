@@ -50,6 +50,7 @@
             SAVE
           </md-button>
         </div>
+        <ConnectToMetamask />
       </div>
     </div>
   </div>
@@ -59,6 +60,7 @@
 import Web3 from 'web3';
 import NavBar from '@/components/NavBar';
 import RoleButton from '@/components/RoleButton';
+import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { abi } from '@/utils/web3abi';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_PROVIDER } from '@/utils/constants';
 
@@ -106,6 +108,7 @@ export default {
   components: {
     NavBar,
     RoleButton,
+    ConnectToMetamask,
   },
   data() {
     return {

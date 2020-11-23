@@ -182,6 +182,7 @@ export default {
   font-weight: 900;
   padding-bottom: 3%;
   font-family: Proxima Nova;
+  line-height: 44px;
 }
 
 .input-form {

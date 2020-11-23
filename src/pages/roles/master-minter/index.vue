@@ -1,77 +1,82 @@
 <template>
   <div>
     <NavBar />
+    <div
+      class="header"
+      data-testid="header"
+    >
+      Check and Configure Minters
+    </div>
     <div class="master-minter">
-      <div
-        class="header"
-        data-testid="header"
-      >
-        Check and Configure Minters
-      </div>
-      <form @submit.prevent="lookupMinterStatus">
-        <md-field class="input-form">
-          <md-input
+      <form
+          class="minter-form"
+          @submit.prevent="lookupMinterStatus"
+        >
+        <CustomInput
             v-model="address"
-            class="input"
-            placeholder="Enter address here"
+            :placeholder="'Enter address here'"
           />
-          <md-button
-            class="button"
-            @click="lookupMinterStatus"
-          >
-            CHECK STATUS
-          </md-button>
-        </md-field>
+          <ActionButton
+            :label="'CHECK STATUS'"
+            :on-click="lookupMinterStatus"
+          />
       </form>
-      <div
-        v-if="this.isMinter && this.minterAllowance !== null"
-        class="minter-clause"
-      > 
-        <div> This address is currently a minter with allowance {{ this.minterAllowance }}. </div>
-        <md-field class="input-form">
-          <md-input
-            v-model="allowance"
-            class="input"
-            placeholder="Enter allowance here"
-          />
-          <md-button
-            class="button"
-            @click="configureMinter"
+        <div
+          v-if="this.isMinter && this.minterAllowance !== null"
+          class="minter-clause"
+        > 
+          <div class="minter-message"> 
+            This address is currently a minter with allowance {{ this.minterAllowance }}. 
+          </div>
+          <div
+            class="minter-form"
           >
-            INCREASE ALLOWANCE
-          </md-button>
-        </md-field>
-        <md-button @click="removeMinter">
-          REMOVE MINTER
-        </md-button>
-        <div> Click to increase the allowance or remove the minter. </div>
-      </div>
-      <div
-        v-else-if="this.isMinter === false"
-        class="minter-clause"
-      > 
-        <div> This address is not currently a minter. </div>
-        <md-field class="input-form">
-          <md-input
-            v-model="allowance"
-            class="input"
-            placeholder="Enter allowance here"
-          />
-          <md-button
-            class="button"
-            @click="configureMinter"
+          <CustomInput
+              v-model="allowance"
+              :placeholder="'Enter allowance here'"
+            />
+            <ActionButton
+              :label="'INCREASE ALLOWANCE'"
+              :on-click="configureMinter"
+            />
+          </div>
+          <div class="button">
+            <ActionButton
+              :label="'REMOVE MINTER'"
+              :on-click="removeMinter"
+            />
+          </div>
+          <div class="minter-message"> 
+            Click to increase the allowance or remove the minter. 
+          </div>
+        </div>
+        <div
+          v-else-if="this.isMinter === false"
+          class="minter-clause"
+        > 
+          <div> This address is not currently a minter. </div>
+          <div
+            class="minter-form"
           >
-            CONFIGURE MINTER
-          </md-button>
-        </md-field>
-        <div> Click to configure minter. </div>
+          <CustomInput
+              v-model="allowance"
+              :placeholder="'Enter allowance here'"
+            />
+            <ActionButton
+              :label="'CONFIGURE MINTER'"
+              :on-click="configureMinter"
+            />
+          </div>
+          <div class="minter-message"> Click to configure minter. </div>
+        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar';
+import ActionButton from '@/components/ActionButton';
+import CustomInput from '@/components/CustomInput';
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
@@ -89,6 +94,8 @@ export default {
   name: 'MasterMinterControl',
   components: {
     NavBar,
+    ActionButton,
+    CustomInput,
   },
   data() {
     return {
@@ -182,29 +189,35 @@ export default {
 <style scoped>
 .master-minter {
   padding: 30px;
-  margin: 40px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  width: 50%;
+  width: 60%;
+  margin: auto;
 }
 
 .header {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 900;
   padding-bottom: 3%;
-}
-
-.button {
-  margin-bottom: 5px;
-}
-
-.input-form {
-  align-items: center;
+  line-height: 44px;
 }
 
 .minter-clause {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.minter-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  margin-top: 20px;
+}
+
+.minter-message {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 </style>

@@ -4,10 +4,10 @@
 
 <script>
 // modules
-import { abi } from '@/utils/testTokenABI.js';
-import Web3 from 'web3';
 import { TEST_TOKEN_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants.js';
-const web3 = new Web3(Web3.givenProvider);
+import { abi } from '@/utils/testTokenABI.js';
+import { web3 } from '@/utils/web3utils';
+
 const contract = new web3.eth.Contract(abi, TEST_TOKEN_CONTRACT_ADDRESS);
 
 export default {

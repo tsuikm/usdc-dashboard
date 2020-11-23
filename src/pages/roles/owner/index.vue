@@ -1,20 +1,22 @@
 <template>
   <div>
     <NavBar />
+    <div class="header">
+      Check and Assign Roles
+    </div>
     <div class="owner">
-      <div class="header">
-        Check and Assign Roles
-      </div>
-      <form @submit.prevent="checkRoles">
-        <md-field class="input-form">
-          <md-input
-            v-model="address"
-            placeholder="Enter Wallet Address Here"
-          />
-          <md-button @click="checkRoles">
-            CHECK ROLES
-          </md-button>
-        </md-field>
+      <form
+        class="input-form"
+        @submit.prevent="checkRoles"
+      >
+        <CustomInput
+          v-model="address"
+          :placeholder="'Enter Wallet Address Here'"
+        />
+        <ActionButton
+          :label="'CHECK ROLES'"
+          :on-click="checkRoles"
+        />
       </form>
       <div class="role-control">
         <div class="role-button-row">
@@ -46,9 +48,10 @@
           <md-icon>error</md-icon> Error: You are not signed in as the owner of this contract and cannot reassign roles.
         </span>
         <div class="update-button">
-          <md-button @click="this.save">
-            SAVE
-          </md-button>
+          <ActionButton
+            :label="'SAVE'"
+            :on-click="this.save"
+          />
         </div>
         <ConnectToMetamask />
       </div>
@@ -57,15 +60,21 @@
 </template>
 
 <script>
-import Web3 from 'web3';
 import NavBar from '@/components/NavBar';
 import RoleButton from '@/components/RoleButton';
+<<<<<<< HEAD
 import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { abi } from '@/utils/web3abi';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_PROVIDER } from '@/utils/constants';
 
 const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
+=======
+import ActionButton from '@/components/ActionButton';
+import CustomInput from '@/components/CustomInput';
+import { contract } from '@/utils/web3utils';
+import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
+>>>>>>> 4e307efa9a948e86097e7e44abe99a62b7f9b2b7
 
 /*----------------------------------------------------------------------------*
  * Helpers
@@ -108,7 +117,12 @@ export default {
   components: {
     NavBar,
     RoleButton,
+<<<<<<< HEAD
     ConnectToMetamask,
+=======
+    ActionButton,
+    CustomInput,
+>>>>>>> 4e307efa9a948e86097e7e44abe99a62b7f9b2b7
   },
   data() {
     return {
@@ -185,15 +199,19 @@ export default {
 }
 
 .header {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 900;
   padding-bottom: 3%;
   font-family: Proxima Nova;
 }
 
 .input-form {
-  align-items: center;
   font-family: Proxima Nova;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .role-control {
@@ -209,4 +227,9 @@ export default {
 .role-container {
   display: flex;
 }
+
+.update-button {
+  margin-top: 20px;
+}
+
 </style>

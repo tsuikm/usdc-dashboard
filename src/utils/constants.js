@@ -1,4 +1,5 @@
 export const WEB3_GET_LOGS_ADDRESS_LENGTH = 64;
+export const WEB3_TXN_HASH_LENGTH = 64;
 export const WEB3_BALANCEOF_ADDRESS_LENGTH = 40;
 export const WEB3_RESULT_TOO_LARGE_ERROR_CODE = -32005;
 export const WEB3_MAX_TRANSACTIONS = 10000;
@@ -20,3 +21,21 @@ export const BLACKLISTER_ADDRESS =
 export const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
 
 export const WEB3_PROVIDER = process.env.WEB3_PROVIDER;
+
+export const BLOCKCHAIN_PATHS = ['', '/solana', '/algorand'];
+
+export const ACCOUNTS_SCHEMA = [
+  {
+    name: 'Address',
+    getter: account => account.address,
+    link: account => `/address/${account.address}`,
+  },
+  {
+    name: 'Balance',
+    getter: account => account.balance,
+  },
+  {
+    name: 'Percentage',
+    getter: account => account.percentage,
+  },
+];

@@ -81,7 +81,7 @@ export default {
   border: none;
   cursor: pointer;
   color: #ffffff;
-  background-color: $circle-blue;
+  background-color: #d4d4d4;
 }
 
 .status {

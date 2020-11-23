@@ -53,6 +53,7 @@
             :on-click="save"
           />
         </div>
+        <ConnectToMetamask />
       </div> 
     </div>
   </div>
@@ -62,6 +63,7 @@
 import NavBar from '@/components/NavBar';
 import ActionButton from '@/components/ActionButton';
 import CustomInput from '@/components/CustomInput';
+import ConnectToMetamask from '@/components/ConnectToMetamask';
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
@@ -76,6 +78,7 @@ export default {
     NavBar,
     ActionButton,
     CustomInput,
+    ConnectToMetamask,
   },
   data() {
     return {

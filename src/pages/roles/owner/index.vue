@@ -1,20 +1,22 @@
 <template>
   <div>
     <NavBar />
+    <div class="header">
+      Check and Assign Roles
+    </div>
     <div class="owner">
-      <div class="header">
-        Check and Assign Roles
-      </div>
-      <form @submit.prevent="checkRoles">
-        <md-field class="input-form">
-          <md-input
-            v-model="address"
-            placeholder="Enter Wallet Address Here"
-          />
-          <md-button @click="checkRoles">
-            CHECK ROLES
-          </md-button>
-        </md-field>
+      <form
+        class="input-form"
+        @submit.prevent="checkRoles"
+      >
+        <CustomInput
+          v-model="address"
+          :placeholder="'Enter Wallet Address Here'"
+        />
+        <ActionButton
+          :label="'CHECK ROLES'"
+          :on-click="checkRoles"
+        />
       </form>
       <div class="role-control">
         <div class="role-button-row">
@@ -46,9 +48,10 @@
           <md-icon>error</md-icon> Error: You are not signed in as the owner of this contract and cannot reassign roles.
         </span>
         <div class="update-button">
-          <md-button @click="this.save">
-            SAVE
-          </md-button>
+          <ActionButton
+            :label="'SAVE'"
+            :on-click="this.save"
+          />
         </div>
       </div>
     </div>
@@ -58,6 +61,8 @@
 <script>
 import NavBar from '@/components/NavBar';
 import RoleButton from '@/components/RoleButton';
+import ActionButton from '@/components/ActionButton';
+import CustomInput from '@/components/CustomInput';
 import { contract } from '@/utils/web3utils';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 
@@ -102,6 +107,8 @@ export default {
   components: {
     NavBar,
     RoleButton,
+    ActionButton,
+    CustomInput,
   },
   data() {
     return {
@@ -178,15 +185,19 @@ export default {
 }
 
 .header {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 900;
   padding-bottom: 3%;
   font-family: Proxima Nova;
 }
 
 .input-form {
-  align-items: center;
   font-family: Proxima Nova;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .role-control {
@@ -202,4 +213,9 @@ export default {
 .role-container {
   display: flex;
 }
+
+.update-button {
+  margin-top: 20px;
+}
+
 </style>

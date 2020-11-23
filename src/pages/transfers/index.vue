@@ -31,12 +31,6 @@
         />
       </md-field>
       <md-card-actions>
-        <!-- <md-button
-          data-testid="transfers-card-connect-button"
-          @click="connectMetamask"
-        >
-          Connect to Metamask
-        </md-button> -->
         <ConnectToMetamask />
         <md-button
           data-testid="transfers-card-send-button"

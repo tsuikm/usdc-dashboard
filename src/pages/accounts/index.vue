@@ -35,25 +35,10 @@ export default {
   },
   computed: {
     tableSchema() {
-      return [
-        {
-          name: 'Address',
-          getter: account => account.address,
-          link: account => `/address/${account.address}`,
-        },
-        {
-          name: 'Balance',
-          getter: account => account.balance,
-        },
-        {
-          name: 'Percentage',
-          getter: account => account.percentage,
-        },
-      ];
+      return constants.ACCOUNTS_SCHEMA;
     },
   },
   async created() {
-    this.loading = true;
     this.accounts = await this.getAccounts();
     this.loading = false;
   },

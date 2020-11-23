@@ -54,7 +54,7 @@
           {{ transaction }}
         </nuxt-link>
         <p v-if="transactions.length < limit && transactions.length > 0">
-          Displaying all transactions in the last {{ recentLookback }} blocks.
+          Displaying all transactions in the last {{ lookback }} blocks.
         </p>
         <p v-if="transactions.length === 0">
           No transactions in the last {{ lookback }} blocks.

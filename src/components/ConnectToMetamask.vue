@@ -1,4 +1,4 @@
-<template :key="this.updateComponent">
+<template :key="this.connected">
   <div>
     <md-button
       class='connectButton'
@@ -7,8 +7,8 @@
     >
       Connect to Metamask
     </md-button>
-    <div v-if="this.connected"> {{'test=' + this.connected}} Connected to MetaMask </div>
-    <div v-else> {{'test=' + this.connected}} Not Connected to MetaMask </div>
+    <div v-if="this.connected"> Connected to MetaMask </div>
+    <div v-else>Not Connected to MetaMask </div>
   </div>
 </template>
 
@@ -28,7 +28,6 @@ export default {
   data() {
     return {
       connected: null,
-      updateComponent: null,
     }
   },
   created: function() {
@@ -45,25 +44,13 @@ export default {
       }
     },
     async checkConnected() {
-      console.log('inside check connected function');
-      const check = await web3.eth.getAccounts(function(err, accounts){
-        console.log('accounts', accounts);
+      const check = await web3.eth.getAccounts((err, accounts) => {
         if (err != null) {
-          console.error("An error occurred: "+err);
+          console.error("An error occurred: "+ err);
         } else if (accounts.length == 0) {
           this.connected = false;
-          console.log('should be false', this.connected);
-
-          console.log('not yet', this.updateComponent)
-          this.updateComponent = this.connected;
-          console.log('now', this.updateComponent)
         } else {
           this.connected = true;
-          console.log('should be true', this.connected);
-          
-          console.log('not yet', this.updateComponent);
-          this.updateComponent = this.connected;
-          console.log('now', this.updateComponent);
         }
       });
     },

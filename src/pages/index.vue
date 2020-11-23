@@ -5,6 +5,8 @@
       :roles="this.roles"
       :blocks="this.blocks"
       :transactions="this.transactions"
+      :lookback="RECENT_TXNS_LOOKBACK"
+      :limit="RECENT_COUNT"
     />
   </div>
 </template>
@@ -17,8 +19,7 @@ import { toHex } from '@/utils/utils';
 import { web3, contract, getTransactions } from '@/utils/web3utils';
 
 // Number of blocks to lookback when searching for the 20 latest transactions
-// No need to search entire history, 10k blocks should (almost) always have 20 transactions
-const RECENT_TXNS_LOOKBACK = 10000;
+const RECENT_TXNS_LOOKBACK = 10;
 
 // Number of recent txns/blocks to display
 const RECENT_COUNT = 20;
@@ -55,6 +56,8 @@ export default {
       ],
       blocks: [],
       transactions: [],
+      RECENT_TXNS_LOOKBACK,
+      RECENT_COUNT,
     };
   },
   created() {
@@ -89,7 +92,7 @@ export default {
     async lookupTransactions() {
       const currentBlock = await web3.eth.getBlockNumber();
 
-      // Gets recent txns in latest 10K blocks, gets the 20 latest txns, and maps to the hash
+      // Gets recent txns in latest 10 blocks, gets the 20 latest txns, and maps to the hash
       this.transactions = (await getTransactions(toHex(currentBlock - RECENT_TXNS_LOOKBACK))).slice(0, RECENT_COUNT).map(transaction => transaction.transactionHash);
     },
   },

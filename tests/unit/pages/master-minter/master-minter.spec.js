@@ -48,7 +48,6 @@ describe('MasterMinterControl', () => {
       },
     });
     expect(getByText('This address is currently a minter with allowance 500.')).not.toBeNull();
-    expect(getByText('Click to increase the allowance or remove the minter.')).not.toBeNull();
   });
 
   it('Displays correctly when non minter address is looked up', async () => {
@@ -61,7 +60,6 @@ describe('MasterMinterControl', () => {
       },
     });
     expect(getByText('This address is not currently a minter.')).not.toBeNull();
-    expect(getByText('Click to configure minter.')).not.toBeNull();
   });
 
   it('Configures a new minter correctly', async () => {
@@ -76,12 +74,10 @@ describe('MasterMinterControl', () => {
       },
     });
     expect(getByText('This address is not currently a minter.')).not.toBeNull();
-    expect(getByText('Click to configure minter.')).not.toBeNull();
 
     await fireEvent.click(getByText('CONFIGURE MINTER'));
     await finishPromises();
     expect(getByText('This address is currently a minter with allowance 50.')).not.toBeNull();
-    expect(getByText('Click to increase the allowance or remove the minter.')).not.toBeNull();
   });
 
   it('Removes a minter correctly', async () => {
@@ -95,12 +91,10 @@ describe('MasterMinterControl', () => {
       },
     });
     expect(getByText('This address is currently a minter with allowance 170.')).not.toBeNull();
-    expect(getByText('Click to increase the allowance or remove the minter.')).not.toBeNull();
 
     await fireEvent.click(getByText('REMOVE MINTER'));
     await finishPromises();
     expect(getByText('This address is not currently a minter.')).not.toBeNull();
-    expect(getByText('Click to configure minter.')).not.toBeNull();
   });
 
   it('Updates allowance of a minter correctly', async () => {
@@ -115,12 +109,10 @@ describe('MasterMinterControl', () => {
       },
     });
     expect(getByText('This address is currently a minter with allowance 195.')).not.toBeNull();
-    expect(getByText('Click to increase the allowance or remove the minter.')).not.toBeNull();
 
     await fireEvent.click(getByText('INCREASE ALLOWANCE'));
     await finishPromises();
     expect(getByText('This address is currently a minter with allowance 675.')).not.toBeNull();
-    expect(getByText('Click to increase the allowance or remove the minter.')).not.toBeNull();
   });
 
 

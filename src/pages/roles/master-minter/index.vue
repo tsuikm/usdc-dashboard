@@ -32,13 +32,13 @@
             class="minter-form"
           >
           <CustomInput
-              v-model="allowance"
-              :placeholder="'Enter allowance here'"
-            />
-            <ActionButton
-              :label="'INCREASE ALLOWANCE'"
-              :on-click="configureMinter"
-            />
+            v-model="allowance"
+            :placeholder="'Allowance: i.e. 0'"
+          />
+          <ActionButton
+            :label="'INCREASE ALLOWANCE'"
+            :on-click="configureMinter"
+          />
           </div>
           <div class="button">
             <ActionButton
@@ -46,28 +46,24 @@
               :on-click="removeMinter"
             />
           </div>
-          <div class="minter-message"> 
-            Click to increase the allowance or remove the minter. 
-          </div>
         </div>
         <div
           v-else-if="this.isMinter === false"
           class="minter-clause"
         > 
-          <div> This address is not currently a minter. </div>
+          <div class="minter-message"> This address is not currently a minter. </div>
           <div
             class="minter-form"
           >
           <CustomInput
-              v-model="allowance"
-              :placeholder="'Enter allowance here'"
-            />
-            <ActionButton
-              :label="'CONFIGURE MINTER'"
-              :on-click="configureMinter"
-            />
+            v-model="allowance"
+            :placeholder="'Allowance: i.e. 0'"
+          />
+          <ActionButton
+            :label="'CONFIGURE MINTER'"
+            :on-click="configureMinter"
+          />
           </div>
-          <div class="minter-message"> Click to configure minter. </div>
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@
     >
       <img :src="require(`@/assets/${role.icon}`)">
       <h2> {{ role.name }} </h2>
-      <div>
+      <div class="role-addresses">
         <nuxt-link
           v-for="(address, addressIndex) in role.addresses"
           :key="addressIndex"
@@ -134,10 +134,6 @@ export default {
   }
 }
 
-h1, h2 {
-  margin-bottom: 1rem;
-}
-
 h2 {
   font-size: 18px;
 }
@@ -152,6 +148,11 @@ h1 {
   @media only screen and (max-width: $mobile-threshold) {
     grid-row: auto;
     grid-column: 1
+  }
+
+  .role-addresses {
+    max-height: 60px;
+    overflow-y: scroll;
   }
 }
 

@@ -71,3 +71,19 @@ export const TRANSACTION_SCHEMA = [
     },
   },
 ];
+
+export const ACCOUNTS_SCHEMA = [
+  {
+    name: 'Address',
+    getter: account => account.address,
+    link: account => `/address/${account.address}`,
+  },
+  {
+    name: 'Balance',
+    getter: account => account.balance,
+  },
+  {
+    name: 'Percentage',
+    getter: account => account.percentage,
+  },
+];

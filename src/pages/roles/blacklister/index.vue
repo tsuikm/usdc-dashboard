@@ -1,54 +1,67 @@
 <template>
   <div>
     <NavBar />
+    <div
+      class="header"
+      data-testid="header"
+    >
+      Check and Blacklist Addresses
+    </div>
     <div class="blacklister">
-      <div
-        class="header"
-        data-testid="header"
+      <form
+        class="blacklist-form"
+        @submit.prevent="lookupBlacklistStatus"
       >
-        Check and Blacklist Addresses
-      </div>
-      <form @submit.prevent="lookupBlacklistStatus">
-        <md-field class="input-form">
-          <md-input
-            v-model="address"
-            class="input"
-            placeholder="Enter address here"
-          />
-          <md-button
-            class="button"
-            @click="lookupBlacklistStatus"
-          >
-            CHECK STATUS
-          </md-button>
-        </md-field>
+        <CustomInput
+          v-model="address"
+          :placeholder="'Enter address here'"
+        />
+        <ActionButton
+          :label="'CHECK STATUS'"
+          :on-click="lookupBlacklistStatus"
+        />
       </form>
       <div
-        v-if="this.isBlacklisted"
+        v-if="this.statusChecked"
         class="blacklist-clause"
       > 
-        <div> This address is currently blacklisted. </div>
-        <md-button @click="handleUnblacklist">
-          UNBLACKLIST
-        </md-button>
-        <div> Click to unblacklist. </div>
-      </div>
-      <div
-        v-else-if="this.isBlacklisted === false"
-        class="blacklist-clause"
-      > 
-        <div> This address is not currently blacklisted. </div>
-        <md-button @click="handleBlacklist">
-          BLACKLIST
-        </md-button>
-        <div> Click to blacklist. </div>
-      </div>
+        <div
+          v-if="this.originalStatus"
+          class="blacklist-message"
+        >
+          Address is currently blacklisted.
+        </div>
+        <div
+          v-else
+          class="blacklist-message"
+        >
+          Address is not currently blacklisted.
+        </div>
+        <div class="container-main">
+          <div class="content-header">
+            Blacklist Address
+          </div>
+          <md-switch 
+            v-model="isBlacklisted"
+            class="md-primary"
+            data-testid="toggle"
+          />
+        </div>
+        <div class="container-save">
+          <ActionButton
+            :label="'SAVE'"
+            :on-click="save"
+          />
+        </div>
+      </div> 
     </div>
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar';
+import ActionButton from '@/components/ActionButton';
+import CustomInput from '@/components/CustomInput';
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
@@ -61,12 +74,16 @@ export default {
   name: 'Blacklister',
   components: {
     NavBar,
+    ActionButton,
+    CustomInput,
   },
   data() {
     return {
       address: '',
       isBlacklisted: null,
       accounts: [],
+      statusChecked: false,
+      originalStatus: false,
     };
   },
   created: function() {
@@ -111,6 +128,8 @@ export default {
         this.isBlacklisted = await contract.methods
           .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
           .call();
+        this.statusChecked = true;
+        this.originalStatus = this.isBlacklisted;
       } catch (e) {
         console.error(e);
         this.isBlacklisted = null;
@@ -142,6 +161,19 @@ export default {
     async unBlacklist(address) { 
       await this.ethReq(contract.methods.unBlacklist(address).encodeABI());
     },
+    async save() {
+      const currentStatus = await contract.methods
+        .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+        .call();
+      const localStatus = this.isBlacklisted;
+
+      if (localStatus && currentStatus !== localStatus) { 
+        await this.handleBlacklist();
+      }
+      if (!localStatus && currentStatus !== localStatus) {
+        await this.handleUnblacklist();
+      }
+    },
   },
 };
 </script>
@@ -149,25 +181,45 @@ export default {
 <style scoped>
 .blacklister {
   padding: 30px;
-  margin: 40px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  width: 50%;
+  width: 60%;
+  margin: auto;
 }
 
 .header {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 900;
   padding-bottom: 3%;
   line-height: 44px;
 }
 
-.button {
-  margin-bottom: 5px;
+.blacklist-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.input-form {
+.blacklist-message {
+  margin-top: 20px;
+}
+
+.content-header {
+  font-weight: 800;
+  font-size: 20px;
+  margin-right: 50px;
+}
+
+.container-main {
+  display: flex;
+  justify-content: center;
   align-items: center;
+  margin-top: 30px;
+}
+
+.container-save {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
 }
 
 .blacklist-clause {

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <button class="button" @click="onClick">{{ label }}</button>
+    <button
+      class="button"
+      @click="onClick"
+    >
+      {{ label }}
+    </button>
   </div>
 </template>
 

@@ -32,12 +32,12 @@
 
 html, body {
   width: 100%;
-  height: 100vh;
   margin: 0;
   padding: 0;
 
-  background: #ffffff;
   font-size: 16px;
+
+  background: white !important;
 }
 
 body {
@@ -48,16 +48,23 @@ body {
   }
 }
 
+#__nuxt {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 #__nuxt, #__layout, #__layout > div {
   height: 100%;
 }
 
-h1, h2 {
-  font-family: 'Proxima Nova';
+h1 {
+  font-size: 36px;
+  margin-bottom: 2rem;
 }
 
 h2 {
   color: $circle-dark-blue;
+  margin-bottom: 1rem;
 }
 
 #root {
@@ -106,10 +113,10 @@ h2 {
       opacity: 0;
       transition: display 0s, ease opacity 0.3s;
     }
-    
+
     #menu-items.open {
       opacity: 1;
-      
+
       display: flex;
       position: fixed;
       top: 0;
@@ -143,8 +150,6 @@ h2 {
 
 .card {
   padding: 1.5rem;
-
-  box-shadow: $shadow;
   border-radius: 16px;
 }
 

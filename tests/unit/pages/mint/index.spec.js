@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/vue';
 import mint from '@/pages/mint/index';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
-import { toHex } from '@/utils/utils';
+import { toHex, finishPromises } from '@/utils/utils';
 import Web3 from 'web3';
 
 const MOCK_ACCOUNTS = {
@@ -36,15 +36,15 @@ describe('Mint page', () => {
   });
 
   test('Mint card renders', async () => {
-    const { queryByTestId, queryByText } = render(mint);
+    const { getByPlaceholderText, queryByText } = render(mint);
     expect(queryByText('Mint USDC')).not.toBeNull();
-    expect(queryByTestId('To Address')).not.toBeNull();
-    expect(queryByTestId('Amount')).not.toBeNull();
-    expect(queryByText('Send')).not.toBeNull();
+    expect(getByPlaceholderText('Enter Wallet Address Here')).not.toBeNull();
+    expect(getByPlaceholderText('Amount: i.e. 0')).not.toBeNull();
+    expect(queryByText('SUBMIT')).not.toBeNull();
   });
 
   test('Mint button works', async () => {
-    const { queryByTestId, queryByText } = render(mint);
+    const { getByPlaceholderText, queryByText } = render(mint);
 
     // eslint-disable-next-line
     expect(ethereum.request.mock.calls[0]).toEqual([{ method: 'eth_requestAccounts' }]);
@@ -54,13 +54,16 @@ describe('Mint page', () => {
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = '100';
 
-    const sendButton = queryByText('Send');
-    const amountInput = queryByTestId('Amount');
-    const toInput = queryByTestId('To Address');
+    const submitButton = queryByText('SUBMIT');
+    const amountInput = getByPlaceholderText('Amount: i.e. 0');
+    const toInput = getByPlaceholderText('Enter Wallet Address Here');
 
     await fireEvent.update(toInput, TO_WALLET_ADDRESS);
+    await finishPromises();
     await fireEvent.update(amountInput, AMOUNT_TEXT);
-    await fireEvent.click(sendButton);
+    await finishPromises();
+    await fireEvent.click(submitButton);
+    await finishPromises();
 
     // eslint-disable-next-line
     expect(ethereum.request.mock.calls[1]).toEqual([{
@@ -85,16 +88,16 @@ describe('Mint page', () => {
       request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
     };
 
-    const { queryByTestId, queryByText } = render(mint);
+    const { getByPlaceholderText, queryByText } = render(mint);
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = '100';
-    const sendButton = queryByText('Send');
-    const amountInput = queryByTestId('Amount');
-    const toInput = queryByTestId('To Address');
+    const submitButton = queryByText('SUBMIT');
+    const amountInput = getByPlaceholderText('Amount: i.e. 0');
+    const toInput = getByPlaceholderText('Enter Wallet Address Here');
 
     await fireEvent.update(toInput, TO_WALLET_ADDRESS);
     await fireEvent.update(amountInput, AMOUNT_TEXT);
-    await fireEvent.click(sendButton);
+    await fireEvent.click(submitButton);
     expect(consoleSpy).toHaveBeenCalled();
   });
 });

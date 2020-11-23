@@ -1,17 +1,20 @@
 <template :key="this.connected">
-  <div>
-    <md-button
+  <div class="container">
+    <button
       class="connectButton"
       data-testid="transfers-card-connect-button"
       @click="connectMetamask"
     >
       Connect to Metamask
-    </md-button>
-    <div v-if="this.connected">
-      Connected to MetaMask
-    </div>
-    <div v-else>
-      Not Connected to MetaMask
+    </button>
+    <div class="status">
+      <div v-if="this.connected">
+        <md-icon class="check">check</md-icon>
+        Connected to MetaMask
+      </div>
+      <div v-else>
+        Not Connected to MetaMask
+      </div>
     </div>
   </div>
 </template>
@@ -60,7 +63,36 @@ export default {
 <style scoped lang="scss">
 @import "@/assets/styles/variables/_colors.scss";
 
-.connectButton {
-  color: $circle-green;
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
+.connectButton {
+  margin-top: 40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 5px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: $circle-blue;
+}
+
+.status {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.check {
+  color: $circle-green;
+  margin-right: 10px;
+}
+
 </style>

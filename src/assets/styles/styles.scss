@@ -49,12 +49,23 @@ body {
   }
 }
 
+#__nuxt {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 #__nuxt, #__layout, #__layout > div {
   height: 100%;
 }
 
+h1 {
+  font-size: 36px;
+  margin-bottom: 2rem;
+}
+
 h2 {
   color: $circle-dark-blue;
+  margin-bottom: 1rem;
 }
 
 #root {

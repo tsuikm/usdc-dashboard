@@ -32,6 +32,7 @@ export default {
   data() {
     return {
       connected: null,
+      accounts: [],
     };
   },
   created: function() {

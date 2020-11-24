@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/vue';
 import transfers from '@/pages/transfers/index';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
-import { toHex } from '@/utils/utils';
+import { toHex, finishPromises } from '@/utils/utils';
 
 const MOCK_WALLET_ADDRESS = '0xdC1e071D120FD40fB1173BCcc86c74F47645F4E0';
 
@@ -33,9 +33,10 @@ describe('Transfers page', () => {
     await fireEvent.update(toInput, TO_WALLET_ADDRESS);
     await fireEvent.update(amountInput, AMOUNT_TEXT);
     await fireEvent.click(submitButton);
+    await finishPromises();
 
     // eslint-disable-next-line
-    expect(ethereum.request.mock.calls[2]).toEqual([{
+    expect(ethereum.request.mock.calls[1]).toEqual([{
       method: 'eth_sendTransaction',
       params: [
         {

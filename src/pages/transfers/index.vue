@@ -16,7 +16,7 @@
       @submit="this.submit"
     />
     <div class="connect-metamask">
-      <ConnectToMetamask />
+      <ConnectToMetamask ref="connectToMetamaskButton" />
     </div>
   </div>
 </template>
@@ -41,14 +41,6 @@ export default {
     };
   },
   methods: {
-    async connectMetamask() {
-      try {
-        // eslint-disable-next-line
-        this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      } catch (e) {
-        console.log(e);
-      }
-    },
     async submit(toAddress, amount) {
       try {
         // eslint-disable-next-line
@@ -57,7 +49,7 @@ export default {
             method: 'eth_sendTransaction',
             params: [
               {
-                from: this.accounts[0],
+                from: this.$refs.connectToMetamaskButton.accounts[0],
                 to: USDC_CONTRACT_ADDRESS,
                 data: contract.methods.transfer(toAddress, toHex(Number(amount) * 1000000)).encodeABI(),
                 gasPrice: DEFAULT_GAS_PRICE,

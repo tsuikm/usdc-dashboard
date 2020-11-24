@@ -5,11 +5,13 @@
       data-testid="transfers-card-connect-button"
       @click="connectMetamask"
     >
-      Connect to Metamask
+      Connect to MetaMask
     </button>
     <div class="status">
       <div v-if="this.connected">
-        <md-icon class="check">check</md-icon>
+        <md-icon class="check">
+          check
+        </md-icon>
         Connected to MetaMask
       </div>
       <div v-else>

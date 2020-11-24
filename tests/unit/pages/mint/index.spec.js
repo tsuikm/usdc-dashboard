@@ -97,5 +97,10 @@ describe('Mint page', () => {
     await fireEvent.click(sendButton);
     expect(consoleSpy).toHaveBeenCalled();
   });
+
+  test('ConnectToMetamask component renders', async () => {
+    const { findByText } = render(mint);
+    expect(findByText('Connect to MetaMask')).not.toBeNull();
+  });
 });
 

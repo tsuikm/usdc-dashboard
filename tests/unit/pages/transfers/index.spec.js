@@ -14,13 +14,13 @@ describe('Transfers page', () => {
     const { queryByLabelText, queryByText } = render(transfers);
     expect(queryByLabelText('To')).not.toBeNull();
     expect(queryByLabelText('Transfer Amount')).not.toBeNull();
-    expect(queryByText('Connect to Metamask')).not.toBeNull();
+    expect(queryByText('Connect to MetaMask')).not.toBeNull();
     expect(queryByText('Send')).not.toBeNull();
   });
 
   test('Connect Metamask button works', async () => {
     const { queryByText } = render(transfers);
-    const button = queryByText('Connect to Metamask');
+    const button = queryByText('Connect to MetaMask');
     await fireEvent.click(button);
 
     // eslint-disable-next-line
@@ -34,7 +34,7 @@ describe('Transfers page', () => {
     const AMOUNT_TEXT = '100';
     const { queryByLabelText, queryByText } = render(transfers);
 
-    const connectMetaMaskButton = queryByText('Connect to Metamask');
+    const connectMetaMaskButton = queryByText('Connect to MetaMask');
     await fireEvent.click(connectMetaMaskButton);
 
     const sendButton = queryByText('Send');

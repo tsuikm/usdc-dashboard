@@ -46,7 +46,6 @@
 <script>
 import NavBar from '@/components/NavBar';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
-import Web3 from 'web3';
 import { contract } from '@/utils/web3utils';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';

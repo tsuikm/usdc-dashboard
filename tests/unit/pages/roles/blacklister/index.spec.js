@@ -101,4 +101,8 @@ describe('BlacklisterControl', () => {
     expect(getByText('Address is not currently blacklisted.')).not.toBeNull();
   });
 
+  test('ConnectToMetamask component renders', async () => {
+    const { findByText } = render(BlacklisterControl);
+    expect(findByText('Connect to MetaMask')).not.toBeNull();
+  });
 });

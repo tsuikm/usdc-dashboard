@@ -3,46 +3,44 @@
     <div class="title">
       {{ title }}
     </div>
-    <md-card class="card">
-      <div
+    <div class="input-container">
+      <div class="input"
         v-for="(object, index) in schema"
         :key="object.label"
       >
-        <label>{{ object.label }}</label>
-
-        <md-field class="field">
-          <md-input
-            v-model="bindings[index]"
-            class="input"
-            :data-testid="object.label"
-          />
-        </md-field>
+        <CustomInput
+          :placeholder="object.placeholder"
+          v-model="bindings[index]"
+          :data-testid="object.label"
+        />
       </div>
-
-      <md-card-actions>
-        <span class="center-span">
-          <md-button
-            class="button"
-            md-alignment="center"
-            @click="this.submit"
-          >Send</md-button>
-        </span>
-      </md-card-actions>
-    </md-card>
+      <div class="button-container">
+        <ActionButton
+          class="button"
+          :label="'SUBMIT'"
+          :on-click="this.submit"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-
+import ActionButton from '@/components/ActionButton';
+import CustomInput from '@/components/CustomInput';
 export default {
   name: 'Form',
+  components: {
+    ActionButton,
+    CustomInput,
+  },
   props: {
     title: String,
 
     /** 
      * List of objects, in the order in which they should be displayed.
      * Each object must contain `label` field. May contain an
-     * optional `defaultValue` field (defaults to '').
+     * optional `placeholder` field (defaults to '').
      * For instance,
      * [
      *  {
@@ -50,7 +48,7 @@ export default {
      *  },
      *  {
      *    label: 'Amount:',
-     *    defaultValue: 0
+     *    placeholder: 0
      *  }
      * ]
      */ 
@@ -76,7 +74,7 @@ export default {
        * their values when the form is submitted.
        */
 
-      bindings: this.schema.map(obj => obj.defaultValue !== undefined ? obj.defaultValue : ''),
+      bindings: this.schema.map(obj => obj.placeholder !== undefined ? obj.placeholder : ''),
     };
   },
   methods: {
@@ -97,7 +95,7 @@ export default {
 }
 
 .title {
-  padding: 8% 0 0 8%;
+  padding: 0% 0 6% 0;
   width: fit-content;
   font-family: Proxima Nova;
   font-style: normal;
@@ -106,32 +104,6 @@ export default {
   line-height: 54px;
   letter-spacing: 0.03em;
   color: $circle-black;
-}
-
-.input {
-  border-radius: 5px;
-  box-sizing: border-box;
-  color: $circle-grey;
-  display: block;
-  font-family: Proxima Nova;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: bold;
-  left: 37.5%;
-  letter-spacing: 0.03em;
-  line-height: 18px;
-  margin-bottom: 14px;
-  text-align: left;
-  width: 25%;
-}
-
-.card {
-  background-color: #FFF;
-  border-radius: 16px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  padding: 24px;
-  margin: auto;
-  width: 60%;
 }
 
 label {
@@ -144,39 +116,25 @@ label {
   letter-spacing: 1px;
   line-height: 13px;
   text-transform: uppercase;
+  text-align: left;
 }
 
-.md-field.md-theme-default::after {
-  background-color: rgba(0, 0, 0, 0);
-  min-height: 0px;
-}
-
-
-.field {
-  border-radius: 5px;
-  border: 1px solid #DBDCDC;
-  box-sizing: border-box;
-  padding-left: 16px;
-}
-
-.button {
-  background: $circle-green;
-  border-radius: 5px;
-  color: #FFFFFF;
-  font-family: Proxima Nova;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: bold;
-  height: 50px;
-  letter-spacing: 1.05px;
-  line-height: 17px;
-  padding: 17px 24px;
-  text-transform: uppercase;
-}
-
-.center-span {
+.button-container {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+  width: 30%;
+}
+
+.input {
+  padding-bottom: 20px;
+}
+
+.input-container {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding-bottom: 10px;
 }
 </style>

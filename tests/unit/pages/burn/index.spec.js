@@ -36,25 +36,25 @@ describe('Burn page', () => {
   });
 
   test('Burn card renders', async () => {
-    const { queryByTestId, queryByText } = render(burn);
+    const { getByPlaceholderText, queryByText } = render(burn);
     expect(queryByText('Burn USDC')).not.toBeNull();
-    expect(queryByTestId('Amount')).not.toBeNull();
-    expect(queryByText('Send')).not.toBeNull();
+    expect(getByPlaceholderText('Amount: i.e. 0')).not.toBeNull();
+    expect(queryByText('SUBMIT')).not.toBeNull();
   });
 
   test('Burn button works', async () => {
-    const { queryByTestId, queryByText } = render(burn);
+    const { getByPlaceholderText, queryByText } = render(burn);
 
     // eslint-disable-next-line
     expect(ethereum.request.mock.calls[0]).toEqual([{ method: 'eth_requestAccounts' }]);
     // eslint-disable-next-line
     expect(ethereum.request.mock.calls).toHaveLength(1);
     const AMOUNT_TEXT = '100';
-    const sendButton = queryByText('Send');
-    const amountInput = queryByTestId('Amount');
+    const submitButton = queryByText('SUBMIT');
+    const amountInput = getByPlaceholderText('Amount: i.e. 0');
 
     await fireEvent.update(amountInput, AMOUNT_TEXT);
-    await fireEvent.click(sendButton);
+    await fireEvent.click(submitButton);
 
     // eslint-disable-next-line
     expect(ethereum.request.mock.calls[1]).toEqual([{
@@ -79,13 +79,13 @@ describe('Burn page', () => {
       request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
     };
 
-    const { queryByTestId, queryByText } = render(burn);
+    const { getByPlaceholderText, queryByText } = render(burn);
     const AMOUNT_TEXT = '100';
-    const sendButton = queryByText('Send');
-    const amountInput = queryByTestId('Amount');
+    const submitButton = queryByText('SUBMIT');
+    const amountInput = getByPlaceholderText('Amount: i.e. 0');
 
     await fireEvent.update(amountInput, AMOUNT_TEXT);
-    await fireEvent.click(sendButton);
+    await fireEvent.click(submitButton);
     expect(consoleSpy).toHaveBeenCalled();
   });
 

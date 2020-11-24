@@ -134,10 +134,6 @@ export default {
   }
 }
 
-h1, h2 {
-  margin-bottom: 1rem;
-}
-
 h2 {
   font-size: 18px;
 }

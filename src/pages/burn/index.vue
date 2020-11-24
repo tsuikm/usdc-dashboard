@@ -6,7 +6,7 @@
       :schema=" [
         {
           label: 'Amount',
-          defaultValue: 0
+          placeholder: 'Amount: i.e. 0'
         }
       ]"
       @submit="this.submit"

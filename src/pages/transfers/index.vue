@@ -1,49 +1,28 @@
 <template>
   <div>
     <NavBar />
-    <md-card
-      class="transferCard"
-      data-testid="transfers-card-test-id"
-    >
-      <md-card-header class="transferCardHeader">
-        <div class="md-title">
-          Transfer USDC
-        </div>
-      </md-card-header>
-
-
-      <md-field
-        class="transferInput"
-      >
-        <label>To</label>
-        <md-input
-          v-model="to"
-          data-testid="transfers-card-to-input"
-        />
-      </md-field>
-      <md-field
-        class="transferInput"
-      >
-        <label>Transfer Amount</label>
-        <md-input
-          v-model="amount"
-          data-testid="transfers-card-amount-input"
-        />
-      </md-field>
-      <md-card-actions>
-        <ConnectToMetamask />
-        <md-button
-          data-testid="transfers-card-send-button"
-          @click="sendUSDC"
-        >
-          Send
-        </md-button>
-      </md-card-actions>
-    </md-card>
+    <Form
+      :title="'Transfer USDC'"
+      :schema=" [
+        {
+          label: 'To Address',
+          placeholder: 'Enter Wallet Address Here'
+        },
+        {
+          label: 'Amount',
+          placeholder: 'Amount: i.e. 0'
+        }
+      ]"
+      @submit="this.submit"
+    />
+    <div class="connect-metamask">
+      <ConnectToMetamask />
+    </div>
   </div>
 </template>
 
 <script>
+import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { contract } from '@/utils/web3utils';
@@ -52,13 +31,12 @@ import { toHex } from '@/utils/utils';
 
 export default {
   components: {
+    Form,
     NavBar,
     ConnectToMetamask,
   },
   data() {
     return {
-      to: '',
-      amount: '',
       accounts: [],
     };
   },
@@ -71,7 +49,7 @@ export default {
         console.log(e);
       }
     },
-    async sendUSDC() {
+    async submit(toAddress, amount) {
       try {
         // eslint-disable-next-line
         const txHash = await ethereum
@@ -81,7 +59,7 @@ export default {
               {
                 from: this.accounts[0],
                 to: USDC_CONTRACT_ADDRESS,
-                data: contract.methods.transfer(this.to, toHex(Number(this.amount) * 1000000)).encodeABI(),
+                data: contract.methods.transfer(toAddress, toHex(Number(amount) * 1000000)).encodeABI(),
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
@@ -93,25 +71,18 @@ export default {
     },
   },
 };
-
-
 </script>
 
 <style scoped>
-.transferInput {
-  color: black;
-  width: 25%;
-  text-align: center;
-  left: 37.5%;
+.connect-metamask {
+  margin-left:auto;
+  margin-right:auto;
+  text-align:center;
+  margin-top: 2%;
 }
 
-.transferCard {
-  width: 50%;
-  left: 25%;
-  padding: 5%;
-  background-color: #6cb6ff;
+.button {
+  width: 20%;
 }
-.transferCardHeader {
-  color: white;
-}
+
 </style>

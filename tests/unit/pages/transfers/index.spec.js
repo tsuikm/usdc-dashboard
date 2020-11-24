@@ -16,18 +16,6 @@ describe('Transfers page', () => {
     expect(getByPlaceholderText('Enter Wallet Address Here')).not.toBeNull();
     expect(getByPlaceholderText('Amount: i.e. 0')).not.toBeNull();
     expect(queryByText('SUBMIT')).not.toBeNull();
-    expect(queryByText('Connect to Metamask')).not.toBeNull();
-  });
-
-  test('Connect Metamask button works', async () => {
-    const { queryByText } = render(transfers);
-    const button = queryByText('Connect to MetaMask');
-    await fireEvent.click(button);
-
-    // eslint-disable-next-line
-    expect(ethereum.request.mock.calls[0]).toEqual([{ method: 'eth_requestAccounts' }]);
-    // eslint-disable-next-line
-    expect(ethereum.request.mock.calls).toHaveLength(1);
   });
 
   test('Submit button works', async () => {

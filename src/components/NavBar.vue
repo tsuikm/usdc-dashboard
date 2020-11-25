@@ -11,13 +11,16 @@
         :to="accountsLink"
         class="link"
       >
-        Accounts
+        {{ 'Accounts' }}
+        <div class="dropdown">
+          hello
+        </div>
       </nuxt-link>
       <nuxt-link
         :to="transfersLink"
         class="link"
       >
-        Transfer
+        {{ 'Transfer' }}
       </nuxt-link>
       <input
         v-model="address"

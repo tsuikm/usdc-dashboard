@@ -5,6 +5,9 @@
       :roles="this.roles"
       :blocks="this.blocks"
       :transactions="this.transactions"
+      :lookback="RECENT_TXNS_LOOKBACK"
+      :limit="RECENT_COUNT"
+      :loading="loading"
     />
   </div>
 </template>
@@ -12,8 +15,15 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Summary from '@/components/Summary';
-import { USDC_CONTRACT_ADDRESS, TRANSACTION_TOPIC, API_BASE_URL } from '@/utils/constants';
-import { web3, contract } from '@/utils/web3utils';
+import { API_BASE_URL } from '@/utils/constants';
+import { toHex } from '@/utils/utils';
+import { web3, contract, getTransactions } from '@/utils/web3utils';
+
+// Number of blocks to lookback when searching for the 20 latest transactions
+const RECENT_TXNS_LOOKBACK = 10;
+
+// Number of recent txns/blocks to display
+const RECENT_COUNT = 20;
 
 export default {
   name: 'SummaryPage',
@@ -47,12 +57,14 @@ export default {
       ],
       blocks: [],
       transactions: [],
+      loading: true,
+      RECENT_TXNS_LOOKBACK,
+      RECENT_COUNT,
     };
   },
-  created() {
-    this.lookupRoles();
-    this.lookupBlocks();
-    this.lookupTransactions();
+  async created() {
+    await Promise.all([this.lookupRoles(), this.lookupBlocks(), this.lookupTransactions()]);
+    this.loading = false;
   },
   methods: {
     async fetch(request) {
@@ -74,20 +86,15 @@ export default {
     },
     async lookupBlocks() {
       const currentBlock = await web3.eth.getBlockNumber();
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < RECENT_COUNT; i++) {
         this.blocks.push(currentBlock - i);
       }
     },
     async lookupTransactions() {
       const currentBlock = await web3.eth.getBlockNumber();
-      const txns = await web3.eth.getPastLogs({
-        fromBlock: currentBlock - 10,
-        toBlock: 'latest',
-        address: USDC_CONTRACT_ADDRESS,
-        topics: [TRANSACTION_TOPIC, null, null],
-      });
 
-      this.transactions = txns.slice(0, 20).map(transaction => transaction.transactionHash);
+      // Gets recent txns in latest 10 blocks, gets the 20 latest txns, and maps to the hash
+      this.transactions = (await getTransactions(toHex(currentBlock - RECENT_TXNS_LOOKBACK))).slice(0, RECENT_COUNT).map(transaction => transaction.transactionHash);
     },
   },
 };

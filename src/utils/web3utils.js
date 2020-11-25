@@ -5,7 +5,9 @@ import {
   WEB3_BALANCEOF_ADDRESS_LENGTH,
   WEB3_MAX_TRANSACTIONS,
 } from '@/utils/constants';
-import { padHex, toHex } from '@/utils/utils';
+import { padHex, toHex, removeDuplicates, removeLeadingZeros, fromHex } from '@/utils/utils';
+import { TRANSACTION_TOPIC } from './constants';
+import moment from 'moment';
 import Web3 from 'web3';
 
 export const abi = [
@@ -421,14 +423,48 @@ export const getTotalSupply = async () => {
   return await contract.methods.totalSupply().call() / (10 ** decimals);
 };
 
-export const getTransactions = async (fromBlock, toBlock='latest', topics=[null, null, null]) => {
+export const processTransactions = async (transactions) => {
+  const decimals = await contract.methods.decimals().call();
+  transactions = removeDuplicates(transactions, t => t.transactionHash).sort((a, b) => a.blockNumber - b.blockNumber).reverse();
+
+  for (let transaction of transactions) {
+    transaction.from = transaction.topics[1] ? removeLeadingZeros(transaction.topics[1]) : '';
+    transaction.to = transaction.topics[2] ? removeLeadingZeros(transaction.topics[2]) : '';
+    transaction.data = fromHex(transaction.data) / (10 ** decimals); // TODO: this is questionable; not all transactions are transfers
+  }
+
+  return transactions;
+};
+
+export const getTransactions = async (fromBlock, address=null) => {
   try {
-    return await web3.eth.getPastLogs({
-      fromBlock,
-      toBlock,
-      address: USDC_CONTRACT_ADDRESS,
-      topics,
-    });
+    if (!address) {
+      const transactions = await web3.eth.getPastLogs({
+        fromBlock,
+        toBlock: 'latest',
+        address: USDC_CONTRACT_ADDRESS,
+        topics: [TRANSACTION_TOPIC, null, null],
+      });
+
+      return await processTransactions(transactions);
+    } else {
+      const senderTxns = await web3.eth.getPastLogs({
+        fromBlock,
+        toBlock: 'latest',
+        address: USDC_CONTRACT_ADDRESS,
+        topics: [TRANSACTION_TOPIC, address, null],
+      });
+
+      const receiverTxns = await web3.eth.getPastLogs({
+        fromBlock,
+        toBlock: 'latest',
+        address: USDC_CONTRACT_ADDRESS,
+        topics: [TRANSACTION_TOPIC, null, address],
+      });
+
+      let combined = receiverTxns.concat(senderTxns.filter(log => log.topics[1] !== log.topics[2]));
+      return await processTransactions(combined);
+    }
   }
   catch (error) {
     if (error.code === WEB3_RESULT_TOO_LARGE_ERROR_CODE) {
@@ -454,7 +490,7 @@ export const getAllTransactions = async () => {
     if (range[1] - range[0] <= 1) {
       let i = 0;
       while (transactions === null) {
-        transactions = await getTransactions(midpoint + i++, latest);
+        transactions = await getTransactions(toHex(midpoint + i++));
       }
       break;
     }
@@ -468,7 +504,59 @@ export const getAllTransactions = async () => {
       range[1] = midpoint;
     }
     midpoint = Math.floor((range[0] + range[1]) / 2);
-    transactions = await getTransactions(midpoint, latest);
+    transactions = await getTransactions(toHex(midpoint));
   }
   return transactions;
+};
+
+export const getWalletTransactions = async (address) => {
+  let transactions = await getTransactions('0x0', address);
+
+  if (transactions !== null) {
+    return transactions.slice(0, WEB3_MAX_TRANSACTIONS);
+  }
+
+  const latest = await web3.eth.getBlockNumber();
+  const range = [0, latest];
+  let midpoint = Math.floor((range[0] + range[1]) / 2);
+  
+  while (transactions === null || transactions.length < WEB3_MAX_TRANSACTIONS) {
+    if (transactions === null) {
+      range[0] = midpoint;
+    } else {
+      range[1] = midpoint;
+    }
+
+    midpoint = Math.floor((range[0] + range[1]) / 2);
+    transactions = await getTransactions(toHex(midpoint), address);
+  }
+  return transactions.slice(0, WEB3_MAX_TRANSACTIONS);
+};
+
+const blockTimes = new Map();
+
+export const fetchAge = async (transaction) => {
+  if (!blockTimes.has(transaction.blockNumber)) {
+    const block = await web3.eth.getBlock(transaction.blockNumber);
+    const blockTime = moment.unix(block.timestamp);
+    blockTimes.set(transaction.blockNumber, blockTime);
+  }
+
+  const blockTime =  blockTimes.get(transaction.blockNumber);
+  const age = moment.duration(moment().diff(blockTime));
+
+  const seconds = age.seconds();
+  const minutes = age.minutes();
+  const hours = age.hours();
+  const days = age.days();
+
+  if (days == 0 && hours == 0 && minutes == 0) {
+    return `${seconds} s ago`;
+  } else if (days == 0 && hours == 0) {
+    return `${minutes} mins ${seconds} s ago`;
+  } else if (days == 0) {
+    return `${hours} hrs ${minutes} mins ago`;
+  } else {
+    return `${days} days ${hours} hrs ago`;
+  }
 };

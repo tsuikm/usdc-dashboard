@@ -56,7 +56,7 @@
         <p v-if="transactions.length < limit && transactions.length > 0">
           Displaying all transactions in the last {{ lookback }} blocks.
         </p>
-        <p v-if="transactions.length === 0">
+        <p v-if="transactions.length === 0 && !loading">
           No transactions in the last {{ lookback }} blocks.
         </p>
       </div>
@@ -113,6 +113,10 @@ export default {
      * @param {number} - Maximum number of transactions displayed
      */
     limit: Number,
+    /**
+     * @param {boolean} - Whether or not data is still being loaded
+     */
+    loading: Boolean,
   },
   computed: {
     basePath() {

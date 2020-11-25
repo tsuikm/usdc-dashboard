@@ -7,6 +7,7 @@
       :transactions="this.transactions"
       :lookback="RECENT_TXNS_LOOKBACK"
       :limit="RECENT_COUNT"
+      :loading="loading"
     />
   </div>
 </template>
@@ -56,14 +57,14 @@ export default {
       ],
       blocks: [],
       transactions: [],
+      loading: true,
       RECENT_TXNS_LOOKBACK,
       RECENT_COUNT,
     };
   },
-  created() {
-    this.lookupRoles();
-    this.lookupBlocks();
-    this.lookupTransactions();
+  async created() {
+    await Promise.all([this.lookupRoles(), this.lookupBlocks(), this.lookupTransactions()]);
+    this.loading = false;
   },
   methods: {
     async fetch(request) {

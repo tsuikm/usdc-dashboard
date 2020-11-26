@@ -11,30 +11,36 @@
         <span class="nav-item-text">
           Explore
         </span>
-        <div class="dropdown">
+        <div
+          class="dropdown"
+          @mouseleave="setChain"
+        >
           <div class="dropdown-section blue">
             <span class="dropdown-section-header">Blockchains</span>
             <nuxt-link
               to="/"
               :class="linkClass('')"
+              @mouseover.native="hover('Ethereum')"
             >
               Ethereum
             </nuxt-link>
             <nuxt-link
               to="/solana"
               :class="linkClass('/solana')"
+              @mouseover.native="hover('Solana')"
             >
               Solana
             </nuxt-link>
             <nuxt-link
               to="/algorand"
               :class="linkClass('/algorand')"
+              @mouseover.native="hover('Algorand')"
             >
               Algorand
             </nuxt-link>
           </div>
           <div class="dropdown-section">
-            <span class="dropdown-section-header">Objects</span>
+            <span class="dropdown-section-header">{{ objectsHeader }}</span>
             <nuxt-link
               :to="transactionsLink"
               class="nav-link"
@@ -134,6 +140,7 @@ export default {
     return {
       address: '',
       menuOpen: false,
+      chain: '',
     };
   },
   computed: {
@@ -145,11 +152,36 @@ export default {
       return '';
     },
     accountsLink() {
-      return `${this.basePath}/accounts`;
+      switch(this.chain) {
+      case 'Algorand':
+        return '/algorand/accounts';
+      case 'Solana':
+        return '/solana/accounts';
+      default:
+        return '/accounts';
+      }
     },
     transactionsLink() {
-      return `${this.basePath}/transactions`;
+      switch(this.chain) {
+      case 'Algorand':
+        return '/algorand/transactions';
+      case 'Solana':
+        return '/solana/transactions';
+      default:
+        return '/transactions';
+      }
     },
+    objectsHeader() {
+      switch(this.chain) {
+      case '':
+        return 'Objects';
+      default:
+        return this.chain;
+      }
+    },
+  },
+  mounted() {
+    this.setChain();
   },
   methods: {
     searchAddress() {
@@ -168,6 +200,22 @@ export default {
       }
 
       return 'nav-link';
+    },
+    hover(chain) {
+      this.chain = chain;
+    },
+    setChain() {
+      console.log('hello');
+      switch(this.basePath) {
+      case '/algorand':
+        this.chain = 'Algorand';
+        break;
+      case '/solana':
+        this.chain = 'Solana';
+        break;
+      default:
+        this.chain = 'Ethereum';
+      }
     },
   },
 };

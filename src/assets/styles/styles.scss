@@ -142,6 +142,11 @@ h2 {
             font-weight: bold;
             font-size: 16px;
             margin-bottom: 8px;
+            color: $circle-grey;
+
+            &.blue {
+              color: $circle-blue;
+            }
           }
         }
       }
@@ -223,7 +228,7 @@ h2 {
 
 .nav-item-text {
   color: $circle-black !important;
-  text-decoration: none;
+  text-decoration: none !important;
   text-transform: uppercase;
   font-weight: bold;
   letter-spacing: 0.03rem;

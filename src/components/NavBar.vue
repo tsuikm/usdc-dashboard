@@ -16,19 +16,19 @@
             <span class="dropdown-section-header">Blockchains</span>
             <nuxt-link
               to="/"
-              class="nav-link"
+              :class="linkClass('')"
             >
               Ethereum
             </nuxt-link>
             <nuxt-link
               to="/solana"
-              class="nav-link"
+              :class="linkClass('/solana')"
             >
               Solana
             </nuxt-link>
             <nuxt-link
               to="/algorand"
-              class="nav-link"
+              :class="linkClass('/algorand')"
             >
               Algorand
             </nuxt-link>
@@ -36,13 +36,13 @@
           <div class="dropdown-section">
             <span class="dropdown-section-header">Objects</span>
             <nuxt-link
-              to="/transactions"
+              :to="transactionsLink"
               class="nav-link"
             >
               Transactions
             </nuxt-link>
             <nuxt-link
-              to="/accounts"
+              :to="accountsLink"
               class="nav-link"
             >
               Accounts
@@ -51,9 +51,12 @@
         </div>
       </div>
       <div class="nav-item">
-        <span class="nav-item-text">
+        <nuxt-link
+          to="/transfers"
+          class="nav-item-text"
+        >
           Transfer
-        </span>
+        </nuxt-link>
       </div>
       <input
         v-model="address"
@@ -104,6 +107,9 @@ export default {
     accountsLink() {
       return `${this.basePath}/accounts`;
     },
+    transactionsLink() {
+      return `${this.basePath}/transactions`;
+    },
     transfersLink() {
       return `${this.basePath}/transfers`;
     },
@@ -118,6 +124,13 @@ export default {
     },
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
+    },
+    linkClass(highlightedBasePath) {
+      if (this.basePath === highlightedBasePath) {
+        return 'nav-link blue';
+      }
+
+      return 'nav-link';
     },
   },
 };

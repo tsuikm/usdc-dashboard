@@ -53,6 +53,12 @@
         >
           {{ transaction }}
         </nuxt-link>
+        <p v-if="transactions.length < limit && transactions.length > 0">
+          Displaying all transactions in the last {{ lookback }} blocks.
+        </p>
+        <p v-if="transactions.length === 0 && !loading">
+          No transactions in the last {{ lookback }} blocks.
+        </p>
       </div>
     </div>
   </div>
@@ -99,6 +105,18 @@ export default {
       type: Array,
       validator: blocks => Array.isArray(blocks) && blocks.every(block => typeof block === 'number'),
     },
+    /**
+     * @param {number} - Number of blocks from latest that are searched for recent transactions
+     */
+    lookback: Number,
+    /**
+     * @param {number} - Maximum number of transactions displayed
+     */
+    limit: Number,
+    /**
+     * @param {boolean} - Whether or not data is still being loaded
+     */
+    loading: Boolean,
   },
   computed: {
     basePath() {

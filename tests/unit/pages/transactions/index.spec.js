@@ -1,8 +1,7 @@
-import Address, { getLogs } from '@/components/Transactions';
 import { fireEvent, render } from '@testing-library/vue';
-import { padHex, removeLeadingZeros } from '@/utils/utils';
+import { padHex, removeLeadingZeros, finishPromises } from '@/utils/utils';
 import Web3 from 'web3';
-import Vue from 'vue';
+import transactions from '@/pages/transactions';
 
 const MOCK_WALLET_ADDRESS = padHex('0x123456789abcdef', 64);
 const MOCK_TRANSACTIONS = [
@@ -60,52 +59,10 @@ const MOCK_TRANSACTIONS = [
 Web3.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
 
 describe('_address.vue', () => {
-  test('getLogs fetches correct logs 1', async () => {
-    const res = await getLogs(MOCK_WALLET_ADDRESS, 4);
-    expect(res[0].transactionHash).toBe(MOCK_TRANSACTIONS[4].transactionHash);
-    expect(res[1].transactionHash).toBe(MOCK_TRANSACTIONS[5].transactionHash);
-    expect(res[2].transactionHash).toBe(MOCK_TRANSACTIONS[2].transactionHash);
-  });
-
-  test('getLogs fetches correct logs 2', async () => {
-    const res = await getLogs(MOCK_WALLET_ADDRESS, 2);
-    expect(res[0].transactionHash).toBe(MOCK_TRANSACTIONS[0].transactionHash);
-    expect(res[1].transactionHash).toBe(MOCK_TRANSACTIONS[1].transactionHash);
-    expect(res[2].transactionHash).toBe(MOCK_TRANSACTIONS[4].transactionHash);
-    expect(res[3].transactionHash).toBe(MOCK_TRANSACTIONS[5].transactionHash);
-    expect(res[4].transactionHash).toBe(MOCK_TRANSACTIONS[2].transactionHash);
-  });
-
-  it('renders wallet transactions correctly', async () => {
-    const { getByTestId, getByText, getAllByText } = render(Address, {
-      propsData: {
-        address: MOCK_WALLET_ADDRESS,
-      },
-
-    });
-
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    expect(getByTestId('md-table')).not.toBeNull();
-
-    expect(getByText(MOCK_TRANSACTIONS[2].transactionHash)).not.toBeNull();
-    expect(getByText((parseInt(MOCK_TRANSACTIONS[2].data) / 10 ** 6).toString())).not.toBeNull();
-    expect(getAllByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender))).not.toBeNull();
-    expect(getByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].receiver))).not.toBeNull();
-    expect(getByText(MOCK_TRANSACTIONS[2].blockNumber.toString())).not.toBeNull();
-
-    expect(getByText(MOCK_TRANSACTIONS[3].transactionHash)).not.toBeNull();
-    expect(getByText((parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6).toString())).not.toBeNull();
-    expect(getAllByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender))).not.toBeNull();
-    expect(getAllByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].receiver))).not.toBeNull();
-    expect(getByText(MOCK_TRANSACTIONS[3].blockNumber.toString())).not.toBeNull();
-  });
-
   it('renders all transactions correctly', async () => {
-    const { getByTestId, getByText } = render(Address);
+    const { getByTestId, getByText } = render(transactions);
 
-    // Finish all promises
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await finishPromises();
 
     expect(getByTestId('md-table')).not.toBeNull();
 
@@ -131,15 +88,9 @@ describe('_address.vue', () => {
     // MOCK_RECEIVER_TXNS now has 24 transactions (8 copies of the same 3 original items)
     // for a total of 27 transactions with the 3 in MOCK_SENDER_TXNS
 
-    const { getByTestId, getByText, getAllByText } = render(Address, {
-      propsData: {
-        address: MOCK_WALLET_ADDRESS,
-      },
+    const { getByTestId, getByText, getAllByText } = render(transactions);
 
-    });
-
-    // Finish all promises
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await finishPromises();
 
     expect(getByTestId('md-table')).not.toBeNull();
 
@@ -152,7 +103,7 @@ describe('_address.vue', () => {
     // Go to next page
     await fireEvent.click(getByText('navigate_next'));
 
-    await Vue.nextTick();
+    await finishPromises();
 
     expect(getByText(MOCK_TRANSACTIONS[3].transactionHash)).not.toBeNull();
     expect(getByText((parseInt(MOCK_TRANSACTIONS[3].data) / 10 ** 6).toString())).not.toBeNull();

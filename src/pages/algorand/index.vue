@@ -15,7 +15,7 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Summary from '@/components/Summary';
-import { ALGORAND_BASE_SERVER, ALGORAND_USDC_ASSET_ID, PURESTAKE_API_KEY } from '@/utils/constants';
+import { ALGORAND_BASE_SERVER, ALGORAND_USDC_ASSET_ID, PURESTAKE_API_KEY, API_BASE_URL } from '@/utils/constants';
 
 export default {
   components: {
@@ -100,9 +100,15 @@ export default {
     async lookupBlocks() {
     },
     async lookupTransactions() {
-      const transactions = await this.fetchAlgorand(`${ALGORAND_BASE_SERVER}/assets/${ALGORAND_USDC_ASSET_ID}/transactions?limit=${10}`);
-      console.log(transactions.transactions)
-      this.transactions = transactions.transactions.map(transaction => transaction.id);      
+
+      const response = await fetch(`${API_BASE_URL}/api/test`);
+      console.log(await response.json());
+      // const transactions = await this.fetchAlgorand(`${ALGORAND_BASE_SERVER}/assets/${ALGORAND_USDC_ASSET_ID}/transactions?limit=${10}`);
+      // console.log(transactions.transactions)
+      // this.transactions = transactions.transactions.map(transaction => transaction.id);     
+      
+      // curl -X GET "https://mainnet-algorand.api.purestake.io/idx2/v2/assets/31566704/transactions?max-round=10489079" -H  "accept: application/json" -H  "x-api-key: Yux8PVogsu1Z7tFByiIvh7npNLq9daJsp0pDmaj6"
+
     },
   },
 };

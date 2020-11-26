@@ -55,9 +55,37 @@ describe('NavBar', () => {
 
       await fireEvent.click(getByText('Accounts'));
       expect(router[router.length - 1].path).toEqual(`${path}/accounts`);
-      await fireEvent.click(getByText('Transfer'));
-      expect(router[router.length - 1].path).toEqual(`${path}/transfers`);
     }
-    expect(router.length).toBe(6);
+    
+    await fireEvent.click(getByText('Transfer'));
+    expect(router[router.length - 1].path).toEqual('/transfers');
+
+    expect(getByText('Ethereum')).not.toBeNull();
+    expect(getByText('Algorand')).not.toBeNull();
+    expect(getByText('Solana')).not.toBeNull();
+
+    await fireEvent.click(getByText('Ethereum'));
+    expect(router[router.length - 1].path).toEqual('/');
+
+    await fireEvent.click(getByText('Algorand'));
+    expect(router[router.length - 1].path).toEqual('/algorand');
+
+    await fireEvent.click(getByText('Solana'));
+    expect(router[router.length - 1].path).toEqual('/solana');
+
+    await fireEvent.click(getByText('Mint'));
+    expect(router[router.length - 1].path).toEqual('/mint');
+
+    await fireEvent.click(getByText('Burn'));
+    expect(router[router.length - 1].path).toEqual('/burn');
+
+    await fireEvent.click(getByText('Owner Controls'));
+    expect(router[router.length - 1].path).toEqual('/roles/owner');
+
+    await fireEvent.click(getByText('Blacklist & Unblacklist'));
+    expect(router[router.length - 1].path).toEqual('/roles/blacklister');
+
+    await fireEvent.click(getByText('Pause & Unpause'));
+    expect(router[router.length - 1].path).toEqual('/roles/pauser');
   });
 });

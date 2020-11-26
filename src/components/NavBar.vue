@@ -150,9 +150,6 @@ export default {
     transactionsLink() {
       return `${this.basePath}/transactions`;
     },
-    transfersLink() {
-      return `${this.basePath}/transfers`;
-    },
   },
   methods: {
     searchAddress() {

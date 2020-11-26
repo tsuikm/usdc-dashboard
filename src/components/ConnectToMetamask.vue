@@ -1,7 +1,7 @@
 <template :key="this.connected">
   <div class="container">
     <button
-      class="connectButton"
+      :class="{'button-grey': this.connected, 'button-colored': !this.connected, 'connectButton': true}"
       data-testid="transfers-card-connect-button"
       @click="connectMetamask"
     >
@@ -41,7 +41,6 @@ export default {
   methods: {
     async connectMetamask() {
       try {
-        // eslint-disable-next-line
         this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
         this.checkConnected();
       } catch (e) {
@@ -84,7 +83,14 @@ export default {
   border: none;
   cursor: pointer;
   color: #ffffff;
-  background-color: #d4d4d4;
+}
+
+.button-colored {
+  background-color: $circle-muted-blue;
+}
+
+.button-grey {
+  background-color: $circle-grey;
 }
 
 .status {

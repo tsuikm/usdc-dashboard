@@ -53,8 +53,8 @@
             :on-click="save"
           />
         </div>
-        <ConnectToMetamask />
       </div> 
+      <ConnectToMetamask />
     </div>
   </div>
 </template>

@@ -101,7 +101,7 @@ export default {
   font-style: normal;
   font-weight: 600;
   font-size: 36px;
-  line-height: 54px;
+  line-height: 44px;
   letter-spacing: 0.03em;
   color: $circle-black;
 }

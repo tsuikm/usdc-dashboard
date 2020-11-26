@@ -107,7 +107,7 @@ h2 {
         transition: all 0.3s;
 
         position: absolute;
-        top: 3rem;
+        
 
         background: white;
 
@@ -115,6 +115,15 @@ h2 {
         border-radius: 5px;
 
         z-index: 10;
+
+        @media only screen and (min-width: $mobile-threshold) {
+          top: 3rem;
+        }
+
+        @media only screen and (max-width: $mobile-threshold) {
+          left: 50%;
+          transform: translate(-50%, 1rem);
+        }
 
         .dropdown-section {
           display: flex;
@@ -180,6 +189,7 @@ h2 {
     #menu-items {
       opacity: 0;
       transition: display 0s, ease opacity 0.3s;
+      z-index: 100;
     }
 
     #menu-items.open {

@@ -4,6 +4,7 @@ export const WEB3_BALANCEOF_ADDRESS_LENGTH = 40;
 export const WEB3_RESULT_TOO_LARGE_ERROR_CODE = -32005;
 export const WEB3_MAX_TRANSACTIONS = 10000;
 export const OPTIMAL_PROMISE_ALL_SIZE = 500;
+export const ALGORAND_USDC_ASSET_ID = 31566704;
 
 export const USDC_CONTRACT_ADDRESS = process.env.USDC_CONTRACT_ADDRESS || '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
 
@@ -22,7 +23,11 @@ export const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
 
 export const WEB3_PROVIDER = process.env.WEB3_PROVIDER;
 
+export const PURESTAKE_API_KEY = process.env.PURESTAKE_API_KEY;
+
 export const BLOCKCHAIN_PATHS = ['', '/solana', '/algorand'];
+
+export const ALGORAND_BASE_SERVER = 'https://mainnet-algorand.api.purestake.io/idx2/v2';
 
 export const TRANSACTION_SCHEMA = [
   {

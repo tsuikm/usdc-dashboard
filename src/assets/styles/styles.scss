@@ -93,24 +93,62 @@ h2 {
     justify-content: flex-end;
     align-items: center;
 
-    .link {
+    .nav-item {
       margin-right: 2rem;
       text-decoration: none;
   
       padding: 0.5rem 0;
   
-      // &:hover {
-      //   border-bottom: 2px solid $circle-blue;
-      // }
-  
       .dropdown {
-        position: absolute;
-        top: 2.25rem;
+        display: flex;
+        visibility: hidden;
+        opacity: 0;
 
-        padding: 0.5rem;
+        transition: all 0.3s;
+
+        position: absolute;
+        top: 3rem;
+
         background: white;
 
         box-shadow: $shadow;
+        border-radius: 5px;
+
+        z-index: 10;
+
+        .dropdown-section {
+          display: flex;
+          flex-direction: column;
+
+          padding: 20px 20px 10px;
+
+          &.blue {
+            background: $circle-really-light-blue;
+          }
+
+          .dropdown-section-header {
+            color: $circle-grey;
+            font-size: 10px;
+
+            font-weight: 600;
+            letter-spacing: 1px;
+            line-height: 12px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+          }
+
+          .nav-link {
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 8px;
+          }
+        }
+      }
+
+      &:hover .dropdown{
+        visibility: visible;
+        opacity: 1;
       }
     }
   }
@@ -130,7 +168,7 @@ h2 {
   @media only screen and (max-width: $mobile-threshold) {
     margin-bottom: 2rem;
 
-    .link, .search {
+    .nav-item, .search {
       display: none;
     }
 
@@ -156,7 +194,7 @@ h2 {
       background: white;
       padding: 2rem;
 
-      .search, .link {
+      .search, .nav-item {
         margin: 1rem 0;
         display: block;
         text-align: center;
@@ -183,12 +221,13 @@ h2 {
   font-weight: bold;
 }
 
-.link {
+.nav-item-text {
   color: $circle-black !important;
   text-decoration: none;
   text-transform: uppercase;
   font-weight: bold;
   letter-spacing: 0.03rem;
+  cursor: pointer;
 }
 
 input {

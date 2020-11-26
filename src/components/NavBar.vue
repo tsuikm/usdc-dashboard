@@ -7,21 +7,54 @@
       id="menu-items"
       :class="menuOpen ? 'open' : ''"
     >
-      <nuxt-link
-        :to="accountsLink"
-        class="link"
-      >
-        {{ 'Accounts' }}
+      <div class="nav-item">
+        <span class="nav-item-text">
+          Explore
+        </span>
         <div class="dropdown">
-          hello
+          <div class="dropdown-section blue">
+            <span class="dropdown-section-header">Blockchains</span>
+            <nuxt-link
+              to="/"
+              class="nav-link"
+            >
+              Ethereum
+            </nuxt-link>
+            <nuxt-link
+              to="/solana"
+              class="nav-link"
+            >
+              Solana
+            </nuxt-link>
+            <nuxt-link
+              to="/algorand"
+              class="nav-link"
+            >
+              Algorand
+            </nuxt-link>
+          </div>
+          <div class="dropdown-section">
+            <span class="dropdown-section-header">Objects</span>
+            <nuxt-link
+              to="/transactions"
+              class="nav-link"
+            >
+              Transactions
+            </nuxt-link>
+            <nuxt-link
+              to="/accounts"
+              class="nav-link"
+            >
+              Accounts
+            </nuxt-link>
+          </div>
         </div>
-      </nuxt-link>
-      <nuxt-link
-        :to="transfersLink"
-        class="link"
-      >
-        {{ 'Transfer' }}
-      </nuxt-link>
+      </div>
+      <div class="nav-item">
+        <span class="nav-item-text">
+          Transfer
+        </span>
+      </div>
       <input
         v-model="address"
         placeholder="Search Address..."

@@ -24,6 +24,54 @@ export const WEB3_PROVIDER = process.env.WEB3_PROVIDER;
 
 export const BLOCKCHAIN_PATHS = ['', '/solana', '/algorand'];
 
+export const TRANSACTION_SCHEMA = [
+  {
+    name: 'Transaction Hash',
+    getter(t) {
+      return t.transactionHash;
+    },
+    link(t) {
+      return `/transaction/${t.transactionHash}`;
+    },
+  },
+  {
+    name: 'Quantity',
+    getter(t) {
+      return t.data;
+    },
+  },
+  {
+    name: 'Sender',
+    getter(t) {
+      return t.from;
+    },
+    link(t) {
+      return `/address/${t.from}`;
+    },
+  },
+  {
+    name: 'Receiver',
+    getter(t) {
+      return t.to;
+    },
+    link(t) {
+      return `/address/${t.to}`;
+    },
+  },
+  {
+    name: 'Age',
+    getter(t) {
+      return t.age;
+    },
+  },
+  {
+    name: 'Block Number',
+    getter(t) {
+      return t.blockNumber;
+    },
+  },
+];
+
 export const ACCOUNTS_SCHEMA = [
   {
     name: 'Address',

@@ -58,6 +58,46 @@
           Transfer
         </nuxt-link>
       </div>
+      <div class="nav-item">
+        <span class="nav-item-text">
+          Privileged Controls
+        </span>
+        <div class="dropdown">
+          <div class="dropdown-section">
+            <span class="dropdown-section-header">Privileged Controls</span>
+            <nuxt-link
+              to="/roles/owner"
+              class="nav-link"
+            >
+              Owner Controls
+            </nuxt-link>
+            <nuxt-link
+              to="/mint"
+              class="nav-link"
+            >
+              Mint
+            </nuxt-link>
+            <nuxt-link
+              to="/burn"
+              class="nav-link"
+            >
+              Burn
+            </nuxt-link>
+            <nuxt-link
+              to="/roles/pauser"
+              class="nav-link"
+            >
+              Pause &amp; Unpause
+            </nuxt-link>
+            <nuxt-link
+              to="/roles/blacklister"
+              class="nav-link"
+            >
+              Blacklist &amp; Unblacklist
+            </nuxt-link>
+          </div>
+        </div>
+      </div>
       <input
         v-model="address"
         placeholder="Search Address..."

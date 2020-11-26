@@ -74,7 +74,6 @@ export default {
      * @param {String}
      */
     async fetchAlgorand(url) {
-      console.log(PURESTAKE_API_KEY);
       const request = await fetch(url, {
         method: 'GET',
         headers: {
@@ -85,12 +84,13 @@ export default {
       const reader = await request.body.getReader();
       const value = (await reader.read()).value;
       const decoder = new TextDecoder('utf8');
+
       return JSON.parse(decoder.decode(value));
     },
 
     async lookupRoles() {
       const roles = await this.fetchAlgorand(`${ALGORAND_BASE_SERVER}/assets/${ALGORAND_USDC_ASSET_ID}`);
-      console.log(roles)
+
       this.setAddresses('Creator', [roles.asset.params.creator]);
       this.setAddresses('Freeze', [roles.asset.params.freeze]);
       this.setAddresses('Reserve', [roles.asset.params.reserve]);
@@ -100,7 +100,14 @@ export default {
     async lookupBlocks() {
     },
     async lookupTransactions() {
+      const transactions = await this.fetchAlgorand(`${ALGORAND_BASE_SERVER}/assets/${ALGORAND_USDC_ASSET_ID}/transactions?limit=${10}`);
+      console.log(transactions.transactions)
+      this.transactions = transactions.transactions.map(transaction => transaction.id);      
     },
   },
 };
 </script>
+
+
+
+

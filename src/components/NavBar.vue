@@ -19,6 +19,7 @@
             <span class="dropdown-section-header">Blockchains</span>
             <nuxt-link
               to="/"
+              data-testid="ethereum-link"
               :class="linkClass('')"
               @mouseover.native="hover('Ethereum')"
             >
@@ -26,6 +27,7 @@
             </nuxt-link>
             <nuxt-link
               to="/solana"
+              data-testid="solana-link"
               :class="linkClass('/solana')"
               @mouseover.native="hover('Solana')"
             >
@@ -33,6 +35,7 @@
             </nuxt-link>
             <nuxt-link
               to="/algorand"
+              data-testid="algorand-link"
               :class="linkClass('/algorand')"
               @mouseover.native="hover('Algorand')"
             >
@@ -205,7 +208,6 @@ export default {
       this.chain = chain;
     },
     setChain() {
-      console.log('hello');
       switch(this.basePath) {
       case '/algorand':
         this.chain = 'Algorand';

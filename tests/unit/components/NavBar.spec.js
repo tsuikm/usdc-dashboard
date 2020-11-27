@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/vue';
+import { fireEvent, getAllByAltText, getAllByTestId, getAllByText, getByTestId, render } from '@testing-library/vue';
 import NavBar from '@/components/NavBar.vue';
 import { padHex, finishPromises } from '@/utils/utils';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH, BLOCKCHAIN_PATHS } from '@/utils/constants';
@@ -39,7 +39,7 @@ describe('NavBar', () => {
   it('Displays page links correctly', async () => {
     const router = [];
     const route = { path: '' };
-    const { getByText } = render(NavBar, {
+    const { getByText, getByTestId } = render(NavBar, {
       mocks: {
         $router: router,
         $route: route,
@@ -47,30 +47,39 @@ describe('NavBar', () => {
     });
 
     expect(getByText('Accounts')).not.toBeNull();
-    expect(getByText('Transfer')).not.toBeNull();
+    expect(getByText('Transactions')).not.toBeNull();
 
     for (const path of BLOCKCHAIN_PATHS) {
       route.path = path;
       await finishPromises();
 
+      if (path === '') {
+        await fireEvent.mouseOver(getByTestId('ethereum-link'));
+      } else if (path === '/solana') {
+        await fireEvent.mouseOver(getByTestId('solana-link'));
+      } else if (path === '/algorand') {
+        await fireEvent.mouseOver(getByTestId('algorand-link'));
+      }
+
       await fireEvent.click(getByText('Accounts'));
       expect(router[router.length - 1].path).toEqual(`${path}/accounts`);
+
+      await fireEvent.click(getByText('Transactions'));
+      expect(router[router.length - 1].path).toEqual(`${path}/transactions`);
     }
     
+    expect(getByText('Transfer')).not.toBeNull();
+
     await fireEvent.click(getByText('Transfer'));
     expect(router[router.length - 1].path).toEqual('/transfers');
 
-    expect(getByText('Ethereum')).not.toBeNull();
-    expect(getByText('Algorand')).not.toBeNull();
-    expect(getByText('Solana')).not.toBeNull();
-
-    await fireEvent.click(getByText('Ethereum'));
+    await fireEvent.click(getByTestId('ethereum-link'));
     expect(router[router.length - 1].path).toEqual('/');
 
-    await fireEvent.click(getByText('Algorand'));
+    await fireEvent.click(getByTestId('algorand-link'));
     expect(router[router.length - 1].path).toEqual('/algorand');
 
-    await fireEvent.click(getByText('Solana'));
+    await fireEvent.click(getByTestId('solana-link'));
     expect(router[router.length - 1].path).toEqual('/solana');
 
     await fireEvent.click(getByText('Mint'));

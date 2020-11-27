@@ -1,4 +1,4 @@
-import { fireEvent, getAllByAltText, getAllByTestId, getAllByText, getByTestId, render } from '@testing-library/vue';
+import { fireEvent, render } from '@testing-library/vue';
 import NavBar from '@/components/NavBar.vue';
 import { padHex, finishPromises } from '@/utils/utils';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH, BLOCKCHAIN_PATHS } from '@/utils/constants';

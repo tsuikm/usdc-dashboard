@@ -3,7 +3,7 @@
     class="content"
     :style="{'--number-of-roles': roles.length}"
   >
-    <h1> USDC Dashboard </h1>
+    <h1> USDC Dashboard with some extra words </h1>
 
     <!-- roles -->
     <div
@@ -173,7 +173,7 @@ h1 {
 
   @media only screen and (max-width: $mobile-threshold) {
     grid-row: auto;
-    grid-column: 1
+    grid-column: 1;
   }
 
   .role-addresses {

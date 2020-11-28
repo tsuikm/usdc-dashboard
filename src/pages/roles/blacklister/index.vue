@@ -89,13 +89,7 @@ export default {
       originalStatus: false,
     };
   },
-  // created: function() {
-  //   this.connectMetamask();
-  // },
   methods: {
-    // async connectMetamask() {
-    //   this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    // },
     async subscribeToEvent(event) {
       contract.once(event, async () => {
         if (this.address === '') {

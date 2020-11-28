@@ -10,8 +10,8 @@
         class="input"
       >
         <CustomInput
-          v-model="bindings[index]"
           :placeholder="object.placeholder"
+          v-model="bindings[index]"
           :data-testid="object.label"
         />
       </div>

@@ -53,7 +53,7 @@
             :on-click="this.save"
           />
         </div>
-        <ConnectToMetamask />
+        <ConnectToMetamask ref="connectToMetamaskButton" />
       </div>
     </div>
   </div>
@@ -148,10 +148,14 @@ export default {
     async save() {
       this.address = this.address.trim().toLowerCase();
 
-      const accounts = (await ethereum.request({ method: 'eth_requestAccounts' })).map(string => string.toLowerCase());
+      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
+      console.log(accounts);
+
       const ownerAccount = await getOwner();
+      console.log(ownerAccount);
 
       this.showOwnerWarning = !accounts.includes(ownerAccount);
+      console.log(this.showOwnerWarning);
 
       this.hasRenouncedRoles = (!this.pauserActive && await getPauser() === this.address) ||
         (!this.masterMinterActive && await getMasterMinter() === this.address) ||

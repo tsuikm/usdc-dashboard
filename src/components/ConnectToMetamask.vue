@@ -55,6 +55,7 @@ export default {
           this.connected = false;
         } else {
           this.connected = true;
+          this.accounts = accounts;
         }
       });
     },

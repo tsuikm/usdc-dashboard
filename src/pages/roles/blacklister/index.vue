@@ -54,7 +54,7 @@
           />
         </div>
       </div> 
-      <ConnectToMetamask />
+      <ConnectToMetamask ref="connectToMetamaskButton" />
     </div>
   </div>
 </template>

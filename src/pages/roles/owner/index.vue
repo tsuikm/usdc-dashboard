@@ -149,13 +149,10 @@ export default {
       this.address = this.address.trim().toLowerCase();
 
       const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
-      console.log(accounts);
 
       const ownerAccount = await getOwner();
-      console.log(ownerAccount);
 
       this.showOwnerWarning = !accounts.includes(ownerAccount);
-      console.log(this.showOwnerWarning);
 
       this.hasRenouncedRoles = (!this.pauserActive && await getPauser() === this.address) ||
         (!this.masterMinterActive && await getMasterMinter() === this.address) ||

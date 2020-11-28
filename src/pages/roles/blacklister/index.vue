@@ -89,13 +89,13 @@ export default {
       originalStatus: false,
     };
   },
-  created: function() {
-    this.connectMetamask();
-  },
+  // created: function() {
+  //   this.connectMetamask();
+  // },
   methods: {
-    async connectMetamask() {
-      this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    },
+    // async connectMetamask() {
+    //   this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+    // },
     async subscribeToEvent(event) {
       contract.once(event, async () => {
         if (this.address === '') {
@@ -140,6 +140,7 @@ export default {
     },
     async ethReq(data) {
       try {
+        this.accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
         await ethereum
           .request({
             method: 'eth_sendTransaction',

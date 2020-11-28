@@ -3,7 +3,7 @@
     class="content"
     :style="{'--number-of-roles': roles.length}"
   >
-    <h1> USDC Dashboard with some extra words </h1>
+    <h1> USDC Dashboard </h1>
 
     <!-- roles -->
     <div

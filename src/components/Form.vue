@@ -4,14 +4,13 @@
       {{ title }}
     </div>
     <div class="input-container">
-      <div
+      <div class="input"
         v-for="(object, index) in schema"
         :key="object.label"
-        class="input"
       >
         <CustomInput
-          v-model="bindings[index]"
           :placeholder="object.placeholder"
+          v-model="bindings[index]"
           :data-testid="object.label"
         />
       </div>

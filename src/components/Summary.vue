@@ -173,7 +173,7 @@ h1 {
 
   @media only screen and (max-width: $mobile-threshold) {
     grid-row: auto;
-    grid-column: 1;
+    grid-column: 1
   }
 
   .role-addresses {

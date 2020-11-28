@@ -16,8 +16,7 @@
       @submit="this.submit"
     />
     <div class="connect-metamask">
-      <md-button
-        class="button"
+      <md-button class="button"
         md-alignment="center"
         data-testid="transfers-card-connect-button"
         @click="connectMetamask"

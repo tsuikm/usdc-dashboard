@@ -9,28 +9,28 @@
     </div>
     <div class="master-minter">
       <form
-        class="minter-form"
-        @submit.prevent="lookupMinterStatus"
-      >
-        <CustomInput
-          v-model="address"
-          :placeholder="'Enter address here'"
-        />
-        <ActionButton
-          :label="'CHECK STATUS'"
-          :on-click="lookupMinterStatus"
-        />
-      </form>
-      <div
-        v-if="this.isMinter && this.minterAllowance !== null"
-        class="minter-clause"
-      > 
-        <div class="minter-message"> 
-          This address is currently a minter with allowance {{ this.minterAllowance }}. 
-        </div>
-        <div
           class="minter-form"
+          @submit.prevent="lookupMinterStatus"
         >
+        <CustomInput
+            v-model="address"
+            :placeholder="'Enter address here'"
+          />
+          <ActionButton
+            :label="'CHECK STATUS'"
+            :on-click="lookupMinterStatus"
+          />
+      </form>
+        <div
+          v-if="this.isMinter && this.minterAllowance !== null"
+          class="minter-clause"
+        > 
+          <div class="minter-message"> 
+            This address is currently a minter with allowance {{ this.minterAllowance }}. 
+          </div>
+          <div
+            class="minter-form"
+          >
           <CustomInput
             v-model="allowance"
             :placeholder="'Allowance: i.e. 0'"
@@ -39,24 +39,22 @@
             :label="'INCREASE ALLOWANCE'"
             :on-click="configureMinter"
           />
-        </div>
-        <div class="button">
-          <ActionButton
-            :label="'REMOVE MINTER'"
-            :on-click="removeMinter"
-          />
-        </div>
-      </div>
-      <div
-        v-else-if="this.isMinter === false"
-        class="minter-clause"
-      > 
-        <div class="minter-message">
-          This address is not currently a minter.
+          </div>
+          <div class="button">
+            <ActionButton
+              :label="'REMOVE MINTER'"
+              :on-click="removeMinter"
+            />
+          </div>
         </div>
         <div
-          class="minter-form"
-        >
+          v-else-if="this.isMinter === false"
+          class="minter-clause"
+        > 
+          <div class="minter-message"> This address is not currently a minter. </div>
+          <div
+            class="minter-form"
+          >
           <CustomInput
             v-model="allowance"
             :placeholder="'Allowance: i.e. 0'"
@@ -65,10 +63,10 @@
             :label="'CONFIGURE MINTER'"
             :on-click="configureMinter"
           />
+          </div>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>

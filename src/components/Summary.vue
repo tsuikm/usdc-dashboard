@@ -1,5 +1,8 @@
 <template>
-  <div class="content">
+  <div
+    class="content"
+    :style="{'--number-of-roles': roles.length}"
+  >
     <h1> USDC Dashboard </h1>
 
     <!-- roles -->
@@ -105,14 +108,17 @@ export default {
       type: Array,
       validator: blocks => Array.isArray(blocks) && blocks.every(block => typeof block === 'number'),
     },
+
     /**
      * @param {number} - Number of blocks from latest that are searched for recent transactions
      */
     lookback: Number,
+
     /**
      * @param {number} - Maximum number of transactions displayed
      */
     limit: Number,
+
     /**
      * @param {boolean} - Whether or not data is still being loaded
      */
@@ -158,6 +164,8 @@ h2 {
 
 h1 {
   grid-row: 1;
+  grid-column-start: 1;
+  grid-column-end: calc(var(--number-of-roles) + 1);
 }
 
 .role {
@@ -189,7 +197,7 @@ h1 {
 #transactions {
   min-width: none;
   grid-column-start: 2;
-  grid-column-end: 5;
+  grid-column-end: calc(var(--number-of-roles) + 1);
 
   @media only screen and (max-width: $mobile-threshold) {
     grid-column-start: 1;

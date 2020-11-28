@@ -31,7 +31,6 @@ global.ethereum = {
 
 describe('Mint page', () => {
   afterEach(() => {
-    // eslint-disable-next-line
     ethereum.request.mockClear();
   });
 
@@ -44,11 +43,12 @@ describe('Mint page', () => {
   });
 
   test('Mint button works', async () => {
-    const { getByPlaceholderText, queryByText } = render(mint);
+    const { getByPlaceholderText, queryByText, getByText } = render(mint);
 
-    // eslint-disable-next-line
+    const metamaskButton = getByText('Connect to MetaMask');
+    await fireEvent.click(metamaskButton);
+
     expect(ethereum.request.mock.calls[0]).toEqual([{ method: 'eth_requestAccounts' }]);
-    // eslint-disable-next-line
     expect(ethereum.request.mock.calls).toHaveLength(1);
 
     const TO_WALLET_ADDRESS = '0x12345';
@@ -65,7 +65,6 @@ describe('Mint page', () => {
     await fireEvent.click(submitButton);
     await finishPromises();
 
-    // eslint-disable-next-line
     expect(ethereum.request.mock.calls[1]).toEqual([{
       method: 'eth_sendTransaction',
       params: [
@@ -88,12 +87,15 @@ describe('Mint page', () => {
       request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
     };
 
-    const { getByPlaceholderText, queryByText } = render(mint);
+    const { getByPlaceholderText, queryByText, getByText } = render(mint);
+    const metamaskButton = getByText('Connect to MetaMask');
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = '100';
     const submitButton = queryByText('SUBMIT');
     const amountInput = getByPlaceholderText('Amount: i.e. 0');
     const toInput = getByPlaceholderText('Enter Wallet Address Here');
+
+    await fireEvent.click(metamaskButton);
 
     await fireEvent.update(toInput, TO_WALLET_ADDRESS);
     await fireEvent.update(amountInput, AMOUNT_TEXT);

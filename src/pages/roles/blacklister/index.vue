@@ -189,6 +189,7 @@ export default {
   font-size: 30px;
   font-weight: 900;
   padding-bottom: 3%;
+  line-height: 44px;
 }
 
 .blacklist-form {

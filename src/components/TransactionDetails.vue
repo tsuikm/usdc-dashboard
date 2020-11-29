@@ -1,85 +1,115 @@
 <template>
   <div>
-    <md-table md-card>
-      <md-table-toolbar>
-        <h1 class="md-title">
-          Transaction Details
-        </h1>
-      </md-table-toolbar>
+    <h1>
+      Transaction Details
+    </h1>
 
-      <md-table-row>
-        <md-table-cell> Hash: </md-table-cell>
-        <md-table-cell> {{ hash }} </md-table-cell>
-      </md-table-row>
+    <div class="transaction-info">
+      <h2> {{ hash.label }} </h2>
+      <p> {{ hash.value }} </p>
+    </div>
 
-      <md-table-row>
-        <md-table-cell> Block: </md-table-cell>
-        <md-table-cell> {{ blockNumber }} </md-table-cell>
-      </md-table-row>
+    <div class="transaction-info">
+      <h2> {{ blockNumber.label }} </h2>
+      <p> {{ blockNumber.value }} </p>
+    </div>
 
-      <md-table-row>
-        <md-table-cell> Sender: </md-table-cell>
-        <md-table-cell>
-          <nuxt-link :to="'/address/' + sender">
-            {{ sender }}
-          </nuxt-link>
-        </md-table-cell>
-      </md-table-row>
+    <div id="sender-receiver-section">
+      <div class="transaction-info">
+        <h2> Sender </h2>
+        <nuxt-link :to="senderLink">
+          {{ sender }}
+        </nuxt-link>
+      </div>
+      <div class="transaction-info">
+        <h2> Receiver </h2>
+        <nuxt-link :to="receiverLink">
+          {{ receiver }}
+        </nuxt-link>
+      </div>
+    </div>
 
-      <md-table-row>
-        <md-table-cell> Receiver: </md-table-cell>
-        <md-table-cell>
-          <nuxt-link :to="'/address/' + receiver">
-            {{ receiver }}
-          </nuxt-link>
-        </md-table-cell>
-      </md-table-row>
-
-      <md-table-row>
-        <md-table-cell> Gas: </md-table-cell>
-        <md-table-cell> {{ gas }} </md-table-cell>
-      </md-table-row>
-    </md-table>
+    <div class="transaction-info">
+      <h2> {{ gas.label }} </h2>
+      <p> {{ gas.value }} </p>
+    </div>
   </div>
 </template>
 
 <script>
+import { basePathFromPath } from '@/utils/utils';
 
-// modules
-import Web3 from 'web3';
-import { WEB3_PROVIDER } from '@/utils/constants';
-import { padHex } from '@/utils/utils';
-
-// constants
-const TRANSACTION_HASH_LENGTH = 64;
-
-const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
+/**
+ * Props: {
+ *    hash: { label: String, value: String }, // known as "signature" in Solana, etc.
+ *    sender: String,
+ *    receiver: String,
+ *    blockNumber: { label: String, value: String }, // known as "slot" in Solana, etc.
+ *    gas: { label: String, value: String } // known as "fee" in Solana, etc.
+ * }
+ */
+const labelValueValidator = prop => {
+  return prop.label !== undefined && prop.value !== undefined;
+};
 
 export default {
   name: 'TransactionDetails',
   props: {
-    hash: String,
+    hash: {
+      type: Object,
+      validator: labelValueValidator,
+    },
+    sender: String,
+    receiver: String,
+    blockNumber: {
+      type: Object,
+      validator: labelValueValidator,
+    },
+    gas: {
+      type: Object,
+      validator: labelValueValidator,
+    },
   },
-  data() {
-    return {
-      gas: null,
-      sender: null,
-      receiver: null,
-      blockNumber: null,
-    };
-  },
-  async created() {
-    try {
-      const transaction = await web3.eth.getTransaction(padHex(this.hash, TRANSACTION_HASH_LENGTH));
-
-      this.sender = transaction.from;
-      this.receiver = transaction.to;
-      this.gas = transaction.gas;
-      this.blockNumber = transaction.blockNumber;
-    }
-    catch (error) {
-      this.$router && this.$router.push({path: '/404' });
-    }
+  computed: {
+    basePath() {
+      if (this.$route) {
+        return basePathFromPath(this.$route.path);
+      }
+      
+      return '';
+    },
+    senderLink() {
+      return `${this.basePath}/address/${this.sender}`;
+    },
+    receiverLink() {
+      return `${this.basePath}/address/${this.receiver}`;
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@/assets/styles/variables/_colors.scss";
+@import "@/assets/styles/variables/constants.scss";
+
+.transaction-info {
+  margin-bottom: 1.5rem;
+
+  p, a {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+#sender-receiver-section {
+  display: flex;
+  justify-content: space-between;
+
+  @media only screen and (max-width: $mobile-threshold) {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+}
+</style>

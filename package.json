@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@google-cloud/bigquery": "^5.2.0",
-    "@openzeppelin/contracts": "^3.2.0",
     "@testing-library/vue": "^5.2.0",
     "@vue/cli-plugin-unit-jest": "^4.5.8",
     "@vue/test-utils": "^1.1.1",
@@ -85,6 +84,9 @@
       "jest/no-commented-out-tests": [
         "off"
       ]
+    },
+    "globals": {
+      "ethereum": "readonly"
     }
   },
   "browserslist": [

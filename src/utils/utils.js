@@ -47,3 +47,7 @@ export function basePathFromPath(path) {
 
   return '';
 }
+
+export async function finishPromises() {
+  return new Promise(resolve => setTimeout(resolve, 0));
+} 

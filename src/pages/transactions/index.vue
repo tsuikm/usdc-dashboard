@@ -1,6 +1,7 @@
 <template>
   <div>
     <NavBar />
+    <h1>USDC Transactions</h1>
     <Table
       ref="table"
       :loading="loading"

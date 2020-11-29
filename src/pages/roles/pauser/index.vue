@@ -23,12 +23,14 @@
         :on-click="save"
       />
     </div>
+    <ConnectToMetamask />
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar';
 import ActionButton from '@/components/ActionButton';
+import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { contract } from '@/utils/web3utils';
 
@@ -36,6 +38,7 @@ export default {
   components: {
     NavBar,
     ActionButton,
+    ConnectToMetamask,
   },
   data() {
     return {
@@ -131,6 +134,7 @@ export default {
   font-size: 30px;
   font-weight: 900;
   padding-bottom: 3%;
+  line-height: 44px;
 }
 
 .content {

@@ -16,14 +16,7 @@
       @submit="this.submit"
     />
     <div class="connect-metamask">
-      <md-button
-        class="button"
-        md-alignment="center"
-        data-testid="transfers-card-connect-button"
-        @click="connectMetamask"
-      >
-        Connect to Metamask
-      </md-button>
+      <ConnectToMetamask ref="connectToMetamaskButton" />
     </div>
   </div>
 </template>
@@ -31,6 +24,7 @@
 <script>
 import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
+import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { contract } from '@/utils/web3utils';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
@@ -39,6 +33,7 @@ export default {
   components: {
     Form,
     NavBar,
+    ConnectToMetamask,
   },
   data() {
     return {
@@ -46,14 +41,6 @@ export default {
     };
   },
   methods: {
-    async connectMetamask() {
-      try {
-        // eslint-disable-next-line
-        this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      } catch (e) {
-        console.log(e);
-      }
-    },
     async submit(toAddress, amount) {
       try {
         // eslint-disable-next-line
@@ -62,7 +49,7 @@ export default {
             method: 'eth_sendTransaction',
             params: [
               {
-                from: this.accounts[0],
+                from: this.$refs.connectToMetamaskButton.accounts[0],
                 to: USDC_CONTRACT_ADDRESS,
                 data: contract.methods.transfer(toAddress, toHex(Number(amount) * 1000000)).encodeABI(),
                 gasPrice: DEFAULT_GAS_PRICE,

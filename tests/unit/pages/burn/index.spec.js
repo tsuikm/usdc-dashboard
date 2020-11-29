@@ -88,4 +88,9 @@ describe('Burn page', () => {
     await fireEvent.click(submitButton);
     expect(consoleSpy).toHaveBeenCalled();
   });
+
+  test('ConnectToMetamask component renders', async () => {
+    const { findByText } = render(burn);
+    expect(findByText('Connect to MetaMask')).not.toBeNull();
+  });
 });

@@ -62,6 +62,9 @@ export default {
         currentMinBlock -= 30000;
       }
     },
+
+    // TODO: the current api calls don't give us the age. Use this method to get the ages of the transactions currently displayed.
+    //
     // async fetchAdditionalInfo(page) {
     //   const pageLength = this.$refs.table.pageLength;
     //   const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);

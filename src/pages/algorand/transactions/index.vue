@@ -1,6 +1,11 @@
 <template>
   <div>
     <NavBar />
+
+    <!-- TODO: this is not how the `key-field` prop is supposed to be used. This was copied from ethereum pages. -->
+    <!-- TODO: it seems like every usage of table uses :total-items="[].length". if the array is already passed-in, is this prop needed? -->
+    <!-- TODO: why is the `name` prop empty? This was copied from ethereum pages. -->
+
     <Table
       ref="table"
       :loading="loading"
@@ -46,6 +51,8 @@ export default {
     async fetchTransactions() {
       const latestBlock = await getCurrentRound();
 
+      // TODO: currently the numbers 30000 and 5000 are hard-coded for convenience.
+      //       Factor this out into constants when the constants are tuned.
       let currentMaxBlock = latestBlock;
       let currentMinBlock = latestBlock - 30000;
 

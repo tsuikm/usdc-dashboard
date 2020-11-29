@@ -53,7 +53,7 @@ export default {
         {
           name: 'Manager',
           addresses: [],
-          icon: 'logo.svg',
+          icon: 'logo.svg', // TODO: we need an icon for the manager role.
         },
       ],
       blocks: [],

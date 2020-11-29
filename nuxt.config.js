@@ -48,6 +48,7 @@ module.exports = {
   env: {
     WEB3_PROVIDER: process.env.WEB3_PROVIDER,
     USDC_CONTRACT_ADDRESS: process.env.USDC_CONTRACT_ADDRESS,
+    USDC_SOLANA_CONTRACT_ADDRESS: process.env.USDC_SOLANA_CONTRACT_ADDRESS,
     API_BASE_URL: process.env.API_BASE_URL,
   },
   serverMiddleware: [

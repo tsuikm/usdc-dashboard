@@ -18,7 +18,42 @@
           :key="roleIndex"
           class="role"
         >
-          <div> {{ role }} </div>
+          <!-- <div class="list-of-roles">
+            {{ role }}
+          </div> -->
+          <div
+            class="role-container"
+            data-testid="role-container"
+          >
+            <div
+              v-if="roles.includes('Minter')"
+            >
+              <md-chip class="minter-chip">
+                Minter
+              </md-chip>
+            </div>
+            <div
+              v-if="roles.includes('Pauser')"
+            >
+              <md-chip class="pauser-chip">
+                Pauser
+              </md-chip>
+            </div>
+            <div
+              v-if="roles.includes('Owner')"
+            >
+              <md-chip class="owner-chip">
+                Owner
+              </md-chip>
+            </div>
+            <div
+              v-if="roles.includes('Blacklister')"
+            >
+              <md-chip class="blacklister-chip">
+                Blacklister
+              </md-chip>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -41,19 +76,6 @@
             No
           </div>
         </div>
-      </div>
-    </div>
-    <!-- transactions -->
-    <div class="transactions">
-      <h1> Address Transactions </h1>
-      <div>
-        <nuxt-link
-          v-for="(transaction, index) in transactions"
-          :key="index"
-          :to="`${basePath}/transaction/${transaction}`"
-        >
-          {{ transaction }}
-        </nuxt-link>
       </div>
     </div>
   </div>
@@ -130,5 +152,29 @@ export default {
 .page-blacklisted {
   padding-top: 5%;
 }
-</style>
+.list-of-roles {
+  background-color: #68d7f3;
+  color: white;
+  font-weight: 700;
+}
 
+.pauser-chip {
+  background-color: #1AA3FF;
+  color: white;
+  font-weight: 700;
+}
+.owner-chip {
+  background-color: #9F72FF;
+  color: white; 
+  font-weight: 700;
+  width: 25%;
+  text-align: center;
+  font-weight: normal;
+}
+.minter-chip {
+  background-color: #4FE39C;
+  color: white;
+  font-weight: 700;
+}
+</style>
+    

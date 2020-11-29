@@ -7,6 +7,8 @@ export const OPTIMAL_PROMISE_ALL_SIZE = 500;
 
 export const USDC_CONTRACT_ADDRESS = process.env.USDC_CONTRACT_ADDRESS || '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
 
+export const USDC_SOLANA_CONTRACT_ADDRESS = process.env.USDC_SOLANA_CONTRACT_ADDRESS || 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
+
 // Test token Contract Address
 export const TEST_TOKEN_CONTRACT_ADDRESS = '0xfc7e3a2554e2d4b23e41c81b14065ee31009cc31';
 

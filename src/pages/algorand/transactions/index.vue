@@ -48,7 +48,7 @@ export default {
   methods: {
     async fetchTransactions() {
       const latestBlock = await getCurrentRound();
-      
+
       let currentMaxBlock = latestBlock;
       let currentMinBlock = latestBlock - 30000;
 
@@ -58,8 +58,7 @@ export default {
           'min-round': currentMinBlock,
           'max-round': currentMaxBlock
         });
-        console.log(transactions)
-      
+
         pushAll(this.transactions, transactions.transactions.reverse());
 
         currentMaxBlock = currentMinBlock;
@@ -73,14 +72,12 @@ export default {
     //   for (let i = page * pageLength; i < upperBound; i++) {
     //   this.transactions[i].age = await fetchAge(this.transactions[i]);
     //     const transaction = await fetchAlgorand(`/v2/transactions/${this.transactions[i].id}`, {
-    //       'asset-id': ALGORAND_USDC_ASdSET_ID 
+    //       'asset-id': ALGORAND_USDC_ASdSET_ID
     //     });
-    //     console.log(transaction);
     //     this.transactions[i].receiver = transaction.curxfer.rcv;
     //     this.transactions[i].amount = transaction.curxfer.amt;
-    //     console.log(this.transactions[i]);
     //   }
-    // },  
+    // },
     async pageChange(page) {
       // this.loading = true;
       // await this.fetchAdditionalInfo(page);

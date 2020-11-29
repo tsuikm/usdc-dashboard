@@ -41,7 +41,6 @@ const blockTimes = new Map();
 export const fetchAge = async transaction => {
   if (!blockTimes.has(transaction['confirmed-round'])) {
     const block = await fetchAlgorand(`/idx2/v2/blocks/${transaction['confirmed-round']}`);
-    console.log(block.timestamp, Date.now())
     const blockTime = moment.unix(block.timestamp);
     blockTimes.set(transaction['confirmed-round'], blockTime);
   }

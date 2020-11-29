@@ -6,6 +6,9 @@ import moment from 'moment';
  * @param {Object} query
  */
 export async function fetchAlgorand(url, query) {
+
+  // Temporary fix for rate limiting: keep requesting until a response is given.
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
       const request = await fetch(ALGORAND_BASE_SERVER + url + '?' + (new URLSearchParams(query)).toString(), {
@@ -33,7 +36,7 @@ export async function fetchAlgorand(url, query) {
 }
 
 export async function getCurrentRound() {
-  const response = await fetchAlgorand(`/ps2/v2/ledger/supply`);
+  const response = await fetchAlgorand('/ps2/v2/ledger/supply');
   return response.current_round;
 }
 

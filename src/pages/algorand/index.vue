@@ -17,9 +17,8 @@ import NavBar from '@/components/NavBar';
 import Summary from '@/components/Summary';
 import {
   ALGORAND_USDC_ASSET_ID,
-  API_BASE_URL,
   RECENT_COUNT,
-  ALGORAND_TXNS_LOOKBACK 
+  ALGORAND_TXNS_LOOKBACK,
 } from '@/utils/constants';
 import { fetchAlgorand, getCurrentRound } from '@/utils/algoUtils';
 
@@ -66,7 +65,7 @@ export default {
   },
   async created() {
     await this.lookupRoles();
-    await this.lookupBlocks()
+    await this.lookupBlocks();
     await this.lookupTransactions();
     this.loading = false;
   },
@@ -96,13 +95,13 @@ export default {
     async lookupTransactions() {
       const currentBlock = await getCurrentRound();
       const transactions = await fetchAlgorand(`/idx2/v2/assets/${ALGORAND_USDC_ASSET_ID}/transactions`, {
-        'min-round': currentBlock - ALGORAND_TXNS_LOOKBACK
+        'min-round': currentBlock - ALGORAND_TXNS_LOOKBACK,
       });
       const length = transactions.transactions.length;
       this.transactions = transactions.transactions
-                                      .slice(length - RECENT_COUNT, length)
-                                      .reverse()
-                                      .map(transaction => transaction.id);
+        .slice(length - RECENT_COUNT, length)
+        .reverse()
+        .map(transaction => transaction.id);
     },
   },
 };

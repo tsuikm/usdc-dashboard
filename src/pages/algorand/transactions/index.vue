@@ -17,14 +17,11 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
-import { fetchAlgorand, getCurrentRound, fetchAge } from '@/utils/algoUtils';
+import { fetchAlgorand, getCurrentRound } from '@/utils/algoUtils';
 import { pushAll } from '@/utils/utils';
 import {
   ALGORAND_USDC_ASSET_ID,
-  API_BASE_URL,
-  RECENT_COUNT,
-  ALGORAND_TXNS_LOOKBACK,
-  ALGORAND_TRANSACTION_SCHEMA
+  ALGORAND_TRANSACTION_SCHEMA,
 } from '@/utils/constants';
 
 export default {
@@ -36,7 +33,7 @@ export default {
     return {
       transactions: [],
       loading: true,
-      ALGORAND_TRANSACTION_SCHEMA
+      ALGORAND_TRANSACTION_SCHEMA,
     };
   },
   async mounted() {
@@ -56,7 +53,7 @@ export default {
         const transactions = await fetchAlgorand('/idx2/v2/transactions', {
           'asset-id': ALGORAND_USDC_ASSET_ID,
           'min-round': currentMinBlock,
-          'max-round': currentMaxBlock
+          'max-round': currentMaxBlock,
         });
 
         pushAll(this.transactions, transactions.transactions.reverse());
@@ -78,7 +75,7 @@ export default {
     //     this.transactions[i].amount = transaction.curxfer.amt;
     //   }
     // },
-    async pageChange(page) {
+    async pageChange() {
       // this.loading = true;
       // await this.fetchAdditionalInfo(page);
       // this.loading = false;

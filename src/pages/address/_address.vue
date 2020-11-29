@@ -3,7 +3,7 @@
     <NavBar />
     <AddressPage 
       :roles="this.roles" 
-      :isBlacklisted="this.isBlacklisted"
+      :is-blacklisted="this.isBlacklisted"
       :balance="this.balance"
     />
   </div>
@@ -56,17 +56,21 @@ export default {
     async checkRoles() {
       if (await contract.methods.isMinter(this.$route.params.address).call()) {
         this.roles.push('minter');
-      };
+      }
       const pauserAddress = await contract.methods.pauser().call();
       if (pauserAddress === this.$route.params.address) {
         this.roles.push('pauser');
-      };
+      }
       const owner = await contract.methods.owner().call();
       const ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
       if (ownerAddress === this.$route.params.address) {
         this.roles.push('owner');
-      };
+      }
     },
   },
 };
 </script>
+
+<style scoped>
+
+</style>

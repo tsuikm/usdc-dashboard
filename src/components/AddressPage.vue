@@ -5,7 +5,7 @@
     <!-- wallet address -->
     <div class="wallet-address">
       <h2> Wallet Address </h2>
-      <div> {{this.$route.params.address}} </div>
+      <div> {{ this.$route.params.address }} </div>
     </div>
 
     <!-- roles -->
@@ -29,8 +29,12 @@
     <!-- blacklisted -->
     <div class="blacklisted">
       <h2> Blacklisted? </h2>
-      <div v-if="this.isBlacklisted"> Yes </div>
-      <div v-else> No </div>
+      <div v-if="this.isBlacklisted">
+        Yes
+      </div>
+      <div v-else>
+        No
+      </div>
     </div>
 
     <!-- transactions -->
@@ -54,9 +58,9 @@ import { basePathFromPath } from '@/utils/utils';
 
 export default {
   name: 'AddressPage',
-   props: {
+  props: {
 
-     /**
+    /**
       * @param {Role[]} - the roles to display.
       * @typedef {Role} {
       *   name: {String} - the name of the Role (eg. 'Pauser').
@@ -64,42 +68,47 @@ export default {
       *   icon: {String} - the file of the icon displayed for the role, relative to the @/assets directory.
       * }
       */
-     roles: {
-       type: Array,
-       validator: roles => Array.isArray(roles) &&
+    roles: {
+      type: Array,
+      validator: roles => Array.isArray(roles) &&
                            roles.every(role => typeof role === 'string'),
-     },
+    },
 
-     /**
+    /**
       * @param {String[]} - the transactions to display.
       */
-     transactions: {
-       type: Array,
-       validator: transactions => Array.isArray(transactions) &&
+    transactions: {
+      type: Array,
+      validator: transactions => Array.isArray(transactions) &&
                                   transactions.every(hash => typeof hash === 'string' && hash.length),
-     },
+    },
 
-     /**
+    /**
       * @param {IsBlacklisted} - whether the address is blacklisted.
       */
-     isBlacklisted: {
-       type: Boolean,
-       validator: isBlacklisted => typeof isBlacklisted === 'boolean',
-     },
+    isBlacklisted: {
+      type: Boolean,
+      validator: isBlacklisted => typeof isBlacklisted === 'boolean',
+    },
 
-     /**
+    /**
       * @param {Balance} - the balance of the address.
       */
-     balance: {
-       type: Number,
-       validator: balance => typeof balance === 'number',
-     },
-   },
-   computed: {
-     basePath() {
-       return this.$route ? basePathFromPath(this.$route.path) : '';
-     },
-   },
-}
+    balance: {
+      type: Number,
+      validator: balance => typeof balance === 'number',
+    },
+  },
+  computed: {
+    basePath() {
+      return this.$route ? basePathFromPath(this.$route.path) : '';
+    },
+  },
+};
 </script>
+<style scoped>
+.wallet-address {
+  width: 100%
+}
+</style>
 

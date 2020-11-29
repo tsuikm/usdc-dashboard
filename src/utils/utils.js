@@ -1,4 +1,4 @@
-import { ALGORAND_BASE_SERVER } from '@/utils/constants';
+import { ALGORAND_BASE_SERVER, PURESTAKE_API_KEY } from '@/utils/constants';
 
 export function toHex(num) {
   return '0x' + (num).toString(16);

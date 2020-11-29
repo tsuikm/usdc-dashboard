@@ -16,9 +16,7 @@
 import NavBar from '@/components/NavBar';
 import Summary from '@/components/Summary';
 import {
-  ALGORAND_BASE_SERVER,
   ALGORAND_USDC_ASSET_ID,
-  PURESTAKE_API_KEY,
   API_BASE_URL,
   RECENT_COUNT,
   ALGORAND_TXNS_LOOKBACK 
@@ -114,7 +112,3 @@ export default {
   },
 };
 </script>
-
-
-
-

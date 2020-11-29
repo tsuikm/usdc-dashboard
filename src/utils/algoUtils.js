@@ -6,19 +6,30 @@ import moment from 'moment';
  * @param {Object} query
  */
 export async function fetchAlgorand(url, query) {
-  const request = await fetch(ALGORAND_BASE_SERVER + url + '?' + (new URLSearchParams(query)).toString(), {
-    method: 'GET',
-    headers: {
-      'accept': 'application/json',
-      'x-api-key': PURESTAKE_API_KEY,
-    },
-  });
+  while (true) {
+    try {
+      const request = await fetch(ALGORAND_BASE_SERVER + url + '?' + (new URLSearchParams(query)).toString(), {
+        method: 'GET',
+        headers: {
+          'accept': 'application/json',
+          'x-api-key': PURESTAKE_API_KEY,
+        },
+      });
 
-  const reader = await request.body.getReader();
-  const value = (await reader.read()).value;
-  const decoder = new TextDecoder('utf8');
+      const reader = await request.body.getReader();
+      const value = (await reader.read()).value;
+      const decoder = new TextDecoder('utf8');
 
-  return JSON.parse(decoder.decode(value));;
+      const response = JSON.parse(decoder.decode(value));
+      if (response.message === 'Too Many Requests') {
+        throw new Error();
+      }
+      return response;
+    }
+    catch {
+      continue;
+    }
+  }
 }
 
 export async function getCurrentRound() {

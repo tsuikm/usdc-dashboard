@@ -50,9 +50,9 @@ export default {
       const latestBlock = await getCurrentRound();
       
       let currentMaxBlock = latestBlock;
-      let currentMinBlock = latestBlock - 600;
+      let currentMinBlock = latestBlock - 30000;
 
-      while (this.transactions.length < 4) {
+      while (this.transactions.length < 5000 && currentMinBlock > 0) {
         const transactions = await fetchAlgorand('/idx2/v2/transactions', {
           'asset-id': ALGORAND_USDC_ASSET_ID,
           'min-round': currentMinBlock,
@@ -63,7 +63,7 @@ export default {
         pushAll(this.transactions, transactions.transactions.reverse());
 
         currentMaxBlock = currentMinBlock;
-        currentMinBlock -= 5000;
+        currentMinBlock -= 30000;
       }
     },
     // async fetchAdditionalInfo(page) {
@@ -82,9 +82,9 @@ export default {
     //   }
     // },  
     async pageChange(page) {
-      this.loading = true;
-      await this.fetchAdditionalInfo(page);
-      this.loading = false;
+      // this.loading = true;
+      // await this.fetchAdditionalInfo(page);
+      // this.loading = false;
     },
   },
 };

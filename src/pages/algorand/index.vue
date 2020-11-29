@@ -98,8 +98,6 @@ export default {
       const transactions = await fetchAlgorand(`/idx2/v2/assets/${ALGORAND_USDC_ASSET_ID}/transactions`, {
         'min-round': currentBlock - ALGORAND_TXNS_LOOKBACK
       });
-
-      console.log(transactions.transactions);
       const length = transactions.transactions.length;
       this.transactions = transactions.transactions
                                       .slice(length - RECENT_COUNT, length)

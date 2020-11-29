@@ -41,7 +41,7 @@ export default {
   },
   async mounted() {
     await this.fetchTransactions();
-    await this.fetchAdditionalInfo(this.$refs.table.page);
+    // await this.fetchAdditionalInfo(this.$refs.table.page);
 
     this.loading = false;
   },
@@ -50,13 +50,15 @@ export default {
       const latestBlock = await getCurrentRound();
       
       let currentMaxBlock = latestBlock;
-      let currentMinBlock = latestBlock - 5000;
+      let currentMinBlock = latestBlock - 600;
 
-      while (this.transactions.length < 10) {
-        const transactions = await fetchAlgorand(`/idx2/v2/assets/${ALGORAND_USDC_ASSET_ID}/transactions`, {
+      while (this.transactions.length < 4) {
+        const transactions = await fetchAlgorand('/idx2/v2/transactions', {
+          'asset-id': ALGORAND_USDC_ASSET_ID,
           'min-round': currentMinBlock,
           'max-round': currentMaxBlock
         });
+        console.log(transactions)
       
         pushAll(this.transactions, transactions.transactions.reverse());
 
@@ -64,25 +66,21 @@ export default {
         currentMinBlock -= 5000;
       }
     },
-    async fetchAdditionalInfo(page) {
-      console.log("fetch addition");
+    // async fetchAdditionalInfo(page) {
+    //   const pageLength = this.$refs.table.pageLength;
+    //   const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);
 
-      const pageLength = this.$refs.table.pageLength;
-      const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);
-
-      for (let i = page * pageLength; i < upperBound; i++) {
-        console.log("in loop");
-
-        this.transactions[i].age = fetchAge(this.transactions[i]);
-        console.log("after age");
-
-        const transaction = await fetchAlgorand(`/ps1/v1/transaction/${this.transactions[i].id}`);
-        console.log("after fetch algo for receiver, amt", transaction);
-        this.transactions[i].receiver = transaction.curxfer.rcv;
-        this.transactions[i].amount = transaction.curxfer.amt;
-        console.log(this.transactions[i]);
-      }
-    },  
+    //   for (let i = page * pageLength; i < upperBound; i++) {
+    //   this.transactions[i].age = await fetchAge(this.transactions[i]);
+    //     const transaction = await fetchAlgorand(`/v2/transactions/${this.transactions[i].id}`, {
+    //       'asset-id': ALGORAND_USDC_ASdSET_ID 
+    //     });
+    //     console.log(transaction);
+    //     this.transactions[i].receiver = transaction.curxfer.rcv;
+    //     this.transactions[i].amount = transaction.curxfer.amt;
+    //     console.log(this.transactions[i]);
+    //   }
+    // },  
     async pageChange(page) {
       this.loading = true;
       await this.fetchAdditionalInfo(page);

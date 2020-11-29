@@ -108,7 +108,7 @@ export const ALGORAND_TRANSACTION_SCHEMA = [
   {
     name: 'Amount',
     getter(t) {
-      return t.amount;
+      return t['asset-transfer-transaction'].amount;
     },
   },
   {
@@ -123,10 +123,10 @@ export const ALGORAND_TRANSACTION_SCHEMA = [
   {
     name: 'Receiver',
     getter(t) {
-      return t.receiver;
+      return t['asset-transfer-transaction'].receiver;
     },
     link(t) {
-      return `/address/${t.receiver}`;
+      return `/address/${t['asset-transfer-transaction'].receiver}`;
     },
   },
   {

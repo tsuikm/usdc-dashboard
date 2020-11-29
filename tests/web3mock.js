@@ -288,6 +288,9 @@ export default class Web3 {
         }
         throw new Error();
       },
+      async getAccounts() {
+        return [Web3.MOCK_ACCOUNTS];
+      },
     };
   }
 

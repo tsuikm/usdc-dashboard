@@ -53,6 +53,7 @@
             :on-click="this.save"
           />
         </div>
+        <ConnectToMetamask ref="connectToMetamaskButton" />
       </div>
     </div>
   </div>
@@ -63,6 +64,7 @@ import NavBar from '@/components/NavBar';
 import RoleButton from '@/components/RoleButton';
 import ActionButton from '@/components/ActionButton';
 import CustomInput from '@/components/CustomInput';
+import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { contract } from '@/utils/web3utils';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 
@@ -107,6 +109,7 @@ export default {
   components: {
     NavBar,
     RoleButton,
+    ConnectToMetamask,
     ActionButton,
     CustomInput,
   },
@@ -145,7 +148,8 @@ export default {
     async save() {
       this.address = this.address.trim().toLowerCase();
 
-      const accounts = (await ethereum.request({ method: 'eth_requestAccounts' })).map(string => string.toLowerCase());
+      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
+
       const ownerAccount = await getOwner();
 
       this.showOwnerWarning = !accounts.includes(ownerAccount);

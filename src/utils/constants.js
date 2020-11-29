@@ -94,3 +94,51 @@ export const ACCOUNTS_SCHEMA = [
     getter: account => account.percentage,
   },
 ];
+
+export const ALGORAND_TRANSACTION_SCHEMA = [
+  {
+    name: 'Transaction ID',
+    getter(t) {
+      return t.id;
+    },
+    link(t) {
+      return `/transaction/${t.id}`;
+    },
+  },
+  {
+    name: 'Amount',
+    getter(t) {
+      return t.amount;
+    },
+  },
+  {
+    name: 'Sender',
+    getter(t) {
+      return t.sender;
+    },
+    link(t) {
+      return `/address/${t.sender}`;
+    },
+  },
+  {
+    name: 'Receiver',
+    getter(t) {
+      return t.receiver;
+    },
+    link(t) {
+      return `/address/${t.receiver}`;
+    },
+  },
+  {
+    name: 'Age',
+    getter(t) {
+      return t.age;
+    },
+  },
+  {
+    name: 'Block Number',
+    getter(t) {
+      return t['confirmed-round'];
+    },
+  },
+];

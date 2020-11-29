@@ -21,7 +21,7 @@ import {
   RECENT_COUNT,
   ALGORAND_TXNS_LOOKBACK 
 } from '@/utils/constants';
-import { fetchAlgorand } from '@/utils/utils';
+import { fetchAlgorand, getCurrentRound } from '@/utils/algoUtils';
 
 export default {
   components: {
@@ -88,27 +88,24 @@ export default {
       this.setAddresses('Manager', [roles.asset.params.manager]);
     },
     async lookupBlocks() {
-      const currentBlock = await this.getCurrentRound();
+      const currentBlock = await getCurrentRound();
       for (let i = 0; i < RECENT_COUNT; i++) {
         this.blocks.push(currentBlock - i);
       }
     },
     async lookupTransactions() {
-      const currentBlock = await this.getCurrentRound();
+      const currentBlock = await getCurrentRound();
       const transactions = await fetchAlgorand(`/idx2/v2/assets/${ALGORAND_USDC_ASSET_ID}/transactions`, {
         'min-round': currentBlock - ALGORAND_TXNS_LOOKBACK
       });
 
+      console.log(transactions.transactions);
       const length = transactions.transactions.length;
       this.transactions = transactions.transactions
                                       .slice(length - RECENT_COUNT, length)
                                       .reverse()
                                       .map(transaction => transaction.id);
     },
-    async getCurrentRound() {
-      const response = await fetchAlgorand(`/ps2/v2/ledger/supply`);
-      return response.current_round;
-    }
   },
 };
 </script>

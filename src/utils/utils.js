@@ -1,5 +1,3 @@
-import { ALGORAND_BASE_SERVER, PURESTAKE_API_KEY } from '@/utils/constants';
-
 export function toHex(num) {
   return '0x' + (num).toString(16);
 }
@@ -53,35 +51,3 @@ export function basePathFromPath(path) {
 export async function finishPromises() {
   return new Promise(resolve => setTimeout(resolve, 0));
 } 
-
-/**
- * @param {String} url
- * @param {Object} query
- */
-export async function fetchAlgorand(url, query) {
-  // while (true) {      
-  //   try {
-      const request = await fetch(ALGORAND_BASE_SERVER + url + '?' + (new URLSearchParams(query)).toString(), {
-        method: 'GET',
-        headers: {
-          'accept': 'application/json',
-          'x-api-key': PURESTAKE_API_KEY,
-        },
-      });
-
-      const reader = await request.body.getReader();
-      const value = (await reader.read()).value;
-      const decoder = new TextDecoder('utf8');
-
-      const response = JSON.parse(decoder.decode(value));
-      
-      if (response.message === "Too Many Requests") {
-        throw new Error();
-      }
-      return response;
-    // }
-    // catch {
-    //   continue;
-    // }
-  // }
-}

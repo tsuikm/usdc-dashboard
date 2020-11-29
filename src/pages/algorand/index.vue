@@ -5,7 +5,7 @@
       :roles="this.roles"
       :blocks="this.blocks"
       :transactions="this.transactions"
-      :lookback="RECENT_TXNS_LOOKBACK"
+      :lookback="ALGORAND_TXNS_LOOKBACK"
       :limit="RECENT_COUNT"
       :loading="loading"
     />
@@ -15,10 +15,15 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Summary from '@/components/Summary';
-import { ALGORAND_BASE_SERVER, ALGORAND_USDC_ASSET_ID, PURESTAKE_API_KEY, API_BASE_URL, RECENT_COUNT } from '@/utils/constants';
-
-// Number of blocks to lookback when searching for the 20 latest transactions
-const RECENT_TXNS_LOOKBACK = 10000;
+import {
+  ALGORAND_BASE_SERVER,
+  ALGORAND_USDC_ASSET_ID,
+  PURESTAKE_API_KEY,
+  API_BASE_URL,
+  RECENT_COUNT,
+  ALGORAND_TXNS_LOOKBACK 
+} from '@/utils/constants';
+import { fetchAlgorand } from '@/utils/utils';
 
 export default {
   components: {
@@ -57,12 +62,14 @@ export default {
       blocks: [],
       transactions: [],
       loading: true,
-      RECENT_TXNS_LOOKBACK,
+      ALGORAND_TXNS_LOOKBACK,
       RECENT_COUNT,
     };
   },
   async created() {
-    await Promise.all([this.lookupRoles(), this.lookupBlocks(), this.lookupTransactions()]);
+    await this.lookupRoles();
+    await this.lookupBlocks()
+    await this.lookupTransactions();
     this.loading = false;
   },
   methods: {
@@ -73,28 +80,8 @@ export default {
         role.addresses.push(address);
       }
     },
-
-    /**
-     * TODO: move this to utils.
-     * @param {String}
-     */
-    async fetchAlgorand(url, query) {
-      const request = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'accept': 'application/json',
-            'x-api-key': PURESTAKE_API_KEY,
-        },
-      });
-      const reader = await request.body.getReader();
-      const value = (await reader.read()).value;
-      const decoder = new TextDecoder('utf8');
-
-      return JSON.parse(decoder.decode(value));
-    },
-
     async lookupRoles() {
-      const roles = await this.fetchAlgorand(`${ALGORAND_BASE_SERVER}/idx2/v2/assets/${ALGORAND_USDC_ASSET_ID}`);
+      const roles = await fetchAlgorand(`/idx2/v2/assets/${ALGORAND_USDC_ASSET_ID}`);
 
       this.setAddresses('Creator', [roles.asset.params.creator]);
       this.setAddresses('Freeze', [roles.asset.params.freeze]);
@@ -108,10 +95,11 @@ export default {
         this.blocks.push(currentBlock - i);
       }
     },
-
     async lookupTransactions() {
       const currentBlock = await this.getCurrentRound();
-      const transactions = await this.fetchAlgorand(`${ALGORAND_BASE_SERVER}/idx2/v2/assets/${ALGORAND_USDC_ASSET_ID}/transactions?min-round=${currentBlock - RECENT_TXNS_LOOKBACK}`);
+      const transactions = await fetchAlgorand(`/idx2/v2/assets/${ALGORAND_USDC_ASSET_ID}/transactions`, {
+        'min-round': currentBlock - ALGORAND_TXNS_LOOKBACK
+      });
 
       const length = transactions.transactions.length;
       this.transactions = transactions.transactions
@@ -120,8 +108,7 @@ export default {
                                       .map(transaction => transaction.id);
     },
     async getCurrentRound() {
-      const response = await this.fetchAlgorand(`${ALGORAND_BASE_SERVER}/ps2/v2/ledger/supply`);
-      console.log(response)
+      const response = await fetchAlgorand(`/ps2/v2/ledger/supply`);
       return response.current_round;
     }
   },

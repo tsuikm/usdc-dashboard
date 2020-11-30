@@ -23,7 +23,6 @@
 <script>
 import NavBar from '@/components/NavBar';
 import AddressPage from '@/components/AddressPage';
-import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import { padHex } from '@/utils/utils';
 import { contract, getBalance } from '@/utils/web3utils';
 import { getWalletTransactions, fetchAge } from '@/utils/web3utils';

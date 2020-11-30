@@ -26,24 +26,33 @@ app.get('/minters', async (req, res) => {
 //       to directly use purestake's rest endpoints. We will investigate if this resolves issue where part
 //       of the response string is cut off, resulting in a JSON parsing error.
 //
-// // const algosdk = require('algosdk');
-// const baseServer = 'https://mainnet-algorand.api.purestake.io/idx2/';
-// const port = '';
-// const token = {
-//   'X-API-Key': 'Yux8PVogsu1Z7tFByiIvh7npNLq9daJsp0pDmaj6',
-// };
-// const client = new algosdk.Indexer(token, baseServer, port);
+const algosdk = require('algosdk');
+const baseServer = 'https://mainnet-algorand.api.purestake.io';
+const port = '';
+const token = {
+  'X-API-Key': process.env.PURESTAKE_API_KEY
+};
 
-// app.get('/test', async (req, res) => {
+const indexer = new algosdk.Indexer(token, `${baseServer}/idx2/`, port);
+const algod = new algosdk.Indexer(token, `${baseServer}/ps2/`, port);
 
-//   try {
-//     const txns = await client.searchForTransactions().do();
-//     res.json(txns);
-//   } catch (e) {
-//     console.log(e);
-//     res.status(500).end();
-//   }
-// });
+app.get('/algorand', async (req, res) => {
+  try {
+    let response;
+    console.log('hello',req.query)
+    if (req.query.api === 'indexer') {
+      if (req.query.request === 'transactions') {
+        response = indexer.searchForTransactions();
+      }
+      response.query = req.query;
+    }
 
+    res.json(await response.do());
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).end();
+  }
+});
 
 module.exports = app;

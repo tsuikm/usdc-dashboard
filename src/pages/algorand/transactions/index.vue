@@ -22,7 +22,7 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
-import { fetchAlgorand, getCurrentRound } from '@/utils/algoUtils';
+import { fetchAlgorand, fetchAlgorandAPI, getCurrentRound } from '@/utils/algoUtils';
 import { pushAll } from '@/utils/utils';
 import {
   ALGORAND_USDC_ASSET_ID,
@@ -49,25 +49,16 @@ export default {
   },
   methods: {
     async fetchTransactions() {
-      const latestBlock = await getCurrentRound();
+      const transactions = await fetchAlgorandAPI({
+        api: 'indexer',
+        request: 'transactions',
+        'asset-id': ALGORAND_USDC_ASSET_ID,
+        'min-round': 0,
+        'limit': 100000000000, // TODO: we need to override the default of 1000.
+        'max-round': await getCurrentRound(),
+      });
 
-      // TODO: currently the numbers 30000 and 5000 are hard-coded for convenience.
-      //       Factor this out into constants when the constants are tuned.
-      let currentMaxBlock = latestBlock;
-      let currentMinBlock = latestBlock - 30000;
-
-      while (this.transactions.length < 5000 && currentMinBlock > 0) {
-        const transactions = await fetchAlgorand('/idx2/v2/transactions', {
-          'asset-id': ALGORAND_USDC_ASSET_ID,
-          'min-round': currentMinBlock,
-          'max-round': currentMaxBlock,
-        });
-
-        pushAll(this.transactions, transactions.transactions.reverse());
-
-        currentMaxBlock = currentMinBlock;
-        currentMinBlock -= 30000;
-      }
+      pushAll(this.transactions, transactions.transactions.reverse());
     },
 
     // TODO: the current api calls don't give us the age. Use this method to get the ages of the transactions currently displayed.

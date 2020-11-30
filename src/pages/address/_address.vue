@@ -74,10 +74,7 @@ export default {
       }
 
       this.isBlacklisted = await contract.methods
-        .isBlacklisted(
-          padHex(this.$route.params.address, WEB3_BALANCEOF_ADDRESS_LENGTH),
-        )
-        .call();
+        .isBlacklisted(this.$route.params.address).call();
     },
     async checkRoles() {
       if (await contract.methods.isMinter(this.$route.params.address).call()) {
@@ -88,8 +85,8 @@ export default {
         this.roles.push('Pauser');
       }
       const owner = await contract.methods.owner().call();
-      const ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
-      if (ownerAddress === this.$route.params.address) {
+      // const ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
+      if (owner === this.$route.params.address) {
         this.roles.push('Owner');
       }
       const blacklisterAddress = await contract.methods.blacklister().call();

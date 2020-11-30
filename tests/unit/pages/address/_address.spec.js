@@ -2,32 +2,20 @@ import AddressDetailsPage from '@/pages/address/_address';
 import { render } from '@testing-library/vue';
 import { padHex, finishPromises } from '@/utils/utils';
 import Web3 from 'web3';
-import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 
 const MOCK_ACCOUNTS = {
-  MOCK_WALLET_ADDRESS: {
+  '0xf7c343FBc40F6B34DaA8bC2a97607BA4cEDF98c3': {
     balance: 10000,
     minter: true,
     pauser: false,
     owner: false,
     blacklisted: false,
   },
-  // '0x1': {
-  //   balance: 10000,
-  //   minter: false,
-  //   pauser: false,
-  //   owner: false,
-  //   blacklisted: false,
-  // },
 };
-const MOCK_WALLET_ADDRESS = padHex('0x12345', WEB3_BALANCEOF_ADDRESS_LENGTH);
+const MOCK_WALLET_ADDRESS = '0xf7c343FBc40F6B34DaA8bC2a97607BA4cEDF98c3';
 
 Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS;
-
-global.ethereum = {
-  request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
-};
 
 const TRANSACTION_DATA = '0x100000';
 const TRANSACTION_HASH = '0x13579';
@@ -49,12 +37,7 @@ const MOCK_TRANSACTIONS = [
 
 Web3.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
 
-// new (new Web3()).eth.Contract();
-
 describe('Address Details Page', () => {
-  // afterEach(() => {
-  //   ethereum.request.mockClear();
-  // });
 
   it('Renders address transaction table', async () => {
     const { getByText } = render(AddressDetailsPage, {

@@ -47,6 +47,9 @@ describe('Address Details Page', () => {
           params: {
             address: MOCK_WALLET_ADDRESS,
           },
+          query: {
+            page: 1, // Load with ?page=1
+          },
         },
         data: function () {
           return {

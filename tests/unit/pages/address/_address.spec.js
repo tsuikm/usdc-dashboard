@@ -20,22 +20,22 @@ Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS;
 const TRANSACTION_DATA = '0x100000';
 const TRANSACTION_HASH = '0x13579';
 const BLOCK_NUMBER = 1;
-const SENDER = padHex('0x2468a', 64);
+const SENDER = '0xf7c343FBc40F6B34DaA8bC2a97607BA4cEDF98c3';
 const RECEIVER = padHex('0x13579', 64);
-const AGE = '17 days';
+// const AGE = '17 days';
 
 const MOCK_TRANSACTIONS = [
   {
-    data: TRANSACTION_DATA,
     transactionHash: TRANSACTION_HASH,
+    data: TRANSACTION_DATA, // amount transfered in hex, times 10 ** 6
+    sender: SENDER, // hex for sender address
+    receiver: RECEIVER, // hex for receiver address
     blockNumber: BLOCK_NUMBER,
-    from: SENDER,
-    to: RECEIVER,
-    age: AGE,
   },
 ];
 
 Web3.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
+// console.log(MOCK_TRANSACTIONS);
 
 describe('Address Details Page', () => {
 
@@ -51,15 +51,15 @@ describe('Address Details Page', () => {
             page: 1, // Load with ?page=1
           },
         },
-        data: function () {
-          return {
-            balance: 10000,
-            isBlacklisted: false,
-            roles: ['Minter'],
-            transactions: [MOCK_TRANSACTIONS],
-            loading: true,
-          };
-        },
+        // data: function () {
+        //   return {
+        //     balance: 10000,
+        //     isBlacklisted: false,
+        //     roles: ['Minter'],
+        //     transactions: MOCK_TRANSACTIONS,
+        //     loading: true,
+        //   };
+        // },
       },
     });
 

@@ -11,7 +11,10 @@
       </div>
 
       <!-- roles -->
-      <div class="roles">
+      <div
+        v-if="roles.length != 0"
+        class="roles"
+      >
         <h2> Roles </h2>
         <div
           v-for="(role, roleIndex) in roles"
@@ -162,6 +165,9 @@ export default {
   background-color: #1AA3FF;
   color: white;
   font-weight: 700;
+  width: 25%;
+  text-align: center;
+  font-weight: bold;
 }
 .owner-chip {
   background-color: #9F72FF;
@@ -169,12 +175,35 @@ export default {
   font-weight: 700;
   width: 25%;
   text-align: center;
-  font-weight: normal;
+  font-weight: bold;
 }
 .minter-chip {
   background-color: #4FE39C;
   color: white;
   font-weight: 700;
+  width: 25%;
+  text-align: center;
+  font-weight: bold;
+}
+.blacklister-chip {
+  background-color: #4FE39C;
+  color: white;
+  font-weight: 700;
+  width: 25%;
+  text-align: center;
+  font-weight: bold;
+}
+.role {
+  padding-top: 3%;
+}
+.wallet-address {
+  font-weight: bold;
+}
+.balance {
+  font-weight: bold;
+}
+.blacklisted {
+  font-weight: bold;
 }
 </style>
-    
+

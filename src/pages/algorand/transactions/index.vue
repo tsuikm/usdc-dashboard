@@ -22,7 +22,7 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
-import { fetchAlgorand, fetchAlgorandAPI, getCurrentRound } from '@/utils/algoUtils';
+import { fetchAge, fetchAlgorand, fetchAlgorandAPI, getCurrentRound } from '@/utils/algoUtils';
 import { pushAll } from '@/utils/utils';
 import {
   ALGORAND_USDC_ASSET_ID,
@@ -43,7 +43,7 @@ export default {
   },
   async mounted() {
     await this.fetchTransactions();
-    // await this.fetchAdditionalInfo(this.$refs.table.page);
+    await this.fetchAges(this.$refs.table.page);
 
     this.loading = false;
   },
@@ -57,29 +57,23 @@ export default {
         'limit': 100000000000, // TODO: we need to override the default of 1000.
         'max-round': await getCurrentRound(),
       });
-
+      console.log(transactions)
       pushAll(this.transactions, transactions.transactions.reverse());
     },
 
-    // TODO: the current api calls don't give us the age. Use this method to get the ages of the transactions currently displayed.
-    //
-    // async fetchAdditionalInfo(page) {
-    //   const pageLength = this.$refs.table.pageLength;
-    //   const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);
+    async fetchAges(page) {
+      const pageLength = this.$refs.table.pageLength;
+      const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);
 
-    //   for (let i = page * pageLength; i < upperBound; i++) {
-    //   this.transactions[i].age = await fetchAge(this.transactions[i]);
-    //     const transaction = await fetchAlgorand(`/v2/transactions/${this.transactions[i].id}`, {
-    //       'asset-id': ALGORAND_USDC_ASdSET_ID
-    //     });
-    //     this.transactions[i].receiver = transaction.curxfer.rcv;
-    //     this.transactions[i].amount = transaction.curxfer.amt;
-    //   }
-    // },
-    async pageChange() {
-      // this.loading = true;
-      // await this.fetchAdditionalInfo(page);
-      // this.loading = false;
+      for (let i = page * pageLength; i < upperBound; i++) {
+        this.transactions[i].age = await fetchAge(this.transactions[i]);
+        this.$refs.table.$forceUpdate();
+      }
+    },
+    async pageChange(page) {
+      this.loading = true;
+      await this.fetchAges(page);
+      this.loading = false;
     },
   },
 };

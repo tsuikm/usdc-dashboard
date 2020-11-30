@@ -51,27 +51,31 @@ export async function getCurrentRound() {
 
 const blockTimes = new Map();
 export const fetchAge = async transaction => {
-  // if (!blockTimes.has(transaction['confirmed-round'])) {
-  //   const block = await fetchAlgorand(`/idx2/v2/blocks/${transaction['confirmed-round']}`);
-  //   const blockTime = moment.unix(block.timestamp);
-  //   blockTimes.set(transaction['confirmed-round'], blockTime);
-  // }
+  if (!blockTimes.has(transaction['confirmed-round'])) {
+    const block = await fetchAlgorandAPI({
+      api: 'indexer',
+      request: 'blocks',
+      param: transaction['confirmed-round']
+    });
+    const blockTime = moment.unix(block.timestamp);
+    blockTimes.set(transaction['confirmed-round'], blockTime);
+  }
 
-  // const blockTime = blockTimes.get(transaction['confirmed-round']);
-  // const age = moment.duration(moment().diff(blockTime));
+  const blockTime = blockTimes.get(transaction['confirmed-round']);
+  const age = moment.duration(moment().diff(blockTime));
 
-  // const seconds = age.seconds();
-  // const minutes = age.minutes();
-  // const hours = age.hours();
-  // const days = age.days();
+  const seconds = age.seconds();
+  const minutes = age.minutes();
+  const hours = age.hours();
+  const days = age.days();
 
-  // if (days == 0 && hours == 0 && minutes == 0) {
-  //   return `${seconds} s ago`;
-  // } else if (days == 0 && hours == 0) {
-  //   return `${minutes} mins ${seconds} s ago`;
-  // } else if (days == 0) {
-  //   return `${hours} hrs ${minutes} mins ago`;
-  // } else {
-  //   return `${days} days ${hours} hrs ago`;
-  // }
+  if (days == 0 && hours == 0 && minutes == 0) {
+    return `${seconds} s ago`;
+  } else if (days == 0 && hours == 0) {
+    return `${minutes} mins ${seconds} s ago`;
+  } else if (days == 0) {
+    return `${hours} hrs ${minutes} mins ago`;
+  } else {
+    return `${days} days ${hours} hrs ago`;
+  }
 };

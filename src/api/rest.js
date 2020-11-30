@@ -37,21 +37,25 @@ const indexer = new algosdk.Indexer(token, `${baseServer}/idx2/`, port);
 const algod = new algosdk.Indexer(token, `${baseServer}/ps2/`, port);
 
 app.get('/algorand', async (req, res) => {
-  try {
-    let response;
-    console.log('hello',req.query)
-    if (req.query.api === 'indexer') {
-      if (req.query.request === 'transactions') {
-        response = indexer.searchForTransactions();
+  while (true) {
+    try {
+      let response;
+      if (req.query.api === 'indexer') {
+        if (req.query.request === 'transactions') {
+          response = indexer.searchForTransactions(req.query.param);
+        }
+        if (req.query.request === 'blocks') {
+          response = indexer.lookupBlock(req.query.param);
+        }
+        response.query = req.query;
       }
-      response.query = req.query;
-    }
 
-    res.json(await response.do());
-  }
-  catch (error) {
-    console.log(error);
-    res.status(500).end();
+      return res.json(await response.do());
+    }
+    catch {
+      await new Promise(response => setTimeout(response, 500));
+      continue;
+    }
   }
 });
 

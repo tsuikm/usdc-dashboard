@@ -103,15 +103,6 @@ export default {
     },
 
     /**
-      * @param {String[]} - the transactions to display.
-      */
-    transactions: {
-      type: Array,
-      validator: transactions => Array.isArray(transactions) &&
-                                  transactions.every(hash => typeof hash === 'string' && hash.length),
-    },
-
-    /**
       * @param {IsBlacklisted} - whether the address is blacklisted.
       */
     isBlacklisted: {

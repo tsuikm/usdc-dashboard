@@ -3,7 +3,10 @@ import AddressPage from '@/components/AddressPage';
 
 const MOCK_WALLET_ADDRESS = '0x12345';
 const MOCK_PROPS = {
-  roles: ['Pauser'],
+  roles: [{
+    name: 'Pauser',
+    color: '#1AA3FF',
+  }],
   isBlacklisted: true,
   balance: 50000,
 };

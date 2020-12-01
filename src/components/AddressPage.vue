@@ -25,34 +25,12 @@
             class="role-container"
             data-testid="role-container"
           >
-            <div
-              v-if="roles.includes('Minter')"
-            >
-              <md-chip class="minter-chip">
-                Minter
-              </md-chip>
-            </div>
-            <div
-              v-if="roles.includes('Pauser')"
-            >
-              <md-chip class="pauser-chip">
-                Pauser
-              </md-chip>
-            </div>
-            <div
-              v-if="roles.includes('Owner')"
-            >
-              <md-chip class="owner-chip">
-                Owner
-              </md-chip>
-            </div>
-            <div
-              v-if="roles.includes('Blacklister')"
-            >
-              <md-chip class="blacklister-chip">
-                Blacklister
-              </md-chip>
-            </div>
+            <md-chip 
+              class="chip"
+              :style="{'background-color': role.color}"
+            > 
+              {{role.name}} 
+            </md-chip>
           </div>
         </div>
       </div>
@@ -89,12 +67,18 @@ export default {
   props: {
 
     /**
-      * @param {String[]} - the role(s) the wallet address has.
+      * @param {Role[]} - the role(s) the wallet address has.
+      * @typedef {Role} {
+      *   name: {String} - the name of the Role (eg. 'Pauser').
+      *   color: {String[]} - the color of the chip.
+      * }
       */
     roles: {
       type: Array,
       validator: roles => Array.isArray(roles) &&
-                           roles.every(role => typeof role === 'string'),
+                          roles.every(role => role instanceof Object &&
+                                              typeof role.name === 'string' &&
+                                              typeof role.color === 'string'),
     },
 
     /**
@@ -143,33 +127,7 @@ export default {
   color: white;
   font-weight: 700;
 }
-
-.pauser-chip {
-  background-color: #1AA3FF;
-  color: white;
-  font-weight: 700;
-  width: 25%;
-  text-align: center;
-  font-weight: bold;
-}
-.owner-chip {
-  background-color: #9F72FF;
-  color: white; 
-  font-weight: 700;
-  width: 25%;
-  text-align: center;
-  font-weight: bold;
-}
-.minter-chip {
-  background-color: #4FE39C;
-  color: white;
-  font-weight: 700;
-  width: 25%;
-  text-align: center;
-  font-weight: bold;
-}
-.blacklister-chip {
-  background-color: #4FE39C;
+.chip {
   color: white;
   font-weight: 700;
   width: 25%;

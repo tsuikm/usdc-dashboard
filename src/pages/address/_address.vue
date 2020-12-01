@@ -77,19 +77,31 @@ export default {
     },
     async checkRoles() {
       if (await contract.methods.isMinter(this.$route.params.address).call()) {
-        this.roles.push('Minter');
+        this.roles.push({
+          name: 'Minter',
+          color: '#4FE39C',
+        });
       }
       const pauserAddress = await contract.methods.pauser().call();
       if (pauserAddress === this.$route.params.address) {
-        this.roles.push('Pauser');
+        this.roles.push({
+          name: 'Pauser',
+          color: '#1AA3FF',
+        });
       }
       const owner = await contract.methods.owner().call();
       if (owner === this.$route.params.address) {
-        this.roles.push('Owner');
+        this.roles.push({
+          name: 'Owner',
+          color: '#9F72FF',
+        });
       }
       const blacklisterAddress = await contract.methods.blacklister().call();
       if (blacklisterAddress === this.$route.params.address) {
-        this.roles.push('Blacklister');
+        this.roles.push({
+          name: 'Blacklister',
+          color: '#4FE39C',
+        });
       }
     },
     async fetchTransactions() {

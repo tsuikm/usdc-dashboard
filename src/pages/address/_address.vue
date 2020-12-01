@@ -84,7 +84,6 @@ export default {
         this.roles.push('Pauser');
       }
       const owner = await contract.methods.owner().call();
-      // const ownerAddress = padHex(owner, WEB3_BALANCEOF_ADDRESS_LENGTH);
       if (owner === this.$route.params.address) {
         this.roles.push('Owner');
       }
@@ -95,7 +94,6 @@ export default {
     },
     async fetchTransactions() {
       this.transactions = await getWalletTransactions(padHex(this.$route.params.address, WEB3_GET_LOGS_ADDRESS_LENGTH));
-      console.log(this.transactions);
     },
     async fetchAges(page) {
       const pageLength = this.$refs.table.pageLength;

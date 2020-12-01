@@ -21,9 +21,6 @@
           :key="roleIndex"
           class="role"
         >
-          <!-- <div class="list-of-roles">
-            {{ role }}
-          </div> -->
           <div
             class="role-container"
             data-testid="role-container"
@@ -92,12 +89,7 @@ export default {
   props: {
 
     /**
-      * @param {Role[]} - the roles to display.
-      * @typedef {Role} {
-      *   name: {String} - the name of the Role (eg. 'Pauser').
-      *   addresses: {String[]} - the addresses that have this particular role.
-      *   icon: {String} - the file of the icon displayed for the role, relative to the @/assets directory.
-      * }
+      * @param {String[]} - the role(s) the wallet address has.
       */
     roles: {
       type: Array,

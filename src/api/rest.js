@@ -37,36 +37,32 @@ const indexer = new algosdk.Indexer(token, `${baseServer}/idx2/`, port);
 const algod = new algosdk.Algodv2(token, `${baseServer}/ps2/`, port);
 
 app.get('/algorand', async (req, res) => {
-  while (true) {
-    try {
-      let response;
-      if (req.query.api === 'indexer') {
-        if (req.query.request === 'transactions') {
-          response = indexer.searchForTransactions(req.query.param);
-        }
-        if (req.query.request === 'blocks') {
-          response = indexer.lookupBlock(req.query.param);
-        }
-        if (req.query.request === 'assets') {
-          response = indexer.lookupAssetByID(req.query.param);
-        }
-        if (req.query.request === 'accounts') {
-          response = indexer.searchAccounts(req.query.param);
-        }
-        response.query = req.query;
+  try {
+    if (req.query.api === 'indexer') {
+      if (req.query.request === 'transactions') {
+        response = indexer.searchForTransactions(req.query.param);
       }
-      else {
-        if (req.query.request === 'supply') {
-          response = algod.supply(req.query.param);
-        } 
+      if (req.query.request === 'blocks') {
+        response = indexer.lookupBlock(req.query.param);
       }
+      if (req.query.request === 'assets') {
+        response = indexer.lookupAssetByID(req.query.param);
+      }
+      if (req.query.request === 'accounts') {
+        response = indexer.searchAccounts(req.query.param);
+      }
+      response.query = req.query;
+    }
+    else {
+      if (req.query.request === 'supply') {
+        response = algod.supply(req.query.param);
+      } 
+    }
 
-      return res.json(await response.do());
-    }
-    catch {
-      await new Promise(response => setTimeout(response, 500));
-      continue;
-    }
+    res.json(await response.do());
+  }
+  catch {
+    res.status(500).end();
   }
 });
 

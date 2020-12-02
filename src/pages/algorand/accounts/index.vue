@@ -49,8 +49,8 @@ export default {
         param: constants.ALGORAND_USDC_ASSET_ID
       });  
       const decimals = assets.asset.params.decimals;
-      const totalSupply = assets.asset.params.total;
-
+      const totalSupply = assets.asset.params.total / (10 ** decimals);
+      
       const accounts = await fetchAlgorand({
         api: 'indexer',
         request: 'accounts',
@@ -62,7 +62,7 @@ export default {
 
       for (const account of sortedAccounts) {
         account.balance = account.amount / (10 ** decimals);
-        account.percentage = account.balance / (totalSupply / (10 ** decimals)) * 100; 
+        account.percentage = account.balance / totalSupply * 100; 
       }
 
       return sortedAccounts;

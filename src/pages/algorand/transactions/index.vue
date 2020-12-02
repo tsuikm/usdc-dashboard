@@ -21,7 +21,7 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
-import { fetchAge, fetchAlgorand, fetchAlgorandAPI, getCurrentRound } from '@/utils/algo-utils';
+import { fetchAge, fetchAlgorand, getCurrentRound } from '@/utils/algo-utils';
 import { pushAll } from '@/utils/utils';
 import {
   ALGORAND_USDC_ASSET_ID,
@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     async fetchTransactions() {
-      this.transactions = (await fetchAlgorandAPI({
+      this.transactions = (await fetchAlgorand({
         api: 'indexer',
         request: 'transactions',
         'asset-id': ALGORAND_USDC_ASSET_ID,

@@ -64,9 +64,7 @@ export default {
     };
   },
   async created() {
-    await this.lookupRoles();
-    await this.lookupBlocks();
-    await this.lookupTransactions();
+    await Promise.all([this.lookupRoles(), this.lookupBlocks(), this.lookupTransactions()]);
     this.loading = false;
   },
   methods: {
@@ -78,7 +76,11 @@ export default {
       }
     },
     async lookupRoles() {
-      const roles = await fetchAlgorand(`/idx2/v2/assets/${ALGORAND_USDC_ASSET_ID}`);
+      const roles = await fetchAlgorand({
+        api: 'indexer',
+        request: 'assets',
+        param: ALGORAND_USDC_ASSET_ID
+      });
 
       this.setAddresses('Creator', [roles.asset.params.creator]);
       this.setAddresses('Freeze', [roles.asset.params.freeze]);
@@ -94,9 +96,12 @@ export default {
     },
     async lookupTransactions() {
       const currentBlock = await getCurrentRound();
-      const transactions = await fetchAlgorand(`/idx2/v2/assets/${ALGORAND_USDC_ASSET_ID}/transactions`, {
-        'min-round': currentBlock - ALGORAND_TXNS_LOOKBACK,
+      const transactions = await fetchAlgorand({
+        api: 'indexer',
+        request: 'transactions',
+        'min-round': currentBlock - ALGORAND_TXNS_LOOKBACK
       });
+
       const length = transactions.transactions.length;
       this.transactions = transactions.transactions
         .slice(length - RECENT_COUNT, length)

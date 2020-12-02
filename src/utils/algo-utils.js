@@ -1,58 +1,24 @@
 import { ALGORAND_BASE_SERVER, PURESTAKE_API_KEY, API_BASE_URL } from '@/utils/constants';
 import moment from 'moment';
 
-/**
- * @param {String} url
- * @param {Object} query
- */
-export async function fetchAlgorand(url, query) {
-
-  // Temporary fix for rate limiting: keep requesting until a response is given.
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    try {
-      const request = await fetch(ALGORAND_BASE_SERVER + url + '?' + (new URLSearchParams(JSON.stringify(query))).toString(), {
-        method: 'GET',
-        headers: {
-          'accept': 'application/json',
-          'x-api-key': PURESTAKE_API_KEY,
-        },
-      });
-
-      const reader = await request.body.getReader();
-      const value = (await reader.read()).value;
-      const decoder = new TextDecoder('utf8');
-
-      const response = JSON.parse(decoder.decode(value));
-      if (response.message === 'Too Many Requests') {
-        throw new Error();
-      }
-      return response;
-    }
-    catch {
-      continue;
-    }
-  }
-}
-export async function fetchAlgorandAPI(query) {
+export async function fetchAlgorand(query) {
   const request = await fetch(`${API_BASE_URL}/api/algorand` + '?' + (new URLSearchParams(query)).toString());
   return request.json();
-  // const reader = await request.body.getReader();
-  // const value = (await reader.read()).value;
-  // const decoder = new TextDecoder('utf8');
-
-  // const response = JSON.parse(decoder.decode(value));
 }
 
 export async function getCurrentRound() {
-  const response = await fetchAlgorand('/ps2/v2/ledger/supply');
+  const response = await fetchAlgorand({
+    api: 'algod',
+    request: 'supply',
+  });
+  
   return response.current_round;
 }
 
 const blockTimes = new Map();
 export const fetchAge = async transaction => {
   if (!blockTimes.has(transaction['confirmed-round'])) {
-    const block = await fetchAlgorandAPI({
+    const block = await fetchAlgorand({
       api: 'indexer',
       request: 'blocks',
       param: transaction['confirmed-round']

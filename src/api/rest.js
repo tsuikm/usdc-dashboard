@@ -34,7 +34,7 @@ const token = {
 };
 
 const indexer = new algosdk.Indexer(token, `${baseServer}/idx2/`, port);
-const algod = new algosdk.Indexer(token, `${baseServer}/ps2/`, port);
+const algod = new algosdk.Algodv2(token, `${baseServer}/ps2/`, port);
 
 app.get('/algorand', async (req, res) => {
   while (true) {
@@ -47,7 +47,15 @@ app.get('/algorand', async (req, res) => {
         if (req.query.request === 'blocks') {
           response = indexer.lookupBlock(req.query.param);
         }
+        if (req.query.request === 'assets') {
+          response = indexer.lookupAssetByID(req.query.param);
+        }
         response.query = req.query;
+      }
+      else {
+        if (req.query.request === 'supply') {
+          response = algod.supply(req.query.param);
+        } 
       }
 
       return res.json(await response.do());

@@ -24,7 +24,7 @@ import { fetchAlgorand, getCurrentRound } from '@/utils/algo-utils';
 
 export default {
   components: {
-    NavsBar,
+    NavBar,
     Summary,
   },
   data() {
@@ -80,7 +80,7 @@ export default {
         api: 'indexer',
         request: 'assets',
         param: ALGORAND_USDC_ASSET_ID
-      });  
+      });
       this.setAddresses('Creator', [roles.asset.params.creator]);
       this.setAddresses('Freeze', [roles.asset.params.freeze]);
       this.setAddresses('Reserve', [roles.asset.params.reserve]);

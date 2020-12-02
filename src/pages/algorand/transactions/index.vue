@@ -14,7 +14,6 @@
       :schema="ALGORAND_TRANSACTION_SCHEMA"
       :content="this.transactions"
       :key-field="'Transaction ID'"
-      @page:change="this.pageChange"
     />
   </div>
 </template>
@@ -55,7 +54,7 @@ export default {
         'min-round': 0,
         'limit': 100000000000, // TODO: we need to override the default of 1000.
         'max-round': await getCurrentRound(),
-      })).reverse();
+      })).transactions.reverse();
     }
   },
 };

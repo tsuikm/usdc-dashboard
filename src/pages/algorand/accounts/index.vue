@@ -43,17 +43,29 @@ export default {
      * @return {Object[]}
      */
     async getAccounts() {
+      const assets = await fetchAlgorand({
+        api: 'indexer',
+        request: 'assets',
+        param: constants.ALGORAND_USDC_ASSET_ID
+      });  
+      const decimals = assets.asset.params.decimals;
+      const totalSupply = assets.asset.params.total;
+
       const accounts = await fetchAlgorand({
         api: 'indexer',
         request: 'accounts',
         limit: constants.ALGORAND_ACCOUNTS_QUERY_LIMIT,
         'asset-id': constants.ALGORAND_USDC_ASSET_ID,
       });
-      console.log('herehr', accounts)
-      //FIXME
-      //decimals
-      accounts.sort((a, b) => b.balance - a.balance);
-      return accounts;
+
+      const sortedAccounts = accounts.accounts.sort((a, b) => b.amount - a.amount);
+
+      for (const account of sortedAccounts) {
+        account.balance = account.amount / (10 ** decimals);
+        account.percentage = account.balance / (totalSupply / (10 ** decimals)) * 100; 
+      }
+
+      return sortedAccounts;
     },
   },
 };

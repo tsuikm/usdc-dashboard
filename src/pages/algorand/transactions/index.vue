@@ -26,6 +26,7 @@ import { pushAll } from '@/utils/utils';
 import {
   ALGORAND_USDC_ASSET_ID,
   ALGORAND_TRANSACTION_SCHEMA,
+  ALGORAND_TXNS_QUERY_LIMIT,
 } from '@/utils/constants';
 
 export default {
@@ -52,7 +53,7 @@ export default {
         request: 'transactions',
         'asset-id': ALGORAND_USDC_ASSET_ID,
         'min-round': 0,
-        'limit': 100000000000, // TODO: we need to override the default of 1000.
+        'limit': ALGORAND_TXNS_QUERY_LIMIT,
         'max-round': await getCurrentRound(),
       })).transactions.reverse();
     }

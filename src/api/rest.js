@@ -50,6 +50,9 @@ app.get('/algorand', async (req, res) => {
         if (req.query.request === 'assets') {
           response = indexer.lookupAssetByID(req.query.param);
         }
+        if (req.query.request === 'accounts') {
+          response = indexer.searchAccounts(req.query.param);
+        }
         response.query = req.query;
       }
       else {

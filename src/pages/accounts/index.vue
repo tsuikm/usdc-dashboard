@@ -20,8 +20,6 @@ import * as constants from '@/utils/constants';
 import { getBalance, getTotalSupply, getAllTransactions } from '@/utils/web3utils';
 import { removeLeadingZeros, roundToNearest, pushAll } from '@/utils/utils';
 
-const PERCENTAGE_DECIMAL_PLACES = 8;
-
 export default {
   components: {
     Table,
@@ -101,7 +99,7 @@ export default {
       let i = 0;
       for (const address of addresses) {
         const balance = balances[i++];
-        const percentage = `${roundToNearest(balance / totalSupply * 100, PERCENTAGE_DECIMAL_PLACES)}%`;
+        const percentage = `${roundToNearest(balance / totalSupply * 100, constants.PERCENTAGE_DECIMAL_PLACES)}%`;
 
         accounts.push({address, balance, percentage});
       }

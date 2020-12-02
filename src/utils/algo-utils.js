@@ -1,4 +1,4 @@
-import { ALGORAND_BASE_SERVER, PURESTAKE_API_KEY, API_BASE_URL } from '@/utils/constants';
+import { ALGORAND_BASE_SERVER, ALGORAND_USDC_ASSET_ID, PURESTAKE_API_KEY, API_BASE_URL } from '@/utils/constants';
 import moment from 'moment';
 
 export async function fetchAlgorand(query) {

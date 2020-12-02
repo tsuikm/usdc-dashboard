@@ -108,7 +108,7 @@ export const ALGORAND_TRANSACTION_SCHEMA = [
   {
     name: 'Amount',
     getter(t) {
-      return t['asset-transfer-transaction'].amount;
+      return t['asset-transfer-transaction'].amount / (10 ** 6);
     },
   },
   {

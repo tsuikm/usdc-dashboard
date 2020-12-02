@@ -1,7 +1,7 @@
-import { 
-  WEB3_PROVIDER, 
-  USDC_CONTRACT_ADDRESS, 
-  WEB3_RESULT_TOO_LARGE_ERROR_CODE, 
+import {
+  WEB3_PROVIDER,
+  USDC_CONTRACT_ADDRESS,
+  WEB3_RESULT_TOO_LARGE_ERROR_CODE,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
   WEB3_MAX_TRANSACTIONS,
 } from '@/utils/constants';
@@ -551,7 +551,7 @@ export const getWalletTransactions = async (address) => {
   const latest = await web3.eth.getBlockNumber();
   const range = [0, latest];
   let midpoint = Math.floor((range[0] + range[1]) / 2);
-  
+
   while (transactions === null || transactions.length < WEB3_MAX_TRANSACTIONS) {
     if (transactions === null) {
       range[0] = midpoint;

@@ -20,7 +20,7 @@ import {
   RECENT_COUNT,
   ALGORAND_TXNS_LOOKBACK,
 } from '@/utils/constants';
-import { fetchAlgorand, getCurrentRound } from '@/utils/algoUtils';
+import { fetchAlgorand, getCurrentRound } from '@/utils/algo-utils';
 
 export default {
   components: {

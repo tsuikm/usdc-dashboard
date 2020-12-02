@@ -130,12 +130,6 @@ export const ALGORAND_TRANSACTION_SCHEMA = [
     },
   },
   {
-    name: 'Age',
-    getter(t) {
-      return t.age;
-    },
-  },
-  {
     name: 'Block Number',
     getter(t) {
       return t['confirmed-round'];

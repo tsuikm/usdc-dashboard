@@ -101,7 +101,7 @@ export default {
       if (blacklisterAddress === this.$route.params.address) {
         this.roles.push({
           name: 'Blacklister',
-          color: '#4FE39C',
+          color: '#FF6678',
         });
       }
     },

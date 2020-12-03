@@ -1,8 +1,8 @@
 <template>
   <div>
     <NavBar />
-    <AddressPage 
-      :roles="this.roles" 
+    <AddressPage
+      :roles="this.roles"
       :is-blacklisted="this.isBlacklisted"
       :balance="this.balance"
     />

@@ -44,14 +44,12 @@
       </div>
 
       <!-- Any additional content needed -->
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>
 
 <script>
-import { basePathFromPath } from '@/utils/utils';
-
 export default {
   name: 'AddressDetails',
   props: {

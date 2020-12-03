@@ -1,7 +1,13 @@
 <template>
   <div>
     <NavBar />
-    <Overview :wallet-address="this.address" />
+    <AddressPage 
+      :roles="this.roles" 
+      :is-blacklisted="this.isBlacklisted"
+      :balance="this.balance"
+      :address="this.address"
+    />
+    <h1>Address Transactions</h1>
     <Table
       ref="table"
       :loading="loading"
@@ -17,20 +23,24 @@
 
 <script>
 import NavBar from '@/components/NavBar';
-import Overview from '@/components/Overview';
-import Table from '@/components/Table';
-import { TRANSACTION_SCHEMA, WEB3_GET_LOGS_ADDRESS_LENGTH, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import AddressPage from '@/components/AddressPage';
 import { padHex } from '@/utils/utils';
+import { contract, getBalance } from '@/utils/web3utils';
 import { getWalletTransactions, fetchAge, web3 } from '@/utils/web3utils';
+import { TRANSACTION_SCHEMA, WEB3_GET_LOGS_ADDRESS_LENGTH, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import Table from '@/components/Table';
 
 export default {
   components: {
-    Overview,
-    Table,
     NavBar,
+    AddressPage,
+    Table,
   },
   data() {
     return {
+      balance: null,
+      isBlacklisted: false,
+      roles: [],
       transactions: [],
       address: null,
       loading: true,
@@ -53,33 +63,72 @@ export default {
       return;
     }
 
-    if (!web3.utils.isAddress(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))) {
+    this.address = padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH);
+
+    if (!web3.utils.isAddress(this.address)) {
       // Not a valid Ethereum address
       this.$router.replace('/404');
       return;
     }
 
-    this.address = padHex(this.address, WEB3_GET_LOGS_ADDRESS_LENGTH);
-
-    await this.fetchTransactions();
+    await Promise.all([
+      this.lookupBalance(),
+      this.lookupBlacklisted(),
+      this.checkRoles(),
+      this.fetchTransactions(),
+    ]);
     await this.fetchAges(0);
     this.loading = false;
   },
   methods: {
+    async lookupBalance() {
+      this.balance = await getBalance(this.address);
+    },
+    async lookupBlacklisted() {
+      this.isBlacklisted = await contract.methods
+        .isBlacklisted(this.address).call();
+    },
+    async checkRoles() {
+      console.log(this.address);
+      if (await contract.methods.isMinter(this.address).call()) {
+        this.roles.push({
+          name: 'Minter',
+          color: '#4FE39C',
+        });
+      }
+      const pauserAddress = await contract.methods.pauser().call();
+      if (pauserAddress === this.address) {
+        this.roles.push({
+          name: 'Pauser',
+          color: '#1AA3FF',
+        });
+      }
+      const owner = await contract.methods.owner().call();
+      if (owner === this.address) {
+        this.roles.push({
+          name: 'Owner',
+          color: '#9F72FF',
+        });
+      }
+      const blacklisterAddress = await contract.methods.blacklister().call();
+      if (blacklisterAddress === this.address) {
+        this.roles.push({
+          name: 'Blacklister',
+          color: '#4FE39C',
+        });
+      }
+    },
     async fetchTransactions() {
-      this.transactions = await getWalletTransactions(this.address);
+      this.transactions = await getWalletTransactions(padHex(this.address, WEB3_GET_LOGS_ADDRESS_LENGTH));
     },
     async fetchAges(page) {
       const pageLength = this.$refs.table.pageLength;
       const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);
       const promises = [];
-
       for (let i = page * pageLength; i < upperBound; i++) {
         promises.push(fetchAge(this.transactions[i]));
       }
-
       const ages = await Promise.all(promises);
-
       for (let i = page * pageLength; i < upperBound; i++) {
         this.transactions[i].age = ages[i - page * pageLength];
       }
@@ -88,3 +137,7 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+</style>

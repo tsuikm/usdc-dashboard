@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/vue';
 import transfers from '@/pages/transfers/index';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
-import { toHex } from '@/utils/utils';
+import { toHex, finishPromises } from '@/utils/utils';
 
 const MOCK_WALLET_ADDRESS = '0xdC1e071D120FD40fB1173BCcc86c74F47645F4E0';
 
@@ -16,18 +16,6 @@ describe('Transfers page', () => {
     expect(getByPlaceholderText('Enter Wallet Address Here')).not.toBeNull();
     expect(getByPlaceholderText('Amount: i.e. 0')).not.toBeNull();
     expect(queryByText('SUBMIT')).not.toBeNull();
-    expect(queryByText('Connect to Metamask')).not.toBeNull();
-  });
-
-  test('Connect Metamask button works', async () => {
-    const { queryByText } = render(transfers);
-    const button = queryByText('Connect to Metamask');
-    await fireEvent.click(button);
-
-    // eslint-disable-next-line
-    expect(ethereum.request.mock.calls[0]).toEqual([{ method: 'eth_requestAccounts' }]);
-    // eslint-disable-next-line
-    expect(ethereum.request.mock.calls).toHaveLength(1);
   });
 
   test('Submit button works', async () => {
@@ -35,7 +23,7 @@ describe('Transfers page', () => {
     const AMOUNT_TEXT = '100';
     const { getByPlaceholderText, queryByText } = render(transfers);
 
-    const connectMetaMaskButton = queryByText('Connect to Metamask');
+    const connectMetaMaskButton = queryByText('Connect to MetaMask');
     await fireEvent.click(connectMetaMaskButton);
 
     const submitButton = queryByText('SUBMIT');
@@ -45,9 +33,10 @@ describe('Transfers page', () => {
     await fireEvent.update(toInput, TO_WALLET_ADDRESS);
     await fireEvent.update(amountInput, AMOUNT_TEXT);
     await fireEvent.click(submitButton);
+    await finishPromises();
 
     // eslint-disable-next-line
-    expect(ethereum.request.mock.calls[2]).toEqual([{
+    expect(ethereum.request.mock.calls[1]).toEqual([{
       method: 'eth_sendTransaction',
       params: [
         {

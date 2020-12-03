@@ -60,4 +60,8 @@ describe('PauserControl', () => {
     expect(getByText('Pausing prevents transfers, minting, and burning.')).not.toBeNull();
   });
 
+  test('ConnectToMetamask component renders', async () => {
+    const { findByText } = render(PauserControl);
+    expect(findByText('Connect to MetaMask')).not.toBeNull();
+  });
 });

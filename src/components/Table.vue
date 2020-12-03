@@ -142,7 +142,6 @@ export default {
 @import "@/assets/styles/variables/_colors.scss";
 
 #table-and-loading-container {
-  width: 90%;
   font-family: Proxima Nova;
   margin: auto;
 }

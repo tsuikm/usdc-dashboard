@@ -27,9 +27,6 @@
     <!-- blocks -->
     <div id="blocks">
       <h2> Latest Blocks </h2>
-      <nuxt-link :to="`${basePath}/blocks`">
-        See all blocks
-      </nuxt-link>
       <div
         v-for="(block, index) in blocks"
         :key="index"

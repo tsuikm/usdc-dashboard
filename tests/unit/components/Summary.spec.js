@@ -35,7 +35,6 @@ describe('Renders Everything Correctly', () => {
     expect(getByText('USDC Dashboard')).not.toBeNull();
     expect(getByText('Latest Blocks')).not.toBeNull();
     expect(getByText('Recent Transactions')).not.toBeNull();
-    expect(getByText('See all blocks')).not.toBeNull();
     expect(getByText('See all transactions')).not.toBeNull();
   });
 

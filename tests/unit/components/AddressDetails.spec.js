@@ -7,7 +7,6 @@ const MOCK_PROPS = {
     name: 'Pauser',
     color: '#1AA3FF',
   }],
-  isBlacklisted: true,
   balance: 50000,
 };
 
@@ -59,20 +58,5 @@ describe('Address page', () => {
       },
     });
     expect(getByText('$50000')).not.toBeNull();
-  });
-
-  it('Displays whether the address is blacklisted correctly', () => {
-    const { getByText } = render(AddressDetails, {
-      props: MOCK_PROPS,
-      mocks: {
-        $route: {
-          path: `/address/${MOCK_WALLET_ADDRESS}`,
-          params: {
-            address: MOCK_WALLET_ADDRESS,
-          },
-        },
-      },
-    });
-    expect(getByText('Yes')).not.toBeNull();
   });
 });

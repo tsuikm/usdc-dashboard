@@ -22,11 +22,6 @@ import TransactionDetails from '@/components/TransactionDetails';
 
 
 export default {
-  head() {
-    return {
-      title: `Transaction: ${this.$route.params.transaction}`
-    };
-  },
   components: {
     NavBar,
     TransactionDetails,
@@ -51,6 +46,11 @@ export default {
     } catch (e) {
       this.$router && this.$router.push({path: '/404' });
     }
+  },
+  head() {
+    return {
+      title: `Transaction: ${this.$route.params.transaction}`,
+    };
   },
 };
 </script>

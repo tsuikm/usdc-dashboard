@@ -22,11 +22,6 @@ import { TRANSACTION_SCHEMA } from '@/utils/constants';
 import { fetchAge, getAllTransactions } from '@/utils/web3utils';
 
 export default {
-  head() {
-    return {
-      title: "Transactions"
-    };
-  },
   components: {
     Table,
     NavBar,
@@ -71,6 +66,11 @@ export default {
       await this.fetchAges(page);
       this.loading = false;
     },
+  },
+  head() {
+    return {
+      title: 'Transactions',
+    };
   },
 };
 </script>

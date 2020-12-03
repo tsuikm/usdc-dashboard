@@ -106,11 +106,6 @@ async function changeRole(ownerAccount, contractMethod, address) {
 //----------------------------------------------------------------------------------------
 
 export default {
-  head() {
-    return {
-      title: "Owner"
-    };
-  },
   components: {
     NavBar,
     RoleButton,
@@ -181,6 +176,11 @@ export default {
         await changeRole(ownerAccount, contract.methods.transferOwnership, this.address);
       }
     },
+  },
+  head() {
+    return {
+      title: 'Owner',
+    };
   },
 };
 </script>

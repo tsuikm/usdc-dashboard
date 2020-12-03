@@ -27,11 +27,6 @@ const RECENT_COUNT = 20;
 
 export default {
   name: 'SummaryPage',
-  head() {
-    return {
-      title: "USDC Dashboard"
-    };
-  },
   components: {
     NavBar,
     Summary,
@@ -101,6 +96,11 @@ export default {
       // Gets recent txns in latest 10 blocks, gets the 20 latest txns, and maps to the hash
       this.transactions = (await getTransactions(toHex(currentBlock - RECENT_TXNS_LOOKBACK))).slice(0, RECENT_COUNT).map(transaction => transaction.transactionHash);
     },
+  },
+  head() {
+    return {
+      title: 'USDC Dashboard',
+    };
   },
 };
 </script>

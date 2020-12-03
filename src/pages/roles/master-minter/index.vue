@@ -90,11 +90,6 @@ const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 
 export default {
   name: 'MasterMinterControl',
-  head() {
-    return {
-      title: "Master Minter"
-    };
-  },
   components: {
     NavBar,
     ActionButton,
@@ -185,6 +180,11 @@ export default {
         //show error
       }
     },
+  },
+  head() {
+    return {
+      title: 'Master Minter',
+    };
   },
 };
 </script>

@@ -74,11 +74,6 @@ import { contract } from '@/utils/web3utils';
 
 export default {
   name: 'Blacklister',
-  head() {
-    return {
-      title: "Blacklister"
-    };
-  },
   components: {
     NavBar,
     ActionButton,
@@ -177,6 +172,11 @@ export default {
         await this.handleUnblacklist();
       }
     },
+  },
+  head() {
+    return {
+      title: 'Blacklister',
+    };
   },
 };
 </script>

@@ -25,11 +25,11 @@
             class="role-container"
             data-testid="role-container"
           >
-            <md-chip 
+            <md-chip
               class="chip"
               :style="{'background-color': role.color}"
-            > 
-              {{ role.name }} 
+            >
+              {{ role.name }}
             </md-chip>
           </div>
         </div>
@@ -67,12 +67,12 @@ export default {
   props: {
 
     /**
-      * @param {Role[]} - the role(s) the wallet address has.
-      * @typedef {Role} {
-      *   name: {String} - the name of the Role (eg. 'Pauser').
-      *   color: {String[]} - the color of the chip.
-      * }
-      */
+     * @param {Role[]} - the role(s) the wallet address has.
+     * @typedef {Role} {
+     *   name: {String} - the name of the Role (eg. 'Pauser').
+     *   color: {String[]} - the color of the chip.
+     * }
+     */
     roles: {
       type: Array,
       validator: roles => Array.isArray(roles) &&
@@ -82,28 +82,18 @@ export default {
     },
 
     /**
-      * @param {IsBlacklisted} - whether the address is blacklisted.
+      * @param {boolean} - whether the address is blacklisted.
       */
-    isBlacklisted: {
-      type: Boolean,
-      validator: isBlacklisted => typeof isBlacklisted === 'boolean',
-    },
+    isBlacklisted: Boolean,
 
     /**
-      * @param {Balance} - the balance of the address.
-      */
-    balance: {
-      type: Number,
-      validator: balance => typeof balance === 'number',
-    },
-  },
-  computed: {
-    basePath() {
-      return this.$route ? basePathFromPath(this.$route.path) : '';
-    },
+     * @param {bnumber} - the balance of the address.
+     */
+    balance: Number,
   },
 };
 </script>
+
 <style scoped>
 .address-page-container {
   display:grid;

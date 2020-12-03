@@ -103,12 +103,9 @@ describe('Links Route Correctly', () => {
 
   //----------------------------------------------------------------------------------------
 
-  it('Labels links', async () => {
-    expect(await testLink('See all blocks', '/blocks')).toBe(true);
-    expect(await testLink('See all transactions', '/transactions')).toBe(true);
-  });
-
   it('Transaction links', async () => {
+    expect(await testLink('See all transactions', '/transactions')).toBe(true);
+
     for (const transaction of MOCK_PROPS.transactions) {
       expect(await testLink(transaction, `/transaction/${transaction}`)).toBe(true);
     }

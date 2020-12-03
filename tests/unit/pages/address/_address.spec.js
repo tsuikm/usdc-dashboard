@@ -30,6 +30,9 @@ describe('Address Details Page', () => {
             page: 1, // Load with ?page=1
           },
         },
+        $router: {
+          replace: () => {},
+        },
         $refs: {
           table: {
             pageLength: 1,
@@ -58,6 +61,9 @@ describe('Address Details Page', () => {
             page: 1, // Load with ?page=1
           },
         },
+        $router: {
+          replace: () => {},
+        },
         $refs: {
           table: {
             pageLength: 1,
@@ -75,5 +81,34 @@ describe('Address Details Page', () => {
     expect(getByText('Block Number')).not.toBeNull();
 
     await finishPromises();
+  });
+
+  it('Redirects to /404 on invalid address', async () => {
+    const routeReplace = jest.fn();
+    render(AddressDetailsPage, {
+      mocks: {
+        $route: {
+          path: '/address/asjkndgkljasbndklganjkdklasjndgklasjng',
+          params: {
+            address: 'asjkndgkljasbndklganjkdklasjndgklasjng',
+          },
+          query: {
+            page: 1, // Load with ?page=1
+          },
+        },
+        $router: {
+          replace: routeReplace,
+        },
+        $refs: {
+          table: {
+            pageLength: 1,
+          },
+        },
+      },
+    });
+
+    
+    expect(routeReplace.mock.calls).toHaveLength(1);
+    expect(routeReplace.mock.calls[0][0]).toBe('/404');
   });
 });

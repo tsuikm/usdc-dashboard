@@ -89,7 +89,6 @@ export default {
         .isBlacklisted(this.address).call();
     },
     async checkRoles() {
-      console.log(this.address);
       if (await contract.methods.isMinter(this.address).call()) {
         this.roles.push({
           name: 'Minter',

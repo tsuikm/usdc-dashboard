@@ -10,7 +10,7 @@
     >
       <img :src="require(`@/assets/${role.icon}`)">
       <h2> {{ role.name }} </h2>
-      <div>
+      <div class="role-addresses">
         <nuxt-link
           v-for="(address, addressIndex) in role.addresses"
           :key="addressIndex"
@@ -53,6 +53,12 @@
         >
           {{ transaction }}
         </nuxt-link>
+        <p v-if="transactions.length < limit && transactions.length > 0">
+          Displaying all transactions in the last {{ lookback }} blocks.
+        </p>
+        <p v-if="transactions.length === 0 && !loading">
+          No transactions in the last {{ lookback }} blocks.
+        </p>
       </div>
     </div>
   </div>
@@ -99,6 +105,18 @@ export default {
       type: Array,
       validator: blocks => Array.isArray(blocks) && blocks.every(block => typeof block === 'number'),
     },
+    /**
+     * @param {number} - Number of blocks from latest that are searched for recent transactions
+     */
+    lookback: Number,
+    /**
+     * @param {number} - Maximum number of transactions displayed
+     */
+    limit: Number,
+    /**
+     * @param {boolean} - Whether or not data is still being loaded
+     */
+    loading: Boolean,
   },
   computed: {
     basePath() {
@@ -134,10 +152,6 @@ export default {
   }
 }
 
-h1, h2 {
-  margin-bottom: 1rem;
-}
-
 h2 {
   font-size: 18px;
 }
@@ -152,6 +166,11 @@ h1 {
   @media only screen and (max-width: $mobile-threshold) {
     grid-row: auto;
     grid-column: 1
+  }
+
+  .role-addresses {
+    max-height: 60px;
+    overflow-y: scroll;
   }
 }
 

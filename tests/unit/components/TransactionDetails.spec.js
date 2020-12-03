@@ -36,11 +36,11 @@ describe('Transaction Details', () => {
       },
     });
 
-    expect(getByText(`${TRANSACTION_HASH_LABEL}:`)).not.toBeNull();
-    expect(getByText('Sender:')).not.toBeNull();
-    expect(getByText('Receiver:')).not.toBeNull();
-    expect(getByText(`${BLOCK_NUMBER_LABEL}:`)).not.toBeNull();
-    expect(getByText(`${GAS_LABEL}:`)).not.toBeNull();
+    expect(getByText(`${TRANSACTION_HASH_LABEL}`)).not.toBeNull();
+    expect(getByText('Sender')).not.toBeNull();
+    expect(getByText('Receiver')).not.toBeNull();
+    expect(getByText(`${BLOCK_NUMBER_LABEL}`)).not.toBeNull();
+    expect(getByText(`${GAS_LABEL}`)).not.toBeNull();
 
     // Finish all promises
     await finishPromises();

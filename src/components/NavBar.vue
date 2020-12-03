@@ -7,18 +7,106 @@
       id="menu-items"
       :class="menuOpen ? 'open' : ''"
     >
-      <nuxt-link
-        :to="accountsLink"
-        class="link"
-      >
-        Accounts
-      </nuxt-link>
-      <nuxt-link
-        :to="transfersLink"
-        class="link"
-      >
-        Transfer
-      </nuxt-link>
+      <div class="nav-item">
+        <span class="nav-item-text">
+          Explore
+        </span>
+        <div
+          class="dropdown"
+          @mouseleave="setChain"
+        >
+          <div class="dropdown-section blue">
+            <span class="dropdown-section-header">Blockchains</span>
+            <nuxt-link
+              to="/"
+              data-testid="ethereum-link"
+              :class="linkClass('')"
+              @mouseover.native="hover('Ethereum')"
+            >
+              Ethereum
+            </nuxt-link>
+            <nuxt-link
+              to="/solana"
+              data-testid="solana-link"
+              :class="linkClass('/solana')"
+              @mouseover.native="hover('Solana')"
+            >
+              Solana
+            </nuxt-link>
+            <nuxt-link
+              to="/algorand"
+              data-testid="algorand-link"
+              :class="linkClass('/algorand')"
+              @mouseover.native="hover('Algorand')"
+            >
+              Algorand
+            </nuxt-link>
+          </div>
+          <div class="dropdown-section">
+            <span class="dropdown-section-header">{{ objectsHeader }}</span>
+            <nuxt-link
+              :to="transactionsLink"
+              class="nav-link"
+            >
+              Transactions
+            </nuxt-link>
+            <nuxt-link
+              :to="accountsLink"
+              class="nav-link"
+            >
+              Accounts
+            </nuxt-link>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item">
+        <nuxt-link
+          to="/transfers"
+          class="nav-item-text"
+        >
+          Transfer
+        </nuxt-link>
+      </div>
+      <div class="nav-item">
+        <span class="nav-item-text">
+          Privileged Controls
+        </span>
+        <div class="dropdown">
+          <div class="dropdown-section">
+            <span class="dropdown-section-header">Privileged Controls</span>
+            <nuxt-link
+              to="/roles/owner"
+              class="nav-link"
+            >
+              Owner Controls
+            </nuxt-link>
+            <nuxt-link
+              to="/mint"
+              class="nav-link"
+            >
+              Mint
+            </nuxt-link>
+            <nuxt-link
+              to="/burn"
+              class="nav-link"
+            >
+              Burn
+            </nuxt-link>
+            <nuxt-link
+              to="/roles/pauser"
+              class="nav-link"
+            >
+              Pause &amp; Unpause
+            </nuxt-link>
+            <nuxt-link
+              to="/roles/blacklister"
+              class="nav-link"
+            >
+              Blacklist &amp; Unblacklist
+            </nuxt-link>
+          </div>
+        </div>
+      </div>
       <input
         v-model="address"
         placeholder="Search Address..."
@@ -55,6 +143,7 @@ export default {
     return {
       address: '',
       menuOpen: false,
+      chain: '',
     };
   },
   computed: {
@@ -66,11 +155,36 @@ export default {
       return '';
     },
     accountsLink() {
-      return `${this.basePath}/accounts`;
+      switch(this.chain) {
+      case 'Algorand':
+        return '/algorand/accounts';
+      case 'Solana':
+        return '/solana/accounts';
+      default:
+        return '/accounts';
+      }
     },
-    transfersLink() {
-      return `${this.basePath}/transfers`;
+    transactionsLink() {
+      switch(this.chain) {
+      case 'Algorand':
+        return '/algorand/transactions';
+      case 'Solana':
+        return '/solana/transactions';
+      default:
+        return '/transactions';
+      }
     },
+    objectsHeader() {
+      switch(this.chain) {
+      case '':
+        return 'Objects';
+      default:
+        return this.chain;
+      }
+    },
+  },
+  mounted() {
+    this.setChain();
   },
   methods: {
     searchAddress() {
@@ -82,6 +196,28 @@ export default {
     },
     toggleMenu() {
       this.menuOpen = !this.menuOpen;
+    },
+    linkClass(highlightedBasePath) {
+      if (this.basePath === highlightedBasePath) {
+        return 'nav-link blue';
+      }
+
+      return 'nav-link';
+    },
+    hover(chain) {
+      this.chain = chain;
+    },
+    setChain() {
+      switch(this.basePath) {
+      case '/algorand':
+        this.chain = 'Algorand';
+        break;
+      case '/solana':
+        this.chain = 'Solana';
+        break;
+      default:
+        this.chain = 'Ethereum';
+      }
     },
   },
 };

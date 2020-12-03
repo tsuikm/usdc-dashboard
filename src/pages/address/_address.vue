@@ -121,6 +121,44 @@ export default {
     },
     pageChange() {},
   },
+  data() {
+    return {
+      transactions: [],
+      address: null,
+      loading: true,
+    };
+  },
+  computed: {
+    tableSchema() {
+      return TRANSACTION_SCHEMA;
+    },
+  },
+  async mounted() {
+    await this.fetchTransactions();
+    await this.fetchAges(0);
+    this.loading = false;
+  },
+  methods: {
+    async fetchTransactions() {
+      this.transactions = await getWalletTransactions(padHex(this.$route.params.address, WEB3_GET_LOGS_ADDRESS_LENGTH));
+    },
+    async fetchAges(page) {
+      const pageLength = this.$refs.table.pageLength;
+      const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);
+      const promises = [];
+
+      for (let i = page * pageLength; i < upperBound; i++) {
+        promises.push(fetchAge(this.transactions[i]));
+      }
+
+      const ages = await Promise.all(promises);
+
+      for (let i = page * pageLength; i < upperBound; i++) {
+        this.transactions[i].age = ages[i - page * pageLength];
+      }
+    },
+    pageChange() {},
+  },
 };
 </script>
 

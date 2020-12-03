@@ -25,36 +25,43 @@ describe('PauserControl', () => {
     const { getByText } = render(PauserControl);
     const header = 'Pause and Unpause Contract';
     expect(getByText(header)).not.toBeNull();
+    expect(getByText('Pausing prevents transfers, minting, and burning.')).not.toBeNull();
   });
 
   it('Unpauses when pauser attempts to unpause', async () => {
-    const { getByText } = render(PauserControl, {
+    const { getByText, getByTestId } = render(PauserControl, {
       data: function() {
         return {
           contractPaused: true,
         };
       },
     });
-    await fireEvent.click(getByText('PAUSED'));
+    const saveButton = getByText('SAVE');
+
+    await fireEvent.click(getByTestId('toggle'));
+    await fireEvent.click(saveButton);
     await finishPromises();
-    expect(getByText('UNPAUSED')).not.toBeNull();
-    expect(getByText('Click to pause contract.')).not.toBeNull();
-    expect(getByText('All transfers, minting, and burning are ACTIVE.')).not.toBeNull();
+    expect(getByText('Pausing prevents transfers, minting, and burning.')).not.toBeNull();
   });
 
   it('Pauses when pauser attempts to pause', async () => {
-    const { getByText } = render(PauserControl, {
+    const { getByText, getByTestId } = render(PauserControl, {
       data: function() {
         return {
           contractPaused: false,
         };
       },
     });
-    await fireEvent.click(getByText('UNPAUSED'));
+    const saveButton = getByText('SAVE');
+
+    await fireEvent.click(getByTestId('toggle'));
+    await fireEvent.click(saveButton);
     await finishPromises();
-    expect(getByText('PAUSED')).not.toBeNull();
-    expect(getByText('Click to unpause contract.')).not.toBeNull();
-    expect(getByText('All transfers, minting, and burning are PAUSED.')).not.toBeNull();
+    expect(getByText('Pausing prevents transfers, minting, and burning.')).not.toBeNull();
   });
 
+  test('ConnectToMetamask component renders', async () => {
+    const { findByText } = render(PauserControl);
+    expect(findByText('Connect to MetaMask')).not.toBeNull();
+  });
 });

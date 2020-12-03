@@ -56,7 +56,9 @@ describe('OwnerControl', () => {
     const pauserButton = getByText('PAUSER');
     const ownerButton = getByText('OWNER');
     const saveButton = getByText('SAVE');
+    const metamaskButton = getByText('Connect to MetaMask');
 
+    await fireEvent.click(metamaskButton);
     await fireEvent.update(input, SCRATCH_ADDRESS);
 
     await fireEvent.click(masterMinterButton);
@@ -117,5 +119,10 @@ describe('OwnerControl', () => {
     await finishPromises();
     expect(getByText(OWNER_ERROR_MESSAGE)).not.toBeNull();
     expect(await contract.methods.owner().call()).not.toBe(SCRATCH_ADDRESS);
+  });
+
+  test('ConnectToMetamask component renders', async () => {
+    const { findByText } = render(OwnerControl);
+    expect(findByText('Connect to MetaMask')).not.toBeNull();
   });
 });

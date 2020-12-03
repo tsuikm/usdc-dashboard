@@ -8,8 +8,10 @@ const MOCK_TRANSACTIONS = [];
 for (let i = 0; i < 101; i++) {
   const randomQuantity = Math.random() * 109502;
   MOCK_TRANSACTIONS.push({
+    transactionHash: toHex(i),
     data: toHex(randomQuantity),
     sender: padHex(toHex(i), WEB3_BALANCEOF_ADDRESS_LENGTH),
+    receiver: padHex(toHex(Math.floor(Math.random() * 101)), WEB3_BALANCEOF_ADDRESS_LENGTH),
     blockNumber: 1,
   });
 }

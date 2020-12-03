@@ -6,11 +6,12 @@
       :schema=" [
         {
           label: 'Amount',
-          defaultValue: 0
+          placeholder: 'Amount: i.e. 0'
         }
       ]"
       @submit="this.submit"
     />
+    <ConnectToMetamask />
   </div>
 </template>
 
@@ -19,6 +20,7 @@
 // modules
 import Form from '@/components/Form';
 import NavBar from '@/components/NavBar';
+import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
 import { contract } from '@/utils/web3utils';
@@ -27,6 +29,7 @@ export default {
   components: {
     NavBar,
     Form,
+    ConnectToMetamask,
   },
   data() {
     return {

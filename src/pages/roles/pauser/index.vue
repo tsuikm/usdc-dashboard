@@ -1,65 +1,44 @@
 <template>
   <div>
     <NavBar />
-    <div class="pauser">
-      <div class="header">
-        Pause and Unpause Contract
-      </div>
-      <div class="container">
-        <div class="content-header">
-          USDC Contract is currently
-        </div>
-        <div
-          v-if="this.contractPaused" 
-          class="content"
-        >
-          <md-button
-            class="status"
-            @click="handleUnpause"
-          >
-            PAUSED
-          </md-button>
-          <div class="content">
-            <div class="content-text">
-              Click to unpause contract.
-            </div>
-            <div class="content-subtext">
-              All transfers, minting, and burning are PAUSED.
-            </div>
-          </div>
-        </div>
-        <div
-          v-else
-          class="content"
-        >
-          <md-button
-            class="status"
-            @click="handlePause"
-          >
-            UNPAUSED
-          </md-button>
-          <div class="content">
-            <div class="content-text">
-              Click to pause contract.
-            </div>
-            <div class="content-subtext">
-              All transfers, minting, and burning are ACTIVE.
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="header">
+      Pause and Unpause Contract
     </div>
+    <div class="container">
+      <div class="container-main">
+        <div class="content-header">
+          Pause Contract
+        </div>
+        <md-switch 
+          v-model="contractPaused"
+          class="md-primary"
+          data-testid="toggle"
+        />
+      </div>
+      <div class="content-subtext">
+        Pausing prevents transfers, minting, and burning.
+      </div>
+      <ActionButton
+        :label="'SAVE'"
+        :on-click="save"
+      />
+    </div>
+    <ConnectToMetamask />
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar';
+import ActionButton from '@/components/ActionButton';
+import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { contract } from '@/utils/web3utils';
 
 export default {
   components: {
     NavBar,
+    ActionButton,
+    ConnectToMetamask,
   },
   data() {
     return {
@@ -82,6 +61,7 @@ export default {
     },
     async handleUnpause() {
       await this.unpause();
+      console.log('unpauses');
       this.subscribeToEvent(contract.unpauseEvent);
     },
     async handlePause() {
@@ -116,29 +96,45 @@ export default {
     async unpause() {  
       await this.ethReq(contract.methods.unpause().encodeABI());
     },
+    async save() {
+      const currentStatus = await contract.methods.paused().call();
+      const localStatus = this.contractPaused;
+
+      if (localStatus && currentStatus !== localStatus) {
+        await this.handlePause();
+      }
+      if (!localStatus && currentStatus !== localStatus) {
+        await this.handleUnpause();
+      }
+    },
   },
 };
 </script>
 
-<style scoped>
-.pauser {
- padding: 30px;
-  margin: 40px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  width: 40%;
+<style scoped lang="scss">
+@import "@/assets/styles/variables/_colors.scss";
+
+.container {
+  padding: 30px;
+  margin: auto;
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .header {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 900;
   padding-bottom: 3%;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  line-height: 44px;
 }
 
 .content {
@@ -148,21 +144,19 @@ export default {
 }
 
 .content-header {
-  font-weight: 500;
-  font-size: 16px;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-.content-text {
-  font-weight: 500;
-  font-size: 12px;
-  margin-top: 10px;
+  font-weight: 800;
+  font-size: 24px;
+  margin-right: 30px;
 }
 
 .content-subtext {
   font-size: 12px;
+  font-weight: 800;
+  margin-top: 10px;
   margin-bottom: 20px;
+  text-align: center;
+  color: $circle-dark-grey;
 }
+
 </style>
 

@@ -30,6 +30,11 @@ import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
 
 export default {
+  head() {
+    return {
+      title: "Transfer"
+    };
+  },
   components: {
     Form,
     NavBar,

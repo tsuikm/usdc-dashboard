@@ -35,6 +35,11 @@ import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { contract } from '@/utils/web3utils';
 
 export default {
+  head() {
+    return {
+      title: "Pauser"
+    };
+  },
   components: {
     NavBar,
     ActionButton,

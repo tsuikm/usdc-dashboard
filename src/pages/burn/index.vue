@@ -26,6 +26,11 @@ import { toHex } from '@/utils/utils';
 import { contract } from '@/utils/web3utils';
 
 export default {
+  head() {
+    return {
+      title: "Burn"
+    };
+  },
   components: {
     NavBar,
     Form,

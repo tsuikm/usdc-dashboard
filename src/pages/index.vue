@@ -27,6 +27,11 @@ const RECENT_COUNT = 20;
 
 export default {
   name: 'SummaryPage',
+  head() {
+    return {
+      title: "USDC Dashboard"
+    };
+  },
   components: {
     NavBar,
     Summary,

@@ -22,6 +22,11 @@ import TransactionDetails from '@/components/TransactionDetails';
 
 
 export default {
+  head() {
+    return {
+      title: `Transaction: ${this.$route.params.transaction}`
+    };
+  },
   components: {
     NavBar,
     TransactionDetails,

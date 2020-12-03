@@ -23,6 +23,11 @@ import { removeLeadingZeros, roundToNearest, pushAll } from '@/utils/utils';
 const PERCENTAGE_DECIMAL_PLACES = 8;
 
 export default {
+  head() {
+    return {
+      title: "Accounts"
+    };
+  },
   components: {
     Table,
     NavBar,

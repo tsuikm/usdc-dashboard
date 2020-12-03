@@ -30,6 +30,11 @@ import { TRANSACTION_SCHEMA, WEB3_GET_LOGS_ADDRESS_LENGTH } from '@/utils/consta
 import Table from '@/components/Table';
 
 export default {
+  head() {
+    return {
+      title: `Address: ${this.$route.params.address}`
+    };
+  },
   components: {
     NavBar,
     AddressPage,

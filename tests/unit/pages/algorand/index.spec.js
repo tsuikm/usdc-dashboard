@@ -1,84 +1,78 @@
 import AlgoSummaryPage from '@/pages/algorand/index';
+import AlgorandFetchFactory from '@/../tests/algorand-fetch-mock';
 import { render } from '@testing-library/vue';
-import { toHex } from '@/utils/utils';
+import { toHex, finishPromises } from '@/utils/utils';
 
-const MOCK_ACCOUNTS = {
-  '0x1': {
+AlgorandFetchFactory.MOCK_ACCOUNTS = {
+  ['0x1']: {
     creator: true,
   },
-  '0x2': {
+  ['0x2']: {
     freeze: true,
   },
-  '0x3': {
+  ['0x3']: {
     clawback: true,
   },
-  '0x4': {
+  ['0x4']: {
     reserve: true,
   },
-  '0x5': {
+  ['0x5']: {
     manager: true,
-  },
-
+  }
 };
-const MOCK_TRANSACTIONS = [
+
+AlgorandFetchFactory.MOCK_TRANSACTIONS = [
   {
     id: '0x0999',
-    confirmedRound: 2,
+    ['confirmed-round']: 2,
   },
   {
     id: '0x01111',
-    confirmedRound: 3,
+    ['confirmed-round']: 3,
   },
   {
     id: '0x12345',
-    confirmedRound: 6,
+    ['confirmed-round']: 6,
   },
   {
     id: '0x13579',
-    confirmedRound: 1,
+    ['confirmed-round']: 1,
   },
 ];
 
-Algo.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
-Algo.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
+AlgorandFetchFactory.CURRENT_ROUND = 10;
 
-global.fetch = async () => {
-  return {
-    json: async () => MOCK_MINTERS,
-  };
-};
+global.fetch = AlgorandFetchFactory.fetch;
 
 describe('Algorand Summary Page', () => {
 
   it('Renders recent transactions', async () => {
     const { getByText } = render(AlgoSummaryPage);
 
-    // Finish all promises
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await finishPromises();
 
-    expect(getByText(MOCK_TRANSACTIONS[0].transactionId)).not.toBeNull();
-    expect(getByText(MOCK_TRANSACTIONS[1].transactionId)).not.toBeNull();
-    expect(getByText(MOCK_TRANSACTIONS[2].transactionId)).not.toBeNull();
-    expect(getByText(MOCK_TRANSACTIONS[3].transactionId)).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[0].id)).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[1].id)).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[2].id)).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[3].id)).not.toBeNull();
   });
 
   it('Renders latest blocks', async () => {
     const { getByText } = render(AlgoSummaryPage);
 
-    // Finish all promises
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    expect(getByText(MOCK_TRANSACTIONS[0].confirmedRound.toString() + ' / ' + toHex(MOCK_TRANSACTIONS[0].confirmedRound))).not.toBeNull();
-    expect(getByText(MOCK_TRANSACTIONS[1].confirmedRound.toString() + ' / ' + toHex(MOCK_TRANSACTIONS[1].confirmedRound))).not.toBeNull();
-    expect(getByText(MOCK_TRANSACTIONS[2].confirmedRound.toString() + ' / ' + toHex(MOCK_TRANSACTIONS[2].confirmedRound))).not.toBeNull();
-    expect(getByText(MOCK_TRANSACTIONS[3].confirmedRound.toString() + ' / ' + toHex(MOCK_TRANSACTIONS[3].confirmedRound))).not.toBeNull();
+    await finishPromises();
+    
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[0]['confirmed-round'].toString() + ' / ' + toHex(AlgorandFetchFactory.MOCK_TRANSACTIONS[0]['confirmed-round']))).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[1]['confirmed-round'].toString() + ' / ' + toHex(AlgorandFetchFactory.MOCK_TRANSACTIONS[1]['confirmed-round']))).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[2]['confirmed-round'].toString() + ' / ' + toHex(AlgorandFetchFactory.MOCK_TRANSACTIONS[2]['confirmed-round']))).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[3]['confirmed-round'].toString() + ' / ' + toHex(AlgorandFetchFactory.MOCK_TRANSACTIONS[3]['confirmed-round']))).not.toBeNull();
   });
 
   it('Renders privileged roles', async () => {
     const { getByText } = render(AlgoSummaryPage);
 
     // Finish all promises
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await finishPromises();
 
     expect(getByText('Creator')).not.toBeNull();
     expect(getByText('Freeze')).not.toBeNull();
@@ -87,14 +81,10 @@ describe('Algorand Summary Page', () => {
     expect(getByText('Manager')).not.toBeNull();
 
     // Finish all promises
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await finishPromises();
 
-    for (const role of Object.keys(Algo.MOCK_ACCOUNTS)) {
+    for (const role of Object.keys(AlgorandFetchFactory.MOCK_ACCOUNTS)) {
       expect(getByText(role)).not.toBeNull();
-    }
-
-    for (const minter of MOCK_MINTERS) {
-      expect(getByText(minter)).not.toBeNull();
     }
   });
 });

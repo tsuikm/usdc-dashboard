@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '@/utils/constants';
+
 export default class AlgorandFetchFactory {
 
   /**
@@ -38,15 +40,15 @@ export default class AlgorandFetchFactory {
    *
    * @param {String} url
    */
-  static fetch(url) {
-    const query = new URLSearchParams(url.replace('/algorand', ''));
+  static async fetch(url) {
+    const query = new URLSearchParams(url.replace(`${API_BASE_URL}/api/algorand`, ''));
 
     return {
-      json: async () => {
-        if (query.request === 'assets') return AlgorandFetchFactory._findAssets(query);
-        if (query.request === 'transactions') return AlgorandFetchFactory._findTransactions(query);
-        if (query.request === 'accounts') return AlgorandFetchFactory._findAccounts(query);
-        if (query.request === 'supply') return AlgorandFetchFactory._findSupply(query);
+      json: () => {
+        if (query.get('request') === 'assets') return AlgorandFetchFactory._findAssets(query);
+        if (query.get('request') === 'transactions') return AlgorandFetchFactory._findTransactions(query);
+        if (query.get('request') === 'accounts') return AlgorandFetchFactory._findAccounts(query);
+        if (query.get('request') === 'supply') return AlgorandFetchFactory._findSupply(query);
       },
     };
   }
@@ -75,7 +77,7 @@ export default class AlgorandFetchFactory {
           freeze: AlgorandFetchFactory._findAccount(account => account.freeze),
           reserve: AlgorandFetchFactory._findAccount(account => account.reserve),
           clawback: AlgorandFetchFactory._findAccount(account => account.clawback),
-          creator: AlgorandFetchFactory._findAccount(account => account.creator),
+          manager: AlgorandFetchFactory._findAccount(account => account.manager),
           decimals: AlgorandFetchFactory.DECIMALS,
           total: AlgorandFetchFactory.TOTAL_SUPPLY,
         }
@@ -85,13 +87,14 @@ export default class AlgorandFetchFactory {
 
   static _findTransactions(query) {
     return {
+      //fix for specific txn detail page fetch
       transactions: AlgorandFetchFactory.MOCK_TRANSACTIONS.filter(transaction => {
         const round = transaction['confirmed-round'];
         const minRound = query.get('min-round') || 0;
         const maxRound = query.get('max-round') || AlgorandFetchFactory.CURRENT_ROUND;
 
-        return round >= minRound && round <= maxRound
-      }).slice(0, query.get('limit'))
+        return round >= minRound && round <= maxRound;
+      }).slice(0, query.get('limit') || AlgorandFetchFactory.MOCK_TRANSACTIONS.length)
     }
   }
 
@@ -103,7 +106,7 @@ export default class AlgorandFetchFactory {
 
   static _findSupply(query) {
     return {
-      ['current-round']: AlgorandFetchFactory.CURRENT_ROUND
+      current_round: AlgorandFetchFactory.CURRENT_ROUND
     }
   }
 }

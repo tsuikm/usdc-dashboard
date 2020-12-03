@@ -81,6 +81,7 @@ export default {
         request: 'assets',
         param: ALGORAND_USDC_ASSET_ID
       });
+
       this.setAddresses('Creator', [roles.asset.params.creator]);
       this.setAddresses('Freeze', [roles.asset.params.freeze]);
       this.setAddresses('Reserve', [roles.asset.params.reserve]);

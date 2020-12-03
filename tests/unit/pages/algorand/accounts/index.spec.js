@@ -11,11 +11,11 @@ for (let i = 0; i < 101; i++) {
 
     id: toHex(i),
     sender: padHex(toHex(i), WEB3_BALANCEOF_ADDRESS_LENGTH),
-    'asset-transfer-transaction': {
+    ['asset-transfer-transaction']: {
         amount: randomQuantity,
         receiver: padHex(toHex(Math.floor(Math.random() * 101)), WEB3_BALANCEOF_ADDRESS_LENGTH),
     },
-    'confirmed-round': 1,
+    ['confirmed-round']: 1,
   });
 }
 

@@ -72,7 +72,7 @@ export default {
     },
 
     /**
-     * @param {bnumber} - the balance of the address.
+     * @param {number} - the balance of the address.
      */
     balance: Number,
   },

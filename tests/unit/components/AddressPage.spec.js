@@ -1,5 +1,5 @@
 import { render } from '@testing-library/vue';
-import AddressPage from '@/components/AddressPage';
+import AddressDetails from '@/components/AddressDetails';
 
 const MOCK_WALLET_ADDRESS = '0x12345';
 const MOCK_PROPS = {
@@ -14,7 +14,7 @@ const MOCK_PROPS = {
 describe('Address page', () => {
 
   it('Renders labels correctly', () => {
-    const { getByText } = render(AddressPage, {
+    const { getByText } = render(AddressDetails, {
       props: MOCK_PROPS,
       mocks: {
         $route: {
@@ -32,7 +32,7 @@ describe('Address page', () => {
   });
 
   it('Renders Roles correctly', () => {
-    const { getByText } = render(AddressPage, {
+    const { getByText } = render(AddressDetails, {
       props: MOCK_PROPS,
       mocks: {
         $route: {
@@ -47,7 +47,7 @@ describe('Address page', () => {
   });
 
   it('Displays the balance correctly', () => {
-    const { getByText } = render(AddressPage, {
+    const { getByText } = render(AddressDetails, {
       props: MOCK_PROPS,
       mocks: {
         $route: {
@@ -62,7 +62,7 @@ describe('Address page', () => {
   });
 
   it('Displays whether the address is blacklisted correctly', () => {
-    const { getByText } = render(AddressPage, {
+    const { getByText } = render(AddressDetails, {
       props: MOCK_PROPS,
       mocks: {
         $route: {

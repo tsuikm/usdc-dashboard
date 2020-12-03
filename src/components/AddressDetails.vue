@@ -63,7 +63,7 @@
 import { basePathFromPath } from '@/utils/utils';
 
 export default {
-  name: 'AddressPage',
+  name: 'AddressDetails',
   props: {
 
     /**

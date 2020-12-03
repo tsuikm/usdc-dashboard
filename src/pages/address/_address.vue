@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavBar />
-    <Overview :wallet-address="this.$route.params.address" />
+    <Overview :wallet-address="this.address" />
     <Table
       ref="table"
       :loading="loading"
@@ -19,9 +19,9 @@
 import NavBar from '@/components/NavBar';
 import Overview from '@/components/Overview';
 import Table from '@/components/Table';
-import { TRANSACTION_SCHEMA, WEB3_GET_LOGS_ADDRESS_LENGTH } from '@/utils/constants';
+import { TRANSACTION_SCHEMA, WEB3_GET_LOGS_ADDRESS_LENGTH, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import { padHex } from '@/utils/utils';
-import { getWalletTransactions, fetchAge } from '@/utils/web3utils';
+import { getWalletTransactions, fetchAge, web3 } from '@/utils/web3utils';
 
 export default {
   components: {
@@ -42,13 +42,32 @@ export default {
     },
   },
   async mounted() {
+    this.address = this.$route.params.address;
+    if (!this.address.startsWith('0x')) {
+      this.address = '0x' + this.address;
+    }
+
+    if (this.address.length > WEB3_BALANCEOF_ADDRESS_LENGTH + 2) {
+      // Too long to be a valid Ethereum address
+      this.$router.replace('/404');
+      return;
+    }
+
+    if (!web3.utils.isAddress(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))) {
+      // Not a valid Ethereum address
+      this.$router.replace('/404');
+      return;
+    }
+
+    this.address = padHex(this.address, WEB3_GET_LOGS_ADDRESS_LENGTH);
+
     await this.fetchTransactions();
     await this.fetchAges(0);
     this.loading = false;
   },
   methods: {
     async fetchTransactions() {
-      this.transactions = await getWalletTransactions(padHex(this.$route.params.address, WEB3_GET_LOGS_ADDRESS_LENGTH));
+      this.transactions = await getWalletTransactions(this.address);
     },
     async fetchAges(page) {
       const pageLength = this.$refs.table.pageLength;

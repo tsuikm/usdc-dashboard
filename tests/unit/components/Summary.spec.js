@@ -109,13 +109,6 @@ describe('Links Route Correctly', () => {
     expect(await testLink('See all transactions', '/transactions')).toBe(true);
   });
 
-
-  it('Block links', async () => {
-    for (const block of MOCK_PROPS.blocks) {
-      expect(await testLink(`${block} / ${toHex(block)}`, `/block/${block}`)).toBe(true);
-    }
-  });
-
   it('Transaction links', async () => {
     for (const transaction of MOCK_PROPS.transactions) {
       expect(await testLink(transaction, `/transaction/${transaction}`)).toBe(true);

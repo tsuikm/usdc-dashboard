@@ -29,7 +29,7 @@
               class="chip"
               :style="{'background-color': role.color}"
             > 
-              {{role.name}} 
+              {{ role.name }} 
             </md-chip>
           </div>
         </div>
@@ -147,4 +147,3 @@ export default {
   font-weight: bold;
 }
 </style>
-

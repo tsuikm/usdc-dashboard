@@ -12,7 +12,7 @@
 
       <!-- roles -->
       <div
-        v-if="roles.length != 0"
+        v-if="roles.length !== 0"
         class="roles"
       >
         <h2> Roles </h2>

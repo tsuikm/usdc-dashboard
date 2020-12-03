@@ -27,7 +27,6 @@ describe('Address page', () => {
     expect(getByText('Address Details')).not.toBeNull();
     expect(getByText('Wallet Address')).not.toBeNull();
     expect(getByText('Balance')).not.toBeNull();
-    expect(getByText('Blacklisted?')).not.toBeNull();
   });
 
   it('Renders Roles correctly', () => {

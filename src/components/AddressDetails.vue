@@ -43,18 +43,8 @@
         </div>
       </div>
 
-      <!-- blacklisted -->
-      <div class="blacklisted">
-        <h2> Blacklisted? </h2>
-        <div class="page-blacklisted">
-          <div v-if="this.isBlacklisted">
-            Yes
-          </div>
-          <div v-else>
-            No
-          </div>
-        </div>
-      </div>
+      <!-- Any additional content needed -->
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -82,11 +72,6 @@ export default {
     },
 
     /**
-      * @param {boolean} - whether the address is blacklisted.
-      */
-    isBlacklisted: Boolean,
-
-    /**
      * @param {bnumber} - the balance of the address.
      */
     balance: Number,
@@ -109,9 +94,7 @@ export default {
 .page-balance {
   padding-top: 5%;
 }
-.page-blacklisted {
-  padding-top: 5%;
-}
+
 .list-of-roles {
   background-color: #68d7f3;
   color: white;
@@ -131,9 +114,6 @@ export default {
   font-weight: bold;
 }
 .balance {
-  font-weight: bold;
-}
-.blacklisted {
   font-weight: bold;
 }
 </style>

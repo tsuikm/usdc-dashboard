@@ -5,7 +5,20 @@
       :roles="this.roles"
       :is-blacklisted="this.isBlacklisted"
       :balance="this.balance"
-    />
+    >
+      <div class="blacklisted">
+        <h2> Blacklisted? </h2>
+        <div class="page-blacklisted">
+          <div v-if="this.isBlacklisted">
+            Yes
+          </div>
+          <div v-else>
+            No
+          </div>
+        </div>
+      </div>
+    </AddressDetails>
+
     <h1> Address Transactions </h1>
     <Table
       ref="table"
@@ -126,5 +139,10 @@ export default {
 </script>
 
 <style scoped>
-
+.page-blacklisted {
+  padding-top: 5%;
+}
+.blacklisted {
+  font-weight: bold;
+}
 </style>

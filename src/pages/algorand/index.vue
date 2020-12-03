@@ -98,6 +98,7 @@ export default {
       const transactions = await fetchAlgorand({
         api: 'indexer',
         request: 'transactions',
+        'asset-id': ALGORAND_USDC_ASSET_ID,
         'min-round': currentBlock - ALGORAND_TXNS_LOOKBACK
       });
 

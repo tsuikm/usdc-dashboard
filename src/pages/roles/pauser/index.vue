@@ -68,7 +68,6 @@ export default {
     },
     async handleUnpause() {
       await this.unpause();
-      console.log('unpauses');
       this.subscribeToEvent(contract.unpauseEvent);
     },
     async handlePause() {

@@ -146,7 +146,6 @@ export default {
       this.blacklisterActive = !this.blacklisterActive;
     },
     async save() {
-      console.log((await contract.methods.pauser().call()).toLowerCase());
       this.address = this.address.trim().toLowerCase();
 
       const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());

@@ -12,6 +12,12 @@ const MOCK_ACCOUNTS = {
 
 Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 
+const MOCK_WALLET_ADDRESS = '0x12345';
+
+global.ethereum = {
+  request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
+};
+
 describe('ConnectToMetamask', () => {
   it('Shows connected properly', () => {
     const { findByText } = render(ConnectToMetamask);

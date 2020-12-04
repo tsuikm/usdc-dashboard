@@ -3,6 +3,7 @@
     <button
       :class="{'button-grey': this.connected, 'button-colored': !this.connected, 'connectButton': true}"
       data-testid="transfers-card-connect-button"
+      v-if="!this.connected"
       @click="connectMetamask"
     >
       Connect to MetaMask

@@ -67,7 +67,10 @@
           />
         </div>
       </div>
-      <ConnectToMetamask />
+      <span v-if="showMasterMinterWarning">
+        <md-icon>error</md-icon> Error: You are not signed in as the master minter of this contract.
+      </span>
+      <ConnectToMetamask ref="connectToMetamaskButton" />
     </div>
   </div>
 </template>
@@ -105,6 +108,7 @@ export default {
       isMinter: null,
       minterAllowance: null,
       accounts: [],
+      showMasterMinterWarning: false,
     };
   },
   methods: {
@@ -132,10 +136,26 @@ export default {
 
     },
     async removeMinter() {
+      const masterMinterAccount = (await contract.methods.masterMinter().call()).toLowerCase();
+      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
+      this.showMasterMinterWarning = !accounts.includes(masterMinterAccount);
+
+      if (this.showMasterMinterWarning) {
+        return;
+      }
+
       await this.ethReq(contract.methods.removeMinter(this.address).encodeABI());
       this.subscribeToEvent(contract.removeMinterEvent);
     },
     async configureMinter() {
+      const masterMinterAccount = (await contract.methods.masterMinter().call()).toLowerCase();
+      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
+      this.showMasterMinterWarning = !accounts.includes(masterMinterAccount);
+
+      if (this.showMasterMinterWarning) {
+        return;
+      }
+      
       await this.ethReq(contract.methods.configureMinter(this.address, this.allowance).encodeABI());
       this.subscribeToEvent(contract.configureMinterEvent);
     },
@@ -204,6 +224,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .minter-form {
@@ -220,4 +241,5 @@ export default {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
 </style>

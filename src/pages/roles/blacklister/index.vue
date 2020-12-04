@@ -173,6 +173,11 @@ export default {
       }
     },
   },
+  head() {
+    return {
+      title: 'Blacklister',
+    };
+  },
 };
 </script>
 

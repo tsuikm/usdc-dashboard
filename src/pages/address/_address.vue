@@ -113,7 +113,7 @@ export default {
       if (blacklisterAddress === this.address) {
         this.roles.push({
           name: 'Blacklister',
-          color: '#4FE39C',
+          color: '#FF6678',
         });
       }
     },
@@ -133,6 +133,11 @@ export default {
       }
     },
     pageChange() {},
+  },
+  head() {
+    return {
+      title: `Address: ${this.$route.params.address}`,
+    };
   },
 };
 </script>

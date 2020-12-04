@@ -122,6 +122,11 @@ export default {
     },
     pageChange() {},
   },
+  head() {
+    return {
+      title: `Address: ${this.$route.params.address}`,
+    };
+  },
 };
 </script>
 

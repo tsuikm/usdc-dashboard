@@ -26,8 +26,25 @@ describe('ConnectToMetamask', () => {
 
   it('Fires event on click', () => {
     const { getByText } = render(ConnectToMetamask);
+    expect(getByText('Not Connected to MetaMask')).not.toBeNull();
     const event = createEvent.click(getByText('Connect to MetaMask'));
     expect(fireEvent(getByText('Connect to MetaMask'), event)).not.toBeNull();
   });
 
+  it('Hides button when user is connected', () => {
+    const { getByText, queryByText } = render(ConnectToMetamask, {
+      data: function() {
+        return {
+          connected: true,
+          accounts: [Web3.MOCK_ACCOUNTS],
+        };
+      },
+    });
+    const connectButton = queryByText('Connect to MetaMask');
+    expect(connectButton).toBeNull();
+    expect(getByText('Connected to MetaMask')).not.toBeNull();
+  });
+
 });
+
+

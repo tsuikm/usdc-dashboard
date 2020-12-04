@@ -67,6 +67,7 @@
           />
         </div>
       </div>
+      <ConnectToMetamask ref="connectToMetamaskButton" />
     </div>
   </div>
 </template>
@@ -75,6 +76,7 @@
 import NavBar from '@/components/NavBar';
 import ActionButton from '@/components/ActionButton';
 import CustomInput from '@/components/CustomInput';
+import ConnectToMetamask from '@/components/ConnectToMetamask';
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
@@ -94,6 +96,7 @@ export default {
     NavBar,
     ActionButton,
     CustomInput,
+    ConnectToMetamask,
   },
   data() {
     return {
@@ -104,13 +107,7 @@ export default {
       accounts: [],
     };
   },
-  created: function() {
-    this.connectMetamask();
-  },
   methods: {
-    async connectMetamask() {
-      this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    },
     async subscribeToEvent(event) {
       contract.once(event, async () => {
         if (this.address === '') {

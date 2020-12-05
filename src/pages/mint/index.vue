@@ -42,14 +42,22 @@ export default {
   },
   methods: {
     async submit(toAddress, amount) {
+      
       this.accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
 
-      if (!await contract.methods.isMinter(this.accounts[0]).call()) {
-        // not allowed to mint
-        console.error(`Wallet ${this.accounts[0]} is not allowed to mint`);
-        return;
+      let minterAccount = null;
+      for (var account in this.accounts) {
+        if (await contract.methods.isMinter(account).call()) {
+          minterAccount = account;
+          break;
+        }
       }
-      
+
+      // if (minterAccount === null) {
+      //   this.showMinterWarning = true;
+      //   return;
+      // }
+
       try {
         await ethereum.request({
           method: 'eth_sendTransaction',

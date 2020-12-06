@@ -18,7 +18,7 @@ Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS;
 
 describe('Address Details Page', () => {
-  it('Renders AddressPage component', async () => {
+  it('Renders AddressDetails component', async () => {
     const { getByText } = render(AddressDetailsPage, {
       mocks: {
         $route: {
@@ -49,7 +49,7 @@ describe('Address Details Page', () => {
     await finishPromises();
   });
 
-  it('Renders AddressPage component and address transaction table', async () => {
+  it('Renders AddressDetails component and address transaction table', async () => {
     const { getByText } = render(AddressDetailsPage, {
       mocks: {
         $route: {

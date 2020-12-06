@@ -35,7 +35,6 @@ describe('Renders Everything Correctly', () => {
     expect(getByText('USDC Dashboard')).not.toBeNull();
     expect(getByText('Latest Blocks')).not.toBeNull();
     expect(getByText('Recent Transactions')).not.toBeNull();
-    expect(getByText('See all blocks')).not.toBeNull();
     expect(getByText('See all transactions')).not.toBeNull();
   });
 
@@ -104,19 +103,9 @@ describe('Links Route Correctly', () => {
 
   //----------------------------------------------------------------------------------------
 
-  it('Labels links', async () => {
-    expect(await testLink('See all blocks', '/blocks')).toBe(true);
-    expect(await testLink('See all transactions', '/transactions')).toBe(true);
-  });
-
-
-  it('Block links', async () => {
-    for (const block of MOCK_PROPS.blocks) {
-      expect(await testLink(`${block} / ${toHex(block)}`, `/block/${block}`)).toBe(true);
-    }
-  });
-
   it('Transaction links', async () => {
+    expect(await testLink('See all transactions', '/transactions')).toBe(true);
+
     for (const transaction of MOCK_PROPS.transactions) {
       expect(await testLink(transaction, `/transaction/${transaction}`)).toBe(true);
     }

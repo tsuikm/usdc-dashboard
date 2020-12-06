@@ -67,5 +67,10 @@ export default {
       this.loading = false;
     },
   },
+  head() {
+    return {
+      title: 'Transactions',
+    };
+  },
 };
 </script>

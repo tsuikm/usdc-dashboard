@@ -68,5 +68,10 @@ export default {
       }
     },
   },
+  head() {
+    return {
+      title: 'Burn',
+    };
+  },
 };
 </script>

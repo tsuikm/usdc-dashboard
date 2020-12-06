@@ -6,7 +6,7 @@
       <div class="wallet-address">
         <h2> Wallet Address </h2>
         <div class="page-wallet-address">
-          {{ this.$route.params.address }}
+          {{ this.address }}
         </div>
       </div>
 
@@ -96,6 +96,10 @@ export default {
       type: Number,
       validator: balance => typeof balance === 'number',
     },
+    /**
+     * @param {Address} - Address of wallet to display
+     */
+    address: String,
   },
   computed: {
     basePath() {

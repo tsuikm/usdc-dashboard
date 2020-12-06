@@ -111,5 +111,10 @@ export default {
       return accounts;
     },
   },
+  head() {
+    return {
+      title: 'Accounts',
+    };
+  },
 };
 </script>

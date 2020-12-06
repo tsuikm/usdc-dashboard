@@ -181,6 +181,11 @@ export default {
       }
     },
   },
+  head() {
+    return {
+      title: 'Master Minter',
+    };
+  },
 };
 </script>
 

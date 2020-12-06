@@ -108,6 +108,11 @@ export default {
       }
     },
   },
+  head() {
+    return {
+      title: 'Pauser',
+    };
+  },
 };
 </script>
 

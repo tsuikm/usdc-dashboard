@@ -47,5 +47,10 @@ export default {
       this.$router && this.$router.push({path: '/404' });
     }
   },
+  head() {
+    return {
+      title: `Transaction: ${this.$route.params.transaction}`,
+    };
+  },
 };
 </script>

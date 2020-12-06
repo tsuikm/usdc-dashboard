@@ -77,6 +77,10 @@ export default {
       for (const address of addresses) {
         role.addresses.push(address);
       }
+
+      if (addresses.length === 0) {
+        this.roles = this.roles.filter(role => role.name !== roleName);
+      }
     },
     async lookupRoles() {
       this.setAddresses('Owner', [await contract.methods.owner().call()]);

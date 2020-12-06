@@ -2,14 +2,16 @@
   <div
     id="navbar"
   >
+  <div>
     <nuxt-link 
       to="/"
       data-testid="ethereum-link"
       :class="linkClass('')"
       @mouseover.native="hover('Ethereum')"
     >
-      <v-img :src="require('../assets/logo.svg')" width="30"/>
+      <img :src="require('../assets/logo.svg')" width="250"/>
     </nuxt-link>
+    </div>
 
     <div
       id="menu-items"

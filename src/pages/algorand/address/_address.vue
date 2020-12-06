@@ -1,9 +1,10 @@
 <template>
   <div>
     <NavBar />
+    <!-- TODO, is blacklisted not a thing -->
     <AddressPage
       :roles="this.roles"
-      :is-blacklisted="this.isBlacklisted"
+      :is-blacklisted="false"
       :balance="this.balance"
       :address="this.address"
     />
@@ -17,7 +18,7 @@
         :loading="loading"
         name=""
         :total-items="transactions.length"
-        :schema="this.tableSchema"
+        :schema="ALGORAND_TRANSACTION_SCHEMA"
         :content="transactions"
         :key-field="'Transaction Hash'"
         @page:change="this.pageChange"
@@ -29,8 +30,7 @@
 <script>
 import NavBar from '@/components/NavBar';
 import AddressPage from '@/components/AddressPage';
-import { getWalletTransactions, fetchAge, web3 } from '@/utils/web3utils';
-import { TRANSACTION_SCHEMA, WEB3_GET_LOGS_ADDRESS_LENGTH, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { ALGORAND_TRANSACTION_SCHEMA } from '@/utils/constants';
 import Table from '@/components/Table';
 
 export default {
@@ -47,18 +47,11 @@ export default {
       transactions: [],
       address: null,
       loading: true,
+      ALGORAND_TRANSACTION_SCHEMA
     };
-  },
-  computed: {
-    tableSchema() {
-      return TRANSACTION_SCHEMA;
-    },
   },
   async mounted() {
     this.address = this.$route.params.address;
-    if (!this.address.startsWith('0x')) {
-      this.address = '0x' + this.address;
-    }
 
     if (this.address.length > WEB3_BALANCEOF_ADDRESS_LENGTH + 2) {
       // Too long to be a valid Ethereum address
@@ -84,6 +77,32 @@ export default {
       await this.fetchAges(this.$refs.table.page);
     }
     this.loading = false;
+
+
+
+
+
+    try {
+      const transaction = (await fetchAlgorand({
+        api: 'indexer',
+        request: 'transactions',
+        'asset-id': ALGORAND_USDC_ASSET_ID,
+        'txid': this.id,
+        'max-round': await getCurrentRound(),
+      })).transactions[0];
+            
+      this.sender = transaction.sender;
+      this.receiver = transaction['asset-transfer-transaction'].receiver;
+      this.fee = transaction.fee;
+      this.blockNumber = transaction['confirmed-round'];
+      // this.amount = transaction['asset-transfer-transaction'].amount;
+      // this.type = transaction['tx-type'];
+    }
+    catch (e) {
+      this.$router && this.$router.push({ path: '/404' });
+    }
+
+    
   },
   methods: {
     async lookupBalance() {

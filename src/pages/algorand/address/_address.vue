@@ -32,7 +32,7 @@ import { fetchAlgorand, getCurrentRound } from '@/utils/algo-utils';
 import {
   ALGORAND_TRANSACTION_SCHEMA,
   ALGORAND_USDC_ASSET_ID,
-  ALGORAND_TXNS_QUERY_LIMIT
+  ALGORAND_TXNS_QUERY_LIMIT,
 } from '@/utils/constants';
 
 export default {
@@ -49,14 +49,14 @@ export default {
       address: this.$route.params.address,
       loading: true,
       assets: null,
-      ALGORAND_TRANSACTION_SCHEMA
+      ALGORAND_TRANSACTION_SCHEMA,
     };
   },
   async mounted() {
     this.assets = await fetchAlgorand({
       api: 'indexer',
       request: 'assets',
-      param: ALGORAND_USDC_ASSET_ID
+      param: ALGORAND_USDC_ASSET_ID,
     });
 
     await this.fetchAddress();
@@ -70,7 +70,7 @@ export default {
         const account = (await fetchAlgorand({
           api: 'indexer',
           request: 'account',
-          param: this.address
+          param: this.address,
         })).account;
 
         this.balance = account.amount / 10 ** this.assets.asset.params.decimals;

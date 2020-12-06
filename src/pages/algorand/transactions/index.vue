@@ -56,7 +56,7 @@ export default {
         'limit': ALGORAND_TXNS_QUERY_LIMIT,
         'max-round': await getCurrentRound(),
       })).transactions.reverse();
-    }
+    },
   },
 };
 </script>

@@ -28,7 +28,7 @@ export default {
     return {
       accounts: [],
       loading: true,
-      ACCOUNTS_SCHEMA: constants.ACCOUNTS_SCHEMA
+      ACCOUNTS_SCHEMA: constants.ACCOUNTS_SCHEMA,
     };
   },
   async created() {
@@ -46,7 +46,7 @@ export default {
       const assets = await fetchAlgorand({
         api: 'indexer',
         request: 'assets',
-        param: constants.ALGORAND_USDC_ASSET_ID
+        param: constants.ALGORAND_USDC_ASSET_ID,
       });
       const decimals = assets.asset.params.decimals;
       const totalSupply = assets.asset.params.total / (10 ** decimals);

@@ -18,7 +18,7 @@ AlgorandFetchFactory.MOCK_ACCOUNTS = {
   },
   ['0x5']: {
     manager: true,
-  }
+  },
 };
 
 AlgorandFetchFactory.MOCK_TRANSACTIONS = [

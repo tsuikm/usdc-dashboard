@@ -67,7 +67,7 @@ export default class AlgorandFetchFactory {
    */
   static _findAccount(predicate) {
     return Object.keys(AlgorandFetchFactory.MOCK_ACCOUNTS)
-                 .find(address => predicate(AlgorandFetchFactory.MOCK_ACCOUNTS[address]));
+      .find(address => predicate(AlgorandFetchFactory.MOCK_ACCOUNTS[address]));
   }
 
   static _findAssets() {
@@ -81,9 +81,9 @@ export default class AlgorandFetchFactory {
           manager: AlgorandFetchFactory._findAccount(account => account.manager),
           decimals: AlgorandFetchFactory.DECIMALS,
           total: AlgorandFetchFactory.TOTAL_SUPPLY,
-        }
-      }
-    }
+        },
+      },
+    };
   }
 
   static _findTransactions(query) {
@@ -105,8 +105,8 @@ export default class AlgorandFetchFactory {
         return round >= minRound && round <= maxRound;
       }).sort((a, b) => b['confirmed-round'] - a['confirmed-round'])
         .reverse()
-        .slice(0, query.get('limit') || AlgorandFetchFactory.MOCK_TRANSACTIONS.length)
-    }
+        .slice(0, query.get('limit') || AlgorandFetchFactory.MOCK_TRANSACTIONS.length),
+    };
   }
 
   static _findAccounts(query) {
@@ -118,18 +118,18 @@ export default class AlgorandFetchFactory {
       AlgorandFetchFactory.MOCK_ACCOUNTS[address].address = address;
     }
 
-    return { accounts }
+    return { accounts };
   }
 
   static _findAccountByAddress(address) {
     return {
-      account: AlgorandFetchFactory.MOCK_ACCOUNTS[address]
-    }
+      account: AlgorandFetchFactory.MOCK_ACCOUNTS[address],
+    };
   }
 
   static _findSupply(query) {
     return {
-      current_round: AlgorandFetchFactory.CURRENT_ROUND
-    }
+      current_round: AlgorandFetchFactory.CURRENT_ROUND,
+    };
   }
 }

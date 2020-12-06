@@ -79,7 +79,7 @@ export default {
       const roles = await fetchAlgorand({
         api: 'indexer',
         request: 'assets',
-        param: ALGORAND_USDC_ASSET_ID
+        param: ALGORAND_USDC_ASSET_ID,
       });
 
       this.setAddresses('Creator', [roles.asset.params.creator]);
@@ -100,7 +100,7 @@ export default {
         api: 'indexer',
         request: 'transactions',
         'asset-id': ALGORAND_USDC_ASSET_ID,
-        'min-round': currentBlock - ALGORAND_TXNS_LOOKBACK
+        'min-round': currentBlock - ALGORAND_TXNS_LOOKBACK,
       });
 
       const length = transactions.transactions.length;

@@ -9,8 +9,8 @@ const MOCK_TRANSACTIONS = [
     id: '0x0999',
     sender: MOCK_WALLET_ADDRESS,
     'asset-transfer-transaction': {
-        amount: 1345,
-        receiver: '0x232323',
+      amount: 1345,
+      receiver: '0x232323',
     },
     'confirmed-round': 2,
   },
@@ -18,8 +18,8 @@ const MOCK_TRANSACTIONS = [
     id: '0x01111',
     sender: MOCK_WALLET_ADDRESS,
     'asset-transfer-transaction': {
-        amount: 1049,
-        receiver: '0x288765',
+      amount: 1049,
+      receiver: '0x288765',
     },
     'confirmed-round': 3,
   },
@@ -27,8 +27,8 @@ const MOCK_TRANSACTIONS = [
     id: '0x12345',
     sender: MOCK_WALLET_ADDRESS,
     'asset-transfer-transaction': {
-        amount: 1340,
-        receiver: '0x2919191',
+      amount: 1340,
+      receiver: '0x2919191',
     },
     'confirmed-round': 6,
   },
@@ -36,8 +36,8 @@ const MOCK_TRANSACTIONS = [
     id: '0x13579',
     sender: '0x103904ba',
     'asset-transfer-transaction': {
-        amount: 4001,
-        receiver: '0x2468a',
+      amount: 4001,
+      receiver: '0x2468a',
     },
     'confirmed-round': 1,
   },
@@ -45,8 +45,8 @@ const MOCK_TRANSACTIONS = [
     id: '0x1357a',
     sender: MOCK_WALLET_ADDRESS,
     'asset-transfer-transaction': {
-        amount: 14000,
-        receiver: '0x2468a',
+      amount: 14000,
+      receiver: '0x2468a',
     },
     'confirmed-round': 4,
   },
@@ -54,8 +54,8 @@ const MOCK_TRANSACTIONS = [
     id: '0x1357b',
     sender: MOCK_WALLET_ADDRESS,
     'asset-transfer-transaction': {
-        amount: 4100042,
-        receiver: '0x24690',
+      amount: 4100042,
+      receiver: '0x24690',
     },
     'confirmed-round': 5,
   },
@@ -64,8 +64,8 @@ const MOCK_TRANSACTIONS = [
     id: '0xd0a69b',
     sender: '0x843935',
     'asset-transfer-transaction': {
-        amount: 149914,
-        receiver: '0x843934',
+      amount: 149914,
+      receiver: '0x843934',
     },
     'confirmed-round': 7,
   },
@@ -99,8 +99,8 @@ describe('_address.vue', () => {
         id: `0x${i.toString(16)}`,
         sender: MOCK_WALLET_ADDRESS,
         'asset-transfer-transaction': {
-            amount: 1234567,
-            receiver: '0x24690'
+          amount: 1234567,
+          receiver: '0x24690',
         },
         'confirmed-round': 5,
       });

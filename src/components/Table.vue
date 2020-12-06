@@ -121,6 +121,11 @@ export default {
       pageLength: 25,
     };
   },
+  computed: {
+    basePath() {
+      return this.$route ? basePathFromPath(this.$route.path) : '';
+    },
+  },
   mounted() {
     if (this.$route && this.$route.query.page) {
       this.page = parseInt(this.$route.query.page) - 1; // subtract 1 since pages are 0-indexed.
@@ -134,11 +139,6 @@ export default {
       // Change the ?page query parameter to match the page. We add 1 since pages are 0-indexed internally.
       this.$router && this.$router.push({query: { page: page + 1 }});
       this.$emit('page:change', page);
-    },
-  },
-  computed: {
-    basePath() {
-      return this.$route ? basePathFromPath(this.$route.path) : '';
     },
   },
 };

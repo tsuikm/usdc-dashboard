@@ -9,7 +9,7 @@ AlgorandFetchFactory.MOCK_ACCOUNTS = {
   [MOCK_WALLET_ADDRESS]: {
     amount: 10000,
     creator: true,
-    manager: true
+    manager: true,
   },
 };
 AlgorandFetchFactory.MOCK_TRANSACTIONS = [
@@ -43,8 +43,8 @@ describe('Algorand Address Details Page', () => {
             address: MOCK_WALLET_ADDRESS,
           },
           query: {
-            page: 1
-          }
+            page: 1,
+          },
         },
       },
     });
@@ -69,8 +69,8 @@ describe('Algorand Address Details Page', () => {
             address: MOCK_WALLET_ADDRESS,
           },
           query: {
-            page: 1
-          }
+            page: 1,
+          },
         },
       },
     });
@@ -92,7 +92,7 @@ describe('Algorand Address Details Page', () => {
             address: 'not-valid',
           },
           query: {
-            page: 1
+            page: 1,
           },
         },
         $router: router,

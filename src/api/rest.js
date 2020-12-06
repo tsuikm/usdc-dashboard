@@ -30,7 +30,7 @@ const algosdk = require('algosdk');
 const baseServer = 'https://mainnet-algorand.api.purestake.io';
 const port = '';
 const token = {
-  'X-API-Key': process.env.PURESTAKE_API_KEY
+  'X-API-Key': process.env.PURESTAKE_API_KEY,
 };
 
 const indexer = new algosdk.Indexer(token, `${baseServer}/idx2/`, port);

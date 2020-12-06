@@ -12,8 +12,8 @@ for (let i = 0; i < 101; i++) {
     id: toHex(i),
     sender: toHex(i),
     ['asset-transfer-transaction']: {
-        amount: randomQuantity,
-        receiver: toHex(Math.floor(Math.random() * 101)),
+      amount: randomQuantity,
+      receiver: toHex(Math.floor(Math.random() * 101)),
     },
     ['confirmed-round']: 1,
   });

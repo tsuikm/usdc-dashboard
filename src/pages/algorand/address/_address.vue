@@ -2,9 +2,10 @@
   <div>
     <NavBar />
     <AddressDetails
-      :roles="roles"
-      :balance="balance"
-      :address="address"
+      :roles="this.roles"
+      :is-blacklisted="false"
+      :balance="this.balance"
+      :address="this.address"
     />
     <h1>Address Transactions</h1>
     <div v-if="transactions.length == 0 && !loading">

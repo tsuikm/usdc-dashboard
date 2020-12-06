@@ -93,14 +93,18 @@ export default class AlgorandFetchFactory {
         const minRound = query.get('min-round') || 0;
         const maxRound = query.get('max-round') || AlgorandFetchFactory.CURRENT_ROUND;
 
+        if (query.get('txid')) {
+          return transaction.id == query.get('txid');
+        }
+
         return round >= minRound && round <= maxRound;
-      }).slice(0, query.get('limit') || AlgorandFetchFactory.MOCK_TRANSACTIONS.length)
+      }).sort((a, b) => b['confirmed-round'] - a['confirmed-round']).reverse().slice(0, query.get('limit') || AlgorandFetchFactory.MOCK_TRANSACTIONS.length)
     }
   }
 
   static _findAccounts(query) {
     return {
-      accounts: AlgorandFetchFactory.MOCK_ACCOUNTS.slice(0, query.get('limit'))
+      accounts: AlgorandFetchFactory.MOCK_ACCOUNTS.sort((a, b) => b.amount - a.amount).reverse().slice(0, query.get('limit'))
     }
   }
 

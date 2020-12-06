@@ -1,6 +1,6 @@
 import { render, fireEvent } from '@testing-library/vue';
-import { fromHex, padHex, toHex, removeLeadingZeros } from '@/utils/utils';
-import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { fromHex,  toHex, removeLeadingZeros } from '@/utils/utils';
+import AlgorandFetchFactory from '@/../tests/algorand-fetch-mock';
 import AlgoAccounts from '@/pages/algorand/accounts';
 
 const MOCK_TRANSACTIONS = [];
@@ -10,10 +10,10 @@ for (let i = 0; i < 101; i++) {
   MOCK_TRANSACTIONS.push({
 
     id: toHex(i),
-    sender: padHex(toHex(i), WEB3_BALANCEOF_ADDRESS_LENGTH),
+    sender: toHex(i),
     ['asset-transfer-transaction']: {
         amount: randomQuantity,
-        receiver: padHex(toHex(Math.floor(Math.random() * 101)), WEB3_BALANCEOF_ADDRESS_LENGTH),
+        receiver: toHex(Math.floor(Math.random() * 101)),
     },
     ['confirmed-round']: 1,
   });
@@ -31,8 +31,11 @@ for (let transaction of MOCK_TRANSACTIONS) {
   }
 }
 
-Web3.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
-Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
+AlgorandFetchFactory.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
+AlgorandFetchFactory.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
+AlgorandFetchFactory.DECIMALS = 6;
+
+global.fetch = AlgorandFetchFactory.fetch;
 
 describe('accounts', () => {
   it('accounts displays a table titled Accounts with columns for Address, Balance and Percentage', () => {
@@ -45,10 +48,9 @@ describe('accounts', () => {
 
   it('orders accounts by balance', async () => {
     const { getByText } = render(AlgoAccounts);
-    const decimals = await (new (new Web3()).eth.Contract()).methods.decimals().call();
 
-    let addresses = [...Object.keys(MOCK_ACCOUNTS)].sort((a, b) => {
-      return MOCK_ACCOUNTS[b].balance - MOCK_ACCOUNTS[a].balance;
+    let addresses = [...Object.keys(AlgorandFetchFactory.MOCK_ACCOUNTS)].sort((a, b) => {
+      return AlgorandFetchFactory.MOCK_ACCOUNTS[b].balance - AlgorandFetchFactory.MOCK_ACCOUNTS[a].balance;
     });
 
     // Finish all promises
@@ -57,7 +59,7 @@ describe('accounts', () => {
     // top 25 accounts by balance
     for (let i = 0; i < 25; i++) {
       expect(getByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
-      expect(getByText(`${MOCK_ACCOUNTS[addresses[i]].balance / 10 ** decimals}`)).not.toBeNull();
+      expect(getByText(`${AlgorandFetchFactory.MOCK_ACCOUNTS[addresses[i]].balance / 10 ** AlgorandFetchFactory.DECIMALS}`)).not.toBeNull();
     }
 
     // go to page 2
@@ -69,7 +71,7 @@ describe('accounts', () => {
     // next top 25 accounts by balance
     for (let i = 25; i < 50; i++) {
       expect(getByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
-      expect(getByText(`${MOCK_ACCOUNTS[addresses[i]].balance / 10 ** decimals}`)).not.toBeNull();
+      expect(getByText(`${AlgorandFetchFactory.MOCK_ACCOUNTS[addresses[i]].balance / 10 ** AlgorandFetchFactory.DECIMALS}`)).not.toBeNull();
     }
   });
 });

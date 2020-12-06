@@ -1,14 +1,15 @@
 import AlgoTransactionDetailsPage from '@/pages/algorand/transaction/_transaction.vue';
-import { render } from '@testing-library/vue';
-import { padHex, finishPromises } from '@/utils/utils';
+import AlgorandFetchFactory from '@/../tests/algorand-fetch-mock';
+import { render, cleanup } from '@testing-library/vue';
+import { finishPromises } from '@/utils/utils';
 
 const TRANSACTION_ID = '0x13579';
-const CONFIRMED_ROUND = 1;
-const SENDER = padHex('0x2468a', 64);
-const RECEIVER = padHex('0x13579', 64);
+AlgorandFetchFactory.CURRENT_ROUND = 1;
+const SENDER = '0x2468a';
+const RECEIVER = '0x13379';
 const FEE = 100;
 
-const MOCK_TRANSACTIONS = [
+AlgorandFetchFactory.MOCK_TRANSACTIONS = [
   {
     id: TRANSACTION_ID,
     fee: FEE,
@@ -16,11 +17,11 @@ const MOCK_TRANSACTIONS = [
     'asset-transfer-transaction': {
       receiver: RECEIVER,
     },
-    'confirmed-round': CONFIRMED_ROUND,
+    'confirmed-round': AlgorandFetchFactory.CURRENT_ROUND,
   },
 ];
 
-Web3.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
+global.fetch = AlgorandFetchFactory.fetch;
 
 describe('Algorand Transaction Details Page', () => {
   it('Renders algorand transaction details', async () => {
@@ -48,7 +49,7 @@ describe('Algorand Transaction Details Page', () => {
     expect(getByText(TRANSACTION_ID)).not.toBeNull();
     expect(getByText(SENDER)).not.toBeNull();
     expect(getByText(RECEIVER)).not.toBeNull();
-    expect(getByText(CONFIRMED_ROUND.toString())).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.CURRENT_ROUND.toString())).not.toBeNull();
     expect(getByText(FEE.toString())).not.toBeNull();
   });
 });

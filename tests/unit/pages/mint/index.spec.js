@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/vue';
 import mint from '@/pages/mint/index';
-import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
-import { toHex, finishPromises } from '@/utils/utils';
+import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { padHex, finishPromises } from '@/utils/utils';
 import Web3 from 'web3';
 
 const MOCK_ACCOUNTS = {
@@ -23,8 +23,12 @@ const MOCK_ACCOUNTS = {
 const MOCK_WALLET_ADDRESS = '0x12345';
 
 Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
-Web3.VALID_ADDRESSES = [...Object.keys(MOCK_ACCOUNTS)];
+Web3.VALID_ADDRESSES = [];
 Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS;
+
+for (let address in Object.keys(MOCK_ACCOUNTS)) {
+  Web3.VALID_ADDRESSES.push(padHex(address.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH));
+}
 
 global.ethereum = {
   request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),

@@ -103,7 +103,7 @@ async function changeRole(ownerAccount, contractMethod, address) {
       ],
     });
   } catch(e) {
-    console.log(e);
+    console.error(e);
   }
 }
 

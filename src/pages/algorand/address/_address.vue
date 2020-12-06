@@ -2,7 +2,7 @@
   <div>
     <NavBar />
     <!-- TODO, is blacklisted not a thing -->
-    <AddressPage
+    <AddressDetails
       :roles="this.roles"
       :is-blacklisted="false"
       :balance="this.balance"
@@ -29,14 +29,14 @@
 
 <script>
 import NavBar from '@/components/NavBar';
-import AddressPage from '@/components/AddressPage';
+import AddressDetails from '@/components/AddressDetails';
 import { ALGORAND_TRANSACTION_SCHEMA } from '@/utils/constants';
 import Table from '@/components/Table';
 
 export default {
   components: {
     NavBar,
-    AddressPage,
+    AddressDetails,
     Table,
   },
   data() {

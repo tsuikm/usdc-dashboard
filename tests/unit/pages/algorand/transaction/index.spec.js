@@ -1,35 +1,36 @@
 import AlgoTransactionDetailsPage from '@/pages/algorand/transaction/_transaction.vue';
+import AlgorandFetchFactory from '@/../tests/algorand-fetch-mock';
 import { render } from '@testing-library/vue';
 import { padHex, finishPromises } from '@/utils/utils';
 
-const TRANSACTION_ID = '0x13579';
-const CONFIRMED_ROUND = 1;
-const SENDER = padHex('0x2468a', 64);
-const RECEIVER = padHex('0x13579', 64);
-const FEE = 100;
+AlgorandFetchFactory.TRANSACTION_ID = '0x13579';
+AlgorandFetchFactory.CONFIRMED_ROUND = 1;
+AlgorandFetchFactory.SENDER = padHex('0x2468a', 64);
+AlgorandFetchFactory.RECEIVER = padHex('0x13579', 64);
+AlgorandFetchFactory.FEE = 100;
 
-const MOCK_TRANSACTIONS = [
+AlgorandFetchFactory.MOCK_TRANSACTIONS = [
   {
-    id: TRANSACTION_ID,
-    fee: FEE,
-    sender: SENDER,
+    id: AlgorandFetchFactory.TRANSACTION_ID,
+    fee: AlgorandFetchFactory.FEE,
+    sender: AlgorandFetchFactory.SENDER,
     'asset-transfer-transaction': {
-      receiver: RECEIVER,
+      receiver: AlgorandFetchFactory.RECEIVER,
     },
-    'confirmed-round': CONFIRMED_ROUND,
+    'confirmed-round': AlgorandFetchFactory.CONFIRMED_ROUND,
   },
 ];
 
-Web3.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
+global.fetch = AlgorandFetchFactory.fetch;
 
 describe('Algorand Transaction Details Page', () => {
   it('Renders algorand transaction details', async () => {
     const { getByText } = render(AlgoTransactionDetailsPage, {
       mocks: {
         $route: { 
-          path: `/algorand/transaction/${TRANSACTION_ID}`, 
+          path: `/algorand/transaction/${AlgorandFetchFactory.TRANSACTION_ID}`, 
           params: {
-            transaction: TRANSACTION_ID,
+            transaction: AlgorandFetchFactory.TRANSACTION_ID,
           }, 
         },
       },
@@ -45,7 +46,7 @@ describe('Algorand Transaction Details Page', () => {
 
     await finishPromises();
 
-    expect(getByText(TRANSACTION_ID)).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.TRANSACTION_ID)).not.toBeNull();
     expect(getByText(SENDER)).not.toBeNull();
     expect(getByText(RECEIVER)).not.toBeNull();
     expect(getByText(CONFIRMED_ROUND.toString())).not.toBeNull();

@@ -26,6 +26,10 @@ Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 Web3.VALID_ADDRESSES = [...Object.keys(MOCK_ACCOUNTS)].map(address => padHex(address.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH));
 Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS;
 
+for (let address in Object.keys(MOCK_ACCOUNTS)) {
+  Web3.VALID_ADDRESSES.push(padHex(address.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH));
+}
+
 global.ethereum = {
   request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
 };

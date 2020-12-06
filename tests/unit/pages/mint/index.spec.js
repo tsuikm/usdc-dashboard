@@ -71,7 +71,7 @@ describe('Mint page', () => {
     await finishPromises();
 
     console.log(ethereum.request.mock.calls);
-    expect(ethereum.request.mock.calls[3]).toEqual([{
+    expect(ethereum.request.mock.calls[1]).toEqual([{
       method: 'eth_sendTransaction',
       params: [
         {

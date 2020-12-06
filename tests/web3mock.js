@@ -288,8 +288,8 @@ export default class Web3 {
         }
         throw new Error();
       },
-      async getAccounts() {
-        return [Web3.MOCK_ACCOUNTS];
+      async getAccounts(callback) {
+        callback(undefined, Web3.MOCK_ACCOUNTS ? Object.keys(Web3.MOCK_ACCOUNTS) : []);
       },
     };
   }

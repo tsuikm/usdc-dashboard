@@ -56,9 +56,7 @@ describe('OwnerControl', () => {
     const pauserButton = getByText('PAUSER');
     const ownerButton = getByText('OWNER');
     const saveButton = getByText('SAVE');
-    const metamaskButton = getByText('Connect to MetaMask');
-
-    await fireEvent.click(metamaskButton);
+    
     await fireEvent.update(input, SCRATCH_ADDRESS);
 
     await fireEvent.click(masterMinterButton);

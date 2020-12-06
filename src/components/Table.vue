@@ -57,7 +57,7 @@
             <!-- All other links are external; e.g. "https://..." -->
             <a
               v-else-if="field.link"
-              :href="basePath() + field.link(item)"
+              :href="basePath + field.link(item)"
             >
               {{ field.getter(item) }}
             </a>

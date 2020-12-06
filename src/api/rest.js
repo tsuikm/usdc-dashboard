@@ -37,32 +37,44 @@ const indexer = new algosdk.Indexer(token, `${baseServer}/idx2/`, port);
 const algod = new algosdk.Algodv2(token, `${baseServer}/ps2/`, port);
 
 app.get('/algorand', async (req, res) => {
-  try {
-    if (req.query.api === 'indexer') {
-      if (req.query.request === 'transactions') {
-        response = indexer.searchForTransactions(req.query.param);
+  while (true) {
+    try {
+      if (req.query.api === 'indexer') {
+        if (req.query.request === 'transactions') {
+          response = indexer.searchForTransactions(req.query.param);
+        }
+        if (req.query.request === 'blocks') {
+          response = indexer.lookupBlock(req.query.param);
+        }
+        if (req.query.request === 'assets') {
+          response = indexer.lookupAssetByID(req.query.param);
+        }
+        if (req.query.request === 'accounts') {
+          response = indexer.searchAccounts(req.query.param);
+        }
+        if (req.query.request === 'account') {
+          response = indexer.lookupAccountByID(req.query.param);
+        }
+        if (req.query.request === 'account-transactions') {
+          response = indexer.lookupAccountTransactions(req.query.param);
+        }
+        response.query = req.query;
       }
-      if (req.query.request === 'blocks') {
-        response = indexer.lookupBlock(req.query.param);
+      else {
+        if (req.query.request === 'supply') {
+          response = algod.supply(req.query.param);
+        }
       }
-      if (req.query.request === 'assets') {
-        response = indexer.lookupAssetByID(req.query.param);
-      }
-      if (req.query.request === 'accounts') {
-        response = indexer.searchAccounts(req.query.param);
-      }
-      response.query = req.query;
-    }
-    else {
-      if (req.query.request === 'supply') {
-        response = algod.supply(req.query.param);
-      } 
-    }
 
-    res.json(await response.do());
-  }
-  catch {
-    res.status(500).end();
+      return res.json(await response.do());
+    }
+    catch (e) {
+      if (e.message === 'Too Many Requests') {
+        await new Promise(r => setTimeout(r, 2000));
+        continue;
+      }
+      return res.status(500).end();
+    }
   }
 });
 

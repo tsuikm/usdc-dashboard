@@ -1,12 +1,10 @@
 <template>
   <div>
     <NavBar />
-    <!-- TODO, is blacklisted not a thing -->
-    <AddressPage
-      :roles="this.roles"
-      :is-blacklisted="false"
-      :balance="this.balance"
-      :address="this.address"
+    <AddressDetails
+      :roles="roles"
+      :balance="balance"
+      :address="address"
     />
     <h1>Address Transactions</h1>
     <div v-if="transactions.length == 0 && !loading">
@@ -21,145 +19,108 @@
         :schema="ALGORAND_TRANSACTION_SCHEMA"
         :content="transactions"
         :key-field="'Transaction Hash'"
-        @page:change="this.pageChange"
       />
     </div>
   </div>
 </template>
 
 <script>
-import NavBar from '@/components/NavBar';
-import AddressPage from '@/components/AddressPage';
-import { ALGORAND_TRANSACTION_SCHEMA } from '@/utils/constants';
+import AddressDetails from '@/components/AddressDetails';
 import Table from '@/components/Table';
+import NavBar from '@/components/NavBar';
+import { fetchAlgorand, getCurrentRound } from '@/utils/algo-utils';
+import {
+  ALGORAND_TRANSACTION_SCHEMA,
+  ALGORAND_USDC_ASSET_ID,
+  ALGORAND_TXNS_QUERY_LIMIT
+} from '@/utils/constants';
 
 export default {
   components: {
     NavBar,
-    AddressPage,
+    AddressDetails,
     Table,
   },
   data() {
     return {
       balance: null,
-      isBlacklisted: false,
       roles: [],
       transactions: [],
-      address: null,
+      address: this.$route.params.address,
       loading: true,
+      assets: null,
       ALGORAND_TRANSACTION_SCHEMA
     };
   },
   async mounted() {
-    this.address = this.$route.params.address;
+    this.assets = await fetchAlgorand({
+      api: 'indexer',
+      request: 'assets',
+      param: ALGORAND_USDC_ASSET_ID
+    });
 
-    if (this.address.length > WEB3_BALANCEOF_ADDRESS_LENGTH + 2) {
-      // Too long to be a valid Ethereum address
-      this.$router.replace('/404');
-      return;
-    }
-
-    this.address = padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH);
-
-    if (!web3.utils.isAddress(this.address)) {
-      // Not a valid Ethereum address
-      this.$router.replace('/404');
-      return;
-    }
-
-    await Promise.all([
-      this.lookupBalance(),
-      this.lookupBlacklisted(),
-      this.checkRoles(),
-      this.fetchTransactions(),
-    ]);
-    if (this.transactions.length != 0) {
-      await this.fetchAges(this.$refs.table.page);
-    }
+    await this.fetchAddress();
+    await this.fetchTransactions();
+    await this.checkRoles();
     this.loading = false;
-
-
-
-
-
-    try {
-      const transaction = (await fetchAlgorand({
-        api: 'indexer',
-        request: 'transactions',
-        'asset-id': ALGORAND_USDC_ASSET_ID,
-        'txid': this.id,
-        'max-round': await getCurrentRound(),
-      })).transactions[0];
-            
-      this.sender = transaction.sender;
-      this.receiver = transaction['asset-transfer-transaction'].receiver;
-      this.fee = transaction.fee;
-      this.blockNumber = transaction['confirmed-round'];
-      // this.amount = transaction['asset-transfer-transaction'].amount;
-      // this.type = transaction['tx-type'];
-    }
-    catch (e) {
-      this.$router && this.$router.push({ path: '/404' });
-    }
-
-    
   },
   methods: {
-    async lookupBalance() {
-      this.balance = await getBalance(this.address);
-    },
-    async lookupBlacklisted() {
-      this.isBlacklisted = await contract.methods
-        .isBlacklisted(this.address).call();
+    async fetchAddress() {
+      try {
+        const account = (await fetchAlgorand({
+          api: 'indexer',
+          request: 'account',
+          param: this.address
+        })).account;
+
+        this.balance = account.amount / 10 ** this.assets.asset.params.decimals;
+      }
+      catch (e) {
+        this.$router && this.$router.push({ path: '/404' });
+      }
     },
     async checkRoles() {
-      if (await contract.methods.isMinter(this.address).call()) {
+      if (this.address === this.assets.asset.params.reserve) {
         this.roles.push({
-          name: 'Minter',
+          name: 'Reserve',
           color: '#4FE39C',
         });
       }
-      const pauserAddress = await contract.methods.pauser().call();
-      if (pauserAddress === this.address) {
+      if (this.address === this.assets.asset.params.freeze) {
         this.roles.push({
-          name: 'Pauser',
+          name: 'Freeze',
           color: '#1AA3FF',
         });
       }
-      const owner = await contract.methods.owner().call();
-      if (owner === this.address) {
+      if (this.address === this.assets.asset.params.creator) {
         this.roles.push({
-          name: 'Owner',
+          name: 'Creator',
           color: '#9F72FF',
         });
       }
-      const blacklisterAddress = await contract.methods.blacklister().call();
-      if (blacklisterAddress === this.address) {
+      if (this.address === this.assets.asset.params.clawback) {
         this.roles.push({
-          name: 'Blacklister',
+          name: 'Clawback',
           color: '#FF6678',
+        });
+      }
+      if (this.address === this.assets.asset.params.manager) {
+        this.roles.push({
+          name: 'Manager',
+          color: '#000000',
         });
       }
     },
     async fetchTransactions() {
-      this.transactions = await getWalletTransactions(padHex(this.address, WEB3_GET_LOGS_ADDRESS_LENGTH));
-    },
-    async fetchAges(page) {
-      const pageLength = this.$refs.table.pageLength;
-      const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);
-      const promises = [];
-      for (let i = page * pageLength; i < upperBound; i++) {
-        promises.push(fetchAge(this.transactions[i]));
-      }
-      const ages = await Promise.all(promises);
-      for (let i = page * pageLength; i < upperBound; i++) {
-        this.transactions[i].age = ages[i - page * pageLength];
-      }
-    },
-    async pageChange(page) {
-      this.loading = true;
-      await this.fetchAges(page);
-      this.loading = false;
+      this.transactions = (await fetchAlgorand({
+        api: 'indexer',
+        request: 'transactions',
+        address: this.address,
+        'asset-id': ALGORAND_USDC_ASSET_ID,
+        'min-round': 0,
+        'limit': ALGORAND_TXNS_QUERY_LIMIT,
+        'max-round': this.assets['current-round'],
+      })).transactions.reverse();
     },
   },
   head() {
@@ -169,7 +130,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-
-</style>

@@ -77,7 +77,7 @@ export default {
       this.checkRoles(),
       this.fetchTransactions(),
     ]);
-    await this.fetchAges(0);
+    await this.fetchAges(this.$refs.table.page);
     this.loading = false;
   },
   methods: {

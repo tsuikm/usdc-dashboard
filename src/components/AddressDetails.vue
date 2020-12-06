@@ -6,7 +6,7 @@
       <div class="wallet-address">
         <h2> Wallet Address </h2>
         <div class="page-wallet-address">
-          {{ this.$route.params.address }}
+          {{ this.address }}
         </div>
       </div>
 

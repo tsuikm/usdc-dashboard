@@ -9,15 +9,17 @@ const BLOCK_NUMBER = 1;
 const SENDER = padHex('0x2468a', 64);
 const RECEIVER = padHex('0x13579', 64);
 const GAS = 100;
+const VALUE = 12345;
 
 const MOCK_TRANSACTIONS = [
   {
-    data: TRANSACTION_DATA,
+    input: TRANSACTION_DATA,
     transactionHash: TRANSACTION_HASH,
     blockNumber: BLOCK_NUMBER,
     from: SENDER,
     to: RECEIVER,
-    gas: GAS,
+    gasPrice: GAS,
+    value: VALUE,
   },
 ];
 
@@ -42,7 +44,9 @@ describe('Transaction Details Page', () => {
     expect(getByText('Sender')).not.toBeNull();
     expect(getByText('Receiver')).not.toBeNull();
     expect(getByText('Block Number')).not.toBeNull();
-    expect(getByText('Gas')).not.toBeNull();
+    expect(getByText('Gas Price (wei)')).not.toBeNull();
+    expect(getByText('Value (wei)')).not.toBeNull();
+    expect(getByText('Transaction Data')).not.toBeNull();
 
     await finishPromises();
 
@@ -51,5 +55,7 @@ describe('Transaction Details Page', () => {
     expect(getByText(RECEIVER)).not.toBeNull();
     expect(getByText(BLOCK_NUMBER.toString())).not.toBeNull();
     expect(getByText(GAS.toString())).not.toBeNull();
+    expect(getByText(VALUE.toString())).not.toBeNull();
+    expect(getByText(TRANSACTION_DATA)).not.toBeNull();
   });
 });

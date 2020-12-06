@@ -18,7 +18,7 @@ Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS;
 
 describe('Address Details Page', () => {
-  it('Renders AddressPage component', async () => {
+  it('Renders AddressDetails component', async () => {
     const { getByText } = render(AddressDetailsPage, {
       mocks: {
         $route: {
@@ -29,6 +29,9 @@ describe('Address Details Page', () => {
           query: {
             page: 1, // Load with ?page=1
           },
+        },
+        $router: {
+          replace: () => {},
         },
         $refs: {
           table: {
@@ -46,7 +49,7 @@ describe('Address Details Page', () => {
     await finishPromises();
   });
 
-  it('Renders AddressPage component and address transaction table', async () => {
+  it('Renders AddressDetails component and address transaction table', async () => {
     const { getByText } = render(AddressDetailsPage, {
       mocks: {
         $route: {
@@ -57,6 +60,9 @@ describe('Address Details Page', () => {
           query: {
             page: 1, // Load with ?page=1
           },
+        },
+        $router: {
+          replace: () => {},
         },
         $refs: {
           table: {
@@ -75,5 +81,34 @@ describe('Address Details Page', () => {
     expect(getByText('Block Number')).not.toBeNull();
 
     await finishPromises();
+  });
+
+  it('Redirects to /404 on invalid address', async () => {
+    const routeReplace = jest.fn();
+    render(AddressDetailsPage, {
+      mocks: {
+        $route: {
+          path: '/address/asjkndgkljasbndklganjkdklasjndgklasjng',
+          params: {
+            address: 'asjkndgkljasbndklganjkdklasjndgklasjng',
+          },
+          query: {
+            page: 1, // Load with ?page=1
+          },
+        },
+        $router: {
+          replace: routeReplace,
+        },
+        $refs: {
+          table: {
+            pageLength: 1,
+          },
+        },
+      },
+    });
+
+    
+    expect(routeReplace.mock.calls).toHaveLength(1);
+    expect(routeReplace.mock.calls[0][0]).toBe('/404');
   });
 });

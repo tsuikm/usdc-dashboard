@@ -15,6 +15,12 @@ const BLOCK_NUMBER_LABEL = 'Block Number';
 const GAS = 0;
 const GAS_LABEL = 'Gas';
 
+const VALUE = 12345;
+const VALUE_LABEL = 'Value';
+
+const DATA = 'abcdef01234567890';
+const DATA_LABEL = 'Data';
+
 describe('Transaction Details', () => {
   it('Renders transaction details correctly for correct hash', async () => {
     const { getByText } = render(TransactionDetails, {
@@ -33,6 +39,14 @@ describe('Transaction Details', () => {
           label: GAS_LABEL,
           value: GAS,
         },
+        value: {
+          label: VALUE_LABEL,
+          value: VALUE,
+        },
+        data: {
+          label: DATA_LABEL,
+          value: DATA,
+        },
       },
     });
 
@@ -41,6 +55,8 @@ describe('Transaction Details', () => {
     expect(getByText('Receiver')).not.toBeNull();
     expect(getByText(`${BLOCK_NUMBER_LABEL}`)).not.toBeNull();
     expect(getByText(`${GAS_LABEL}`)).not.toBeNull();
+    expect(getByText(`${VALUE_LABEL}`)).not.toBeNull();
+    expect(getByText(`${DATA_LABEL}`)).not.toBeNull();
 
     // Finish all promises
     await finishPromises();
@@ -49,6 +65,8 @@ describe('Transaction Details', () => {
     expect(getByText(RECEIVER_ADDRESS)).not.toBeNull();
     expect(getByText(BLOCK_NUMBER)).not.toBeNull();
     expect(getByText(GAS.toString())).not.toBeNull();
+    expect(getByText(VALUE.toString())).not.toBeNull();
+    expect(getByText(DATA.toString())).not.toBeNull();
   });
 
   it('Links to sender and receiver with blockchain awareness', async () => {
@@ -70,6 +88,14 @@ describe('Transaction Details', () => {
         gas: {
           label: GAS_LABEL,
           value: GAS,
+        },
+        value: {
+          label: VALUE_LABEL,
+          value: VALUE,
+        },
+        data: {
+          label: DATA_LABEL,
+          value: DATA,
         },
       },
       mocks: {

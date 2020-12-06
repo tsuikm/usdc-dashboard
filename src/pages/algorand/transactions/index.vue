@@ -48,7 +48,6 @@ export default {
   methods: {
     async fetchTransactions() {
       this.transactions = (await fetchAlgorand({
-        api: 'indexer',
         request: 'transactions',
         'asset-id': ALGORAND_USDC_ASSET_ID,
         'min-round': 0,

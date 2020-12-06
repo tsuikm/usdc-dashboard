@@ -77,7 +77,6 @@ export default {
     },
     async lookupRoles() {
       const roles = await fetchAlgorand({
-        api: 'indexer',
         request: 'assets',
         param: ALGORAND_USDC_ASSET_ID,
       });
@@ -97,7 +96,6 @@ export default {
     async lookupTransactions() {
       const currentBlock = await getCurrentRound();
       const transactions = await fetchAlgorand({
-        api: 'indexer',
         request: 'transactions',
         'asset-id': ALGORAND_USDC_ASSET_ID,
         'min-round': currentBlock - ALGORAND_TXNS_LOOKBACK,

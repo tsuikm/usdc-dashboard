@@ -34,36 +34,27 @@ const token = {
 };
 
 const indexer = new algosdk.Indexer(token, `${baseServer}/idx2/`, port);
-const algod = new algosdk.Algodv2(token, `${baseServer}/ps2/`, port);
 
 app.get('/algorand', async (req, res) => {
   while (true) {
     try {
       let response;
-
-      if (req.query.api === 'indexer') {
-        if (req.query.request === 'transactions') {
-          response = indexer.searchForTransactions(req.query.param);
-        }
-        if (req.query.request === 'blocks') {
-          response = indexer.lookupBlock(req.query.param);
-        }
-        if (req.query.request === 'assets') {
-          response = indexer.lookupAssetByID(req.query.param);
-        }
-        if (req.query.request === 'accounts') {
-          response = indexer.searchAccounts(req.query.param);
-        }
-        if (req.query.request === 'account') {
-          response = indexer.lookupAccountByID(req.query.param);
-        }
-        response.query = req.query;
+      if (req.query.request === 'transactions') {
+        response = indexer.searchForTransactions(req.query.param);
       }
-      else {
-        if (req.query.request === 'supply') {
-          response = algod.supply(req.query.param);
-        }
+      if (req.query.request === 'blocks') {
+        response = indexer.lookupBlock(req.query.param);
       }
+      if (req.query.request === 'assets') {
+        response = indexer.lookupAssetByID(req.query.param);
+      }
+      if (req.query.request === 'accounts') {
+        response = indexer.searchAccounts(req.query.param);
+      }
+      if (req.query.request === 'account') {
+        response = indexer.lookupAccountByID(req.query.param);
+      }
+      response.query = req.query;
 
       return res.json(await response.do());
     }

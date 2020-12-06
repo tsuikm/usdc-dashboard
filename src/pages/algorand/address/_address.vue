@@ -54,7 +54,6 @@ export default {
   },
   async mounted() {
     this.assets = await fetchAlgorand({
-      api: 'indexer',
       request: 'assets',
       param: ALGORAND_USDC_ASSET_ID,
     });
@@ -68,7 +67,6 @@ export default {
     async fetchAddress() {
       try {
         const account = (await fetchAlgorand({
-          api: 'indexer',
           request: 'account',
           param: this.address,
         })).account;
@@ -113,7 +111,6 @@ export default {
     },
     async fetchTransactions() {
       this.transactions = (await fetchAlgorand({
-        api: 'indexer',
         request: 'transactions',
         address: this.address,
         'asset-id': ALGORAND_USDC_ASSET_ID,

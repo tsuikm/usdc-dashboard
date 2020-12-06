@@ -40,7 +40,6 @@ export default {
 
     try {
       const transaction = (await fetchAlgorand({
-        api: 'indexer',
         request: 'transactions',
         'asset-id': ALGORAND_USDC_ASSET_ID,
         'txid': this.id,

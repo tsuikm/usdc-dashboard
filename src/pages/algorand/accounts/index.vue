@@ -44,7 +44,6 @@ export default {
      */
     async getAccounts() {
       const assets = await fetchAlgorand({
-        api: 'indexer',
         request: 'assets',
         param: constants.ALGORAND_USDC_ASSET_ID,
       });
@@ -52,7 +51,6 @@ export default {
       const totalSupply = assets.asset.params.total / (10 ** decimals);
 
       const accounts = await fetchAlgorand({
-        api: 'indexer',
         request: 'accounts',
         limit: constants.ALGORAND_ACCOUNTS_QUERY_LIMIT,
         'asset-id': constants.ALGORAND_USDC_ASSET_ID,

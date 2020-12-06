@@ -7,7 +7,6 @@ export async function fetchAlgorand(query) {
 
 export async function getCurrentRound() {
   const assets = await fetchAlgorand({
-    api: 'indexer',
     request: 'assets',
     param: ALGORAND_USDC_ASSET_ID,
   });

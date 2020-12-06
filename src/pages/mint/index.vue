@@ -15,6 +15,17 @@
       ]"
       @submit="this.submit"
     />
+    <div class="error"> 
+      <span v-if="showMinterWarning">
+          <md-icon>error</md-icon> Error: You are not signed in as a minter of this contract and cannot mint tokens.
+      </span>
+      <span v-if="showAddressWarning">
+          <md-icon>error</md-icon> Error: Please input a valid address.
+      </span>
+      <span v-if="showAmountWarning">
+          <md-icon>error</md-icon> Error: Please input a valid amount.
+      </span>
+    </div>
     <ConnectToMetamask ref="connectToMetamaskButton" />
   </div>
 </template>
@@ -37,35 +48,51 @@ export default {
   },
   data() {
     return {
+      showMinterWarning: false,
+      showAddressWarning: false,
+      showAmountWarning: false,
+      address: '',
       accounts: [],
     };
   },
   methods: {
     async submit(toAddress, amount) {
-      
       this.accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
 
       let minterAccount = null;
-      for (var account in this.accounts) {
+      for (let account of this.accounts) {
         if (await contract.methods.isMinter(account).call()) {
           minterAccount = account;
           break;
         }
       }
 
-      // if (minterAccount === null) {
-      //   this.showMinterWarning = true;
-      //   return;
-      // }
+      if (minterAccount === null) {
+        this.showMinterWarning = true;
+        return;
+      }
+
+      this.address = padHex(toAddress.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
+
+      if (!web3.utils.isAddress(this.address)) {
+        // Not a valid Ethereum address
+        this.showAddressWarning = true;
+        return;
+      }
+      if (isNaN(amount)) {
+        // Not a valid Ethereum address
+        this.showAmountWarning = true;
+        return;
+      }
 
       try {
         await ethereum.request({
           method: 'eth_sendTransaction',
           params: [
             {
-              from: this.accounts[0],
+              from: minterAccount,
               to: USDC_CONTRACT_ADDRESS,
-              data: contract.methods.mint(toAddress, toHex(Number(amount) * 1000000)).encodeABI(),
+              data: contract.methods.mint(this.address, toHex(Number(amount) * 1000000)).encodeABI(),
               gasPrice: DEFAULT_GAS_PRICE,
             },
           ],
@@ -83,3 +110,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2%;
+}
+
+</style>

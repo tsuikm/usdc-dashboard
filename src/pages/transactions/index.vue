@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar />
     <h1>USDC Transactions</h1>
     <Table
       ref="table"
@@ -16,7 +15,6 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 import { TRANSACTION_SCHEMA } from '@/utils/constants';
 import { fetchAge, getAllTransactions } from '@/utils/web3utils';
@@ -24,7 +22,6 @@ import { fetchAge, getAllTransactions } from '@/utils/web3utils';
 export default {
   components: {
     Table,
-    NavBar,
   },
   data() {
     return {

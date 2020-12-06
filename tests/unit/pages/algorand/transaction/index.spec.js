@@ -1,23 +1,23 @@
 import AlgoTransactionDetailsPage from '@/pages/algorand/transaction/_transaction.vue';
 import AlgorandFetchFactory from '@/../tests/algorand-fetch-mock';
-import { render } from '@testing-library/vue';
-import { padHex, finishPromises } from '@/utils/utils';
+import { render, cleanup } from '@testing-library/vue';
+import { finishPromises } from '@/utils/utils';
 
-AlgorandFetchFactory.TRANSACTION_ID = '0x13579';
-AlgorandFetchFactory.CONFIRMED_ROUND = 1;
-AlgorandFetchFactory.SENDER = padHex('0x2468a', 64);
-AlgorandFetchFactory.RECEIVER = padHex('0x13579', 64);
-AlgorandFetchFactory.FEE = 100;
+const TRANSACTION_ID = '0x13579';
+AlgorandFetchFactory.CURRENT_ROUND = 1;
+const SENDER = '0x2468a';
+const RECEIVER = '0x13379';
+const FEE = 100;
 
 AlgorandFetchFactory.MOCK_TRANSACTIONS = [
   {
-    id: AlgorandFetchFactory.TRANSACTION_ID,
-    fee: AlgorandFetchFactory.FEE,
-    sender: AlgorandFetchFactory.SENDER,
+    id: TRANSACTION_ID,
+    fee: FEE,
+    sender: SENDER,
     'asset-transfer-transaction': {
-      receiver: AlgorandFetchFactory.RECEIVER,
+      receiver: RECEIVER,
     },
-    'confirmed-round': AlgorandFetchFactory.CONFIRMED_ROUND,
+    'confirmed-round': AlgorandFetchFactory.CURRENT_ROUND,
   },
 ];
 
@@ -28,9 +28,9 @@ describe('Algorand Transaction Details Page', () => {
     const { getByText } = render(AlgoTransactionDetailsPage, {
       mocks: {
         $route: { 
-          path: `/algorand/transaction/${AlgorandFetchFactory.TRANSACTION_ID}`, 
+          path: `/algorand/transaction/${TRANSACTION_ID}`, 
           params: {
-            transaction: AlgorandFetchFactory.TRANSACTION_ID,
+            transaction: TRANSACTION_ID,
           }, 
         },
       },
@@ -46,10 +46,10 @@ describe('Algorand Transaction Details Page', () => {
 
     await finishPromises();
 
-    expect(getByText(AlgorandFetchFactory.TRANSACTION_ID)).not.toBeNull();
+    expect(getByText(TRANSACTION_ID)).not.toBeNull();
     expect(getByText(SENDER)).not.toBeNull();
     expect(getByText(RECEIVER)).not.toBeNull();
-    expect(getByText(CONFIRMED_ROUND.toString())).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.CURRENT_ROUND.toString())).not.toBeNull();
     expect(getByText(FEE.toString())).not.toBeNull();
   });
 });

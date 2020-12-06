@@ -93,6 +93,10 @@ export default class AlgorandFetchFactory {
         const minRound = query.get('min-round') || 0;
         const maxRound = query.get('max-round') || AlgorandFetchFactory.CURRENT_ROUND;
 
+        if (query.get('txid')) {
+          return transaction.id == query.get('txid');
+        }
+
         return round >= minRound && round <= maxRound;
       }).slice(0, query.get('limit') || AlgorandFetchFactory.MOCK_TRANSACTIONS.length)
     }

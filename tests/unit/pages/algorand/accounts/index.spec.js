@@ -1,5 +1,5 @@
 import { render, fireEvent } from '@testing-library/vue';
-import { fromHex,  toHex, removeLeadingZeros } from '@/utils/utils';
+import { toHex } from '@/utils/utils';
 import AlgorandFetchFactory from '@/../tests/algorand-fetch-mock';
 import AlgoAccounts from '@/pages/algorand/accounts';
 
@@ -50,7 +50,7 @@ describe('accounts', () => {
     const { getByText } = render(AlgoAccounts);
 
     let addresses = [...Object.keys(AlgorandFetchFactory.MOCK_ACCOUNTS)].sort((a, b) => {
-      return AlgorandFetchFactory.MOCK_ACCOUNTS[b].balance - AlgorandFetchFactory.MOCK_ACCOUNTS[a].balance;
+      return AlgorandFetchFactory.MOCK_ACCOUNTS[b].amount - AlgorandFetchFactory.MOCK_ACCOUNTS[a].amount;
     });
 
     // Finish all promises
@@ -58,8 +58,9 @@ describe('accounts', () => {
 
     // top 25 accounts by balance
     for (let i = 0; i < 25; i++) {
-      expect(getByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
-      expect(getByText(`${AlgorandFetchFactory.MOCK_ACCOUNTS[addresses[i]].balance / 10 ** AlgorandFetchFactory.DECIMALS}`)).not.toBeNull();
+      console.log(i);
+      expect(getByText(addresses[i])).not.toBeNull();
+      expect(getByText(`${AlgorandFetchFactory.MOCK_ACCOUNTS[addresses[i]].amount / 10 ** AlgorandFetchFactory.DECIMALS}`)).not.toBeNull();
     }
 
     // go to page 2
@@ -70,8 +71,8 @@ describe('accounts', () => {
 
     // next top 25 accounts by balance
     for (let i = 25; i < 50; i++) {
-      expect(getByText(removeLeadingZeros(addresses[i]))).not.toBeNull();
-      expect(getByText(`${AlgorandFetchFactory.MOCK_ACCOUNTS[addresses[i]].balance / 10 ** AlgorandFetchFactory.DECIMALS}`)).not.toBeNull();
+      expect(getByText(addresses[i])).not.toBeNull();
+      expect(getByText(`${AlgorandFetchFactory.MOCK_ACCOUNTS[addresses[i]].amount / 10 ** AlgorandFetchFactory.DECIMALS}`)).not.toBeNull();
     }
   });
 });

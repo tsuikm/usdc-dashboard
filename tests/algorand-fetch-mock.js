@@ -104,7 +104,7 @@ export default class AlgorandFetchFactory {
 
   static _findAccounts(query) {
     return {
-      accounts: AlgorandFetchFactory.MOCK_ACCOUNTS.sort((a, b) => b.amount - a.amount).reverse().slice(0, query.get('limit'))
+      accounts: [...Object.values(AlgorandFetchFactory.MOCK_ACCOUNTS)].slice(0, query.get('limit')),
     }
   }
 

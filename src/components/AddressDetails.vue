@@ -55,6 +55,11 @@ export default {
   props: {
 
     /**
+     * @param {String}
+     */
+    address: String,
+
+    /**
      * @param {Role[]} - the role(s) the wallet address has.
      * @typedef {Role} {
      *   name: {String} - the name of the Role (eg. 'Pauser').

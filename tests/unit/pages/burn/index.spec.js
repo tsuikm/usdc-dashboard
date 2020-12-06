@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/vue';
 import burn from '@/pages/burn/index';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
-import { toHex } from '@/utils/utils';
+import { toHex, finishPromises } from '@/utils/utils';
 import Web3 from 'web3';
 
 const MOCK_ACCOUNTS = {
@@ -71,7 +71,6 @@ describe('Burn page', () => {
   });
 
   test('Error renders', async () => {
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const MOCK_WALLET_ADDRESS_ERROR = '0x1';
     Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
     Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS_ERROR;
@@ -79,14 +78,20 @@ describe('Burn page', () => {
       request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
     };
 
-    const { getByPlaceholderText, queryByText } = render(burn);
+    const { getByPlaceholderText, queryByText, getByText } = render(burn);
     const AMOUNT_TEXT = '100';
     const submitButton = queryByText('SUBMIT');
     const amountInput = getByPlaceholderText('Amount: i.e. 0');
 
+    const MINTER_ERROR_MESSAGE = 'Error: You are not signed in as a minter of this contract and cannot burn tokens.';
+
     await fireEvent.update(amountInput, AMOUNT_TEXT);
     await fireEvent.click(submitButton);
-    expect(consoleSpy).toHaveBeenCalled();
+
+    await finishPromises();
+
+    expect(getByText(MINTER_ERROR_MESSAGE)).not.toBeNull();
+
   });
 
   test('ConnectToMetamask component renders', async () => {

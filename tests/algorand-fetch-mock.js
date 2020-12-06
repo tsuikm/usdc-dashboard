@@ -103,9 +103,15 @@ export default class AlgorandFetchFactory {
   }
 
   static _findAccounts(query) {
-    return {
-      accounts: [...Object.values(AlgorandFetchFactory.MOCK_ACCOUNTS)].slice(0, query.get('limit')),
+    const addresses = [...Object.keys(AlgorandFetchFactory.MOCK_ACCOUNTS)].slice(0, query.get('limit'));
+    const accounts = [];
+
+    for (let address of addresses) {
+      accounts.push(AlgorandFetchFactory.MOCK_ACCOUNTS[address]);
+      AlgorandFetchFactory.MOCK_ACCOUNTS[address].address = address;
     }
+
+    return { accounts }
   }
 
   static _findSupply(query) {

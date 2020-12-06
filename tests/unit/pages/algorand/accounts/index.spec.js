@@ -1,5 +1,5 @@
 import { render, fireEvent } from '@testing-library/vue';
-import { toHex } from '@/utils/utils';
+import { toHex, fromHex, finishPromises } from '@/utils/utils';
 import AlgorandFetchFactory from '@/../tests/algorand-fetch-mock';
 import AlgoAccounts from '@/pages/algorand/accounts';
 
@@ -54,11 +54,10 @@ describe('accounts', () => {
     });
 
     // Finish all promises
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await finishPromises();
 
     // top 25 accounts by balance
     for (let i = 0; i < 25; i++) {
-      console.log(i);
       expect(getByText(addresses[i])).not.toBeNull();
       expect(getByText(`${AlgorandFetchFactory.MOCK_ACCOUNTS[addresses[i]].amount / 10 ** AlgorandFetchFactory.DECIMALS}`)).not.toBeNull();
     }

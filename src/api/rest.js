@@ -55,9 +55,6 @@ app.get('/algorand', async (req, res) => {
         if (req.query.request === 'account') {
           response = indexer.lookupAccountByID(req.query.param);
         }
-        if (req.query.request === 'account-transactions') {
-          response = indexer.lookupAccountTransactions(req.query.param);
-        }
         response.query = req.query;
       }
       else {

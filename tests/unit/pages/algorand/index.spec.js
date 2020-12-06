@@ -61,7 +61,7 @@ describe('Algorand Summary Page', () => {
     const { getByText } = render(AlgoSummaryPage);
 
     await finishPromises();
-    
+
     expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[0]['confirmed-round'].toString() + ' / ' + toHex(AlgorandFetchFactory.MOCK_TRANSACTIONS[0]['confirmed-round']))).not.toBeNull();
     expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[1]['confirmed-round'].toString() + ' / ' + toHex(AlgorandFetchFactory.MOCK_TRANSACTIONS[1]['confirmed-round']))).not.toBeNull();
     expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[2]['confirmed-round'].toString() + ' / ' + toHex(AlgorandFetchFactory.MOCK_TRANSACTIONS[2]['confirmed-round']))).not.toBeNull();

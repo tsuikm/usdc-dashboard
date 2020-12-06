@@ -13,7 +13,6 @@
     </div>
     <div v-else>
       <Table
-        ref="table"
         :loading="loading"
         name=""
         :total-items="transactions.length"

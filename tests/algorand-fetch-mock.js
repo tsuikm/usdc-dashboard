@@ -48,6 +48,7 @@ export default class AlgorandFetchFactory {
         if (query.get('request') === 'assets') return AlgorandFetchFactory._findAssets(query);
         if (query.get('request') === 'transactions') return AlgorandFetchFactory._findTransactions(query);
         if (query.get('request') === 'accounts') return AlgorandFetchFactory._findAccounts(query);
+        if (query.get('request') === 'account') return AlgorandFetchFactory._findAccountByAddress(query.get('param'));
         if (query.get('request') === 'supply') return AlgorandFetchFactory._findSupply(query);
       },
     };
@@ -61,7 +62,7 @@ export default class AlgorandFetchFactory {
    * Finds the account address that matches the predicate when the account object is passed in.
    * @private
    *
-   * @param {function(account: Object):boolean} predicate.
+   * @param {function(account: Account):boolean} predicate.
    * @return {String} - the account address.
    */
   static _findAccount(predicate) {
@@ -96,9 +97,15 @@ export default class AlgorandFetchFactory {
         if (query.get('txid')) {
           return transaction.id == query.get('txid');
         }
+        if (query.get('address')) {
+          return transaction.sender === query.get('address') ||
+                 transaction['asset-transfer-transaction'].receiver === query.get('address');
+        }
 
         return round >= minRound && round <= maxRound;
-      }).sort((a, b) => b['confirmed-round'] - a['confirmed-round']).reverse().slice(0, query.get('limit') || AlgorandFetchFactory.MOCK_TRANSACTIONS.length)
+      }).sort((a, b) => b['confirmed-round'] - a['confirmed-round'])
+        .reverse()
+        .slice(0, query.get('limit') || AlgorandFetchFactory.MOCK_TRANSACTIONS.length)
     }
   }
 
@@ -112,6 +119,12 @@ export default class AlgorandFetchFactory {
     }
 
     return { accounts }
+  }
+
+  static _findAccountByAddress(address) {
+    return {
+      account: AlgorandFetchFactory.MOCK_ACCOUNTS[address]
+    }
   }
 
   static _findSupply(query) {

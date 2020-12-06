@@ -2,7 +2,15 @@
   <div
     id="navbar"
   >
-    <img src="@/assets/logo.svg">
+    <nuxt-link 
+      to="/"
+      data-testid="ethereum-link"
+      :class="linkClass('')"
+      @mouseover.native="hover('Ethereum')"
+    >
+      <v-img :src="require('../assets/logo.svg')" width="30"/>
+    </nuxt-link>
+
     <div
       id="menu-items"
       :class="menuOpen ? 'open' : ''"

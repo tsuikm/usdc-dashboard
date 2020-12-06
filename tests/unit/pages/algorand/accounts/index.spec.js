@@ -35,6 +35,8 @@ AlgorandFetchFactory.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
 AlgorandFetchFactory.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 AlgorandFetchFactory.DECIMALS = 6;
 
+global.fetch = AlgorandFetchFactory.fetch;
+
 describe('accounts', () => {
   it('accounts displays a table titled Accounts with columns for Address, Balance and Percentage', () => {
     const { getByText, getAllByText } = render(AlgoAccounts);

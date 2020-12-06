@@ -34,7 +34,7 @@ const MOCK_TRANSACTIONS = [
   },
   {
     id: '0x13579',
-    sender: MOCK_WALLET_ADDRESS,
+    sender: '0x103904ba',
     'asset-transfer-transaction': {
         amount: 4001,
         receiver: '0x2468a',

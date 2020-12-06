@@ -29,8 +29,6 @@
 <script>
 import NavBar from '@/components/NavBar';
 import AddressPage from '@/components/AddressPage';
-import { padHex } from '@/utils/utils';
-import { contract, getBalance } from '@/utils/web3utils';
 import { getWalletTransactions, fetchAge, web3 } from '@/utils/web3utils';
 import { TRANSACTION_SCHEMA, WEB3_GET_LOGS_ADDRESS_LENGTH, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import Table from '@/components/Table';

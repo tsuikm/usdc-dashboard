@@ -1,5 +1,23 @@
 import { USDC_SOLANA_CONTRACT_ADDRESS } from '@/utils/constants';
 
+export const SOLANA_TRANSACTION_SCHEMA = [
+  {
+    name: 'Transaction Signature',
+    getter(t) {
+      return t.signature;
+    },
+    link(t) {
+      return `transaction/${t.signature}`;
+    },
+  },
+  {
+    name: 'Slot',
+    getter(t) {
+      return t.slot;
+    },
+  },
+];
+
 // Getting token information
 export const getTokenInformation = async () => {
   const response = await fetch('https://api.mainnet-beta.solana.com/', {

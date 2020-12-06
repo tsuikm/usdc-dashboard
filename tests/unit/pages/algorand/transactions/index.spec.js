@@ -1,4 +1,5 @@
 import { fireEvent, render } from '@testing-library/vue';
+import AlgorandFetchFactory from '@/../tests/algorand-fetch-mock';
 import { padHex, removeLeadingZeros, finishPromises } from '@/utils/utils';
 import AlgoTransactions from '@/pages/algorand/transactions';
 
@@ -70,7 +71,9 @@ const MOCK_TRANSACTIONS = [
   },
 ];
 
-Algo.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
+AlgorandFetchFactory.MOCK_TRANSACTIONS = MOCK_TRANSACTIONS;
+
+global.fetch = AlgorandFetchFactory.fetch;
 
 describe('_address.vue', () => {
   it('renders all transactions correctly', async () => {
@@ -80,18 +83,17 @@ describe('_address.vue', () => {
 
     expect(getByTestId('md-table')).not.toBeNull();
 
-    expect(getByText(MOCK_TRANSACTIONS[6].id)).not.toBeNull();
-    expect(getByText((parseInt(MOCK_TRANSACTIONS[6]['asset-transfer-transaction'].amount) / 10 ** 6).toString())).not.toBeNull();
-    expect(getByText(removeLeadingZeros(MOCK_TRANSACTIONS[6].sender))).not.toBeNull();
-    expect(getByText(removeLeadingZeros(MOCK_TRANSACTIONS[6]['asset-transfer-transaction'].receiver))).not.toBeNull();
-    expect(getByText(MOCK_TRANSACTIONS[6]['current-round'].toString())).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[6].id)).not.toBeNull();
+    expect(getByText((parseInt(AlgorandFetchFactory.MOCK_TRANSACTIONS[6]['asset-transfer-transaction'].amount) / 10 ** 6).toString())).not.toBeNull();
+    expect(getByText(removeLeadingZeros(AlgorandFetchFactory.MOCK_TRANSACTIONS[6].sender))).not.toBeNull();
+    expect(getByText(removeLeadingZeros(AlgorandFetchFactory.MOCK_TRANSACTIONS[6]['asset-transfer-transaction'].receiver))).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[6]['current-round'].toString())).not.toBeNull();
   });
 
   it('paginates correctly', async () => {
     // Push more transactions to have over 25 and enable pagination
     for (let i = 0; i < 21; i++) {
-      Algo.MOCK_TRANSACTIONS.push({
-
+      AlgorandFetchFactory.AlgorandFetchFactory.MOCK_TRANSACTIONS.push({
 
         id: `0x${i.toString(16)}`,
         sender: MOCK_WALLET_ADDRESS,
@@ -112,21 +114,21 @@ describe('_address.vue', () => {
 
     expect(getByTestId('md-table')).not.toBeNull();
 
-    expect(getByText(MOCK_TRANSACTIONS[2].id)).not.toBeNull();
-    expect(getByText((parseInt(MOCK_TRANSACTIONS[2]['asset-transfer-transaction'].amount) / 10 ** 6).toString())).not.toBeNull();
-    expect(getAllByText(removeLeadingZeros(MOCK_TRANSACTIONS[2].sender))).not.toBeNull();
-    expect(getByText(removeLeadingZeros(MOCK_TRANSACTIONS[2]['asset-transfer-transaction'].receiver))).not.toBeNull();
-    expect(getByText(MOCK_TRANSACTIONS[2]['current-round'].toString())).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[2].id)).not.toBeNull();
+    expect(getByText((parseInt(AlgorandFetchFactory.MOCK_TRANSACTIONS[2]['asset-transfer-transaction'].amount) / 10 ** 6).toString())).not.toBeNull();
+    expect(getAllByText(removeLeadingZeros(AlgorandFetchFactory.MOCK_TRANSACTIONS[2].sender))).not.toBeNull();
+    expect(getByText(removeLeadingZeros(AlgorandFetchFactory.MOCK_TRANSACTIONS[2]['asset-transfer-transaction'].receiver))).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[2]['current-round'].toString())).not.toBeNull();
 
     // Go to next page
     await fireEvent.click(getByText('navigate_next'));
 
     await finishPromises();
 
-    expect(getByText(MOCK_TRANSACTIONS[3].id)).not.toBeNull();
-    expect(getByText((parseInt(MOCK_TRANSACTIONS[3]['asset-transfer-transaction'].amount) / 10 ** 6).toString())).not.toBeNull();
-    expect(getByText(removeLeadingZeros(MOCK_TRANSACTIONS[3].sender))).not.toBeNull();
-    expect(getAllByText(removeLeadingZeros(MOCK_TRANSACTIONS[3]['asset-transfer-transaction'].receiver))).not.toBeNull();
-    expect(getByText(MOCK_TRANSACTIONS[3]['current-round'].toString())).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[3].id)).not.toBeNull();
+    expect(getByText((parseInt(AlgorandFetchFactory.MOCK_TRANSACTIONS[3]['asset-transfer-transaction'].amount) / 10 ** 6).toString())).not.toBeNull();
+    expect(getByText(removeLeadingZeros(AlgorandFetchFactory.MOCK_TRANSACTIONS[3].sender))).not.toBeNull();
+    expect(getAllByText(removeLeadingZeros(AlgorandFetchFactory.MOCK_TRANSACTIONS[3]['asset-transfer-transaction'].receiver))).not.toBeNull();
+    expect(getByText(AlgorandFetchFactory.MOCK_TRANSACTIONS[3]['current-round'].toString())).not.toBeNull();
   });
 });

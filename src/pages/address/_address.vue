@@ -74,7 +74,7 @@ export default {
       this.checkRoles(),
       this.fetchTransactions(),
     ]);
-    await this.fetchAges(0);
+    await this.fetchAges(this.$refs.table.page);
     this.loading = false;
   },
   methods: {
@@ -129,7 +129,11 @@ export default {
         this.transactions[i].age = ages[i - page * pageLength];
       }
     },
-    pageChange() {},
+    async pageChange(page) {
+      this.loading = true;
+      await this.fetchAges(page);
+      this.loading = false;
+    },
   },
   head() {
     return {

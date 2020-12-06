@@ -36,7 +36,7 @@ export default {
   },
   async mounted() {
     await this.fetchTransactions();
-    await this.fetchAges(0);
+    await this.fetchAges(this.$refs.table.page);
     this.loading = false;
   },
   methods: {

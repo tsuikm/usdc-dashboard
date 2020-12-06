@@ -5,7 +5,7 @@
   <div>
     <nuxt-link 
       to="/"
-      data-testid="ethereum-link"
+      data-testid="logo-link"
       :class="linkClass('')"
       @mouseover.native="hover('Ethereum')"
     >

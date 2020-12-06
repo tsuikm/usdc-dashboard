@@ -33,8 +33,8 @@ Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 
 describe('accounts', () => {
   it('accounts displays a table titled Accounts with columns for Address, Balance and Percentage', () => {
-    const { getByText, getAllByText } = render(accounts);
-    expect(getAllByText('Accounts')).toHaveLength(2);
+    const { getByText } = render(accounts);
+    expect(getByText('Accounts')).not.toBeNull();
     expect(getByText('Address')).not.toBeNull();
     expect(getByText('Balance')).not.toBeNull();
     expect(getByText('Percentage')).not.toBeNull();

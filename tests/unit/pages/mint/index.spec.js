@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/vue';
 import mint from '@/pages/mint/index';
-import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
-import { toHex, finishPromises } from '@/utils/utils';
+import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { toHex, finishPromises, padHex } from '@/utils/utils';
 import Web3 from 'web3';
 
 const MOCK_ACCOUNTS = {
@@ -23,7 +23,7 @@ const MOCK_ACCOUNTS = {
 const MOCK_WALLET_ADDRESS = '0x12345';
 
 Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
-Web3.VALID_ADDRESSES = [...Object.keys(MOCK_ACCOUNTS)];
+Web3.VALID_ADDRESSES = [...Object.keys(MOCK_ACCOUNTS)].map(address => padHex(address.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH));
 Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS;
 
 global.ethereum = {
@@ -70,14 +70,13 @@ describe('Mint page', () => {
     await fireEvent.click(submitButton);
     await finishPromises();
 
-    console.log(ethereum.request.mock.calls);
-    expect(ethereum.request.mock.calls[3]).toEqual([{
+    expect(ethereum.request.mock.calls[1]).toEqual([{
       method: 'eth_sendTransaction',
       params: [
         {
           from: MOCK_WALLET_ADDRESS,
           to: USDC_CONTRACT_ADDRESS,
-          data: TO_WALLET_ADDRESS + ', ' + AMOUNT_TEXT,
+          data: padHex(TO_WALLET_ADDRESS.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH) + ', ' + toHex(AMOUNT_TEXT * 1000000),
           gasPrice: DEFAULT_GAS_PRICE,
         },
       ],

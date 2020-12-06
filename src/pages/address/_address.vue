@@ -1,8 +1,8 @@
 <template>
   <div>
     <NavBar />
-    <AddressPage 
-      :roles="this.roles" 
+    <AddressPage
+      :roles="this.roles"
       :is-blacklisted="this.isBlacklisted"
       :balance="this.balance"
       :address="this.address"
@@ -132,7 +132,11 @@ export default {
         this.transactions[i].age = ages[i - page * pageLength];
       }
     },
-    pageChange() {},
+    async pageChange(page) {
+      this.loading = true;
+      await this.fetchAges(page);
+      this.loading = false;
+    },
   },
   head() {
     return {

@@ -41,6 +41,9 @@
             :on-click="toggleBlacklister"
           />
         </div>
+        <span v-if="noRoles">
+          <md-icon>error</md-icon> No roles 
+        </span>
         <span v-if="hasRenouncedRoles">
           <md-icon>error</md-icon> Error: Cannot renounce roles. Please assign role to another address.
         </span>
@@ -126,16 +129,23 @@ export default {
       blacklisterActive: false,
       hasRenouncedRoles: false,
       showOwnerWarning: false,
+      noRoles: false,
     };
   },
   methods: {
     async checkRoles() {
+      this.hasRenouncedRoles = false;
+      this.showOwnerWarning = false;
       this.address = this.address.trim().toLowerCase();
 
       this.blacklisterActive = this.address === await getBlacklister();
       this.masterMinterActive = this.address === await getMasterMinter();
       this.pauserActive = this.address === await getPauser();
       this.ownerActive = this.address === await getOwner();
+
+      if (!this.blacklisterActive && !this.masterMinterActive && !this.pauserActive && !this.ownerActive) {
+        this.noRoles = true;
+      }
     },
     toggleMasterMinter() {
       this.masterMinterActive = !this.masterMinterActive;

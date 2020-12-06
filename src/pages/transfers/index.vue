@@ -16,10 +16,10 @@
     />
     <div class="error"> 
       <span v-if="showAddressWarning">
-          <md-icon>error</md-icon> Error: Please input a valid address.
+        <md-icon>error</md-icon> Error: Please input a valid address.
       </span>
       <span v-if="showAmountWarning">
-          <md-icon>error</md-icon> Error: Please input a valid amount.
+        <md-icon>error</md-icon> Error: Please input a valid amount.
       </span>
     </div>
     <div class="connect-metamask">
@@ -85,7 +85,7 @@ export default {
         console.log(e);
         //show error
       }
-    }
+    },
   },
   head() {
     return {

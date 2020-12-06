@@ -16,13 +16,13 @@
     />
     <div class="error"> 
       <span v-if="showMinterWarning">
-          <md-icon>error</md-icon> Error: You are not signed in as a minter of this contract and cannot mint tokens.
+        <md-icon>error</md-icon> Error: You are not signed in as a minter of this contract and cannot mint tokens.
       </span>
       <span v-if="showAddressWarning">
-          <md-icon>error</md-icon> Error: Please input a valid address.
+        <md-icon>error</md-icon> Error: Please input a valid address.
       </span>
       <span v-if="showAmountWarning">
-          <md-icon>error</md-icon> Error: Please input a valid amount.
+        <md-icon>error</md-icon> Error: Please input a valid amount.
       </span>
     </div>
     <ConnectToMetamask ref="connectToMetamaskButton" />

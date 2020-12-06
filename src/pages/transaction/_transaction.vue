@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NavBar />
     <TransactionDetails 
       :hash="{ label: 'Transaction Hash', value: hash }"
       :sender="sender"
@@ -18,11 +19,13 @@
 import { web3 } from '@/utils/web3utils';
 import { padHex } from '@/utils/utils';
 import { WEB3_TXN_HASH_LENGTH } from '@/utils/constants';
+import NavBar from '@/components/NavBar';
 import TransactionDetails from '@/components/TransactionDetails';
 
 
 export default {
   components: {
+    NavBar,
     TransactionDetails,
   },
   data() {

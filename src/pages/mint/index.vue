@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NavBar />
     <Form
       :title="'Mint USDC'"
       :schema=" [
@@ -33,6 +34,7 @@
 
 // modules
 import Form from '@/components/Form';
+import NavBar from '@/components/NavBar';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import { toHex, padHex } from '@/utils/utils';
@@ -40,6 +42,7 @@ import { web3, contract } from '@/utils/web3utils';
 
 export default {
   components: {
+    NavBar,
     Form,
     ConnectToMetamask,
   },

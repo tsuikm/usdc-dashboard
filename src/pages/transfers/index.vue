@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NavBar />
     <Form
       :title="'Transfer USDC'"
       :schema=" [
@@ -30,6 +31,7 @@
 
 <script>
 import Form from '@/components/Form';
+import NavBar from '@/components/NavBar';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { contract, web3 } from '@/utils/web3utils';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
@@ -38,6 +40,7 @@ import { toHex, padHex } from '@/utils/utils';
 export default {
   components: {
     Form,
+    NavBar,
     ConnectToMetamask,
   },
   data() {

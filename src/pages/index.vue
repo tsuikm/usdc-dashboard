@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NavBar />
     <Summary
       :roles="this.roles"
       :blocks="this.blocks"
@@ -12,6 +13,7 @@
 </template>
 
 <script>
+import NavBar from '@/components/NavBar';
 import Summary from '@/components/Summary';
 import { API_BASE_URL } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
@@ -26,6 +28,7 @@ const RECENT_COUNT = 20;
 export default {
   name: 'SummaryPage',
   components: {
+    NavBar,
     Summary,
   },
   data() {

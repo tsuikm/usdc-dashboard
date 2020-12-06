@@ -1,7 +1,8 @@
 <template>
   <div>
-    <AddressDetails
-      :roles="this.roles"
+    <NavBar />
+    <AddressDetails 
+      :roles="this.roles" 
       :is-blacklisted="this.isBlacklisted"
       :balance="this.balance"
     >
@@ -36,6 +37,7 @@
 </template>
 
 <script>
+import NavBar from '@/components/NavBar';
 import AddressDetails from '@/components/AddressDetails';
 import { padHex } from '@/utils/utils';
 import { contract, getBalance } from '@/utils/web3utils';
@@ -45,6 +47,7 @@ import Table from '@/components/Table';
 
 export default {
   components: {
+    NavBar,
     AddressDetails,
     Table,
   },

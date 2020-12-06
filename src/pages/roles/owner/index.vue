@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NavBar />
     <div class="header">
       Check and Assign Roles
     </div>
@@ -59,6 +60,7 @@
 </template>
 
 <script>
+import NavBar from '@/components/NavBar';
 import RoleButton from '@/components/RoleButton';
 import ActionButton from '@/components/ActionButton';
 import CustomInput from '@/components/CustomInput';
@@ -105,6 +107,7 @@ async function changeRole(ownerAccount, contractMethod, address) {
 
 export default {
   components: {
+    NavBar,
     RoleButton,
     ConnectToMetamask,
     ActionButton,

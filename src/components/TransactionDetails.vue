@@ -14,7 +14,7 @@
       <p> {{ blockNumber.value }} </p>
     </div>
 
-    <div id="sender-receiver-section">
+    <div class="dual-section">
       <div class="transaction-info">
         <h2> Sender </h2>
         <nuxt-link :to="senderLink">
@@ -29,9 +29,25 @@
       </div>
     </div>
 
+    <div class="dual-section">
+      <div class="transaction-info">
+        <h2> {{ value.label }} </h2>
+        <p> {{ value.value }} </p>
+      </div>
+
+      <div class="transaction-info">
+        <h2> {{ gas.label }} </h2>
+        <p> {{ gas.value }} </p>
+      </div>
+    </div>
+
     <div class="transaction-info">
-      <h2> {{ gas.label }} </h2>
-      <p> {{ gas.value }} </p>
+      <h2>
+        {{ data.label }}
+      </h2>
+      <p class="wrap">
+        {{ data.value }}
+      </p>
     </div>
   </div>
 </template>
@@ -69,6 +85,14 @@ export default {
       type: Object,
       validator: labelValueValidator,
     },
+    value: {
+      type: Object,
+      validator: labelValueValidator,
+    },
+    data: {
+      type: Object,
+      validator: labelValueValidator,
+    },
   },
   computed: {
     basePath() {
@@ -101,15 +125,27 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  .wrap {
+    overflow-wrap: anywhere; 
+    white-space: normal;
+  }
 }
 
-#sender-receiver-section {
+.dual-section {
   display: flex;
-  justify-content: space-between;
+
+  .transaction-info {
+    width: 50%;
+  }
 
   @media only screen and (max-width: $mobile-threshold) {
     flex-direction: column;
     justify-content: flex-start;
+
+    .transaction-info {
+      width: 100%;
+    }
   }
 }
 </style>

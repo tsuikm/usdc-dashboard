@@ -50,7 +50,6 @@ export default class AlgorandFetchFactory {
         if (query.get('request') === 'transactions') return AlgorandFetchFactory._findTransactions(query);
         if (query.get('request') === 'accounts') return AlgorandFetchFactory._findAccounts(query);
         if (query.get('request') === 'account') return AlgorandFetchFactory._findAccountByAddress(query.get('param'));
-        if (query.get('request') === 'supply') return AlgorandFetchFactory._findSupply();
       },
     };
   }
@@ -90,7 +89,6 @@ export default class AlgorandFetchFactory {
 
   static _findTransactions(query) {
     return {
-      //fix for specific txn detail page fetch
       transactions: AlgorandFetchFactory.MOCK_TRANSACTIONS.filter(transaction => {
         const round = transaction['confirmed-round'];
         const minRound = query.get('min-round') || 0;
@@ -126,12 +124,6 @@ export default class AlgorandFetchFactory {
   static _findAccountByAddress(address) {
     return {
       account: AlgorandFetchFactory.MOCK_ACCOUNTS[address],
-    };
-  }
-
-  static _findSupply() {
-    return {
-      current_round: AlgorandFetchFactory.CURRENT_ROUND,
     };
   }
 }

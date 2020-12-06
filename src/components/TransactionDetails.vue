@@ -85,8 +85,14 @@ export default {
       type: Object,
       validator: labelValueValidator,
     },
-    value: Number,
-    data: String,
+    value: {
+      type: Object,
+      validator: labelValueValidator,
+    },
+    data: {
+      type: Object,
+      validator: labelValueValidator,
+    },
   },
   computed: {
     basePath() {

@@ -6,7 +6,9 @@
       :sender="sender"
       :receiver="receiver"
       :block-number="{ label: 'Block Number', value: blockNumber }"
-      :gas="{ label: 'Gas', value: gas }"
+      :gas="{ label: 'Gas Price (wei)', value: gas }"
+      :value="{ label: 'Value (wei)', value: value }"
+      :data="{ label: 'Transaction Data', value: data }"
     />
   </div>
 </template>
@@ -33,6 +35,8 @@ export default {
       sender: null,
       receiver: null,
       blockNumber: null,
+      value: null,
+      data: null,
     };
   },
   async mounted() {
@@ -41,8 +45,10 @@ export default {
       const transaction = await web3.eth.getTransaction(padHex(this.hash, WEB3_TXN_HASH_LENGTH));
       this.sender = transaction.from;
       this.receiver = transaction.to;
-      this.gas = transaction.gas;
+      this.gas = transaction.gasPrice;
       this.blockNumber = transaction.blockNumber;
+      this.value = transaction.value;
+      this.data = transaction.input;
     } catch (e) {
       this.$router && this.$router.push({path: '/404' });
     }

@@ -151,7 +151,7 @@ export default {
       if (this.$route) {
         return basePathFromPath(this.$route.path);
       }
-      
+
       return '';
     },
     accountsLink() {

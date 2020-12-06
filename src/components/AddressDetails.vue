@@ -6,13 +6,13 @@
       <div class="wallet-address">
         <h2> Wallet Address </h2>
         <div class="page-wallet-address">
-          {{ this.$route.params.address }}
+          {{ this.address }}
         </div>
       </div>
 
       <!-- roles -->
       <div
-        v-if="roles.length != 0"
+        v-if="roles.length !== 0"
         class="roles"
       >
         <h2> Roles </h2>
@@ -25,11 +25,11 @@
             class="role-container"
             data-testid="role-container"
           >
-            <md-chip 
+            <md-chip
               class="chip"
               :style="{'background-color': role.color}"
-            > 
-              {{ role.name }} 
+            >
+              {{ role.name }}
             </md-chip>
           </div>
         </div>
@@ -43,36 +43,24 @@
         </div>
       </div>
 
-      <!-- blacklisted -->
-      <div class="blacklisted">
-        <h2> Blacklisted? </h2>
-        <div class="page-blacklisted">
-          <div v-if="this.isBlacklisted">
-            Yes
-          </div>
-          <div v-else>
-            No
-          </div>
-        </div>
-      </div>
+      <!-- Any additional content needed -->
+      <slot />
     </div>
   </div>
 </template>
 
 <script>
-import { basePathFromPath } from '@/utils/utils';
-
 export default {
-  name: 'AddressPage',
+  name: 'AddressDetails',
   props: {
 
     /**
-      * @param {Role[]} - the role(s) the wallet address has.
-      * @typedef {Role} {
-      *   name: {String} - the name of the Role (eg. 'Pauser').
-      *   color: {String[]} - the color of the chip.
-      * }
-      */
+     * @param {Role[]} - the role(s) the wallet address has.
+     * @typedef {Role} {
+     *   name: {String} - the name of the Role (eg. 'Pauser').
+     *   color: {String[]} - the color of the chip.
+     * }
+     */
     roles: {
       type: Array,
       validator: roles => Array.isArray(roles) &&
@@ -82,28 +70,13 @@ export default {
     },
 
     /**
-      * @param {IsBlacklisted} - whether the address is blacklisted.
-      */
-    isBlacklisted: {
-      type: Boolean,
-      validator: isBlacklisted => typeof isBlacklisted === 'boolean',
-    },
-
-    /**
-      * @param {Balance} - the balance of the address.
-      */
-    balance: {
-      type: Number,
-      validator: balance => typeof balance === 'number',
-    },
-  },
-  computed: {
-    basePath() {
-      return this.$route ? basePathFromPath(this.$route.path) : '';
-    },
+     * @param {number} - the balance of the address.
+     */
+    balance: Number,
   },
 };
 </script>
+
 <style scoped>
 .address-page-container {
   display:grid;
@@ -119,9 +92,7 @@ export default {
 .page-balance {
   padding-top: 5%;
 }
-.page-blacklisted {
-  padding-top: 5%;
-}
+
 .list-of-roles {
   background-color: #68d7f3;
   color: white;
@@ -141,9 +112,6 @@ export default {
   font-weight: bold;
 }
 .balance {
-  font-weight: bold;
-}
-.blacklisted {
   font-weight: bold;
 }
 </style>

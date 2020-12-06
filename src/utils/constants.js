@@ -32,8 +32,6 @@ export const PURESTAKE_API_KEY = process.env.PURESTAKE_API_KEY;
 
 export const BLOCKCHAIN_PATHS = ['', '/solana', '/algorand'];
 
-export const ALGORAND_BASE_SERVER = 'https://mainnet-algorand.api.purestake.io';
-
 export const TRANSACTION_SCHEMA = [
   {
     name: 'Transaction Hash',

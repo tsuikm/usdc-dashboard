@@ -43,13 +43,18 @@ describe('Burn page', () => {
   });
 
   test('Burn button works', async () => {
-    const { getByPlaceholderText, queryByText } = render(burn);
+    global.ethereum = {
+      request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
+    };
 
-    // eslint-disable-next-line
+    const { getByPlaceholderText, queryByText, getByText } = render(burn);
+
+    const metamaskButton = getByText('Connect to MetaMask');
+    await fireEvent.click(metamaskButton);
+
     expect(ethereum.request.mock.calls[0]).toEqual([{ method: 'eth_requestAccounts' }]);
-    // eslint-disable-next-line
     expect(ethereum.request.mock.calls).toHaveLength(1);
-    const AMOUNT_TEXT = '100';
+    const AMOUNT_TEXT = 100;
     const submitButton = queryByText('SUBMIT');
     const amountInput = getByPlaceholderText('Amount: i.e. 0');
 
@@ -79,7 +84,7 @@ describe('Burn page', () => {
     };
 
     const { getByPlaceholderText, queryByText, getByText } = render(burn);
-    const AMOUNT_TEXT = '100';
+    const AMOUNT_TEXT = 100;
     const submitButton = queryByText('SUBMIT');
     const amountInput = getByPlaceholderText('Amount: i.e. 0');
 

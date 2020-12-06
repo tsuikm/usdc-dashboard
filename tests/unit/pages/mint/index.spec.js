@@ -23,6 +23,8 @@ const MOCK_ACCOUNTS = {
 const MOCK_WALLET_ADDRESS = '0x12345';
 
 Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
+Web3.VALID_ADDRESSES = [...Object.keys(MOCK_ACCOUNTS)];
+console.log(Web3.VALID_ADDRESSES);
 Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS;
 
 global.ethereum = {
@@ -52,7 +54,7 @@ describe('Mint page', () => {
     expect(ethereum.request.mock.calls).toHaveLength(1);
 
     const TO_WALLET_ADDRESS = '0x12345';
-    const AMOUNT_TEXT = '100';
+    const AMOUNT_TEXT = 100;
 
     const submitButton = queryByText('SUBMIT');
     const amountInput = getByPlaceholderText('Amount: i.e. 0');
@@ -79,7 +81,6 @@ describe('Mint page', () => {
   });
 
   test('Error renders', async () => {
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const MOCK_WALLET_ADDRESS_ERROR = '0x1';
     Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
     Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS_ERROR;
@@ -90,17 +91,23 @@ describe('Mint page', () => {
     const { getByPlaceholderText, queryByText, getByText } = render(mint);
     const metamaskButton = getByText('Connect to MetaMask');
     const TO_WALLET_ADDRESS = '0x12345';
-    const AMOUNT_TEXT = '100';
+    const AMOUNT_TEXT = 200;
     const submitButton = queryByText('SUBMIT');
     const amountInput = getByPlaceholderText('Amount: i.e. 0');
     const toInput = getByPlaceholderText('Enter Wallet Address Here');
+
+    const MINTER_ERROR_MESSAGE = 'Error: You are not signed in as a minter of this contract and cannot mint tokens.';
+
 
     await fireEvent.click(metamaskButton);
 
     await fireEvent.update(toInput, TO_WALLET_ADDRESS);
     await fireEvent.update(amountInput, AMOUNT_TEXT);
     await fireEvent.click(submitButton);
-    expect(consoleSpy).toHaveBeenCalled();
+
+    await finishPromises();
+
+    expect(getByText(MINTER_ERROR_MESSAGE)).not.toBeNull();
   });
 
   test('ConnectToMetamask component renders', async () => {

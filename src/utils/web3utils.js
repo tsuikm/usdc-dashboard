@@ -442,7 +442,7 @@ export const abi = [
     type:'function',
   },
   {
-    inputs: [{ name:'_amount', type :'uint256' }],
+    inputs: [{"internalType":"uint256","name":"_amount","type":"uint256"}],
     name: 'burn',
     outputs:[],
     stateMutability:'nonpayable',

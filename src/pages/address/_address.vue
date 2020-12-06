@@ -8,16 +8,21 @@
       :address="this.address"
     />
     <h1>Address Transactions</h1>
-    <Table
-      ref="table"
-      :loading="loading"
-      name=""
-      :total-items="transactions.length"
-      :schema="this.tableSchema"
-      :content="transactions"
-      :key-field="'Transaction Hash'"
-      @page:change="this.pageChange"
-    />
+    <div v-if="transactions.length == 0 && !loading">
+      No transactions with this wallet address.
+    </div>
+    <div v-else>
+      <Table
+        ref="table"
+        :loading="loading"
+        name=""
+        :total-items="transactions.length"
+        :schema="this.tableSchema"
+        :content="transactions"
+        :key-field="'Transaction Hash'"
+        @page:change="this.pageChange"
+      />
+    </div>
   </div>
 </template>
 
@@ -77,7 +82,9 @@ export default {
       this.checkRoles(),
       this.fetchTransactions(),
     ]);
-    await this.fetchAges(this.$refs.table.page);
+    if (this.transactions.length != 0) {
+      await this.fetchAges(this.$refs.table.page);
+    }
     this.loading = false;
   },
   methods: {

@@ -88,6 +88,7 @@ export default {
       } catch (e) {
         console.error(e);
         //show error
+        console.log('hi');
       }
     },
     async pause() {  

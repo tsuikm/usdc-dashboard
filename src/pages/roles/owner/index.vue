@@ -90,17 +90,21 @@ const getMasterMinter = async () => (await contract.methods.masterMinter().call(
  * @param {String} address - the address to assign the role to.
  */
 async function changeRole(ownerAccount, contractMethod, address) {
-  await ethereum.request({
-    method: 'eth_sendTransaction',
-    params: [
-      {
-        from: ownerAccount,
-        to: USDC_CONTRACT_ADDRESS,
-        data: contractMethod(address).encodeABI(),
-        gasPrice: DEFAULT_GAS_PRICE,
-      },
-    ],
-  });
+  try {
+    await ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [
+        {
+          from: ownerAccount,
+          to: USDC_CONTRACT_ADDRESS,
+          data: contractMethod(address).encodeABI(),
+          gasPrice: DEFAULT_GAS_PRICE,
+        },
+      ],
+    });
+  } catch(e) {
+    console.log(e);
+  }
 }
 
 //----------------------------------------------------------------------------------------

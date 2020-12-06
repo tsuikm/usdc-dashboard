@@ -21,7 +21,7 @@ function ethereumFactory(isConnectedToMetamask) {
 const MASTERMINTER = padHex('0x00000001', WEB3_BALANCEOF_ADDRESS_LENGTH);
 const MINTER = padHex('0x00000002', WEB3_BALANCEOF_ADDRESS_LENGTH);
 Web3.MOCK_ACCOUNTS = {
-  [MASTERMINTER]: {},
+  [MASTERMINTER]: { masterMinter: true },
   [MINTER]: {},
   [padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH)]: {},
 };
@@ -75,6 +75,8 @@ describe('MasterMinterControl', () => {
     });
     expect(getByText('This address is not currently a minter.')).not.toBeNull();
 
+    await fireEvent.click(getByText('Connect to MetaMask'));
+
     await fireEvent.click(getByText('CONFIGURE MINTER'));
     await finishPromises();
     expect(getByText('This address is currently a minter with allowance 50.')).not.toBeNull();
@@ -91,6 +93,8 @@ describe('MasterMinterControl', () => {
       },
     });
     expect(getByText('This address is currently a minter with allowance 170.')).not.toBeNull();
+
+    await fireEvent.click(getByText('Connect to MetaMask'));
 
     await fireEvent.click(getByText('REMOVE MINTER'));
     await finishPromises();
@@ -109,6 +113,8 @@ describe('MasterMinterControl', () => {
       },
     });
     expect(getByText('This address is currently a minter with allowance 195.')).not.toBeNull();
+
+    await fireEvent.click(getByText('Connect to MetaMask'));
 
     await fireEvent.click(getByText('INCREASE ALLOWANCE'));
     await finishPromises();

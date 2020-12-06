@@ -39,7 +39,11 @@ export default {
   },
   async mounted() {
     await this.fetchTransactions();
+<<<<<<< HEAD
     await this.fetchAges(this.$refs.table.pageLength);
+=======
+    await this.fetchAges(this.$refs.table.page);
+>>>>>>> master
     this.loading = false;
   },
   methods: {
@@ -66,6 +70,11 @@ export default {
       await this.fetchAges(page);
       this.loading = false;
     },
+  },
+  head() {
+    return {
+      title: 'Transactions',
+    };
   },
 };
 </script>

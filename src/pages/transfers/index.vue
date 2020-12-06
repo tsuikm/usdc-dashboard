@@ -62,6 +62,11 @@ export default {
       }
     },
   },
+  head() {
+    return {
+      title: 'Transfer',
+    };
+  },
 };
 </script>
 

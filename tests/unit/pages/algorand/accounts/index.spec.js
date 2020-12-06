@@ -1,5 +1,5 @@
 import { render, fireEvent } from '@testing-library/vue';
-import { toHex, fromHex, finishPromises } from '@/utils/utils';
+import { toHex, finishPromises } from '@/utils/utils';
 import AlgorandFetchFactory from '@/../tests/algorand-fetch-mock';
 import AlgoAccounts from '@/pages/algorand/accounts';
 

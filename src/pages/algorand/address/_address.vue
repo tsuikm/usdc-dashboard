@@ -28,7 +28,7 @@
 import AddressDetails from '@/components/AddressDetails';
 import Table from '@/components/Table';
 import NavBar from '@/components/NavBar';
-import { fetchAlgorand, getCurrentRound } from '@/utils/algo-utils';
+import { fetchAlgorand } from '@/utils/algo-utils';
 import {
   ALGORAND_TRANSACTION_SCHEMA,
   ALGORAND_USDC_ASSET_ID,

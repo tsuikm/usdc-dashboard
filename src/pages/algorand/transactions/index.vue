@@ -21,8 +21,7 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
-import { fetchAge, fetchAlgorand, getCurrentRound } from '@/utils/algo-utils';
-import { pushAll } from '@/utils/utils';
+import { fetchAlgorand, getCurrentRound } from '@/utils/algo-utils';
 import {
   ALGORAND_USDC_ASSET_ID,
   ALGORAND_TRANSACTION_SCHEMA,

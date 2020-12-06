@@ -39,6 +39,8 @@ const algod = new algosdk.Algodv2(token, `${baseServer}/ps2/`, port);
 app.get('/algorand', async (req, res) => {
   while (true) {
     try {
+      let response;
+
       if (req.query.api === 'indexer') {
         if (req.query.request === 'transactions') {
           response = indexer.searchForTransactions(req.query.param);

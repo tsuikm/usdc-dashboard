@@ -1,6 +1,6 @@
 import AlgoTransactionDetailsPage from '@/pages/algorand/transaction/_transaction.vue';
 import AlgorandFetchFactory from '@/../tests/algorand-fetch-mock';
-import { render, cleanup } from '@testing-library/vue';
+import { render } from '@testing-library/vue';
 import { finishPromises } from '@/utils/utils';
 
 const TRANSACTION_ID = '0x13579';

@@ -46,11 +46,11 @@ export default class AlgorandFetchFactory {
 
     return {
       json: () => {
-        if (query.get('request') === 'assets') return AlgorandFetchFactory._findAssets(query);
+        if (query.get('request') === 'assets') return AlgorandFetchFactory._findAssets();
         if (query.get('request') === 'transactions') return AlgorandFetchFactory._findTransactions(query);
         if (query.get('request') === 'accounts') return AlgorandFetchFactory._findAccounts(query);
         if (query.get('request') === 'account') return AlgorandFetchFactory._findAccountByAddress(query.get('param'));
-        if (query.get('request') === 'supply') return AlgorandFetchFactory._findSupply(query);
+        if (query.get('request') === 'supply') return AlgorandFetchFactory._findSupply();
       },
     };
   }
@@ -129,7 +129,7 @@ export default class AlgorandFetchFactory {
     };
   }
 
-  static _findSupply(query) {
+  static _findSupply() {
     return {
       current_round: AlgorandFetchFactory.CURRENT_ROUND,
     };

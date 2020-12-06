@@ -6,10 +6,11 @@ export async function fetchAlgorand(query) {
 }
 
 export async function getCurrentRound() {
-  const response = await fetchAlgorand({
-    api: 'algod',
-    request: 'supply',
+  const assets = await fetchAlgorand({
+    api: 'indexer',
+    request: 'assets',
+    param: ALGORAND_USDC_ASSET_ID,
   });
 
-  return response.current_round;
+  return assets['current-round'];
 }

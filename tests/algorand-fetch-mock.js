@@ -24,7 +24,8 @@ export default class AlgorandFetchFactory {
    *      amount: {Number},
    *      receiver: {String}
    *    },
-   *    'confirmed-round': Number
+   *    'confirmed-round': Number,
+   *    'tx-type': String
    * }
    */
   static MOCK_TRANSACTIONS = []
@@ -83,6 +84,7 @@ export default class AlgorandFetchFactory {
           total: AlgorandFetchFactory.TOTAL_SUPPLY,
         },
       },
+      ['current-round']: AlgorandFetchFactory.CURRENT_ROUND,
     };
   }
 

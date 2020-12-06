@@ -16,8 +16,10 @@ AlgorandFetchFactory.MOCK_TRANSACTIONS = [
     sender: SENDER,
     'asset-transfer-transaction': {
       receiver: RECEIVER,
+      amount: 0,
     },
     'confirmed-round': AlgorandFetchFactory.CURRENT_ROUND,
+    'tx-type': 'transfer',
   },
 ];
 
@@ -27,11 +29,11 @@ describe('Algorand Transaction Details Page', () => {
   it('Renders algorand transaction details', async () => {
     const { getByText } = render(AlgoTransactionDetailsPage, {
       mocks: {
-        $route: { 
-          path: `/algorand/transaction/${TRANSACTION_ID}`, 
+        $route: {
+          path: `/algorand/transaction/${TRANSACTION_ID}`,
           params: {
             transaction: TRANSACTION_ID,
-          }, 
+          },
         },
       },
     });

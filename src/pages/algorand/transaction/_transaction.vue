@@ -46,13 +46,12 @@ export default {
         'txid': this.id,
         'max-round': await getCurrentRound(),
       })).transactions[0];
-      console.log(transaction)
 
       this.sender = transaction.sender;
-      this.receiver = transaction['asset-transfer-transaction'].receiver;
+      this.receiver = transaction['asset-transfer-transaction'] ? transaction['asset-transfer-transaction'].receiver : '';
       this.fee = transaction.fee;
       this.blockNumber = transaction['confirmed-round'];
-      this.amount = transaction['asset-transfer-transaction'].amount;
+      this.amount = transaction['asset-transfer-transaction'] ? transaction['asset-transfer-transaction'].amount : '';
       this.type = transaction['tx-type'];
     }
     catch (e) {

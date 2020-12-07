@@ -3,6 +3,8 @@ import { render, fireEvent } from '@testing-library/vue';
 import { finishPromises } from '@/utils/utils';
 import Web3 from 'web3';
 
+const contract = new (new Web3()).eth.Contract();
+
 function ethereumFactory(isConnectedToMetamask) {
   return {
     request: jest.fn(async config => {
@@ -10,14 +12,18 @@ function ethereumFactory(isConnectedToMetamask) {
         await config.params[0].data();
       }
 
-      // Simulates connecting to metamask as the owner.
+      // Simulates connecting to metamask as the pauser.
       if (config.method === 'eth_requestAccounts') {
-        return isConnectedToMetamask ? [Web3.PAUSER] : [];
+        return isConnectedToMetamask ? [await contract.methods.pauser().call()] : [];
       }
     }),
   };
 }
-Web3.PAUSER = '0x00000001';
+
+Web3.MOCK_ACCOUNTS = {
+  '0x0000000a': { pauser: true },
+};
+
 global.ethereum = ethereumFactory(true);
 
 describe('PauserControl', () => {

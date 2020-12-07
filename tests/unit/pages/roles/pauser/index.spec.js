@@ -7,7 +7,7 @@ const contract = new (new Web3()).eth.Contract();
 
 function ethereumFactory(isConnectedToMetamask) {
   return {
-    request: async config => {
+    request: jest.fn(async config => {
       if (config.method === 'eth_sendTransaction') {
         await config.params[0].data();
       }
@@ -16,7 +16,7 @@ function ethereumFactory(isConnectedToMetamask) {
       if (config.method === 'eth_requestAccounts') {
         return isConnectedToMetamask ? [await contract.methods.pauser().call()] : [];
       }
-    },
+    }),
   };
 }
 

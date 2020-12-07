@@ -6,7 +6,7 @@ import Web3 from 'web3';
 
 function ethereumFactory(isConnectedToMetamask) {
   return {
-    request: async config => {
+    request: jest.fn(async config => {
       if (config.method === 'eth_sendTransaction') {
         await config.params[0].data();
       }
@@ -15,7 +15,7 @@ function ethereumFactory(isConnectedToMetamask) {
       if (config.method === 'eth_requestAccounts') {
         return isConnectedToMetamask ? [BLACKLISTER] : [];
       }
-    },
+    }),
   };
 }
 const BLACKLISTER = padHex('0x00000001', WEB3_BALANCEOF_ADDRESS_LENGTH);
@@ -31,7 +31,6 @@ describe('BlacklisterControl', () => {
     const header = 'Check and Blacklist Addresses';
     expect(findByText(header)).not.toBeNull();
   });
-
 
   it('Correctly renders components when blacklisted address is entered', async () => {
     const { getByText } = render(BlacklisterControl, {

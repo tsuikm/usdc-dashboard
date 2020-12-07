@@ -1,8 +1,6 @@
 import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { render, createEvent, fireEvent } from '@testing-library/vue';
-import { padHex, finishPromises } from '@/utils/utils';
-import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
-import Web3 from 'web3';
+import { finishPromises } from '@/utils/utils';
 
 global.ethereum = {
   request: jest.fn(async () => ['0x12345']),

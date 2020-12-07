@@ -6,7 +6,7 @@ import Web3 from 'web3';
 
 function ethereumFactory(isConnectedToMetamask) {
   return {
-    request: async config => {
+    request: jest.fn(async config => {
       if (config.method === 'eth_sendTransaction') {
         await config.params[0].data();
       }
@@ -15,7 +15,7 @@ function ethereumFactory(isConnectedToMetamask) {
       if (config.method === 'eth_requestAccounts') {
         return isConnectedToMetamask ? [MASTERMINTER] : [];
       }
-    },
+    }),
   };
 }
 const MASTERMINTER = padHex('0x00000001', WEB3_BALANCEOF_ADDRESS_LENGTH);

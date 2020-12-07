@@ -46,6 +46,9 @@
             data-testid="toggle"
           />
         </div>
+        <span v-if="showBlacklisterWarning">
+          <md-icon>error</md-icon> Error: You are not signed in as the blacklister of this contract.
+        </span>
         <div class="container-save">
           <ActionButton
             :label="'SAVE'"
@@ -84,6 +87,7 @@ export default {
       accounts: [],
       statusChecked: false,
       originalStatus: false,
+      showBlacklisterWarning: false,
     };
   },
   methods: {
@@ -157,6 +161,14 @@ export default {
       await this.ethReq(contract.methods.unBlacklist(address).encodeABI());
     },
     async save() {
+      const blacklisterAccount = (await contract.methods.blacklister().call()).toLowerCase();
+      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
+      this.showBlacklisterWarning = !accounts.includes(blacklisterAccount);
+
+      if (this.showBlacklisterWarning) {
+        return;
+      }
+
       const currentStatus = await contract.methods
         .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
         .call();

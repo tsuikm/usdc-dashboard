@@ -17,12 +17,18 @@
       <div class="content-subtext">
         Pausing prevents transfers, minting, and burning.
       </div>
+      <span
+        v-if="showPauserWarning"
+        class="error-msg"
+      >
+        <md-icon>error</md-icon> Error: You are not signed in as the pauser of this contract.
+      </span>
       <ActionButton
         :label="'SAVE'"
         :on-click="save"
       />
     </div>
-    <ConnectToMetamask />
+    <ConnectToMetamask ref="connectToMetamaskButton" />
   </div>
 </template>
 
@@ -41,6 +47,7 @@ export default {
     return {
       contractPaused: null,
       accounts: [],
+      showPauserWarning: false,
     };
   },
   created: function() {
@@ -58,7 +65,6 @@ export default {
     },
     async handleUnpause() {
       await this.unpause();
-      console.log('unpauses');
       this.subscribeToEvent(contract.unpauseEvent);
     },
     async handlePause() {
@@ -94,6 +100,14 @@ export default {
       await this.ethReq(contract.methods.unpause().encodeABI());
     },
     async save() {
+      const pauserAccount = (await contract.methods.pauser().call()).toLowerCase();
+      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
+      this.showPauserWarning = !accounts.includes(pauserAccount);
+
+      if (this.showPauserWarning) {
+        return;
+      }
+
       const currentStatus = await contract.methods.paused().call();
       const localStatus = this.contractPaused;
 
@@ -119,7 +133,7 @@ export default {
 .container {
   padding: 30px;
   margin: auto;
-  width: 35%;
+  width: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -158,6 +172,10 @@ export default {
   margin-bottom: 20px;
   text-align: center;
   color: $circle-dark-grey;
+}
+
+.error-msg {
+  margin-bottom: 25px;
 }
 
 </style>

@@ -203,7 +203,7 @@ export default class Web3 {
               };
             },
             configureMinter: (address, allowance) => {
-              const configureMinter = async () => { 
+              const configureMinter = async () => {
                 Web3.MOCK_ACCOUNTS[address].minter = true;
                 Web3.MOCK_ACCOUNTS[address].minterAllowance = allowance;
               };
@@ -213,7 +213,7 @@ export default class Web3 {
               };
             },
             removeMinter: (address) => {
-              const removeMinter = async () => { 
+              const removeMinter = async () => {
                 Web3.MOCK_ACCOUNTS[address].minter = false;
                 Web3.MOCK_ACCOUNTS[address].minterAllowance = 0;
               };
@@ -288,8 +288,13 @@ export default class Web3 {
         }
         throw new Error();
       },
-      async getAccounts() {
-        return [Web3.MOCK_ACCOUNTS];
+      async getAccounts(callback) {
+        if (global.ethereum) {
+          const results = await Promise.all(ethereum.request.mock.results.map(result => result.value));
+
+          const accounts = results.find(result => Array.isArray(result) && result.length);
+          callback(undefined, accounts || []);
+        }
       },
     };
   }

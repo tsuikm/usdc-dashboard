@@ -17,7 +17,7 @@
     />
     <div class="error"> 
       <span v-if="showMinterWarning">
-        <md-icon>error</md-icon> Error: You are not signed in as a minter of this contract and cannot mint tokens.
+        <md-icon>error</md-icon> Error: You are not signed in as a minter of this contract and cannot mint USDC.
       </span>
       <span v-if="showAddressWarning">
         <md-icon>error</md-icon> Error: Please input a valid address.
@@ -80,7 +80,7 @@ export default {
         return;
       }
       if (isNaN(amount)) {
-        // Not a valid Ethereum address
+        // Not a valid amount
         this.showAmountWarning = true;
         return;
       }

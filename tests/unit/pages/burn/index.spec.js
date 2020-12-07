@@ -88,7 +88,7 @@ describe('Burn page', () => {
     const submitButton = queryByText('SUBMIT');
     const amountInput = getByPlaceholderText('Amount: i.e. 0');
 
-    const MINTER_ERROR_MESSAGE = 'Error: You are not signed in as a minter of this contract and cannot burn tokens.';
+    const MINTER_ERROR_MESSAGE = 'Error: You are not signed in as a minter of this contract and cannot burn USDC.';
 
     await fireEvent.update(amountInput, AMOUNT_TEXT);
     await fireEvent.click(submitButton);

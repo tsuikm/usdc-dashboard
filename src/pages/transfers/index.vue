@@ -63,7 +63,7 @@ export default {
         return;
       }
       if (isNaN(amount)) {
-        // Not a valid Ethereum address
+        // Not a valid amount
         this.showAmountWarning = true;
         return;
       }

@@ -99,7 +99,7 @@ describe('Mint page', () => {
     const amountInput = getByPlaceholderText('Amount: i.e. 0');
     const toInput = getByPlaceholderText('Enter Wallet Address Here');
 
-    const MINTER_ERROR_MESSAGE = 'Error: You are not signed in as a minter of this contract and cannot mint tokens.';
+    const MINTER_ERROR_MESSAGE = 'Error: You are not signed in as a minter of this contract and cannot mint USDC.';
 
     await fireEvent.click(metamaskButton);
 

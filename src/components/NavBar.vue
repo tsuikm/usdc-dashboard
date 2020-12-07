@@ -5,11 +5,8 @@
   <div>
     <nuxt-link 
       to="/"
-      data-testid="logo-link"
-      :class="linkClass('')"
-      @mouseover.native="hover('Ethereum')"
     >
-      <img :src="require('../assets/logo.svg')" width="250"/>
+      <img :src="require('@/assets/logo.svg')" width="250"/>
     </nuxt-link>
     </div>
 

@@ -36,8 +36,8 @@ export default {
       accounts: [],
     };
   },
-  created: function() {
-    this.checkConnected();
+  created: async function() {
+    await this.checkConnected();
   },
   methods: {
     async connectMetamask() {

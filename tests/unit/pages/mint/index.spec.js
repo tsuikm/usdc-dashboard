@@ -45,6 +45,9 @@ describe('Mint page', () => {
   test('Mint button works', async () => {
     const { getByPlaceholderText, queryByText, getByText } = render(mint);
 
+    await fireEvent.click(getByText('Connect to MetaMask'));
+    await finishPromises();
+
     expect(ethereum.request.mock.calls[0]).toEqual([{ method: 'eth_requestAccounts' }]);
     expect(ethereum.request.mock.calls).toHaveLength(1);
 
@@ -83,8 +86,11 @@ describe('Mint page', () => {
     global.ethereum = {
       request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
     };
-
     const { getByPlaceholderText, queryByText, getByText } = render(mint);
+
+    await fireEvent.click(getByText('Connect to MetaMask'));
+    await finishPromises();
+
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = '100';
     const submitButton = queryByText('SUBMIT');

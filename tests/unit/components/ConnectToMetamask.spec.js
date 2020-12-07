@@ -4,16 +4,8 @@ import { padHex, finishPromises } from '@/utils/utils';
 import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import Web3 from 'web3';
 
-const MOCK_ACCOUNTS = {
-  [padHex('0x11111111', WEB3_BALANCEOF_ADDRESS_LENGTH)]: {
-    balance: 1000,
-  },
-};
-
-const MOCK_WALLET_ADDRESS = '0x12345';
-
 global.ethereum = {
-  request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
+  request: jest.fn(async () => ['0x12345']),
 };
 
 describe('ConnectToMetamask', () => {
@@ -33,8 +25,6 @@ describe('ConnectToMetamask', () => {
     const { getByText, queryByText } = render(ConnectToMetamask);
     const connectButton = getByText('Connect to MetaMask');
     expect(connectButton).not.toBeNull();
-
-    Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
 
     await fireEvent.click(connectButton);
     await finishPromises();

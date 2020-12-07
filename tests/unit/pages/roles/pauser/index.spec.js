@@ -5,7 +5,7 @@ import Web3 from 'web3';
 
 function ethereumFactory(isConnectedToMetamask) {
   return {
-    request: async config => {
+    request: jest.fn(async config => {
       if (config.method === 'eth_sendTransaction') {
         await config.params[0].data();
       }
@@ -14,7 +14,7 @@ function ethereumFactory(isConnectedToMetamask) {
       if (config.method === 'eth_requestAccounts') {
         return isConnectedToMetamask ? [Web3.PAUSER] : [];
       }
-    },
+    }),
   };
 }
 Web3.PAUSER = '0x00000001';

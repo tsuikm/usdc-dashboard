@@ -1,6 +1,7 @@
 <template :key="this.connected">
   <div class="container">
     <button
+      v-if="!this.connected"
       :class="{'button-grey': this.connected, 'button-colored': !this.connected, 'connectButton': true}"
       data-testid="transfers-card-connect-button"
       @click="connectMetamask"
@@ -35,8 +36,8 @@ export default {
       accounts: [],
     };
   },
-  created: function() {
-    this.checkConnected();
+  created: async function() {
+    await this.checkConnected();
   },
   methods: {
     async connectMetamask() {

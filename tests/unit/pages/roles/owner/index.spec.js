@@ -7,7 +7,7 @@ const contract = new (new Web3()).eth.Contract();
 
 function ethereumFactory(isConnectedToMetamask) {
   return {
-    request: async config => {
+    request: jest.fn(async config => {
       if (config.method === 'eth_sendTransaction') {
         await config.params[0].data();
       }
@@ -16,7 +16,7 @@ function ethereumFactory(isConnectedToMetamask) {
       if (config.method === 'eth_requestAccounts') {
         return isConnectedToMetamask ? [await contract.methods.owner().call()] : [];
       }
-    },
+    }),
   };
 }
 
@@ -33,6 +33,10 @@ describe('OwnerControl', () => {
       '0x0000000d': { masterMinter: true },
       [SCRATCH_ADDRESS]: {},
     };
+  });
+
+  afterEach(() => {
+    global.ethereum && ethereum.request.mockClear();
   });
 
   it('Text components render properly', () => {
@@ -56,9 +60,10 @@ describe('OwnerControl', () => {
     const pauserButton = getByText('PAUSER');
     const ownerButton = getByText('OWNER');
     const saveButton = getByText('SAVE');
-    const metamaskButton = getByText('Connect to MetaMask');
 
-    await fireEvent.click(metamaskButton);
+    await fireEvent.click(getByText('Connect to MetaMask'));
+    await finishPromises();
+
     await fireEvent.update(input, SCRATCH_ADDRESS);
 
     await fireEvent.click(masterMinterButton);
@@ -93,6 +98,9 @@ describe('OwnerControl', () => {
     const pauserButton = getByText('PAUSER');
     const ownerButton = getByText('OWNER');
     const saveButton = getByText('SAVE');
+
+    await fireEvent.click(getByText('Connect to MetaMask'));
+    await finishPromises();
 
     await fireEvent.update(input, SCRATCH_ADDRESS);
 

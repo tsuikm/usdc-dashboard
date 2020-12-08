@@ -577,6 +577,10 @@ export const fetchAge = async (transaction) => {
   const blockTime =  blockTimes.get(transaction.blockNumber);
   const age = moment.duration(moment().diff(blockTime));
 
+  return ageText(age);
+};
+
+export const ageText = (age) => {
   const seconds = age.seconds();
   const minutes = age.minutes();
   const hours = age.hours();

@@ -11,9 +11,21 @@ export const SOLANA_TRANSACTION_SCHEMA = [
     },
   },
   {
+    name: 'Fee',
+    getter(t) {
+      return t.fee;
+    },
+  },
+  {
     name: 'Slot',
     getter(t) {
       return t.slot;
+    },
+  },
+  {
+    name: 'Age',
+    getter(t) {
+      return t.age;
     },
   },
 ];

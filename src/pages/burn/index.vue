@@ -11,7 +11,15 @@
       ]"
       @submit="this.submit"
     />
-    <ConnectToMetamask />
+    <div class="error"> 
+      <span v-if="showMinterWarning">
+        <md-icon>error</md-icon> Error: You are not signed in as a minter of this contract and cannot burn USDC.
+      </span>
+      <span v-if="showAmountWarning">
+        <md-icon>error</md-icon> Error: Please input a valid amount.
+      </span>
+    </div>
+    <ConnectToMetamask ref="connectToMetamaskButton" />
   </div>
 </template>
 
@@ -33,18 +41,32 @@ export default {
   },
   data() {
     return {
+      showMinterWarning: false,
+      showAmountWarning: false,
       accounts: [],
     };
   },
-  async mounted() {
-    // eslint-disable-next-line
-    this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-  },
   methods: {
     async submit(amount) {
-      if (!await contract.methods.isMinter(this.accounts[0]).call()) {
-        // not allowed to burn
-        console.error(`Wallet ${this.accounts[0]} is not allowed to burn`);
+
+      this.accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
+
+      let minterAccount = null;
+      for (let account of this.accounts) {
+        if (await contract.methods.isMinter(account).call()) {
+          minterAccount = account;
+          break;
+        }
+      }
+
+      if (minterAccount === null) {
+        this.showMinterWarning = true;
+        return;
+      }
+
+      if (isNaN(amount)) {
+        // Not a valid amount
+        this.showAmountWarning = true;
         return;
       }
 
@@ -55,7 +77,7 @@ export default {
             method: 'eth_sendTransaction',
             params: [
               {
-                from: this.accounts[0],
+                from: minterAccount,
                 to: USDC_CONTRACT_ADDRESS,
                 data: contract.methods.burn(toHex(Number(amount) * 1000000)).encodeABI(),
                 gasPrice: DEFAULT_GAS_PRICE,
@@ -75,3 +97,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2%;
+}
+
+</style>

@@ -7,7 +7,7 @@ const bigqueryClient = new BigQuery();
 app.use(bodyParser.json());
 
 app.get('/minters', async (req, res) => {
-  if (process.env.USDC_CONTRACT_ADDRESS && process.env.USDC_CONTRACT_ADDRESS !== '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48') {
+  if (req.query.contract !== '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48') {
     return res.json([]);
   }
 

@@ -37,29 +37,29 @@ export const TRANSACTION_SCHEMA = [
   {
     name: 'Transaction Hash',
     getter: t => t.transactionHash,
-    link: t => `/transaction/${t.transactionHash}`
+    link: t => `/transaction/${t.transactionHash}`,
   },
   {
     name: 'Quantity',
-    getter: t => t.data
+    getter: t => t.data,
   },
   {
     name: 'Sender',
     getter: t => t.from,
-    link: t => `/address/${t.from}`
+    link: t => `/address/${t.from}`,
   },
   {
     name: 'Receiver',
     getter: t => t.to,
-    link: t => `/address/${t.to}`
+    link: t => `/address/${t.to}`,
   },
   {
     name: 'Age',
-    getter: t => t.age
+    getter: t => t.age,
   },
   {
     name: 'Block Number',
-    getter: t => t.blockNumber
+    getter: t => t.blockNumber,
   },
 ];
 
@@ -87,7 +87,7 @@ export const ALGORAND_TRANSACTION_SCHEMA = [
   },
   {
     name: 'Amount',
-    getter: t => t['asset-transfer-transaction'] ? t['asset-transfer-transaction'].amount / (10 ** DECIMALS) : ''
+    getter: t => t['asset-transfer-transaction'] ? t['asset-transfer-transaction'].amount / (10 ** DECIMALS) : '',
   },
   {
     name: 'Sender',

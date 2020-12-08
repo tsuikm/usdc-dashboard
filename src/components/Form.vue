@@ -17,7 +17,6 @@
       </div>
       <div class="button-container">
         <ActionButton
-          class="button"
           :label="'SUBMIT'"
           :on-click="this.submit"
         />

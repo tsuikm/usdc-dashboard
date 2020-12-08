@@ -18,8 +18,9 @@
 <script>
 import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
-import { getRecentTransactions, SOLANA_TRANSACTION_SCHEMA } from '@/utils/solana';
-// import { fetchAge, getAllTransactions } from '@/utils/web3utils';
+import { getRecentTransactions, getTransactionInfo, getBlockTime, SOLANA_TRANSACTION_SCHEMA } from '@/utils/solana';
+import moment from 'moment';
+import { ageText } from '@/utils/web3utils';
 
 export default {
   components: {
@@ -39,32 +40,33 @@ export default {
   },
   async mounted() {
     await this.fetchTransactions();
-    // await this.fetchAges(this.$refs.table.page);
+    await this.fetchInfos(this.$refs.table.page);
     this.loading = false;
   },
   methods: {
     async fetchTransactions() {
       this.transactions = (await getRecentTransactions(1000)).result;
-      console.log(this.transactions);
     },
-    // async fetchAges(page) {
-    //   const pageLength = this.$refs.table.pageLength;
-    //   const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);
-    //   const promises = [];
+    async fetchInfos(page) {
+      const pageLength = this.$refs.table.pageLength;
+      const upperBound = Math.min((page + 1) * pageLength, this.transactions.length);
+      const promises = [];
 
-    //   for (let i = page * pageLength; i < upperBound; i++) {
-    //     promises.push(fetchAge(this.transactions[i]));
-    //   }
+      for (let i = page * pageLength; i < upperBound; i++) {
+        promises.push(getBlockTime(this.transactions[i].slot));
+        promises.push(getTransactionInfo(this.transactions[i]));
+      }
 
-    //   const ages = await Promise.all(promises);
-
-    //   for (let i = page * pageLength; i < upperBound; i++) {
-    //     this.transactions[i].age = ages[i - page * pageLength];
-    //   }
-    // },
+      const infos = await Promise.all(promises);
+      for (let i = page * pageLength; i < upperBound; i++) {
+        const age = moment.duration(moment().diff(moment.unix(infos[2 * (i - page * pageLength)].result)));
+        this.transactions[i].age = ageText(age);
+        this.transactions[i].fee = infos[2 * (i - page * pageLength) + 1].result.meta.fee / (10 ** 9);
+      }
+    },
     async pageChange(page) {
       this.loading = true;
-      await this.fetchAges(page);
+      await this.fetchInfos(page);
       this.loading = false;
     },
   },

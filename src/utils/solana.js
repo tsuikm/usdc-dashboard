@@ -11,9 +11,21 @@ export const SOLANA_TRANSACTION_SCHEMA = [
     },
   },
   {
+    name: 'Fee',
+    getter(t) {
+      return t.fee;
+    },
+  },
+  {
     name: 'Slot',
     getter(t) {
       return t.slot;
+    },
+  },
+  {
+    name: 'Age',
+    getter(t) {
+      return t.age;
     },
   },
 ];
@@ -83,7 +95,7 @@ export const getBlockTime = async (slot) => {
   if (response.ok) {
     return await response.json();
   } else {
-    throw Error('Unable to fetch Solana recent transactions');
+    throw Error('Unable to fetch Solana block time');
   }
 };
 
@@ -104,7 +116,7 @@ export const getTransactionInfo = async (txn) => {
   if (response.ok) {
     return await response.json();
   } else {
-    throw Error('Unable to fetch Solana block time');
+    throw Error('Unable to fetch Solana transaction details');
   }
 };
 

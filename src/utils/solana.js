@@ -66,8 +66,49 @@ export const getRecentTransactions = async (limit = 25) => {
   }
 };
 
-// Getting top accounts by balance on the token
+export const getBlockTime = async (slot) => {
+  const response = await fetch('https://api.mainnet-beta.solana.com/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: 1,
+      jsonrpc: '2.0',
+      method: 'getBlockTime',
+      params: [slot],
+    }),
+  });
 
+  if (response.ok) {
+    return await response.json();
+  } else {
+    throw Error('Unable to fetch Solana recent transactions');
+  }
+};
+
+export const getTransactionInfo = async (txn) => {
+  const response = await fetch('https://api.mainnet-beta.solana.com/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: 1,
+      jsonrpc: '2.0',
+      method: 'getConfirmedTransaction',
+      params: [txn.signature, 'jsonParsed'],
+    }),
+  });
+
+  if (response.ok) {
+    return await response.json();
+  } else {
+    throw Error('Unable to fetch Solana block time');
+  }
+};
+
+// Getting top accounts by balance on the token
 export const getTopAccounts = async () => {
   const response = await fetch('https://api.mainnet-beta.solana.com/', {
     method: 'POST',

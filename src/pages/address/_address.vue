@@ -5,6 +5,7 @@
       :roles="this.roles"
       :is-blacklisted="this.isBlacklisted"
       :balance="this.balance"
+      :address="this.address"
     >
       <div class="blacklisted">
         <h2> Blacklisted? </h2>

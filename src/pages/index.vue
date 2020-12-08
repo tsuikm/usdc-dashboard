@@ -78,6 +78,9 @@ export default {
         role.addresses.push(address);
       }
 
+      // This is for hiding Minters section when not on Mainnet (since minters are fetch via 
+      // BigQuery rather than web3). This is a temporary solution, as there does not yet exist 
+      // a USDC BigQuery for Ropsten.
       if (addresses.length === 0) {
         this.roles = this.roles.filter(role => role.name !== roleName);
       }

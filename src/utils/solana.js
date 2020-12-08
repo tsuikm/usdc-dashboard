@@ -164,3 +164,24 @@ export const getBalance = async (account) => {
     throw Error('Unable to fetch balance of this address');
   }
 };
+
+export const getWalletTransactions = async (account, limit = 25) => {
+  const response = await fetch('https://api.mainnet-beta.solana.com/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: 1,
+      jsonrpc: '2.0',
+      method: 'getConfirmedSignaturesForAddress2',
+      params: [account, { limit }],
+    }),
+  });
+
+  if (response.ok) {
+    return await response.json();
+  } else {
+    throw Error('Unable to fetch Solana recent transactions');
+  }
+};

@@ -95,7 +95,7 @@ export const getBlockTime = async (slot) => {
   if (response.ok) {
     return await response.json();
   } else {
-    throw Error('Unable to fetch Solana recent transactions');
+    throw Error('Unable to fetch Solana block time');
   }
 };
 
@@ -116,7 +116,7 @@ export const getTransactionInfo = async (txn) => {
   if (response.ok) {
     return await response.json();
   } else {
-    throw Error('Unable to fetch Solana block time');
+    throw Error('Unable to fetch Solana transaction details');
   }
 };
 

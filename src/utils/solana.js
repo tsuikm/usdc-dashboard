@@ -87,21 +87,8 @@ export const getBlockTime = async (slot) => {
   }
 };
 
-export const fetchInfo = async (txn) => {
-  const blockTimeResponse = await fetch('https://api.mainnet-beta.solana.com/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      id: 1,
-      jsonrpc: '2.0',
-      method: 'getBlockTime',
-      params: [txn.slot],
-    }),
-  });
-
-  const txnDetailsResponse = await fetch('https://api.mainnet-beta.solana.com/', {
+export const getTransactionInfo = async (txn) => {
+  const response = await fetch('https://api.mainnet-beta.solana.com/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -114,14 +101,7 @@ export const fetchInfo = async (txn) => {
     }),
   });
 
-  if (blockTimeResponse.ok && txnDetailsResponse.ok) {
-    const blockTimeData = await blockTimeResponse.json();
-    const txnDetailsData = await txnDetailsResponse.json();
-    
-    const txnData = {
-
-    };
-
+  if (response.ok) {
     return await response.json();
   } else {
     throw Error('Unable to fetch Solana block time');

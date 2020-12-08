@@ -131,3 +131,24 @@ export const getTopAccounts = async () => {
     throw Error('Unable to fetch Solana largest accounts');
   }
 };
+
+export const getBalance = async (account) => {
+  const response = await fetch('https://api.mainnet-beta.solana.com/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    }, 
+    body: JSON.stringify({
+      jsonrpc: '2.0', 
+      id: 1,
+      method: 'getBalance', 
+      params: [account],
+    }),
+  });
+
+  if (response.ok) {
+    return await response.json();
+  } else {
+    throw Error('Unable to fetch balance of this address');
+  }
+};

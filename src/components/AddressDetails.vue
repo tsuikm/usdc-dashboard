@@ -73,6 +73,7 @@ export default {
      * @param {number} - the balance of the address.
      */
     balance: Number,
+    address: String,
   },
 };
 </script>

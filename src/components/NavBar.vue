@@ -2,7 +2,14 @@
   <div
     id="navbar"
   >
-    <img src="@/assets/logo.svg">
+  <div>
+    <nuxt-link 
+      to="/"
+    >
+      <img :src="require('@/assets/logo.svg')" width="250"/>
+    </nuxt-link>
+    </div>
+
     <div
       id="menu-items"
       :class="menuOpen ? 'open' : ''"

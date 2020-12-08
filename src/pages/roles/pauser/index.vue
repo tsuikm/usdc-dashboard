@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar />
     <div class="header">
       Pause and Unpause Contract
     </div>
@@ -34,7 +33,6 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar';
 import ActionButton from '@/components/ActionButton';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
@@ -42,7 +40,6 @@ import { contract } from '@/utils/web3utils';
 
 export default {
   components: {
-    NavBar,
     ActionButton,
     ConnectToMetamask,
   },

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar />
     <div
       class="header"
       data-testid="header"
@@ -63,7 +62,6 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar';
 import ActionButton from '@/components/ActionButton';
 import CustomInput from '@/components/CustomInput';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
@@ -78,7 +76,6 @@ import { contract } from '@/utils/web3utils';
 export default {
   name: 'Blacklister',
   components: {
-    NavBar,
     ActionButton,
     CustomInput,
     ConnectToMetamask,

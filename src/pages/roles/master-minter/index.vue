@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar />
     <div
       class="header"
       data-testid="header"
@@ -76,7 +75,6 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar';
 import ActionButton from '@/components/ActionButton';
 import CustomInput from '@/components/CustomInput';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
@@ -96,7 +94,6 @@ const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
 export default {
   name: 'MasterMinterControl',
   components: {
-    NavBar,
     ActionButton,
     CustomInput,
     ConnectToMetamask,

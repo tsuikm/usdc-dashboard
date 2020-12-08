@@ -13,23 +13,49 @@ import Web3 from 'web3';
 export const abi = [
   {
     constant: true,
-    inputs: [{ name: '_owner', type: 'address' }],
-    name: 'balanceOf',
-    outputs: [{ name: 'balance', type: 'uint256' }],
+    inputs: [],
+    name: 'decimals',
+    outputs: [
+      {
+        name: '',
+        type: 'uint8',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
     type: 'function',
   },
   {
     constant: true,
-    inputs: [],
-    name: 'decimals',
-    outputs: [{ name: '', type: 'uint8' }],
+    inputs: [
+      {
+        name: '_owner',
+        type: 'address',
+      },
+    ],
+    name: 'balanceOf',
+    outputs: [
+      {
+        name: 'balance',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
     type: 'function',
   },
   {
     constant: true,
     inputs: [],
     name: 'totalSupply',
-    outputs: [{ name: '', type: 'uint256' }],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -409,13 +435,6 @@ export const abi = [
     type: 'event',
   },
   {
-    constant: true,
-    inputs: [{ name: 'account', type: 'address' }],
-    name: 'isMinter',
-    outputs: [{ name: '', type: 'bool' }],
-    type: 'function',
-  },
-  {
     inputs: [{ name:'_to', type: 'address'}, {name:'_amount', type:'uint256'}],
     name: 'mint',
     outputs: [{ name:'', type: 'bool' }],
@@ -423,14 +442,7 @@ export const abi = [
     type:'function',
   },
   {
-    constant: true,
-    inputs: [{ name: 'account', type: 'address' }],
-    name: 'isMinter',
-    outputs: [{ name: '', type: 'bool' }],
-    type: 'function',
-  },
-  {
-    inputs: [{ name:'_amount', type :'uint256' }],
+    inputs: [{ internalType:'uint256', name:'_amount', type:'uint256'}],
     name: 'burn',
     outputs:[],
     stateMutability:'nonpayable',

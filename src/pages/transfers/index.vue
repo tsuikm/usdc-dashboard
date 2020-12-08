@@ -14,6 +14,14 @@
       ]"
       @submit="this.submit"
     />
+    <div class="error"> 
+      <span v-if="showAddressWarning">
+        <md-icon>error</md-icon> Error: Please input a valid address.
+      </span>
+      <span v-if="showAmountWarning">
+        <md-icon>error</md-icon> Error: Please input a valid amount.
+      </span>
+    </div>
     <div class="connect-metamask">
       <ConnectToMetamask ref="connectToMetamaskButton" />
     </div>
@@ -23,9 +31,9 @@
 <script>
 import Form from '@/components/Form';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
-import { contract } from '@/utils/web3utils';
-import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
-import { toHex } from '@/utils/utils';
+import { contract, web3 } from '@/utils/web3utils';
+import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { toHex, padHex } from '@/utils/utils';
 
 export default {
   components: {
@@ -34,11 +42,31 @@ export default {
   },
   data() {
     return {
+      showAddressWarning: false,
+      showAmountWarning: false,
+      address: '',
       accounts: [],
     };
   },
   methods: {
     async submit(toAddress, amount) {
+      this.showAddressWarning = false;
+      this.showAmountWarning = false;
+      this.address = padHex(toAddress.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
+
+      if (!web3.utils.isAddress(this.address)) {
+        // Not a valid Ethereum address
+        this.showAddressWarning = true;
+        return;
+      }
+      if (isNaN(amount)) {
+        // Not a valid amount
+        this.showAmountWarning = true;
+        return;
+      }
+      this.transfer(this.address, amount);
+    },
+    async transfer(address, amount) {
       try {
         // eslint-disable-next-line
         const txHash = await ethereum
@@ -48,7 +76,7 @@ export default {
               {
                 from: this.$refs.connectToMetamaskButton.accounts[0],
                 to: USDC_CONTRACT_ADDRESS,
-                data: contract.methods.transfer(toAddress, toHex(Number(amount) * 1000000)).encodeABI(),
+                data: contract.methods.transfer(address, toHex(Number(amount) * 1000000)).encodeABI(),
                 gasPrice: DEFAULT_GAS_PRICE,
               },
             ],
@@ -72,11 +100,17 @@ export default {
   margin-left:auto;
   margin-right:auto;
   text-align:center;
-  margin-top: 2%;
 }
 
 .button {
   width: 20%;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2%;
 }
 
 </style>

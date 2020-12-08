@@ -92,4 +92,32 @@ describe('Ethereum Summary Page', () => {
       expect(getByText(minter)).not.toBeNull();
     }
   });
+
+  it('Hides Minters if empty', async () => {
+    MOCK_MINTERS.splice(0, 2);
+
+    const { getByText, queryByText } = render(SummaryPage);
+
+    // Finish all promises
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(getByText('Owner')).not.toBeNull();
+    expect(getByText('Pauser')).not.toBeNull();
+    expect(getByText('Blacklister')).not.toBeNull();
+    expect(queryByText('Minters')).toBeNull();
+
+    // Finish all promises
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    for (const role of Object.keys(Web3.MOCK_ACCOUNTS)) {
+      expect(getByText(role)).not.toBeNull();
+    }
+
+    for (const minter of MOCK_MINTERS) {
+      expect(queryByText(minter)).toBeNull();
+    }
+
+    MOCK_MINTERS.push('0x5');
+    MOCK_MINTERS.push('0x6');
+  });
 });

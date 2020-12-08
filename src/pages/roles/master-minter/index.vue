@@ -67,6 +67,10 @@
           />
         </div>
       </div>
+      <span v-if="showMasterMinterWarning">
+        <md-icon>error</md-icon> Error: You are not signed in as the master minter of this contract.
+      </span>
+      <ConnectToMetamask ref="connectToMetamaskButton" />
     </div>
   </div>
 </template>
@@ -75,6 +79,7 @@
 import NavBar from '@/components/NavBar';
 import ActionButton from '@/components/ActionButton';
 import CustomInput from '@/components/CustomInput';
+import ConnectToMetamask from '@/components/ConnectToMetamask';
 import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
@@ -94,6 +99,7 @@ export default {
     NavBar,
     ActionButton,
     CustomInput,
+    ConnectToMetamask,
   },
   data() {
     return {
@@ -102,15 +108,10 @@ export default {
       isMinter: null,
       minterAllowance: null,
       accounts: [],
+      showMasterMinterWarning: false,
     };
   },
-  created: function() {
-    this.connectMetamask();
-  },
   methods: {
-    async connectMetamask() {
-      this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    },
     async subscribeToEvent(event) {
       contract.once(event, async () => {
         if (this.address === '') {
@@ -135,10 +136,26 @@ export default {
 
     },
     async removeMinter() {
+      const masterMinterAccount = (await contract.methods.masterMinter().call()).toLowerCase();
+      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
+      this.showMasterMinterWarning = !accounts.includes(masterMinterAccount);
+
+      if (this.showMasterMinterWarning) {
+        return;
+      }
+
       await this.ethReq(contract.methods.removeMinter(this.address).encodeABI());
       this.subscribeToEvent(contract.removeMinterEvent);
     },
     async configureMinter() {
+      const masterMinterAccount = (await contract.methods.masterMinter().call()).toLowerCase();
+      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
+      this.showMasterMinterWarning = !accounts.includes(masterMinterAccount);
+
+      if (this.showMasterMinterWarning) {
+        return;
+      }
+      
       await this.ethReq(contract.methods.configureMinter(this.address, this.allowance).encodeABI());
       this.subscribeToEvent(contract.configureMinterEvent);
     },
@@ -207,6 +224,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .minter-form {
@@ -223,4 +241,5 @@ export default {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
 </style>

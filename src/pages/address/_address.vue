@@ -1,34 +1,44 @@
 <template>
   <div>
     <NavBar />
-    <AddressPage
+    <AddressDetails
       :roles="this.roles"
       :is-blacklisted="this.isBlacklisted"
       :balance="this.balance"
-      :address="this.address"
-    />
-    <h1>Address Transactions</h1>
+    >
+      <div class="blacklisted">
+        <h2> Blacklisted? </h2>
+        <div class="page-blacklisted">
+          <div v-if="this.isBlacklisted">
+            Yes
+          </div>
+          <div v-else>
+            No
+          </div>
+        </div>
+      </div>
+    </AddressDetails>
+
+    <h1> Address Transactions </h1>
     <div v-if="transactions.length == 0 && !loading">
       No transactions with this wallet address.
     </div>
-    <div v-else>
-      <Table
-        ref="table"
-        :loading="loading"
-        name=""
-        :total-items="transactions.length"
-        :schema="this.tableSchema"
-        :content="transactions"
-        :key-field="'Transaction Hash'"
-        @page:change="this.pageChange"
-      />
-    </div>
+    <Table
+      ref="table"
+      :loading="loading"
+      name=""
+      :total-items="transactions.length"
+      :schema="this.tableSchema"
+      :content="transactions"
+      :key-field="'Transaction Hash'"
+      @page:change="this.pageChange"
+    />
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar';
-import AddressPage from '@/components/AddressPage';
+import AddressDetails from '@/components/AddressDetails';
 import { padHex } from '@/utils/utils';
 import { contract, getBalance } from '@/utils/web3utils';
 import { getWalletTransactions, fetchAge, web3 } from '@/utils/web3utils';
@@ -38,7 +48,7 @@ import Table from '@/components/Table';
 export default {
   components: {
     NavBar,
-    AddressPage,
+    AddressDetails,
     Table,
   },
   data() {
@@ -154,5 +164,10 @@ export default {
 </script>
 
 <style scoped>
-
+.page-blacklisted {
+  padding-top: 5%;
+}
+.blacklisted {
+  font-weight: bold;
+}
 </style>

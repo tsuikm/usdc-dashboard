@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar />
     <AddressDetails
       :roles="this.roles"
       :is-blacklisted="false"
@@ -27,7 +26,6 @@
 <script>
 import AddressDetails from '@/components/AddressDetails';
 import Table from '@/components/Table';
-import NavBar from '@/components/NavBar';
 import { fetchAlgorand } from '@/utils/algo-utils';
 import {
   ALGORAND_TRANSACTION_SCHEMA,
@@ -37,7 +35,6 @@ import {
 
 export default {
   components: {
-    NavBar,
     AddressDetails,
     Table,
   },

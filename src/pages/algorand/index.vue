@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar />
     <Summary
       :roles="this.roles"
       :blocks="this.blocks"
@@ -13,7 +12,6 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar';
 import Summary from '@/components/Summary';
 import {
   ALGORAND_USDC_ASSET_ID,
@@ -24,7 +22,6 @@ import { fetchAlgorand, getCurrentRound } from '@/utils/algo-utils';
 
 export default {
   components: {
-    NavBar,
     Summary,
   },
   data() {

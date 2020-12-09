@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar />
     <Table
       ref="table"
       :loading="loading"
@@ -14,7 +13,6 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 import { fetchAlgorand, getCurrentRound } from '@/utils/algo-utils';
 import {
@@ -26,7 +24,6 @@ import {
 export default {
   components: {
     Table,
-    NavBar,
   },
   data() {
     return {

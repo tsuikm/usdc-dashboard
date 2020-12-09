@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar />
     <TransactionDetails
       :hash="{ label: 'Transaction ID', value: id }"
       :sender="sender"
@@ -16,12 +15,10 @@
 <script>
 import { getCurrentRound, fetchAlgorand } from '@/utils/algo-utils';
 import { ALGORAND_USDC_ASSET_ID } from '@/utils/constants';
-import NavBar from '@/components/NavBar';
 import TransactionDetails from '@/components/TransactionDetails';
 
 export default {
   components: {
-    NavBar,
     TransactionDetails,
   },
   data() {

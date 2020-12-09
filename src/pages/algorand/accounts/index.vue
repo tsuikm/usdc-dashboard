@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar />
     <Table
       :name="'Accounts'"
       :loading="loading"
@@ -14,7 +13,6 @@
 <script>
 
 // modules
-import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 import * as constants from '@/utils/constants';
 import { fetchAlgorand }from '@/utils/algo-utils';
@@ -22,7 +20,6 @@ import { fetchAlgorand }from '@/utils/algo-utils';
 export default {
   components: {
     Table,
-    NavBar,
   },
   data() {
     return {

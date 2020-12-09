@@ -88,6 +88,12 @@
               Owner Controls
             </nuxt-link>
             <nuxt-link
+              to="/roles/master-minter"
+              class="nav-link"
+            >
+              Master Minter Controls
+            </nuxt-link>
+            <nuxt-link
               to="/mint"
               class="nav-link"
             >

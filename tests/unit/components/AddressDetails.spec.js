@@ -8,6 +8,7 @@ const MOCK_PROPS = {
     color: '#1AA3FF',
   }],
   balance: 50000,
+  address: MOCK_WALLET_ADDRESS,
 };
 
 describe('Address page', () => {
@@ -26,6 +27,7 @@ describe('Address page', () => {
     });
     expect(getByText('Address Details')).not.toBeNull();
     expect(getByText('Wallet Address')).not.toBeNull();
+    expect(getByText(MOCK_WALLET_ADDRESS)).not.toBeNull();
     expect(getByText('Balance')).not.toBeNull();
   });
 

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar />
     <Table
       :name="'Accounts'"
       :loading="loading"
@@ -14,7 +13,6 @@
 <script>
 
 // modules
-import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 import * as constants from '@/utils/constants';
 import { getBalance, getTotalSupply, getAllTransactions } from '@/utils/web3utils';
@@ -23,7 +21,6 @@ import { removeLeadingZeros, roundToNearest, pushAll } from '@/utils/utils';
 export default {
   components: {
     Table,
-    NavBar,
   },
   data() {
     return {

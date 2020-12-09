@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/vue';
 import burn from '@/pages/burn/index';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
-import { toHex } from '@/utils/utils';
+import { toHex, finishPromises } from '@/utils/utils';
 import Web3 from 'web3';
 
 const MOCK_ACCOUNTS = {
@@ -43,13 +43,18 @@ describe('Burn page', () => {
   });
 
   test('Burn button works', async () => {
-    const { getByPlaceholderText, queryByText } = render(burn);
+    global.ethereum = {
+      request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
+    };
 
-    // eslint-disable-next-line
+    const { getByPlaceholderText, queryByText, getByText } = render(burn);
+
+    const metamaskButton = getByText('Connect to MetaMask');
+    await fireEvent.click(metamaskButton);
+
     expect(ethereum.request.mock.calls[0]).toEqual([{ method: 'eth_requestAccounts' }]);
-    // eslint-disable-next-line
     expect(ethereum.request.mock.calls).toHaveLength(1);
-    const AMOUNT_TEXT = '100';
+    const AMOUNT_TEXT = 100;
     const submitButton = queryByText('SUBMIT');
     const amountInput = getByPlaceholderText('Amount: i.e. 0');
 
@@ -71,7 +76,6 @@ describe('Burn page', () => {
   });
 
   test('Error renders', async () => {
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const MOCK_WALLET_ADDRESS_ERROR = '0x1';
     Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
     Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS_ERROR;
@@ -79,14 +83,20 @@ describe('Burn page', () => {
       request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
     };
 
-    const { getByPlaceholderText, queryByText } = render(burn);
-    const AMOUNT_TEXT = '100';
+    const { getByPlaceholderText, queryByText, getByText } = render(burn);
+    const AMOUNT_TEXT = 100;
     const submitButton = queryByText('SUBMIT');
     const amountInput = getByPlaceholderText('Amount: i.e. 0');
 
+    const MINTER_ERROR_MESSAGE = 'Error: You are not signed in as a minter of this contract and cannot burn USDC.';
+
     await fireEvent.update(amountInput, AMOUNT_TEXT);
     await fireEvent.click(submitButton);
-    expect(consoleSpy).toHaveBeenCalled();
+
+    await finishPromises();
+
+    expect(getByText(MINTER_ERROR_MESSAGE)).not.toBeNull();
+
   });
 
   test('ConnectToMetamask component renders', async () => {

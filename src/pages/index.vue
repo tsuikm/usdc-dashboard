@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar />
     <Summary
       :roles="this.roles"
       :blocks="this.blocks"
@@ -13,9 +12,8 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar';
 import Summary from '@/components/Summary';
-import { API_BASE_URL } from '@/utils/constants';
+import { API_BASE_URL, USDC_CONTRACT_ADDRESS } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
 import { web3, contract, getTransactions } from '@/utils/web3utils';
 
@@ -28,7 +26,6 @@ const RECENT_COUNT = 20;
 export default {
   name: 'SummaryPage',
   components: {
-    NavBar,
     Summary,
   },
   data() {
@@ -77,11 +74,18 @@ export default {
       for (const address of addresses) {
         role.addresses.push(address);
       }
+
+      // This is for hiding Minters section when not on Mainnet (since minters are fetch via
+      // BigQuery rather than web3). This is a temporary solution, as there does not yet exist
+      // a USDC BigQuery for Ropsten.
+      if (addresses.length === 0) {
+        this.roles = this.roles.filter(role => role.name !== roleName);
+      }
     },
     async lookupRoles() {
       this.setAddresses('Owner', [await contract.methods.owner().call()]);
       this.setAddresses('Pauser', [await contract.methods.pauser().call()]);
-      this.setAddresses('Minters', await this.fetch(`${API_BASE_URL}/api/minters`));
+      this.setAddresses('Minters', await this.fetch(`${API_BASE_URL}/api/minters?contract=${USDC_CONTRACT_ADDRESS}`));
       this.setAddresses('Blacklister', [await contract.methods.blacklister().call()]);
     },
     async lookupBlocks() {

@@ -91,6 +91,9 @@ describe('NavBar', () => {
     await fireEvent.click(getByText('Owner Controls'));
     expect(router[router.length - 1].path).toEqual('/roles/owner');
 
+    await fireEvent.click(getByText('Master Minter Controls'));
+    expect(router[router.length - 1].path).toEqual('/roles/master-minter');
+
     await fireEvent.click(getByText('Blacklist & Unblacklist'));
     expect(router[router.length - 1].path).toEqual('/roles/blacklister');
 

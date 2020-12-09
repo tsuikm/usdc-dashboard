@@ -33,7 +33,7 @@ export default {
   components: {
     NavBar,
     AddressPage,
-    Table
+    Table,
   },
   data() {
     return {
@@ -61,6 +61,7 @@ export default {
   },
   methods: {
     async lookupBalance() {
+      console.log((await getBalance(this.address)));
       this.balance = (await getBalance(this.address)).result.value;
     },
     async fetchTransactions() {

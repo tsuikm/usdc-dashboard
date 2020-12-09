@@ -188,8 +188,10 @@ export default {
   },
   methods: {
     searchAddress() {
-      this.address = padHex(this.address.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
-
+      if (this.basePath === '') {
+        this.address = padHex(this.address.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
+      }
+        
       if (this.$router) {
         this.$router.push({path: `${this.basePath}/address/${this.address}` });
       }

@@ -50,14 +50,14 @@
             <!-- Internal links start with "/"; e.g. "/pages" -->
             <nuxt-link
               v-if="field.link && field.link(item).startsWith('/')"
-              :to="field.link(item)"
+              :to="basePath + field.link(item)"
             >
               {{ field.getter(item) }}
             </nuxt-link>
             <!-- All other links are external; e.g. "https://..." -->
             <a
               v-else-if="field.link"
-              :href="field.link(item)"
+              :href="basePath + field.link(item)"
             >
               {{ field.getter(item) }}
             </a>
@@ -74,6 +74,7 @@
 
 <script>
 import Pagination from './Pagination';
+import { basePathFromPath } from '@/utils/utils';
 
 export default {
   name: 'Table',
@@ -119,6 +120,11 @@ export default {
       page: 0,
       pageLength: 25,
     };
+  },
+  computed: {
+    basePath() {
+      return this.$route ? basePathFromPath(this.$route.path) : '';
+    },
   },
   mounted() {
     if (this.$route && this.$route.query.page) {

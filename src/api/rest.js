@@ -25,4 +25,6 @@ app.get('/minters', async (req, res) => {
   }
 });
 
+app.get('/algorand', require('./algorand-rest').get);
+
 module.exports = app;

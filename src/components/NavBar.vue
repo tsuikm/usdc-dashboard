@@ -2,12 +2,15 @@
   <div
     id="navbar"
   >
-  <div>
-    <nuxt-link 
-      to="/"
-    >
-      <img :src="require('@/assets/logo.svg')" width="250"/>
-    </nuxt-link>
+    <div>
+      <nuxt-link 
+        to="/"
+      >
+        <img
+          :src="require('@/assets/logo.svg')"
+          width="250"
+        >
+      </nuxt-link>
     </div>
 
     <div

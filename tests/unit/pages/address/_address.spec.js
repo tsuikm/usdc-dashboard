@@ -107,7 +107,7 @@ describe('Address Details Page', () => {
       },
     });
 
-    
+
     expect(routeReplace.mock.calls).toHaveLength(1);
     expect(routeReplace.mock.calls[0][0]).toBe('/404');
   });

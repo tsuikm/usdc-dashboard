@@ -55,6 +55,11 @@ export default {
   props: {
 
     /**
+     * @param {String}
+     */
+    address: String,
+
+    /**
      * @param {Role[]} - the role(s) the wallet address has.
      * @typedef {Role} {
      *   name: {String} - the name of the Role (eg. 'Pauser').
@@ -71,10 +76,8 @@ export default {
 
     /**
      * @param {number} - the balance of the address.
-     * @param {string}
      */
     balance: Number,
-    address: String,
   },
 };
 </script>

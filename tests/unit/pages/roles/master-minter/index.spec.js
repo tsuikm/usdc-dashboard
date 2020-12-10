@@ -16,6 +16,7 @@ function ethereumFactory(isConnectedToMetamask) {
         return isConnectedToMetamask ? [MASTERMINTER] : [];
       }
     }),
+    selectedAddress: isConnectedToMetamask ? MASTERMINTER : null
   };
 }
 const MASTERMINTER = padHex('0x00000001', WEB3_BALANCEOF_ADDRESS_LENGTH);
@@ -121,5 +122,27 @@ describe('MasterMinterControl', () => {
     expect(getByText('This address is currently a minter with allowance 675.')).not.toBeNull();
   });
 
+
+  it('ConnectToMetamask component renders', async () => {
+    const { getByText } = render(MasterMinterControl, {
+      data: function() {
+        return {
+          address: MINTER,
+          isMinter: true,
+          minterAllowance: 195,
+          allowance: 675,
+        };
+      },
+    });
+    global.ethereum = ethereumFactory(false);
+
+    expect(getByText('This address is currently a minter with allowance 195.')).not.toBeNull();
+
+    await fireEvent.click(getByText('Connect to MetaMask'));
+    
+    await fireEvent.click(getByText('INCREASE ALLOWANCE'));
+    await finishPromises();
+    expect(getByText('Please connect your account to Metamask before proceeding.')).not.toBeNull();    await finishPromises();
+  });
 
 });

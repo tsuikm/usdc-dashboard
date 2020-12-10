@@ -36,9 +36,7 @@
         >
           Address is not currently blacklisted.
         </div>
-        <div
-          v-if="this.connectedToMetamask"
-        >
+
           <div class="container-main">
             <div class="content-header">
               Blacklist Address
@@ -49,6 +47,12 @@
               data-testid="toggle"
             />
           </div>
+          <div
+          v-if="connectedToMetamask === false"
+        >
+                  <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
+
+        </div>
           <span v-if="showBlacklisterWarning">
             <md-icon>error</md-icon> Error: You are not signed in as the blacklister of this contract.
           </span>
@@ -58,12 +62,6 @@
               :on-click="save"
             />
           </div>
-        </div>
-        <div
-          v-else
-          class="status-message"
-        >
-          <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
         </div>
       </div> 
       <ConnectToMetamask ref="connectToMetamaskButton" />
@@ -96,7 +94,7 @@ export default {
       statusChecked: false,
       originalStatus: false,
       showBlacklisterWarning: false,
-      connectedToMetamask: false,
+      connectedToMetamask: null,
     };
   },
   methods: {
@@ -136,7 +134,6 @@ export default {
           .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
           .call();
         this.statusChecked = true;
-        this.connectedToMetamask = !!(this.$refs.connectToMetamaskButton && this.$refs.connectToMetamaskButton.selectedAddress);
         this.originalStatus = this.isBlacklisted;
       } catch (e) {
         console.error(e);
@@ -151,6 +148,11 @@ export default {
       await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', contract.methods.unBlacklist(address).encodeABI());
     },
     async save() {
+      this.connectedToMetamask = !!(this.$refs.connectToMetamaskButton && this.$refs.connectToMetamaskButton.selectedAddress);
+      if (!this.connectedToMetamask) {
+        return;
+      }
+
       const blacklisterAccount = (await contract.methods.blacklister().call()).toLowerCase();
       this.showBlacklisterWarning = this.$refs.connectToMetamaskButton.selectedAddress !== blacklisterAccount;
 

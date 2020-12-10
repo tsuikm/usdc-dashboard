@@ -28,6 +28,7 @@ Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS;
 
 global.ethereum = {
   request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
+  selectedAddress: MOCK_WALLET_ADDRESS
 };
 
 describe('Mint page', () => {
@@ -46,6 +47,7 @@ describe('Mint page', () => {
   test('Mint button works', async () => {
     global.ethereum = {
       request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
+      selectedAddress: MOCK_WALLET_ADDRESS
     };
 
     const { getByPlaceholderText, queryByText, getByText } = render(mint);
@@ -83,34 +85,67 @@ describe('Mint page', () => {
     }]);
   });
 
-  test('Error renders', async () => {
-    const MOCK_WALLET_ADDRESS_ERROR = '0x1';
-    Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
-    Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS_ERROR;
-    global.ethereum = {
-      request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
-    };
-    const { getByPlaceholderText, queryByText, getByText } = render(mint);
+  describe ('Errors', () => {
+    test('Not connected to Metamask error renders', async () => {
+      const MOCK_WALLET_ADDRESS_ERROR = '0x1';
+      Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
+      Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS_ERROR;
+      global.ethereum = {
+        request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
+      };
+      const { getByPlaceholderText, queryByText, getByText } = render(mint);
+  
+      await fireEvent.click(getByText('Connect to MetaMask'));
+      await finishPromises();
+  
+      const TO_WALLET_ADDRESS = '0x12345';
+      const AMOUNT_TEXT = 200;
+      const submitButton = queryByText('SUBMIT');
+      const amountInput = getByPlaceholderText('Amount: i.e. 0');
+      const toInput = getByPlaceholderText('Enter Wallet Address Here');
+  
+      const NOT_CONNECTED_TO_METAMASK_ERROR_MESSAGE = 'Please connect your account to Metamask before proceeding.';
+  
+      await fireEvent.update(toInput, TO_WALLET_ADDRESS);
+      await fireEvent.update(amountInput, AMOUNT_TEXT);
+      await fireEvent.click(submitButton);
+  
+      await finishPromises();
+  
+      expect(getByText(NOT_CONNECTED_TO_METAMASK_ERROR_MESSAGE)).not.toBeNull();
+    });
 
-    await fireEvent.click(getByText('Connect to MetaMask'));
-    await finishPromises();
+    test('Not minter error renders', async () => {
+      const MOCK_WALLET_ADDRESS_ERROR = '0x1';
+      Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
+      Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS_ERROR;
+      global.ethereum = {
+        request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
+        selectedAddress: MOCK_WALLET_ADDRESS_ERROR
+      };
+      const { getByPlaceholderText, queryByText, getByText } = render(mint);
+  
+      await fireEvent.click(getByText('Connect to MetaMask'));
+      await finishPromises();
+  
+      const TO_WALLET_ADDRESS = '0x12345';
+      const AMOUNT_TEXT = 200;
+      const submitButton = queryByText('SUBMIT');
+      const amountInput = getByPlaceholderText('Amount: i.e. 0');
+      const toInput = getByPlaceholderText('Enter Wallet Address Here');
+  
+      const MINTER_ERROR_MESSAGE = 'Error: You are not signed in as a minter of this contract and cannot mint USDC.';
+  
+      await fireEvent.update(toInput, TO_WALLET_ADDRESS);
+      await fireEvent.update(amountInput, AMOUNT_TEXT);
+      await fireEvent.click(submitButton);
+  
+      await finishPromises();
+  
+      expect(getByText(MINTER_ERROR_MESSAGE)).not.toBeNull();
+    });
+  })
 
-    const TO_WALLET_ADDRESS = '0x12345';
-    const AMOUNT_TEXT = 200;
-    const submitButton = queryByText('SUBMIT');
-    const amountInput = getByPlaceholderText('Amount: i.e. 0');
-    const toInput = getByPlaceholderText('Enter Wallet Address Here');
-
-    const MINTER_ERROR_MESSAGE = 'Error: You are not signed in as a minter of this contract and cannot mint USDC.';
-
-    await fireEvent.update(toInput, TO_WALLET_ADDRESS);
-    await fireEvent.update(amountInput, AMOUNT_TEXT);
-    await fireEvent.click(submitButton);
-
-    await finishPromises();
-
-    expect(getByText(MINTER_ERROR_MESSAGE)).not.toBeNull();
-  });
 
   test('ConnectToMetamask component renders', async () => {
     const { findByText } = render(mint);

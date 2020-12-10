@@ -24,7 +24,7 @@
         v-if="this.isMinter && this.minterAllowance !== null"
         class="minter-clause"
       > 
-        <div class="minter-message"> 
+        <div class="status-message"> 
           This address is currently a minter with allowance {{ this.minterAllowance }}. 
         </div>
         <div
@@ -50,7 +50,7 @@
         v-else-if="this.isMinter === false"
         class="minter-clause"
       > 
-        <div class="minter-message">
+        <div class="status-message">
           This address is not currently a minter.
         </div>
         <div
@@ -66,6 +66,9 @@
           />
         </div>
       </div>
+      <span v-if="connectedToMetamask === false">
+          <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
+      </span>
       <span v-if="showMasterMinterWarning">
         <md-icon>error</md-icon> Error: You are not signed in as the master minter of this contract.
       </span>
@@ -82,11 +85,10 @@ import {
   USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
   WEB3_PROVIDER,
-  DEFAULT_GAS_PRICE, 
 } from '@/utils/constants';
 import Web3 from 'web3';
 import { padHex } from '@/utils/utils';
-import { abi } from '@/utils/web3utils';
+import { abi, ethReq } from '@/utils/web3utils';
 
 const web3 = new Web3(WEB3_PROVIDER || Web3.givenProvider);
 const contract = new web3.eth.Contract(abi, USDC_CONTRACT_ADDRESS);
@@ -106,6 +108,7 @@ export default {
       minterAllowance: null,
       accounts: [],
       showMasterMinterWarning: false,
+      connectedToMetamask: null,
     };
   },
   methods: {
@@ -132,28 +135,43 @@ export default {
 
 
     },
-    async removeMinter() {
+    async checkMasterMinter() {
       const masterMinterAccount = (await contract.methods.masterMinter().call()).toLowerCase();
-      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
-      this.showMasterMinterWarning = !accounts.includes(masterMinterAccount);
+      this.showMasterMinterWarning = this.$refs.connectToMetamaskButton.selectedAddress !== masterMinterAccount; 
+    },
+    checkConnectedToMetamask() {
+      this.connectedToMetamask = !!(this.$refs.connectToMetamaskButton && this.$refs.connectToMetamaskButton.selectedAddress);
+    },
+    async removeMinter() {
+      this.checkConnectedToMetamask();
+
+      if (!this.connectedToMetamask) {
+        return;
+      }
+
+      await this.checkMasterMinter();
 
       if (this.showMasterMinterWarning) {
         return;
       }
 
-      await this.ethReq(contract.methods.removeMinter(this.address).encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', contract.methods.removeMinter(this.address).encodeABI());
       this.subscribeToEvent(contract.removeMinterEvent);
     },
     async configureMinter() {
-      const masterMinterAccount = (await contract.methods.masterMinter().call()).toLowerCase();
-      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
-      this.showMasterMinterWarning = !accounts.includes(masterMinterAccount);
+      this.checkConnectedToMetamask();
+
+      if (!this.connectedToMetamask) {
+        return;
+      }
+
+      await this.checkMasterMinter();
 
       if (this.showMasterMinterWarning) {
         return;
       }
       
-      await this.ethReq(contract.methods.configureMinter(this.address, this.allowance).encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', contract.methods.configureMinter(this.address, this.allowance).encodeABI());
       this.subscribeToEvent(contract.configureMinterEvent);
     },
     async lookupMinterStatus() {
@@ -173,25 +191,6 @@ export default {
       } catch (e) {
         console.error(e);
         this.isMinter = null;
-      }
-    },
-    async ethReq(data) {
-      try {
-        await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.$refs.connectToMetamaskButton.accounts[0],
-                to: USDC_CONTRACT_ADDRESS,
-                data: data,
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.error(e);
-        //show error
       }
     },
   },
@@ -234,7 +233,7 @@ export default {
   margin-top: 20px;
 }
 
-.minter-message {
+.status-message {
   margin-top: 20px;
   margin-bottom: 20px;
 }

@@ -15,6 +15,9 @@
       @submit="this.submit"
     />
     <div class="error"> 
+      <span v-if="connectedToMetamask === false">
+        <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
+      </span>
       <span v-if="showMinterWarning">
         <md-icon>error</md-icon> Error: You are not signed in as a minter of this contract and cannot mint USDC.
       </span>
@@ -36,7 +39,7 @@ import Form from '@/components/Form';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
 import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import { toHex, padHex } from '@/utils/utils';
-import { web3, contract } from '@/utils/web3utils';
+import { web3, contract, ethReq } from '@/utils/web3utils';
 
 export default {
   components: {
@@ -48,23 +51,19 @@ export default {
       showMinterWarning: false,
       showAddressWarning: false,
       showAmountWarning: false,
+      connectedToMetamask: null,
       address: '',
       accounts: [],
     };
   },
   methods: {
     async submit(toAddress, amount) {
-      this.accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
-
-      let minterAccount = null;
-      for (let account of this.accounts) {
-        if (await contract.methods.isMinter(account).call()) {
-          minterAccount = account;
-          break;
-        }
+      this.connectedToMetamask = !!(this.$refs.connectToMetamaskButton && this.$refs.connectToMetamaskButton.selectedAddress);
+      if (!this.connectedToMetamask) {
+        return;
       }
 
-      if (minterAccount === null) {
+      if (!(await contract.methods.isMinter(this.$refs.connectToMetamaskButton.selectedAddress).call())) {
         this.showMinterWarning = true;
         return;
       }
@@ -81,23 +80,8 @@ export default {
         this.showAmountWarning = true;
         return;
       }
-
-      try {
-        await ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [
-            {
-              from: minterAccount,
-              to: USDC_CONTRACT_ADDRESS,
-              data: contract.methods.mint(this.address, toHex(Number(amount) * 1000000)).encodeABI(),
-              gasPrice: DEFAULT_GAS_PRICE,
-            },
-          ],
-        });
-      } catch (e) {
-        console.error(e);
-        // show error
-      }
+      const mintData = contract.methods.mint(this.address, toHex(Number(amount) * 1000000)).encodeABI()
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', mintData);
     },
   },
   head() {

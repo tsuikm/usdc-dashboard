@@ -10,6 +10,7 @@ Web3.VALID_ADDRESSES = [padHex(MOCK_WALLET_ADDRESS.trim(), WEB3_BALANCEOF_ADDRES
 
 global.ethereum = {
   request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
+  selectedAddress: MOCK_WALLET_ADDRESS, 
 };
 
 describe('Transfers page', () => {
@@ -24,12 +25,12 @@ describe('Transfers page', () => {
   test('Submit button works', async () => {
     const TO_WALLET_ADDRESS = '0x12345';
     const AMOUNT_TEXT = 100;
-    const { getByPlaceholderText, queryByText } = render(transfers);
+    const { getByPlaceholderText, getByText } = render(transfers);
 
-    const connectMetaMaskButton = queryByText('Connect to MetaMask');
+    const connectMetaMaskButton = getByText('Connect to MetaMask');
     await fireEvent.click(connectMetaMaskButton);
 
-    const submitButton = queryByText('SUBMIT');
+    const submitButton = getByText('SUBMIT');
     const amountInput = getByPlaceholderText('Amount: i.e. 0');
     const toInput = getByPlaceholderText('Enter Wallet Address Here');
 
@@ -38,7 +39,6 @@ describe('Transfers page', () => {
     await fireEvent.click(submitButton);
     await finishPromises();
 
-    // eslint-disable-next-line
     expect(ethereum.request.mock.calls[1]).toEqual([{
       method: 'eth_sendTransaction',
       params: [
@@ -50,5 +50,31 @@ describe('Transfers page', () => {
         },
       ],
     }]);
+  });
+
+  test('Not connected to Metamask error renders', async () => {
+    global.ethereum = {
+      request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
+      selectedAddress: null, 
+    };
+
+    const TO_WALLET_ADDRESS = '0x12345';
+    const AMOUNT_TEXT = 100;
+    const { getByPlaceholderText, getByText } = render(transfers);
+
+    const connectMetaMaskButton = getByText('Connect to MetaMask');
+    await fireEvent.click(connectMetaMaskButton);
+
+    const submitButton = getByText('SUBMIT');
+    const amountInput = getByPlaceholderText('Amount: i.e. 0');
+    const toInput = getByPlaceholderText('Enter Wallet Address Here');
+
+    await fireEvent.update(toInput, TO_WALLET_ADDRESS);
+    await fireEvent.update(amountInput, AMOUNT_TEXT);
+    await fireEvent.click(submitButton);
+    await finishPromises();
+
+    expect(getByText('Please connect your account to Metamask before proceeding.')).not.toBeNull();
+
   });
 });

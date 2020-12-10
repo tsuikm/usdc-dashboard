@@ -15,6 +15,9 @@
       @submit="this.submit"
     />
     <div class="error"> 
+      <span v-if="connectedToMetamask === false">
+        <md-icon>error</md-icon> Please connect your account to Metamask before proceeding.
+      </span>
       <span v-if="showAddressWarning">
         <md-icon>error</md-icon> Error: Please input a valid address.
       </span>
@@ -31,8 +34,8 @@
 <script>
 import Form from '@/components/Form';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
-import { contract, web3 } from '@/utils/web3utils';
-import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { contract, ethReq, web3 } from '@/utils/web3utils';
+import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import { toHex, padHex } from '@/utils/utils';
 
 export default {
@@ -44,14 +47,18 @@ export default {
     return {
       showAddressWarning: false,
       showAmountWarning: false,
+      connectedToMetamask: null,
       address: '',
       accounts: [],
     };
   },
   methods: {
     async submit(toAddress, amount) {
-      this.showAddressWarning = false;
-      this.showAmountWarning = false;
+      this.connectedToMetamask = !!(this.$refs.connectToMetamaskButton && this.$refs.connectToMetamaskButton.selectedAddress);
+      if (!this.connectedToMetamask) {
+        return;
+      }
+
       this.address = padHex(toAddress.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
 
       if (!web3.utils.isAddress(this.address)) {
@@ -67,24 +74,7 @@ export default {
       this.transfer(this.address, amount);
     },
     async transfer(address, amount) {
-      try {
-        // eslint-disable-next-line
-        const txHash = await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.$refs.connectToMetamaskButton.accounts[0],
-                to: USDC_CONTRACT_ADDRESS,
-                data: contract.methods.transfer(address, toHex(Number(amount) * 1000000)).encodeABI(),
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.log(e);
-        //show error
-      }
+      ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', contract.methods.transfer(address, toHex(Number(amount) * 1000000)).encodeABI());
     },
   },
   head() {

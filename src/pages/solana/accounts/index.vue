@@ -44,10 +44,9 @@ export default {
     this.supply = (await getTokenInformation()).result.value.data.parsed.info.supply / (10 ** 6);
 
     for (let account of this.accounts) {
-      account.percentage = (account.uiAmount / this.supply * 100).toFixed(2).toString() + '%';
+      account.percentage = (account.uiAmount / this.supply * 100).toFixed(2) + '%';
     }
     
-    console.log(this.supply);
     this.loading = false;
   },
   methods: {},

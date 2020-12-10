@@ -30,6 +30,22 @@ export const SOLANA_TRANSACTION_SCHEMA = [
   },
 ];
 
+export const ACCOUNTS_SCHEMA = [
+  {
+    name: 'Address',
+    getter: account => account.address,
+    link: account => `/address/${account.address}`,
+  },
+  {
+    name: 'Balance',
+    getter: account => account.uiAmount,
+  },
+  {
+    name: 'Percentage',
+    getter: account => account.percentage,
+  },
+];
+
 // Getting token information
 export const getTokenInformation = async () => {
   const response = await fetch('https://api.mainnet-beta.solana.com/', {

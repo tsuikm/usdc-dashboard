@@ -16,7 +16,7 @@ function ethereumFactory(isConnectedToMetamask) {
         return isConnectedToMetamask ? [BLACKLISTER] : [];
       }
     }),
-    selectedAddress: isConnectedToMetamask ? BLACKLISTER : null
+    selectedAddress: isConnectedToMetamask ? BLACKLISTER : null,
   };
 }
 const BLACKLISTER = padHex('0x00000001', WEB3_BALANCEOF_ADDRESS_LENGTH);

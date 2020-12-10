@@ -37,35 +37,33 @@
           Address is not currently blacklisted.
         </div>
 
-          <div class="container-main">
-            <div class="content-header">
-              Blacklist Address
-            </div>
-            <md-switch
-              v-model="isBlacklisted"
-              class="md-primary"
-              data-testid="toggle"
-            />
+        <div class="container-main">
+          <div class="content-header">
+            Blacklist Address
           </div>
-          <div
+          <md-switch
+            v-model="isBlacklisted"
+            class="md-primary"
+            data-testid="toggle"
+          />
+        </div>
+        <div
           v-if="connectedToMetamask === false"
         >
-                  <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
-
+          <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
         </div>
-          <span v-if="showBlacklisterWarning">
-            <md-icon>error</md-icon> Error: You are not signed in as the blacklister of this contract.
-          </span>
-          <div class="container-save">
-            <ActionButton
-              :label="'SAVE'"
-              :on-click="save"
-            />
-          </div>
+        <span v-if="showBlacklisterWarning">
+          <md-icon>error</md-icon> Error: You are not signed in as the blacklister of this contract.
+        </span>
+        <div class="container-save">
+          <ActionButton
+            :label="'SAVE'"
+            :on-click="save"
+          />
         </div>
-      </div> 
-      <ConnectToMetamask ref="connectToMetamaskButton" />
-    </div>
+      </div>
+    </div> 
+    <ConnectToMetamask ref="connectToMetamaskButton" />
   </div>
 </template>
 

@@ -133,7 +133,7 @@ describe('Burn page', () => {
       expect(getByText(MINTER_ERROR_MESSAGE)).not.toBeNull();
   
     });
-  })
+  });
 
 
   test('ConnectToMetamask component renders', async () => {

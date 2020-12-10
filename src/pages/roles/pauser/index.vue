@@ -17,16 +17,22 @@
       <div class="content-subtext">
         Pausing prevents transfers, minting, and burning.
       </div>
+      <ActionButton
+        :label="'SAVE'"
+        :on-click="save"
+      />
+      <span
+        v-if="connectedToMetamask === false"
+        class="error-msg"
+      >
+        <md-icon>error</md-icon> Please connect your account to Metamask before proceeding.
+      </span>
       <span
         v-if="showPauserWarning"
         class="error-msg"
       >
         <md-icon>error</md-icon> Error: You are not signed in as the pauser of this contract.
       </span>
-      <ActionButton
-        :label="'SAVE'"
-        :on-click="save"
-      />
     </div>
     <ConnectToMetamask ref="connectToMetamaskButton" />
   </div>
@@ -35,8 +41,7 @@
 <script>
 import ActionButton from '@/components/ActionButton';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
-import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
-import { contract } from '@/utils/web3utils';
+import { contract, ethReq } from '@/utils/web3utils';
 
 export default {
   components: {
@@ -48,6 +53,7 @@ export default {
       contractPaused: null,
       accounts: [],
       showPauserWarning: false,
+      connectedToMetamask: null,
     };
   },
   created: function() {
@@ -70,35 +76,20 @@ export default {
     async lookupContractStatus() {
       this.contractPaused = await contract.methods.paused().call();
     },
-    async ethReq(data) {
-      try {
-        await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.accounts[0],
-                to: USDC_CONTRACT_ADDRESS,
-                data: data,
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.error(e);
-        //show error
-      }
-    },
     async pause() {  
-      await this.ethReq(contract.methods.pause().encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', contract.methods.unpause().encodeABI());
     },
     async unpause() {  
-      await this.ethReq(contract.methods.unpause().encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', contract.methods.pause().encodeABI());
     },
     async save() {
+      this.connectedToMetamask = !!(this.$refs.connectToMetamaskButton && this.$refs.connectToMetamaskButton.selectedAddress);
+      if (!this.connectedToMetamask) {
+        return;
+      }
+
       const pauserAccount = (await contract.methods.pauser().call()).toLowerCase();
-      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
-      this.showPauserWarning = !accounts.includes(pauserAccount);
+      this.showPauserWarning = this.$refs.connectToMetamaskButton.selectedAddress !== pauserAccount;
 
       if (this.showPauserWarning) {
         return;

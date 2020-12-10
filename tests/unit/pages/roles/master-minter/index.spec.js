@@ -16,7 +16,7 @@ function ethereumFactory(isConnectedToMetamask) {
         return isConnectedToMetamask ? [MASTERMINTER] : [];
       }
     }),
-    selectedAddress: isConnectedToMetamask ? MASTERMINTER : null
+    selectedAddress: isConnectedToMetamask ? MASTERMINTER : null,
   };
 }
 const MASTERMINTER = padHex('0x00000001', WEB3_BALANCEOF_ADDRESS_LENGTH);

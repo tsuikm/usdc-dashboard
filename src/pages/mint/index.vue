@@ -37,7 +37,7 @@
 // modules
 import Form from '@/components/Form';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
-import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE, WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
+import { WEB3_BALANCEOF_ADDRESS_LENGTH } from '@/utils/constants';
 import { toHex, padHex } from '@/utils/utils';
 import { web3, contract, ethReq } from '@/utils/web3utils';
 
@@ -80,7 +80,7 @@ export default {
         this.showAmountWarning = true;
         return;
       }
-      const mintData = contract.methods.mint(this.address, toHex(Number(amount) * 1000000)).encodeABI()
+      const mintData = contract.methods.mint(this.address, toHex(Number(amount) * 1000000)).encodeABI();
       await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', mintData);
     },
   },

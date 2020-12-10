@@ -66,8 +66,7 @@ import RoleButton from '@/components/RoleButton';
 import ActionButton from '@/components/ActionButton';
 import CustomInput from '@/components/CustomInput';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
-import { contract } from '@/utils/web3utils';
-import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
+import { contract, ethReq } from '@/utils/web3utils';
 
 /*----------------------------------------------------------------------------*
  * Helpers
@@ -82,33 +81,6 @@ const getOwner = async () => (await contract.methods.owner().call()).toLowerCase
 const getPauser = async () => (await contract.methods.pauser().call()).toLowerCase();
 const getBlacklister = async () => (await contract.methods.blacklister().call()).toLowerCase();
 const getMasterMinter = async () => (await contract.methods.masterMinter().call()).toLowerCase();
-
-/**
- * Changes the owner/pauser/blacklister/master minter.
- *
- * @param {String} ownerAccount - the owner's account.
- * @param {String} contractMethod - the abi method that changes the role.
- * @param {String} address - the address to assign the role to.
- */
-async function changeRole(ownerAccount, contractMethod, address) {
-  try {
-    await ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [
-        {
-          from: ownerAccount,
-          to: USDC_CONTRACT_ADDRESS,
-          data: contractMethod(address).encodeABI(),
-          gasPrice: DEFAULT_GAS_PRICE,
-        },
-      ],
-    });
-  } catch(e) {
-    console.error(e);
-  }
-}
-
-//----------------------------------------------------------------------------------------
 
 export default {
   components: {
@@ -127,6 +99,7 @@ export default {
       hasRenouncedRoles: false,
       showOwnerWarning: false,
       noRoles: false,
+      connectedToMetamask: null,
     };
   },
   methods: {
@@ -157,13 +130,13 @@ export default {
       this.blacklisterActive = !this.blacklisterActive;
     },
     async save() {
-      this.address = this.address.trim().toLowerCase();
+      this.connectedToMetamask = !!(this.$refs.connectToMetamaskButton && this.$refs.connectToMetamaskButton.selectedAddress);
 
-      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
+      this.address = this.address.trim().toLowerCase();
 
       const ownerAccount = await getOwner();
 
-      this.showOwnerWarning = !accounts.includes(ownerAccount);
+      this.showOwnerWarning = this.$refs.connectToMetamaskButton.selectedAddress !== ownerAccount;
 
       this.hasRenouncedRoles = (!this.pauserActive && await getPauser() === this.address) ||
         (!this.masterMinterActive && await getMasterMinter() === this.address) ||
@@ -175,16 +148,16 @@ export default {
       }
 
       if (this.pauserActive && await getPauser() !== this.address) {
-        await changeRole(ownerAccount, contract.methods.updatePauser, this.address);
+        await ethReq(ownerAccount, 'eth_sendTransaction', contract.methods.updatePauser(this.address).encodeABI());
       }
       if (this.masterMinterActive && await getMasterMinter() !== this.address) {
-        await changeRole(ownerAccount, contract.methods.updateMasterMinter, this.address);
+        await ethReq(ownerAccount, 'eth_sendTransaction', contract.methods.updateMasterMinter(this.address).encodeABI());
       }
       if (this.blacklisterActive && await getBlacklister() !== this.address) {
-        await changeRole(ownerAccount, contract.methods.updateBlacklister, this.address);
+        await ethReq(ownerAccount, 'eth_sendTransaction', contract.methods.updateBlacklister(this.address).encodeABI());
       }
       if (this.ownerActive && await getOwner() !== this.address) {
-        await changeRole(ownerAccount, contract.methods.transferOwnership, this.address);
+        await ethReq(ownerAccount, 'eth_sendTransaction', contract.methods.transferOwnership(this.address).encodeABI());
       }
     },
   },

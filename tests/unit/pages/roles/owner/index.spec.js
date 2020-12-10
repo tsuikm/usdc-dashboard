@@ -5,7 +5,8 @@ import Web3 from 'web3';
 
 const contract = new (new Web3()).eth.Contract();
 
-function ethereumFactory(isConnectedToMetamask) {
+async function ethereumFactory(isConnectedToMetamask) {
+  const ownerContractAddress = await contract.methods.owner().call();
   return {
     request: jest.fn(async config => {
       if (config.method === 'eth_sendTransaction') {
@@ -14,9 +15,10 @@ function ethereumFactory(isConnectedToMetamask) {
 
       // Simulates connecting to metamask as the owner.
       if (config.method === 'eth_requestAccounts') {
-        return isConnectedToMetamask ? [await contract.methods.owner().call()] : [];
+        return isConnectedToMetamask ? [ownerContractAddress] : [];
       }
     }),
+    selectedAddress: isConnectedToMetamask ? ownerContractAddress : null,
   };
 }
 
@@ -52,7 +54,7 @@ describe('OwnerControl', () => {
     const { getByText, getByPlaceholderText } = render(OwnerControl);
 
     // Simulates connecting to metamask as the owner.
-    global.ethereum = ethereumFactory(true);
+    global.ethereum = await ethereumFactory(true);
 
     const input = getByPlaceholderText('Enter Wallet Address Here');
     const masterMinterButton = getByText('MASTER MINTER');
@@ -90,7 +92,7 @@ describe('OwnerControl', () => {
   it('Prevents reassigning roles when owner is not connected', async () => {
     const { getByText, getByPlaceholderText } = render(OwnerControl);
 
-    global.ethereum = ethereumFactory(false);
+    global.ethereum = await ethereumFactory(false);
 
     const input = getByPlaceholderText('Enter Wallet Address Here');
     const masterMinterButton = getByText('MASTER MINTER');
@@ -99,8 +101,8 @@ describe('OwnerControl', () => {
     const ownerButton = getByText('OWNER');
     const saveButton = getByText('SAVE');
 
-    await fireEvent.click(getByText('Connect to MetaMask'));
-    await finishPromises();
+    // await fireEvent.click(getByText('Connect to MetaMask'));
+    // await finishPromises();
 
     await fireEvent.update(input, SCRATCH_ADDRESS);
 

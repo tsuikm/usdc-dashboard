@@ -67,7 +67,7 @@
         </div>
       </div>
       <span v-if="connectedToMetamask === false">
-          <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
+        <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
       </span>
       <span v-if="showMasterMinterWarning">
         <md-icon>error</md-icon> Error: You are not signed in as the master minter of this contract.

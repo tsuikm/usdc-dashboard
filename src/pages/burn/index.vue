@@ -65,7 +65,7 @@ export default {
       }
 
       const burnData = contract.methods.burn(toHex(Number(amount) * 1000000)).encodeABI();
-      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', burnData);
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, burnData);
     },
   },
   head() {

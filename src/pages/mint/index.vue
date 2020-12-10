@@ -81,7 +81,7 @@ export default {
         return;
       }
       const mintData = contract.methods.mint(this.address, toHex(Number(amount) * 1000000)).encodeABI();
-      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', mintData);
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, mintData);
     },
   },
   head() {

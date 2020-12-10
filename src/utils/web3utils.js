@@ -607,11 +607,11 @@ export const fetchAge = async (transaction) => {
 };
 
 
-export const ethReq = async(sender, method, data) => {
+export const ethReq = async(sender, data) => {
   try {
     await ethereum
       .request({
-        method: method,
+        method: 'eth_sendTransaction',
         params: [
           {
             from: sender,

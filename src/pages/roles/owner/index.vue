@@ -148,16 +148,16 @@ export default {
       }
 
       if (this.pauserActive && await getPauser() !== this.address) {
-        await ethReq(ownerAccount, 'eth_sendTransaction', contract.methods.updatePauser(this.address).encodeABI());
+        await ethReq(ownerAccount, contract.methods.updatePauser(this.address).encodeABI());
       }
       if (this.masterMinterActive && await getMasterMinter() !== this.address) {
-        await ethReq(ownerAccount, 'eth_sendTransaction', contract.methods.updateMasterMinter(this.address).encodeABI());
+        await ethReq(ownerAccount, contract.methods.updateMasterMinter(this.address).encodeABI());
       }
       if (this.blacklisterActive && await getBlacklister() !== this.address) {
-        await ethReq(ownerAccount, 'eth_sendTransaction', contract.methods.updateBlacklister(this.address).encodeABI());
+        await ethReq(ownerAccount, contract.methods.updateBlacklister(this.address).encodeABI());
       }
       if (this.ownerActive && await getOwner() !== this.address) {
-        await ethReq(ownerAccount, 'eth_sendTransaction', contract.methods.transferOwnership(this.address).encodeABI());
+        await ethReq(ownerAccount, contract.methods.transferOwnership(this.address).encodeABI());
       }
     },
   },

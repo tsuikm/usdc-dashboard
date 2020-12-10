@@ -155,7 +155,7 @@ export default {
         return;
       }
 
-      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', contract.methods.removeMinter(this.address).encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.removeMinter(this.address).encodeABI());
       this.subscribeToEvent(contract.removeMinterEvent);
     },
     async configureMinter() {
@@ -171,7 +171,7 @@ export default {
         return;
       }
       
-      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', contract.methods.configureMinter(this.address, this.allowance).encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.configureMinter(this.address, this.allowance).encodeABI());
       this.subscribeToEvent(contract.configureMinterEvent);
     },
     async lookupMinterStatus() {

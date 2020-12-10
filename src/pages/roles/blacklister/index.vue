@@ -139,11 +139,11 @@ export default {
       }
     },
     async blacklist(address) {  
-      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', contract.methods.blacklist(address).encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.blacklist(address).encodeABI());
     },
 
     async unBlacklist(address) { 
-      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', contract.methods.unBlacklist(address).encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.unBlacklist(address).encodeABI());
     },
     async save() {
       this.connectedToMetamask = !!(this.$refs.connectToMetamaskButton && this.$refs.connectToMetamaskButton.selectedAddress);

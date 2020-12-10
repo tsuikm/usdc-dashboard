@@ -52,12 +52,8 @@ export default {
   },
   created: function() {
     this.lookupContractStatus();
-    this.connectMetamask();
   },
   methods: {
-    async connectMetamask() {
-      this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    },
     async subscribeToEvent(event) {
       contract.once(event, async () => {
         this.contractPaused = await contract.methods.paused().call();

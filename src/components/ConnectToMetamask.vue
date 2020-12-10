@@ -34,6 +34,7 @@ export default {
     return {
       connected: null,
       accounts: [],
+      selectedAddress: '',
     };
   },
   created: async function() {
@@ -43,6 +44,7 @@ export default {
     async connectMetamask() {
       try {
         this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+        this.selectedAddress = ethereum.selectedAddress;
         this.checkConnected();
       } catch (e) {
         console.log(e);
@@ -57,6 +59,7 @@ export default {
         } else {
           this.connected = true;
           this.accounts = accounts;
+          this.selectedAddress = ethereum.selectedAddress;
         }
       });
     },

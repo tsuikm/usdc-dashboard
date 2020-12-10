@@ -4,9 +4,10 @@ import {
   WEB3_RESULT_TOO_LARGE_ERROR_CODE,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
   WEB3_MAX_TRANSACTIONS,
+  TRANSACTION_TOPIC,
+  DEFAULT_GAS_PRICE,
 } from '@/utils/constants';
 import { padHex, toHex, removeDuplicates, removeLeadingZeros, fromHex } from '@/utils/utils';
-import { TRANSACTION_TOPIC } from './constants';
 import moment from 'moment';
 import Web3 from 'web3';
 
@@ -602,5 +603,26 @@ export const fetchAge = async (transaction) => {
     return `${hours} hrs ${minutes} mins ago`;
   } else {
     return `${days} days ${hours} hrs ago`;
+  }
+};
+
+
+export const ethReq = async(sender, method, data) => {
+  try {
+    await ethereum
+      .request({
+        method: method,
+        params: [
+          {
+            from: sender,
+            to: USDC_CONTRACT_ADDRESS,
+            data: data,
+            gasPrice: DEFAULT_GAS_PRICE,
+          },
+        ],
+      });
+  } catch (e) {
+    console.error(e);
+    //show error
   }
 };

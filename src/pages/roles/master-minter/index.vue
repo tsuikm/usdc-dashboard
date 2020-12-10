@@ -182,7 +182,7 @@ export default {
             method: 'eth_sendTransaction',
             params: [
               {
-                from: this.accounts[0],
+                from: this.$refs.connectToMetamaskButton.accounts[0],
                 to: USDC_CONTRACT_ADDRESS,
                 data: data,
                 gasPrice: DEFAULT_GAS_PRICE,

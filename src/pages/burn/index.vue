@@ -11,7 +11,7 @@
       @submit="this.submit"
     />
     <div class="error"> 
-      <span v-if="!connectedToMetamask">
+      <span v-if="connectedToMetamask === false">
         <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
       </span>
       <span v-if="showMinterWarning">
@@ -30,9 +30,8 @@
 // modules
 import Form from '@/components/Form';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
-import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
 import { toHex } from '@/utils/utils';
-import { contract } from '@/utils/web3utils';
+import { contract, ethReq } from '@/utils/web3utils';
 
 export default {
   components: {
@@ -44,7 +43,7 @@ export default {
       showMinterWarning: false,
       showAmountWarning: false,
       accounts: [],
-      connectedToMetamask: false,
+      connectedToMetamask: null,
     };
   },
   methods: {
@@ -54,17 +53,7 @@ export default {
         return;
       }
 
-      this.accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
-
-      let minterAccount = null;
-      for (let account of this.accounts) {
-        if (await contract.methods.isMinter(account).call()) {
-          minterAccount = account;
-          break;
-        }
-      }
-
-      if (minterAccount === null) {
+      if (!(await contract.methods.isMinter(this.$refs.connectToMetamaskButton.selectedAddress).call())) {
         this.showMinterWarning = true;
         return;
       }
@@ -75,24 +64,7 @@ export default {
         return;
       }
 
-      try {
-        // eslint-disable-next-line
-          const txHash = await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: minterAccount,
-                to: USDC_CONTRACT_ADDRESS,
-                data: contract.methods.burn(toHex(Number(amount) * 1000000)).encodeABI(),
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.error(e);
-        // show error
-      }
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, 'eth_sendTransaction', contract.methods.burn(toHex(Number(amount) * 1000000)).encodeABI());
     },
   },
   head() {

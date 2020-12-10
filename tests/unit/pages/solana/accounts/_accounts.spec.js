@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/vue';
+import { render } from '@testing-library/vue';
 import accounts from '@/pages/solana/accounts';
 
 const MOCK_ACCOUNTS = [

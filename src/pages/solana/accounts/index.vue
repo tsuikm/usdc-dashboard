@@ -18,9 +18,6 @@ import NavBar from '@/components/NavBar';
 import Table from '@/components/Table';
 // import { getBalance, getTotalSupply, getAllTransactions } from '@/utils/web3utils';
 import { ACCOUNTS_SCHEMA, getTopAccounts, getTokenInformation } from '@/utils/solana';
-import { removeLeadingZeros, roundToNearest, pushAll } from '@/utils/utils';
-
-const PERCENTAGE_DECIMAL_PLACES = 8;
 
 export default {
   components: {

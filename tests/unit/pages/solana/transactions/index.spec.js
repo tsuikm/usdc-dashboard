@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/vue';
+import { render } from '@testing-library/vue';
 import { finishPromises } from '@/utils/utils';
 import transactions from '@/pages/solana/transactions';
 

@@ -11,6 +11,9 @@
       @submit="this.submit"
     />
     <div class="error"> 
+      <span v-if="!connectedToMetamask">
+        <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
+      </span>
       <span v-if="showMinterWarning">
         <md-icon>error</md-icon> Error: You are not signed in as a minter of this contract and cannot burn USDC.
       </span>
@@ -41,10 +44,15 @@ export default {
       showMinterWarning: false,
       showAmountWarning: false,
       accounts: [],
+      connectedToMetamask: false,
     };
   },
   methods: {
     async submit(amount) {
+      this.connectedToMetamask = !!(this.$refs.connectToMetamaskButton && this.$refs.connectToMetamaskButton.selectedAddress);
+      if (!this.connectedToMetamask) {
+        return;
+      }
 
       this.accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
 

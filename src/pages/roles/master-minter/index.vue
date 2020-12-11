@@ -140,7 +140,7 @@ export default {
       this.showMasterMinterWarning = this.$refs.connectToMetamaskButton.selectedAddress !== masterMinterAccount; 
     },
     checkConnectedToMetamask() {
-      this.connectedToMetamask = !!(this.$refs.connectToMetamaskButton.selectedAddress);
+      this.connectedToMetamask = !!this.$refs.connectToMetamaskButton.selectedAddress;
     },
     async removeMinter() {
       this.checkConnectedToMetamask();

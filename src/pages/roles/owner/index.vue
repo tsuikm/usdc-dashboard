@@ -130,7 +130,7 @@ export default {
       this.blacklisterActive = !this.blacklisterActive;
     },
     async save() {
-      this.connectedToMetamask = !!(this.$refs.connectToMetamaskButton && this.$refs.connectToMetamaskButton.selectedAddress);
+      this.connectedToMetamask = !!this.$refs.connectToMetamaskButton.selectedAddress;
 
       this.address = this.address.trim().toLowerCase();
 

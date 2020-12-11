@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     async submit(toAddress, amount) {
-      this.connectedToMetamask = !!(this.$refs.connectToMetamaskButton && this.$refs.connectToMetamaskButton.selectedAddress);
+      this.connectedToMetamask = !!this.$refs.connectToMetamaskButton.selectedAddress;
       if (!this.connectedToMetamask) {
         return;
       }

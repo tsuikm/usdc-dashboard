@@ -106,6 +106,7 @@ export default {
           this.isBlacklisted = await contract.methods
             .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
             .call();
+          this.originalStatus = this.isBlacklisted;
         } catch (e) {
           console.error(e);
           this.isBlacklisted = null;

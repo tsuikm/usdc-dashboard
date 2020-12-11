@@ -99,7 +99,7 @@ export default {
       hasRenouncedRoles: false,
       showOwnerWarning: false,
       noRoles: false,
-      connectedToMetamask: null,
+      showConnectToMetamaskWarning: false,
     };
   },
   methods: {

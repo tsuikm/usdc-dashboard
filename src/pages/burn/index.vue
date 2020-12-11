@@ -11,7 +11,7 @@
       @submit="this.submit"
     />
     <div class="error"> 
-      <span v-if="connectedToMetamask === false">
+      <span v-if="showConnectToMetamaskWarning">
         <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
       </span>
       <span v-if="showMinterWarning">
@@ -42,14 +42,14 @@ export default {
     return {
       showMinterWarning: false,
       showAmountWarning: false,
+      showConnectToMetamaskWarning: false,
       accounts: [],
-      connectedToMetamask: null,
     };
   },
   methods: {
     async submit(amount) {
-      this.connectedToMetamask = !!this.$refs.connectToMetamaskButton.selectedAddress;
-      if (!this.connectedToMetamask) {
+      this.showConnectToMetamaskWarning = !this.$refs.connectToMetamaskButton.selectedAddress;
+      if (this.showConnectToMetamaskWarning) {
         return;
       }
 

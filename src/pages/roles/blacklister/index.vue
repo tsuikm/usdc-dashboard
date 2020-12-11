@@ -48,7 +48,7 @@
           />
         </div>
         <div
-          v-if="connectedToMetamask === false"
+          v-if="showConnectToMetamaskWarning"
         >
           <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
         </div>
@@ -92,7 +92,7 @@ export default {
       statusChecked: false,
       originalStatus: false,
       showBlacklisterWarning: false,
-      connectedToMetamask: null,
+      showConnectToMetamaskWarning: false,
     };
   },
   methods: {
@@ -146,8 +146,8 @@ export default {
       await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.unBlacklist(address).encodeABI());
     },
     async save() {
-      this.connectedToMetamask = !!this.$refs.connectToMetamaskButton.selectedAddress;
-      if (!this.connectedToMetamask) {
+      this.showConnectToMetamaskWarning = !this.$refs.connectToMetamaskButton.selectedAddress;
+      if (this.showConnectToMetamaskWarning) {
         return;
       }
 

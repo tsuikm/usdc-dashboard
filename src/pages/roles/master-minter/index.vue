@@ -66,7 +66,7 @@
           />
         </div>
       </div>
-      <span v-if="connectedToMetamask === false">
+      <span v-if="showConnectToMetamaskWarning">
         <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
       </span>
       <span v-if="showMasterMinterWarning">
@@ -108,7 +108,7 @@ export default {
       minterAllowance: null,
       accounts: [],
       showMasterMinterWarning: false,
-      connectedToMetamask: null,
+      showConnectToMetamaskWarning: false,
     };
   },
   methods: {
@@ -140,12 +140,12 @@ export default {
       this.showMasterMinterWarning = this.$refs.connectToMetamaskButton.selectedAddress !== masterMinterAccount; 
     },
     checkConnectedToMetamask() {
-      this.connectedToMetamask = !!this.$refs.connectToMetamaskButton.selectedAddress;
+      this.showConnectToMetamaskWarning = !this.$refs.connectToMetamaskButton.selectedAddress;
     },
     async removeMinter() {
       this.checkConnectedToMetamask();
 
-      if (!this.connectedToMetamask) {
+      if (this.showConnectToMetamaskWarning) {
         return;
       }
 
@@ -161,7 +161,7 @@ export default {
     async configureMinter() {
       this.checkConnectedToMetamask();
 
-      if (!this.connectedToMetamask) {
+      if (this.showConnectToMetamaskWarning) {
         return;
       }
 

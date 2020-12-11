@@ -22,7 +22,7 @@
         :on-click="save"
       />
       <span
-        v-if="connectedToMetamask === false"
+        v-if="showConnectToMetamaskWarning"
         class="error-msg"
       >
         <md-icon>error</md-icon> Please connect your account to Metamask before proceeding.
@@ -53,7 +53,7 @@ export default {
       contractPaused: null,
       accounts: [],
       showPauserWarning: false,
-      connectedToMetamask: null,
+      showConnectToMetamaskWarning: false,
     };
   },
   created: function() {
@@ -83,8 +83,8 @@ export default {
       await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.pause().encodeABI());
     },
     async save() {
-      this.connectedToMetamask = !!this.$refs.connectToMetamaskButton.selectedAddress;
-      if (!this.connectedToMetamask) {
+      this.showConnectToMetamaskWarning = !this.$refs.connectToMetamaskButton.selectedAddress;
+      if (this.showConnectToMetamaskWarning) {
         return;
       }
 

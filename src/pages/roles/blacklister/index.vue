@@ -115,11 +115,11 @@ export default {
 
     },
     async handleBlacklist() {
-      await this.blacklist(this.address);
+      await this.blacklist(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH));
       this.subscribeToEvent(contract.blacklistEvent);
     },
     async handleUnblacklist() {
-      await this.unBlacklist(this.address);
+      await this.unBlacklist(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH));
       this.subscribeToEvent(contract.unBlacklistEvent);
     },
     async lookupBlacklistStatus() {

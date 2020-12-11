@@ -77,10 +77,10 @@ export default {
       this.contractPaused = await contract.methods.paused().call();
     },
     async pause() {  
-      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.unpause().encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.pause().encodeABI());
     },
     async unpause() {  
-      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.pause().encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.unpause().encodeABI());
     },
     async save() {
       this.showConnectToMetamaskWarning = !this.$refs.connectToMetamaskButton.selectedAddress;
@@ -118,7 +118,7 @@ export default {
 @import "@/assets/styles/variables/_colors.scss";
 
 .container {
-  padding: 30px;
+  padding: 30px 30px 0px 30px;
   margin: auto;
   width: 50%;
   display: flex;
@@ -162,6 +162,7 @@ export default {
 }
 
 .error-msg {
+  margin-top: 20px;
   margin-bottom: 25px;
 }
 

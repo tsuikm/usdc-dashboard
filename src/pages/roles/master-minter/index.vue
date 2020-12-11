@@ -137,7 +137,7 @@ export default {
     },
     async checkMasterMinter() {
       const masterMinterAccount = (await contract.methods.masterMinter().call()).toLowerCase();
-      this.showMasterMinterWarning = this.$refs.connectToMetamaskButton.selectedAddress !== masterMinterAccount; 
+      this.showMasterMinterWarning = this.$refs.connectToMetamaskButton.selectedAddress.toLowerCase() !== masterMinterAccount; 
     },
     checkConnectedToMetamask() {
       this.showConnectToMetamaskWarning = !this.$refs.connectToMetamaskButton.selectedAddress;

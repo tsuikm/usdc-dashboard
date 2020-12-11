@@ -15,8 +15,6 @@ async function ethereumFactory(isConnectedToMetamask, owner = null) {
 
       // Simulates connecting to metamask as the owner.
       if (config.method === 'eth_requestAccounts') {
-        console.log(isConnectedToMetamask);
-        console.log(isConnectedToMetamask ? [ownerAddress] : []);
         return isConnectedToMetamask ? [ownerAddress] : [];
       }
     }),

@@ -68,7 +68,7 @@ describe('Burn page', () => {
         {
           from: MOCK_WALLET_ADDRESS,
           to: USDC_CONTRACT_ADDRESS,
-          data: toHex(Number(AMOUNT_TEXT) * decimals),
+          data: toHex(Number(AMOUNT_TEXT) * (10 ** decimals)),
           gasPrice: DEFAULT_GAS_PRICE,
         },
       ],

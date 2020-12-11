@@ -89,7 +89,7 @@ export default {
       }
 
       const pauserAccount = (await contract.methods.pauser().call()).toLowerCase();
-      this.showPauserWarning = this.$refs.connectToMetamaskButton.selectedAddress !== pauserAccount;
+      this.showPauserWarning = this.$refs.connectToMetamaskButton.selectedAddress.toLowerCase() !== pauserAccount;
 
       if (this.showPauserWarning) {
         return;

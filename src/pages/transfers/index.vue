@@ -74,7 +74,9 @@ export default {
       this.transfer(this.address, amount);
     },
     async transfer(address, amount) {
-      ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.transfer(address, toHex(Number(amount) * 1000000)).encodeABI());
+      const decimals = await contract.methods.decimals().call(); 
+      const transferData = contract.methods.transfer(address, toHex(Number(amount) * (10 ** decimals))).encodeABI();
+      ethReq(this.$refs.connectToMetamaskButton.selectedAddress, transferData);
     },
   },
   head() {

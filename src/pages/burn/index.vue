@@ -64,7 +64,7 @@ export default {
         return;
       }
       const decimals = await contract.methods.decimals().call(); 
-      const burnData = contract.methods.burn(toHex(Number(amount) * decimals)).encodeABI();
+      const burnData = contract.methods.burn(toHex(Number(amount) * (10 ** decimals))).encodeABI();
       await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, burnData);
     },
   },

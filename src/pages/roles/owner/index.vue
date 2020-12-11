@@ -144,7 +144,7 @@ export default {
 
       const ownerAccount = await getOwner();
 
-      this.showOwnerWarning = this.$refs.connectToMetamaskButton.selectedAddress !== ownerAccount;
+      this.showOwnerWarning = this.$refs.connectToMetamaskButton.selectedAddress.toLowerCase() !== ownerAccount;
 
       this.hasRenouncedRoles = (!this.pauserActive && await getPauser() === this.address) ||
         (!this.masterMinterActive && await getMasterMinter() === this.address) ||

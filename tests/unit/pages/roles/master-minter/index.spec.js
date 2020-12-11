@@ -142,7 +142,7 @@ describe('MasterMinterControl', () => {
     
     await fireEvent.click(getByText('INCREASE ALLOWANCE'));
     await finishPromises();
-    expect(getByText('Please connect your account to Metamask before proceeding.')).not.toBeNull();    await finishPromises();
+    expect(getByText('Please connect your account to Metamask before proceeding.')).not.toBeNull(); 
   });
 
 });

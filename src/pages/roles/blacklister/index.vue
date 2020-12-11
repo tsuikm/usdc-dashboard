@@ -152,7 +152,7 @@ export default {
       }
 
       const blacklisterAccount = (await contract.methods.blacklister().call()).toLowerCase();
-      this.showBlacklisterWarning = this.$refs.connectToMetamaskButton.selectedAddress !== blacklisterAccount;
+      this.showBlacklisterWarning = this.$refs.connectToMetamaskButton.selectedAddress.toLowerCase() !== blacklisterAccount;
 
       if (this.showBlacklisterWarning) {
         return;

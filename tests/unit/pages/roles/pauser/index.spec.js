@@ -6,7 +6,6 @@ import Web3 from 'web3';
 const contract = new (new Web3()).eth.Contract();
 
 async function ethereumFactory(isConnectedToMetamask) {
-  const pauserAddress = await contract.methods.pauser().call();
   return {
     request: jest.fn(async config => {
       if (config.method === 'eth_sendTransaction') {
@@ -15,10 +14,9 @@ async function ethereumFactory(isConnectedToMetamask) {
 
       // Simulates connecting to metamask as the pauser.
       if (config.method === 'eth_requestAccounts') {
-        return isConnectedToMetamask ? [pauserAddress] : [];
+        return isConnectedToMetamask ? [await contract.methods.pauser().call()] : [];
       }
     }),
-    selectedAddress: isConnectedToMetamask ? pauserAddress : null,
   };
 }
 

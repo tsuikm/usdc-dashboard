@@ -45,7 +45,6 @@ describe('Burn page', () => {
   test('Burn button works', async () => {
     global.ethereum = {
       request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
-      selectedAddress: MOCK_WALLET_ADDRESS,
     };
 
     const { getByPlaceholderText, queryByText, getByText } = render(burn);
@@ -81,7 +80,7 @@ describe('Burn page', () => {
       Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
       Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS;
       global.ethereum = {
-        request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
+        request: jest.fn(async () => []),
       };
   
       const { getByPlaceholderText, queryByText, getByText } = render(burn);
@@ -106,7 +105,6 @@ describe('Burn page', () => {
       Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS_ERROR;
       global.ethereum = {
         request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
-        selectedAddress: MOCK_WALLET_ADDRESS_ERROR,
       };
   
       const { getByPlaceholderText, queryByText, getByText } = render(burn);

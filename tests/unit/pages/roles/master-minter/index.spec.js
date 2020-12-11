@@ -16,7 +16,6 @@ function ethereumFactory(isConnectedToMetamask) {
         return isConnectedToMetamask ? [MASTERMINTER] : [];
       }
     }),
-    selectedAddress: isConnectedToMetamask ? MASTERMINTER : null,
   };
 }
 const MASTERMINTER = padHex('0x00000001', WEB3_BALANCEOF_ADDRESS_LENGTH);
@@ -123,7 +122,9 @@ describe('MasterMinterControl', () => {
   });
 
 
-  it('ConnectToMetamask component renders', async () => {
+  it('Not connected to Metamask error renders', async () => {
+    global.ethereum = ethereumFactory(false);
+
     const { getByText } = render(MasterMinterControl, {
       data: function() {
         return {
@@ -134,8 +135,7 @@ describe('MasterMinterControl', () => {
         };
       },
     });
-    global.ethereum = ethereumFactory(false);
-
+    
     expect(getByText('This address is currently a minter with allowance 195.')).not.toBeNull();
 
     await fireEvent.click(getByText('Connect to MetaMask'));

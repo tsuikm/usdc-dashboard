@@ -10,7 +10,6 @@ Web3.VALID_ADDRESSES = [padHex(MOCK_WALLET_ADDRESS.trim(), WEB3_BALANCEOF_ADDRES
 
 global.ethereum = {
   request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
-  selectedAddress: MOCK_WALLET_ADDRESS, 
 };
 
 describe('Transfers page', () => {
@@ -54,8 +53,7 @@ describe('Transfers page', () => {
 
   test('Not connected to Metamask error renders', async () => {
     global.ethereum = {
-      request: jest.fn(async () => [MOCK_WALLET_ADDRESS]),
-      selectedAddress: null, 
+      request: jest.fn(async () => []),
     };
 
     const TO_WALLET_ADDRESS = '0x12345';

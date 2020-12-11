@@ -44,10 +44,10 @@ export default {
     async connectMetamask() {
       try {
         this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-        this.selectedAddress = ethereum.selectedAddress;
+        this.selectedAddress = this.accounts ? this.accounts[0] : null;
         this.checkConnected();
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
     async checkConnected() {
@@ -56,10 +56,11 @@ export default {
           console.error('An error occurred: '+ err);
         } else if (accounts.length == 0) {
           this.connected = false;
+          this.selectedAddress = null;
         } else {
           this.connected = true;
           this.accounts = accounts;
-          this.selectedAddress = ethereum.selectedAddress;
+          this.selectedAddress = this.accounts[0];
         }
       });
     },

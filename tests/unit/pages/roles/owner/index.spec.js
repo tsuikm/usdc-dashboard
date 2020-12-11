@@ -6,7 +6,6 @@ import Web3 from 'web3';
 const contract = new (new Web3()).eth.Contract();
 
 async function ethereumFactory(isConnectedToMetamask) {
-  const ownerContractAddress = await contract.methods.owner().call();
   return {
     request: jest.fn(async config => {
       if (config.method === 'eth_sendTransaction') {
@@ -15,10 +14,9 @@ async function ethereumFactory(isConnectedToMetamask) {
 
       // Simulates connecting to metamask as the owner.
       if (config.method === 'eth_requestAccounts') {
-        return isConnectedToMetamask ? [ownerContractAddress] : [];
+        return isConnectedToMetamask ? [await contract.methods.owner().call()] : [];
       }
     }),
-    selectedAddress: isConnectedToMetamask ? ownerContractAddress : null,
   };
 }
 

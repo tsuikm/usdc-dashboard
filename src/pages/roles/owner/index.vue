@@ -40,20 +40,25 @@
             :on-click="toggleBlacklister"
           />
         </div>
-        <span v-if="noRoles">
-          <md-icon>error</md-icon> No roles 
-        </span>
-        <span v-if="hasRenouncedRoles">
-          <md-icon>error</md-icon> Error: Cannot renounce roles. Please assign role to another address.
-        </span>
-        <span v-if="showOwnerWarning">
-          <md-icon>error</md-icon> Error: You are not signed in as the owner of this contract and cannot reassign roles.
-        </span>
         <div class="update-button">
           <ActionButton
             :label="'SAVE'"
             :on-click="this.save"
           />
+        </div>
+        <div class="error">
+          <span v-if="showConnectToMetamaskWarning">
+            <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
+          </span>
+          <span v-if="noRoles">
+            <md-icon>error</md-icon> No roles 
+          </span>
+          <span v-if="hasRenouncedRoles">
+            <md-icon>error</md-icon> Error: Cannot renounce roles. Please assign role to another address.
+          </span>
+          <span v-if="showOwnerWarning">
+            <md-icon>error</md-icon> Error: You are not signed in as the owner of this contract and cannot reassign roles.
+          </span>
         </div>
         <ConnectToMetamask ref="connectToMetamaskButton" />
       </div>
@@ -130,7 +135,10 @@ export default {
       this.blacklisterActive = !this.blacklisterActive;
     },
     async save() {
-      this.connectedToMetamask = !!this.$refs.connectToMetamaskButton.selectedAddress;
+      this.showConnectToMetamaskWarning = !this.$refs.connectToMetamaskButton.selectedAddress;
+      if (this.showConnectToMetamaskWarning) {
+        return;
+      }
 
       this.address = this.address.trim().toLowerCase();
 
@@ -210,6 +218,13 @@ export default {
 
 .update-button {
   margin-top: 20px;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2%;
 }
 
 </style>

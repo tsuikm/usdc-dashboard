@@ -61,14 +61,14 @@ describe('Burn page', () => {
     await fireEvent.update(amountInput, AMOUNT_TEXT);
     await fireEvent.click(submitButton);
 
-    // eslint-disable-next-line
+    const decimals = await (new (new Web3()).eth.Contract()).methods.decimals().call();    // eslint-disable-next-line
     expect(ethereum.request.mock.calls[1]).toEqual([{
       method: 'eth_sendTransaction',
       params: [
         {
           from: MOCK_WALLET_ADDRESS,
           to: USDC_CONTRACT_ADDRESS,
-          data: toHex(Number(AMOUNT_TEXT) * 1000000),
+          data: toHex(Number(AMOUNT_TEXT) * decimals),
           gasPrice: DEFAULT_GAS_PRICE,
         },
       ],

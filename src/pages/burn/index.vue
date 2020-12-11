@@ -63,8 +63,8 @@ export default {
         this.showAmountWarning = true;
         return;
       }
-
-      const burnData = contract.methods.burn(toHex(Number(amount) * 1000000)).encodeABI();
+      const decimals = await contract.methods.decimals().call(); 
+      const burnData = contract.methods.burn(toHex(Number(amount) * decimals)).encodeABI();
       await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, burnData);
     },
   },

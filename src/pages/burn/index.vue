@@ -52,6 +52,8 @@ export default {
       if (this.showConnectToMetamaskWarning) {
         return;
       }
+      this.showMinterWarning = false;
+      this.showAmountWarning = false;
 
       if (!(await contract.methods.isMinter(this.$refs.connectToMetamaskButton.selectedAddress).call())) {
         this.showMinterWarning = true;

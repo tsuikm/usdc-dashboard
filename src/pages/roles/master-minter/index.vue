@@ -47,7 +47,7 @@
         </div>
       </div>
       <div
-        v-else-if="this.isMinter === false"
+        v-else-if="this.isMinter === false && !this.showAddressWarning"
         class="minter-clause"
       > 
         <div class="status-message">
@@ -66,12 +66,20 @@
           />
         </div>
       </div>
-      <span v-if="showConnectToMetamaskWarning">
-        <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
-      </span>
-      <span v-if="showMasterMinterWarning">
-        <md-icon>error</md-icon> Error: You are not signed in as the master minter of this contract.
-      </span>
+      <div class="error">
+        <span v-if="showConnectToMetamaskWarning">
+          <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
+        </span>
+        <span v-if="showMasterMinterWarning">
+          <md-icon>error</md-icon> Error: You are not signed in as the master minter of this contract.
+        </span>
+        <span v-if="showAddressWarning">
+          <md-icon>error</md-icon> Error: Please input a valid address.
+        </span>
+        <span v-if="showAmountWarning">
+          <md-icon>error</md-icon> Error: Please input a valid amount.
+        </span>
+      </div>
       <ConnectToMetamask ref="connectToMetamaskButton" />
     </div>
   </div>
@@ -109,22 +117,20 @@ export default {
       accounts: [],
       showMasterMinterWarning: false,
       showConnectToMetamaskWarning: false,
+      showAddressWarning: false,
+      showAmountWarning: false,
     };
   },
   methods: {
     async subscribeToEvent(event) {
       contract.once(event, async () => {
-        if (this.address === '') {
-          this.isMinter = null;
-          return;
-        }
         try {
           this.isMinter = await contract.methods
-            .isMinter(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+            .isMinter(this.address)
             .call();
           if (this.isMinter) {
             this.minterAllowance = await contract.methods
-              .minterAllowance(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+              .minterAllowance(this.address)
               .call();
           }
         } catch (e) {
@@ -170,22 +176,36 @@ export default {
       if (this.showMasterMinterWarning) {
         return;
       }
-      
+
+      if (isNaN(this.allowance)) {
+        this.showAmountWarning = true;
+        return;
+      }
+      this.showAmountWarning = false;
       await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.configureMinter(this.address, this.allowance).encodeABI());
       this.subscribeToEvent(contract.configureMinterEvent);
     },
     async lookupMinterStatus() {
+      this.showConnectToMetamaskWarning = false;
+      this.showMasterMinterWarning = false;
       if (this.address === '') {
         this.isMinter = null;
+        this.showAddressWarning = true;
+        return;
+      }
+      this.showAddressWarning = false;
+      this.address = padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH);
+      if (!web3.utils.isAddress(this.address)) {
+        this.showAddressWarning = true;
         return;
       }
       try {
         this.isMinter = await contract.methods
-          .isMinter(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+          .isMinter(this.address)
           .call();
         if (this.isMinter) {
           this.minterAllowance = await contract.methods
-            .minterAllowance(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+            .minterAllowance(this.address)
             .call();
         }
       } catch (e) {
@@ -236,6 +256,13 @@ export default {
 .status-message {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2%;
 }
 
 </style>

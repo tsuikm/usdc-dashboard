@@ -102,10 +102,6 @@ export default {
   methods: {
     async subscribeToEvent(event) {
       contract.once(event, async () => {
-        if (this.address === '') {
-          this.isBlacklisted = null;
-          return;
-        }
         try {
           this.isBlacklisted = await contract.methods
             .isBlacklisted(this.address)
@@ -113,7 +109,6 @@ export default {
           this.originalStatus = this.isBlacklisted;
         } catch (e) {
           console.error(e);
-          this.showAddressWarning = true;
           this.isBlacklisted = null;
         }
       } );
@@ -129,11 +124,14 @@ export default {
       this.subscribeToEvent(contract.unBlacklistEvent);
     },
     async lookupBlacklistStatus() {
-      this.showAddressWarning = false;
+      this.showConnectToMetamaskWarning = false;
+      this.showBlacklisterWarning = false;
       if (this.address === '') {
         this.isBlacklisted = null;
+        this.showAddressWarning = true;
         return;
       }
+      this.showAddressWarning = false;
       this.address = padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH);
       if (!web3.utils.isAddress(this.address)) {
         this.showAddressWarning = true;
@@ -162,10 +160,6 @@ export default {
     async save() {
       this.showConnectToMetamaskWarning = !this.$refs.connectToMetamaskButton.selectedAddress;
       if (this.showConnectToMetamaskWarning) {
-        return;
-      }
-      if (!web3.utils.isAddress(this.address)) {
-        this.showAddressWarning = true;
         return;
       }
 

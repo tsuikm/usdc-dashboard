@@ -58,6 +58,8 @@ export default {
       if (this.showConnectToMetamaskWarning) {
         return;
       }
+      this.showAddressWarning = false;
+      this.showAmountWarning = false;
 
       this.address = padHex(toAddress.trim(), WEB3_BALANCEOF_ADDRESS_LENGTH);
 

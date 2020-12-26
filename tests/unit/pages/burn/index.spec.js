@@ -61,43 +61,78 @@ describe('Burn page', () => {
     await fireEvent.update(amountInput, AMOUNT_TEXT);
     await fireEvent.click(submitButton);
 
-    // eslint-disable-next-line
+    const decimals = await (new (new Web3()).eth.Contract()).methods.decimals().call();    // eslint-disable-next-line
     expect(ethereum.request.mock.calls[1]).toEqual([{
       method: 'eth_sendTransaction',
       params: [
         {
           from: MOCK_WALLET_ADDRESS,
           to: USDC_CONTRACT_ADDRESS,
-          data: toHex(Number(AMOUNT_TEXT) * 1000000),
+          data: toHex(Number(AMOUNT_TEXT) * (10 ** decimals)),
           gasPrice: DEFAULT_GAS_PRICE,
         },
       ],
     }]);
   });
 
-  test('Error renders', async () => {
-    const MOCK_WALLET_ADDRESS_ERROR = '0x1';
-    Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
-    Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS_ERROR;
-    global.ethereum = {
-      request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
-    };
+  describe('Errors', () => {
+    test('Not connected to Metamask error renders', async () => {
+      Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
+      Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS;
+      global.ethereum = {
+        request: jest.fn(async () => []),
+      };
+  
+      const { getByPlaceholderText, queryByText, getByText } = render(burn);
+      const AMOUNT_TEXT = 100;
+      const submitButton = queryByText('SUBMIT');
+      const amountInput = getByPlaceholderText('Amount: i.e. 0');
+  
+      const NOT_CONNECTED_TO_METAMASK_ERROR_MESSAGE = 'Please connect your account to Metamask before proceeding.';
+  
+      await fireEvent.update(amountInput, AMOUNT_TEXT);
+      await fireEvent.click(submitButton);
+  
+      await finishPromises();
+  
+      expect(getByText(NOT_CONNECTED_TO_METAMASK_ERROR_MESSAGE)).not.toBeNull();
+  
+    });
 
-    const { getByPlaceholderText, queryByText, getByText } = render(burn);
-    const AMOUNT_TEXT = 100;
-    const submitButton = queryByText('SUBMIT');
-    const amountInput = getByPlaceholderText('Amount: i.e. 0');
-
-    const MINTER_ERROR_MESSAGE = 'Error: You are not signed in as a minter of this contract and cannot burn USDC.';
-
-    await fireEvent.update(amountInput, AMOUNT_TEXT);
-    await fireEvent.click(submitButton);
-
-    await finishPromises();
-
-    expect(getByText(MINTER_ERROR_MESSAGE)).not.toBeNull();
-
+    test('Not minter error renders', async () => {
+      const MOCK_WALLET_ADDRESS_ERROR = '0x1';
+      Web3.MOCK_ACCOUNTS = MOCK_ACCOUNTS;
+      Web3.MOCK_WALLET_ADDRESS = MOCK_WALLET_ADDRESS_ERROR;
+      global.ethereum = {
+        request: jest.fn(async () => [MOCK_WALLET_ADDRESS_ERROR]),
+      };
+  
+      const { getByPlaceholderText, queryByText, getByText } = render(burn);
+  
+      const metamaskButton = getByText('Connect to MetaMask');
+      await fireEvent.click(metamaskButton);
+  
+      expect(ethereum.request.mock.calls[0]).toEqual([{ method: 'eth_requestAccounts' }]);
+      expect(ethereum.request.mock.calls).toHaveLength(1);
+      const AMOUNT_TEXT = 100;
+      const submitButton = queryByText('SUBMIT');
+      const amountInput = getByPlaceholderText('Amount: i.e. 0');
+  
+      await fireEvent.update(amountInput, AMOUNT_TEXT);
+      await fireEvent.click(submitButton);
+  
+      const MINTER_ERROR_MESSAGE = 'Error: You are not signed in as a minter of this contract and cannot burn USDC.';
+  
+      await fireEvent.update(amountInput, AMOUNT_TEXT);
+      await fireEvent.click(submitButton);
+  
+      await finishPromises();
+  
+      expect(getByText(MINTER_ERROR_MESSAGE)).not.toBeNull();
+  
+    });
   });
+
 
   test('ConnectToMetamask component renders', async () => {
     const { findByText } = render(burn);

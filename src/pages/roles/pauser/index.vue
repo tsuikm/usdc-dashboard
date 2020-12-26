@@ -17,16 +17,22 @@
       <div class="content-subtext">
         Pausing prevents transfers, minting, and burning.
       </div>
+      <ActionButton
+        :label="'SAVE'"
+        :on-click="save"
+      />
+      <span
+        v-if="showConnectToMetamaskWarning"
+        class="error-msg"
+      >
+        <md-icon>error</md-icon> Please connect your account to Metamask before proceeding.
+      </span>
       <span
         v-if="showPauserWarning"
         class="error-msg"
       >
         <md-icon>error</md-icon> Error: You are not signed in as the pauser of this contract.
       </span>
-      <ActionButton
-        :label="'SAVE'"
-        :on-click="save"
-      />
     </div>
     <ConnectToMetamask ref="connectToMetamaskButton" />
   </div>
@@ -35,8 +41,7 @@
 <script>
 import ActionButton from '@/components/ActionButton';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
-import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
-import { contract } from '@/utils/web3utils';
+import { contract, ethReq } from '@/utils/web3utils';
 
 export default {
   components: {
@@ -48,16 +53,13 @@ export default {
       contractPaused: null,
       accounts: [],
       showPauserWarning: false,
+      showConnectToMetamaskWarning: false,
     };
   },
   created: function() {
     this.lookupContractStatus();
-    this.connectMetamask();
   },
   methods: {
-    async connectMetamask() {
-      this.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    },
     async subscribeToEvent(event) {
       contract.once(event, async () => {
         this.contractPaused = await contract.methods.paused().call();
@@ -74,35 +76,20 @@ export default {
     async lookupContractStatus() {
       this.contractPaused = await contract.methods.paused().call();
     },
-    async ethReq(data) {
-      try {
-        await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.accounts[0],
-                to: USDC_CONTRACT_ADDRESS,
-                data: data,
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.error(e);
-        //show error
-      }
-    },
     async pause() {  
-      await this.ethReq(contract.methods.pause().encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.pause().encodeABI());
     },
     async unpause() {  
-      await this.ethReq(contract.methods.unpause().encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.unpause().encodeABI());
     },
     async save() {
+      this.showConnectToMetamaskWarning = !this.$refs.connectToMetamaskButton.selectedAddress;
+      if (this.showConnectToMetamaskWarning) {
+        return;
+      }
+
       const pauserAccount = (await contract.methods.pauser().call()).toLowerCase();
-      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
-      this.showPauserWarning = !accounts.includes(pauserAccount);
+      this.showPauserWarning = this.$refs.connectToMetamaskButton.selectedAddress.toLowerCase() !== pauserAccount;
 
       if (this.showPauserWarning) {
         return;
@@ -131,7 +118,7 @@ export default {
 @import "@/assets/styles/variables/_colors.scss";
 
 .container {
-  padding: 30px;
+  padding: 30px 30px 0px 30px;
   margin: auto;
   width: 50%;
   display: flex;
@@ -175,6 +162,7 @@ export default {
 }
 
 .error-msg {
+  margin-top: 20px;
   margin-bottom: 25px;
 }
 

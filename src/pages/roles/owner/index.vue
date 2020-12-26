@@ -40,20 +40,25 @@
             :on-click="toggleBlacklister"
           />
         </div>
-        <span v-if="noRoles">
-          <md-icon>error</md-icon> No roles 
-        </span>
-        <span v-if="hasRenouncedRoles">
-          <md-icon>error</md-icon> Error: Cannot renounce roles. Please assign role to another address.
-        </span>
-        <span v-if="showOwnerWarning">
-          <md-icon>error</md-icon> Error: You are not signed in as the owner of this contract and cannot reassign roles.
-        </span>
         <div class="update-button">
           <ActionButton
             :label="'SAVE'"
             :on-click="this.save"
           />
+        </div>
+        <div class="error">
+          <span v-if="showConnectToMetamaskWarning">
+            <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
+          </span>
+          <span v-if="noRoles">
+            <md-icon>error</md-icon> No roles 
+          </span>
+          <span v-if="hasRenouncedRoles">
+            <md-icon>error</md-icon> Error: Cannot renounce roles. Please assign role to another address.
+          </span>
+          <span v-if="showOwnerWarning">
+            <md-icon>error</md-icon> Error: You are not signed in as the owner of this contract and cannot reassign roles.
+          </span>
         </div>
         <ConnectToMetamask ref="connectToMetamaskButton" />
       </div>
@@ -66,8 +71,7 @@ import RoleButton from '@/components/RoleButton';
 import ActionButton from '@/components/ActionButton';
 import CustomInput from '@/components/CustomInput';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
-import { contract } from '@/utils/web3utils';
-import { USDC_CONTRACT_ADDRESS, DEFAULT_GAS_PRICE } from '@/utils/constants';
+import { contract, ethReq } from '@/utils/web3utils';
 
 /*----------------------------------------------------------------------------*
  * Helpers
@@ -82,33 +86,6 @@ const getOwner = async () => (await contract.methods.owner().call()).toLowerCase
 const getPauser = async () => (await contract.methods.pauser().call()).toLowerCase();
 const getBlacklister = async () => (await contract.methods.blacklister().call()).toLowerCase();
 const getMasterMinter = async () => (await contract.methods.masterMinter().call()).toLowerCase();
-
-/**
- * Changes the owner/pauser/blacklister/master minter.
- *
- * @param {String} ownerAccount - the owner's account.
- * @param {String} contractMethod - the abi method that changes the role.
- * @param {String} address - the address to assign the role to.
- */
-async function changeRole(ownerAccount, contractMethod, address) {
-  try {
-    await ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [
-        {
-          from: ownerAccount,
-          to: USDC_CONTRACT_ADDRESS,
-          data: contractMethod(address).encodeABI(),
-          gasPrice: DEFAULT_GAS_PRICE,
-        },
-      ],
-    });
-  } catch(e) {
-    console.error(e);
-  }
-}
-
-//----------------------------------------------------------------------------------------
 
 export default {
   components: {
@@ -127,6 +104,7 @@ export default {
       hasRenouncedRoles: false,
       showOwnerWarning: false,
       noRoles: false,
+      showConnectToMetamaskWarning: false,
     };
   },
   methods: {
@@ -157,13 +135,16 @@ export default {
       this.blacklisterActive = !this.blacklisterActive;
     },
     async save() {
-      this.address = this.address.trim().toLowerCase();
+      this.showConnectToMetamaskWarning = !this.$refs.connectToMetamaskButton.selectedAddress;
+      if (this.showConnectToMetamaskWarning) {
+        return;
+      }
 
-      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
+      this.address = this.address.trim().toLowerCase();
 
       const ownerAccount = await getOwner();
 
-      this.showOwnerWarning = !accounts.includes(ownerAccount);
+      this.showOwnerWarning = this.$refs.connectToMetamaskButton.selectedAddress.toLowerCase() !== ownerAccount;
 
       this.hasRenouncedRoles = (!this.pauserActive && await getPauser() === this.address) ||
         (!this.masterMinterActive && await getMasterMinter() === this.address) ||
@@ -175,16 +156,16 @@ export default {
       }
 
       if (this.pauserActive && await getPauser() !== this.address) {
-        await changeRole(ownerAccount, contract.methods.updatePauser, this.address);
+        await ethReq(ownerAccount, contract.methods.updatePauser(this.address).encodeABI());
       }
       if (this.masterMinterActive && await getMasterMinter() !== this.address) {
-        await changeRole(ownerAccount, contract.methods.updateMasterMinter, this.address);
+        await ethReq(ownerAccount, contract.methods.updateMasterMinter(this.address).encodeABI());
       }
       if (this.blacklisterActive && await getBlacklister() !== this.address) {
-        await changeRole(ownerAccount, contract.methods.updateBlacklister, this.address);
+        await ethReq(ownerAccount, contract.methods.updateBlacklister(this.address).encodeABI());
       }
       if (this.ownerActive && await getOwner() !== this.address) {
-        await changeRole(ownerAccount, contract.methods.transferOwnership, this.address);
+        await ethReq(ownerAccount, contract.methods.transferOwnership(this.address).encodeABI());
       }
     },
   },
@@ -237,6 +218,13 @@ export default {
 
 .update-button {
   margin-top: 20px;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2%;
 }
 
 </style>

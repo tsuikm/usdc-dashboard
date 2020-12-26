@@ -5,7 +5,8 @@ import Web3 from 'web3';
 
 const contract = new (new Web3()).eth.Contract();
 
-function ethereumFactory(isConnectedToMetamask) {
+async function ethereumFactory(isConnectedToMetamask, owner = null) {
+  const ownerAddress = owner || await contract.methods.owner().call();
   return {
     request: jest.fn(async config => {
       if (config.method === 'eth_sendTransaction') {
@@ -14,7 +15,7 @@ function ethereumFactory(isConnectedToMetamask) {
 
       // Simulates connecting to metamask as the owner.
       if (config.method === 'eth_requestAccounts') {
-        return isConnectedToMetamask ? [await contract.methods.owner().call()] : [];
+        return isConnectedToMetamask ? [ownerAddress] : [];
       }
     }),
   };
@@ -22,6 +23,7 @@ function ethereumFactory(isConnectedToMetamask) {
 
 const SCRATCH_ADDRESS = '0x0000000e'; // has no roles
 const OWNER_ERROR_MESSAGE = 'Error: You are not signed in as the owner of this contract and cannot reassign roles.';
+const NOT_CONNECTED_TO_METAMASK_ERROR_MESSAGE = 'Please connect your account to Metamask before proceeding.';
 
 describe('OwnerControl', () => {
 
@@ -52,7 +54,7 @@ describe('OwnerControl', () => {
     const { getByText, getByPlaceholderText } = render(OwnerControl);
 
     // Simulates connecting to metamask as the owner.
-    global.ethereum = ethereumFactory(true);
+    global.ethereum = await ethereumFactory(true);
 
     const input = getByPlaceholderText('Enter Wallet Address Here');
     const masterMinterButton = getByText('MASTER MINTER');
@@ -89,8 +91,9 @@ describe('OwnerControl', () => {
 
   it('Prevents reassigning roles when owner is not connected', async () => {
     const { getByText, getByPlaceholderText } = render(OwnerControl);
+    const FAKE_OWNER_ADDRESS = '0xWOOIAMNOTANOWNERADDRESS';
 
-    global.ethereum = ethereumFactory(false);
+    global.ethereum = await ethereumFactory(true, FAKE_OWNER_ADDRESS);
 
     const input = getByPlaceholderText('Enter Wallet Address Here');
     const masterMinterButton = getByText('MASTER MINTER');
@@ -126,6 +129,46 @@ describe('OwnerControl', () => {
     await fireEvent.click(saveButton);
     await finishPromises();
     expect(getByText(OWNER_ERROR_MESSAGE)).not.toBeNull();
+    expect(await contract.methods.owner().call()).not.toBe(SCRATCH_ADDRESS);
+  });
+
+  it('Not connected to Metamask error renders', async () => {
+    const { getByText, getByPlaceholderText } = render(OwnerControl);
+    const FAKE_OWNER_ADDRESS = '0xWOOIAMNOTANOWNERADDRESS';
+
+    global.ethereum = await ethereumFactory(false, FAKE_OWNER_ADDRESS);
+
+    const input = getByPlaceholderText('Enter Wallet Address Here');
+    const masterMinterButton = getByText('MASTER MINTER');
+    const blacklisterButton = getByText('BLACKLISTER');
+    const pauserButton = getByText('PAUSER');
+    const ownerButton = getByText('OWNER');
+    const saveButton = getByText('SAVE');
+
+    await fireEvent.update(input, SCRATCH_ADDRESS);
+
+    await fireEvent.click(masterMinterButton);
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(getByText(NOT_CONNECTED_TO_METAMASK_ERROR_MESSAGE)).not.toBeNull();
+    expect(await contract.methods.masterMinter().call()).not.toBe(SCRATCH_ADDRESS);
+
+    await fireEvent.click(blacklisterButton);
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(getByText(NOT_CONNECTED_TO_METAMASK_ERROR_MESSAGE)).not.toBeNull();
+    expect(await contract.methods.blacklister().call()).not.toBe(SCRATCH_ADDRESS);
+
+    await fireEvent.click(pauserButton);
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(getByText(NOT_CONNECTED_TO_METAMASK_ERROR_MESSAGE)).not.toBeNull();
+    expect(await contract.methods.pauser().call()).not.toBe(SCRATCH_ADDRESS);
+
+    await fireEvent.click(ownerButton);
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(getByText(NOT_CONNECTED_TO_METAMASK_ERROR_MESSAGE)).not.toBeNull();
     expect(await contract.methods.owner().call()).not.toBe(SCRATCH_ADDRESS);
   });
 

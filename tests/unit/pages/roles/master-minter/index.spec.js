@@ -122,4 +122,27 @@ describe('MasterMinterControl', () => {
   });
 
 
+  it('Not connected to Metamask error renders', async () => {
+    global.ethereum = ethereumFactory(false);
+
+    const { getByText } = render(MasterMinterControl, {
+      data: function() {
+        return {
+          address: MINTER,
+          isMinter: true,
+          minterAllowance: 195,
+          allowance: 675,
+        };
+      },
+    });
+    
+    expect(getByText('This address is currently a minter with allowance 195.')).not.toBeNull();
+
+    await fireEvent.click(getByText('Connect to MetaMask'));
+    
+    await fireEvent.click(getByText('INCREASE ALLOWANCE'));
+    await finishPromises();
+    expect(getByText('Please connect your account to Metamask before proceeding.')).not.toBeNull(); 
+  });
+
 });

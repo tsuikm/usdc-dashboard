@@ -21,43 +21,52 @@
         />
       </form>
       <div
-        v-if="this.statusChecked"
+        v-if="this.statusChecked && !this.showAddressWarning"
         class="blacklist-clause"
       > 
         <div
           v-if="this.originalStatus"
-          class="blacklist-message"
+          class="status-message"
         >
           Address is currently blacklisted.
         </div>
         <div
           v-else
-          class="blacklist-message"
+          class="status-message"
         >
           Address is not currently blacklisted.
         </div>
+
         <div class="container-main">
           <div class="content-header">
             Blacklist Address
           </div>
-          <md-switch 
+          <md-switch
             v-model="isBlacklisted"
             class="md-primary"
             data-testid="toggle"
           />
         </div>
-        <span v-if="showBlacklisterWarning">
-          <md-icon>error</md-icon> Error: You are not signed in as the blacklister of this contract.
-        </span>
         <div class="container-save">
           <ActionButton
             :label="'SAVE'"
             :on-click="save"
           />
         </div>
-      </div> 
-      <ConnectToMetamask ref="connectToMetamaskButton" />
+      </div>
+    </div> 
+    <div class="error"> 
+      <span v-if="showConnectToMetamaskWarning">
+        <md-icon>error</md-icon>Please connect your account to Metamask before proceeding.
+      </span>
+      <span v-if="showBlacklisterWarning">
+      <md-icon>error</md-icon> Error: You are not signed in as the blacklister of this contract.
+    </span>
+      <span v-if="showAddressWarning">
+        <md-icon>error</md-icon> Error: Please input a valid address.
+      </span>
     </div>
+    <ConnectToMetamask ref="connectToMetamaskButton" />
   </div>
 </template>
 
@@ -66,12 +75,10 @@ import ActionButton from '@/components/ActionButton';
 import CustomInput from '@/components/CustomInput';
 import ConnectToMetamask from '@/components/ConnectToMetamask';
 import {
-  USDC_CONTRACT_ADDRESS,
   WEB3_BALANCEOF_ADDRESS_LENGTH,
-  DEFAULT_GAS_PRICE, 
 } from '@/utils/constants';
 import { padHex } from '@/utils/utils';
-import { contract } from '@/utils/web3utils';
+import { web3, contract, ethReq } from '@/utils/web3utils';
 
 export default {
   name: 'Blacklister',
@@ -88,19 +95,18 @@ export default {
       statusChecked: false,
       originalStatus: false,
       showBlacklisterWarning: false,
+      showConnectToMetamaskWarning: false,
+      showAddressWarning: false,
     };
   },
   methods: {
     async subscribeToEvent(event) {
       contract.once(event, async () => {
-        if (this.address === '') {
-          this.isBlacklisted = null;
-          return;
-        }
         try {
           this.isBlacklisted = await contract.methods
-            .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+            .isBlacklisted(this.address)
             .call();
+          this.originalStatus = this.isBlacklisted;
         } catch (e) {
           console.error(e);
           this.isBlacklisted = null;
@@ -118,59 +124,53 @@ export default {
       this.subscribeToEvent(contract.unBlacklistEvent);
     },
     async lookupBlacklistStatus() {
+      this.showConnectToMetamaskWarning = false;
+      this.showBlacklisterWarning = false;
       if (this.address === '') {
         this.isBlacklisted = null;
+        this.showAddressWarning = true;
         return;
       }
-      try {
-        this.isBlacklisted = await contract.methods
-          .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
-          .call();
-        this.statusChecked = true;
-        this.originalStatus = this.isBlacklisted;
-      } catch (e) {
-        console.error(e);
+      this.showAddressWarning = false;
+      this.address = padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH);
+      if (!web3.utils.isAddress(this.address)) {
+        this.showAddressWarning = true;
         this.isBlacklisted = null;
-      }
-    },
-    async ethReq(data) {
-      try {
-        this.accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
-        await ethereum
-          .request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: this.accounts[0],
-                to: USDC_CONTRACT_ADDRESS,
-                data: data,
-                gasPrice: DEFAULT_GAS_PRICE,
-              },
-            ],
-          });
-      } catch (e) {
-        console.error(e);
-        //show error
+
+      } else {
+        try {
+          this.isBlacklisted = await contract.methods
+            .isBlacklisted(this.address)
+            .call();
+          this.statusChecked = true;
+          this.originalStatus = this.isBlacklisted;
+        } catch (e) {
+          console.error(e);
+          this.isBlacklisted = null;
+        }
       }
     },
     async blacklist(address) {  
-      await this.ethReq(contract.methods.blacklist(address).encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.blacklist(address).encodeABI());
     },
 
     async unBlacklist(address) { 
-      await this.ethReq(contract.methods.unBlacklist(address).encodeABI());
+      await ethReq(this.$refs.connectToMetamaskButton.selectedAddress, contract.methods.unBlacklist(address).encodeABI());
     },
     async save() {
+      this.showConnectToMetamaskWarning = !this.$refs.connectToMetamaskButton.selectedAddress;
+      if (this.showConnectToMetamaskWarning) {
+        return;
+      }
+
       const blacklisterAccount = (await contract.methods.blacklister().call()).toLowerCase();
-      const accounts = this.$refs.connectToMetamaskButton.accounts.map(string => string.toLowerCase());
-      this.showBlacklisterWarning = !accounts.includes(blacklisterAccount);
+      this.showBlacklisterWarning = this.$refs.connectToMetamaskButton.selectedAddress.toLowerCase() !== blacklisterAccount;
 
       if (this.showBlacklisterWarning) {
         return;
       }
-
       const currentStatus = await contract.methods
-        .isBlacklisted(padHex(this.address, WEB3_BALANCEOF_ADDRESS_LENGTH))
+        .isBlacklisted(this.address)
         .call();
       const localStatus = this.isBlacklisted;
 
@@ -210,8 +210,15 @@ export default {
   align-items: center;
 }
 
-.blacklist-message {
+.status-message {
   margin-top: 20px;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2%;
 }
 
 .content-header {

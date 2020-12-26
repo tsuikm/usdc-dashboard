@@ -72,6 +72,7 @@ describe('BlacklisterControl', () => {
       },
     });
     expect(getByText('Address is currently blacklisted.')).not.toBeNull();
+
     const saveButton = getByText('SAVE');
 
     await fireEvent.click(getByTestId('toggle'));
@@ -92,12 +93,36 @@ describe('BlacklisterControl', () => {
       },
     });
     expect(getByText('Address is not currently blacklisted.')).not.toBeNull();
+
     const saveButton = getByText('SAVE');
 
     await fireEvent.click(getByTestId('toggle'));
     await fireEvent.click(saveButton);
     await finishPromises();
     expect(getByText('Address is not currently blacklisted.')).not.toBeNull();
+  });
+
+  it('Not connected to Metamask error renders', async () => {
+    const { getByText, getByTestId } = render(BlacklisterControl, {
+      data: function() {
+        return {
+          address: padHex('0x00000000', WEB3_BALANCEOF_ADDRESS_LENGTH),
+          isBlacklisted: true,
+          statusChecked: true,
+          originalStatus: false,
+        };
+      },
+    });
+    global.ethereum = ethereumFactory(false);
+
+    expect(getByText('Address is not currently blacklisted.')).not.toBeNull();
+
+    const saveButton = getByText('SAVE');
+
+    await fireEvent.click(getByTestId('toggle'));
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(getByText('Please connect your account to Metamask before proceeding.')).not.toBeNull();
   });
 
   test('ConnectToMetamask component renders', async () => {

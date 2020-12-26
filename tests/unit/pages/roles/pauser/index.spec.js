@@ -5,7 +5,7 @@ import Web3 from 'web3';
 
 const contract = new (new Web3()).eth.Contract();
 
-function ethereumFactory(isConnectedToMetamask) {
+async function ethereumFactory(isConnectedToMetamask) {
   return {
     request: jest.fn(async config => {
       if (config.method === 'eth_sendTransaction') {
@@ -24,10 +24,12 @@ Web3.MOCK_ACCOUNTS = {
   '0x0000000a': { pauser: true },
 };
 
-global.ethereum = ethereumFactory(true);
 
 describe('PauserControl', () => {
-  it('Text components render properly', () => {
+
+  it('Text components render properly', async () => {
+    global.ethereum = await ethereumFactory(true);
+
     const { getByText } = render(PauserControl);
     const header = 'Pause and Unpause Contract';
     expect(getByText(header)).not.toBeNull();
@@ -35,6 +37,8 @@ describe('PauserControl', () => {
   });
 
   it('Unpauses when pauser attempts to unpause', async () => {
+    global.ethereum = await ethereumFactory(true);
+
     const { getByText, getByTestId } = render(PauserControl, {
       data: function() {
         return {
@@ -51,6 +55,8 @@ describe('PauserControl', () => {
   });
 
   it('Pauses when pauser attempts to pause', async () => {
+    global.ethereum = await ethereumFactory(true);
+
     const { getByText, getByTestId } = render(PauserControl, {
       data: function() {
         return {
@@ -64,6 +70,26 @@ describe('PauserControl', () => {
     await fireEvent.click(saveButton);
     await finishPromises();
     expect(getByText('Pausing prevents transfers, minting, and burning.')).not.toBeNull();
+  });
+
+  it('Not connected to Metamask error renders', async () => {
+    global.ethereum = await ethereumFactory(false);
+
+    const { getByText, getByTestId } = render(PauserControl, {
+      data: function() {
+        return {
+          contractPaused: false,
+        };
+      },
+    });
+
+    const saveButton = getByText('SAVE');
+
+    await fireEvent.click(getByTestId('toggle'));
+    await fireEvent.click(saveButton);
+    await finishPromises();
+    expect(getByText('Pausing prevents transfers, minting, and burning.')).not.toBeNull();
+    expect(getByText('Please connect your account to Metamask before proceeding.')).not.toBeNull();
   });
 
   test('ConnectToMetamask component renders', async () => {
